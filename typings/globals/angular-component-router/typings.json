@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/d4d4286f7a33e78a68fd4f78b2ae70e07e500fe7/angularjs/angular-component-router.d.ts",
+    "raw": "registry:dt/angular-component-router#1.5.0+20160328094519",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/d4d4286f7a33e78a68fd4f78b2ae70e07e500fe7/angularjs/angular-component-router.d.ts"
+  }
+}
