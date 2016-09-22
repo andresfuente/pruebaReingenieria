@@ -43,6 +43,6 @@
     "typings": "^0.8.1"
   },
   "publishConfig": {
-    "registry": "http://minode:80/"
+    "registry": "http://10.113.47.127:8081/nexus/content/repositories/angular-components/"
   }
 }
