@@ -12,7 +12,7 @@ module OrangeFeSARQ.Services {
     export interface IContractsSrv {
         getPrepagoLines(products: any): any;
         getPospagoLines(products: any): any;
-        getContract(products: any, msisdn: any): any; 
+        getContract(products: any, msisdn: any): any;
     }
 
     export class ContractsSrv implements IContractsSrv {

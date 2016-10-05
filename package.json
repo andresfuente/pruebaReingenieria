@@ -33,7 +33,7 @@
     "karma-chrome-launcher": "^0.2.2",
     "karma-coverage": "^0.5.5",
     "karma-jasmine": "^0.3.8",
-    "orange-notification-center": "0.0.2",
+    "orange-notification-center": "0.1.0",
     "tslint": "^3.7.1",
     "typescript": "^1.8.9",
     "typings": "^0.8.1"
