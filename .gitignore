@@ -20,6 +20,5 @@ html-report
 /bin
 /dist
 /node_modules
-/src
 /.idea
 /.tscache

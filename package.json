@@ -1,8 +1,8 @@
 {
-  "name": "orange-more-megas",
-  "title": "Orange-more-megas",
+  "name": "orange-services",
+  "title": "Orange-services",
   "version": "0.1.0",
-  "description": "Modulo que nos muestra la informcaion del consumo actual",
+  "description": "Contiene los diversos servicios que consume la app",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -33,11 +33,7 @@
     "karma-chrome-launcher": "^0.2.2",
     "karma-coverage": "^0.5.5",
     "karma-jasmine": "^0.3.8",
-    "orange-parent-controller": "^0.1.0",
-    "orange-services": "^0.1.0",
-    "orange-notification-center": "^0.1.0",
-    "orange-variables-sass": "^0.1.0",
-    "orange-row-switch": "^0.1.0",
+    "orange-notification-center": "0.0.2",
     "tslint": "^3.7.1",
     "typescript": "^1.8.9",
     "typings": "^0.8.1"

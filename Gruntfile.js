@@ -3,57 +3,9 @@
 
 module.exports = function (grunt) {
 
-    var __NAME__ = 'more-megas';
-
-    var css_files = [
-        // {
-        //     './dist/styles/commons-more-megas.css': './source/sass/' + __NAME__ + '.scss'
-        // }
-        //
-        // {
-        //     './dist/styles/fdc-more-megas.css': './source/sass/fdc-' + __NAME__ + '.scss'
-        // },
-        //
-        // {
-        //     './dist/styles/pae-more-megas.css': './source/sass/pae-' + __NAME__ + '.scss'
-        // },
-        //
-        // {
-        //     './dist/styles/mbf-more-megas.css': './source/sass/mbf-' + __NAME__ + '.scss'
-        // }
-    ];
-
     grunt.initConfig({
 
         pkg: grunt.file.readJSON('package.json'),
-
-        postcss: {
-            options: {
-                processors: [
-                    require('autoprefixer')({
-                        // add the specific-browser css-prefix
-                        browsers: ['> 0%', 'last 2 versions']
-                    })
-                    // require('cssnano')()    // minify the result
-                ]
-            },
-            // commons: {
-            //     src: './dist/styles/commons-' + __NAME__ + '.css',
-            //     dest: './dist/styles/commons-' + __NAME__ + '.css'
-            // }
-            // fdc: {
-            //     src: './dist/styles/fdc-' + __NAME__ + '.css',
-            //     dest: './dist/styles/fdc-' + __NAME__ + '.css'
-            // },
-            // pae: {
-            //     src: './dist/styles/pae-' + __NAME__ + '.css',
-            //     dest: './dist/styles/pae-' + __NAME__ + '.css'
-            // },
-            // mbf: {
-            //     src: './dist/styles/mbf-' + __NAME__ + '.css',
-            //     dest: './dist/styles/mbf-' + __NAME__ + '.css'
-            // }
-        },
 
         ts: {
             default: {
@@ -73,15 +25,7 @@ module.exports = function (grunt) {
             },
 
             dist: {
-                src: [
-                    // 'src/**/*.js'
-                    'src/**/*controller.js',
-                    'src/**/*constant.js',
-                    'src/**/*service.js',
-                    'src/types/**/*.js',
-                    'src/**/*component.js',
-                    'src/**/*.module.js'
-                ],
+                src: ['build/**/*.js'],
                 dest: 'dist/<%= pkg.name %>.js'
             }
         },
@@ -104,7 +48,7 @@ module.exports = function (grunt) {
                 jshintrc: true
             },
             afterconcat: ['dist/<%= pkg.name %>.js'],
-            files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js']
+            files: ['Gruntfile.js', 'build/**/*.js', 'test/**/*.js']
         },
 
         watch: {
@@ -114,32 +58,25 @@ module.exports = function (grunt) {
 
         config: {
             js: {
-                src: 'src/components/*.js',
-                dist: 'src/components/'
+                src: 'build/components/*.js',
+                dist: 'build/components/'
             },
 
             html: {
-                src: 'source/templates/*.html',
-                dist: 'src/'
+                src: 'src/templates/*.html',
+                dist: 'build/'
             }
 
         },
 
-        sass: {
+        tslint: {
             options: {
-                sourceMap: true,
-                sourceComments: false,
-                processors: [
-                    //require('autoprefixer')()  // add the specific-browser css-prefix
-                    // require('cssnano')()    // minify the result
-                ]
+                configuration: "tslint.json"
             },
-
-            dist: {
-                options: {
-                    style: 'compressed'
-                },
-                files: css_files
+            files: {
+                src: [
+                    "src/**/*.ts"
+                ]
             }
         },
 
@@ -177,7 +114,7 @@ module.exports = function (grunt) {
                         {
                             pattern: /('tpls.*')/ig,
                             replacement: function (match, p1) {
-                                var p = grunt.file.read('src/source/templates/' + __NAME__ + '.html');
+                                var p = grunt.file.read('build/src/templates/' + __NAME__ + '.html');
                                 return "\"" + p + "\"";
 
                             }
@@ -196,17 +133,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-ts');
-
-    grunt.loadNpmTasks('grunt-sass');
-    grunt.loadNpmTasks('grunt-autoprefixer');
-    grunt.loadNpmTasks('grunt-postcss');
+    grunt.loadNpmTasks("grunt-tslint");
 
 
+    grunt.registerTask('ts-linter', ['ts', 'tslint']);
     grunt.registerTask('str', ['string-replace']);
     grunt.registerTask('rejs', ['string-replace:js']);
 
-    grunt.registerTask('css', ['sass:dist']);
-    grunt.registerTask('build', ['css', 'postcss']);
-
-    grunt.registerTask('default', ['string-replace:html', 'ts', 'string-replace:js', 'concat','uglify', 'build']);
+    grunt.registerTask('default', ['ts','string-replace:html', 'string-replace:js', 'concat',  'uglify']);
 };

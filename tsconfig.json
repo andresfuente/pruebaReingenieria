@@ -11,7 +11,7 @@
         "noImplicitUseStrict": false,
         "removeComments": true,
         "noLib": false,
-        "outDir": "src",
+        "outDir": "build",
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
         "sourceMap": true
