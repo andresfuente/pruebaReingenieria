@@ -37,8 +37,5 @@
     "tslint": "^3.7.1",
     "typescript": "^1.8.9",
     "typings": "^0.8.1"
-  },
-  "publishConfig": {
-    "registry": "http://10.113.47.127:8081/nexus/content/repositories/angular-components/"
   }
 }
