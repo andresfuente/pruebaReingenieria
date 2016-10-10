@@ -244,6 +244,16 @@ module OrangeFeSARQ.Services {
                 }
             }
         }
+		
+		typeHref(oData:any) {
+            let vm = this;
+            if (oData.includes('http')) {
+                return oData;
+            }
+            else {
+                return '#/' + oData;
+            }
+        }
 
     }
     angular.module('utils', [])
