@@ -69,8 +69,6 @@ module OrangeFeSARQ.Services {
                         if (metaInfoResponse.data) {
                             let layoutMetaData = metaInfoResponse.data;
 
-                            vm.setDataHeader(layoutMetaData.headerSection);
-
                             vm.setDataInStore(layoutMetaData.topSection);
 
                             vm.setDataInStore(layoutMetaData.centralSection);
@@ -82,7 +80,8 @@ module OrangeFeSARQ.Services {
                             vm.setDataInStore(layoutMetaData.bottomSection);
 
                             vm.setDataFooter(layoutMetaData.footerSection);
-
+							                            
+							vm.setDataHeader(layoutMetaData.headerSection);
 
                             return layoutMetaData;
                         }
