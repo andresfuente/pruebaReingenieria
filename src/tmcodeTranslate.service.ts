@@ -27,6 +27,6 @@ module OrangeFeSARQ.Services {
 
 
     }
-    angular.module('tmcodeTranslateSrv', [])
-        .service('TmCodeTranslateSrv', OrangeFeSARQ.Services.TmCodeTranslateSrv);
+    angular.module('tmcodeTranslate', [])
+        .service('tmcodeTranslateSrv', OrangeFeSARQ.Services.TmCodeTranslateSrv);
 }
