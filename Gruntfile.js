@@ -59,7 +59,7 @@ module.exports = function (grunt) {
         config: {
             js: {
                 src: 'build/components/*.js',
-                dist: 'build/components/'
+                dist: 'build/'
             },
 
             html: {
