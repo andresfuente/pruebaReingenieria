@@ -120,7 +120,7 @@ module OrangeFeSARQ.Services {
                         return response;
                     }
                 )
-                .catch(function (error) {
+                .catch(function(error) {
                     return error;
                 });
         }
@@ -228,10 +228,19 @@ module OrangeFeSARQ.Services {
             }
         }
 
-        findByName(name, array) {
+        findByName(name, array, value = 'value') {
             for (let i: number = 0; i < array.length; i++) {
                 if (array[i].name.replace(" ", "") === name.replace(" ", "")) {
-                    return array[i].value;
+                    return array[i][value];
+                }
+            }
+            return null;
+        }
+
+        findByInArray(array, value, campo = 'name') {
+            for (let i: number = 0; i < array.length; i++) {
+                if (array[i][campo].replace(" ", "") === value.replace(" ", "")) {
+                    return array[i];
                 }
             }
             return null;
@@ -244,13 +253,34 @@ module OrangeFeSARQ.Services {
                 }
             }
         }
-		
-		typeHref(oData:any) {
+
+        getIsMsisdn(msisdn: string): boolean {
+
+            if (msisdn.length === 9 && (msisdn.charAt(0) === '6' || msisdn.charAt(0) === '7')) {
+                return true;
+            }
+            return false;
+        }
+
+        console(type, mesage, param) {
+            if (window.location.href.indexOf('https') < 0) {
+                console[type]('LOG de desarrollo: ' + new Date() + ' ' + mesage, param ? param : null);
+            }
+
+        }
+
+
+        trim(val: string) {
+            let removeSpaces = /\s*/g;
+            return val.replace(removeSpaces, '');
+        }
+
+        typeHref(oData:any){
             let vm = this;
-            if (oData.includes('http')) {
+            if(oData.includes('http')){
                 return oData;
             }
-            else {
+            else{
                 return '#/' + oData;
             }
         }
