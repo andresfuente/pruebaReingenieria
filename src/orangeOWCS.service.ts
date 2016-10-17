@@ -58,6 +58,46 @@ module OrangeFeSARQ.Services {
             }
         }
 
+
+        /**
+         Ssutituye los componentes no validos
+         */
+        changeComp(element) {
+          element.compId = 'no_component_comp';
+          element.labelAngular = "<no-component-comp></no-component-comp>"
+          return element;
+        }
+        /**
+         Ssutituye los componentes no validos
+         */
+        checkCompId(section) {
+            let vm = this;
+
+            for (let i: number = 0; i < section.length; i++) {
+                //esto me dice que viene un compID
+                if (vm.keys[section[i].compId] !== null ){
+                    //aqui verifico que ese id este en las constantes
+                    if(vm.keys[section[i].compId] !== undefined) {
+                        let storeService = vm.$injector.get(vm.keys[section[i].compId].store);
+                        if (storeService !== null) {
+                            //correcto
+                        }else{
+                            //esta bien escrito pero el store no existe
+                            vm.changeComp(section[i]);
+                        }
+                    }else{
+                        //cuando el compiD viene mal
+                        vm.changeComp(section[i])
+                    }
+                }else{
+                    //aqui directamete compId no me viene
+                    vm.changeComp(section[i])
+                }
+            }
+
+            return section;
+        }
+
         /**
          Recover a property from sessionStorage
          */
@@ -69,19 +109,21 @@ module OrangeFeSARQ.Services {
                         if (metaInfoResponse.data) {
                             let layoutMetaData = metaInfoResponse.data;
 
+                            layoutMetaData.topSection = vm.checkCompId(layoutMetaData.topSection);
+                            layoutMetaData.centralSection = vm.checkCompId(layoutMetaData.centralSection);
+                            layoutMetaData.leftSection = vm.checkCompId(layoutMetaData.leftSection);
+                            layoutMetaData.rightSection = vm.checkCompId(layoutMetaData.rightSection);
+                            layoutMetaData.bottomSection = vm.checkCompId(layoutMetaData.bottomSection);
+                            layoutMetaData.footerSection = vm.checkCompId(layoutMetaData.footerSection);
+                            layoutMetaData.headerSection = vm.checkCompId(layoutMetaData.headerSection);
+
                             vm.setDataInStore(layoutMetaData.topSection);
-
                             vm.setDataInStore(layoutMetaData.centralSection);
-
                             vm.setDataInStore(layoutMetaData.leftSection);
-
                             vm.setDataInStore(layoutMetaData.rightSection);
-
                             vm.setDataInStore(layoutMetaData.bottomSection);
-
                             vm.setDataFooter(layoutMetaData.footerSection);
-							                            
-							vm.setDataHeader(layoutMetaData.headerSection);
+                                  vm.setDataHeader(layoutMetaData.headerSection);
 
                             return layoutMetaData;
                         }
