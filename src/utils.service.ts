@@ -153,6 +153,18 @@ module OrangeFeSARQ.Services {
             }
         }
 
+        isNif(document: string): boolean {
+           var nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+           var str = document.toString().toUpperCase();
+
+           if (nifRexp.test(str))
+            return true
+          else
+            return false
+        }
+
+
+
 
         isCif(cif: string): boolean {
             cif = cif.toUpperCase();
