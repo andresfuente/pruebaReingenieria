@@ -11,12 +11,12 @@ module OrangeFeSARQ.Services {
      */
     export class HttpCacheOrange {
         public static $inject = ['$http', '$q', '$cacheFactory', 'utils'];
-        public static keys:string[] = [];
+        public static keys: string[] = [];
 
-        constructor(private $http:ng.IHttpService,
-                    private $q:ng.IQService,
-                    private $cacheFactory:ng.ICacheFactoryService,
-                    private utils) {
+        constructor(private $http: ng.IHttpService,
+            private $q: ng.IQService,
+            private $cacheFactory: ng.ICacheFactoryService,
+            private utils) {
 
         }
 
@@ -45,49 +45,59 @@ module OrangeFeSARQ.Services {
          *
          * @return {Object} Type ng.IPromise<any>
          */
-        public post(url:string, requestParams:any, resetCacheKey:string = ''):ng.IPromise<any> {
+        public post(url: string, params: any, resetCacheKey: string = ''): ng.IPromise<any> {
             let vm = this;
 
-            return vm.$http.post(url, requestParams)
+            if (params && params.urlParams && params.urlParams.length > 0) {
+                for (let i: number = 0; i < params.urlParams.length; i++) {
+                    url += '/' + params.urlParams[i]
+                }
+            }
+
+            let _search: any;
+            let key = url;
+            let queryParams = JSON.stringify(params.queryParams);
+            // vm.$http.defaults.headers.post['Content-Type'] = 'text/plainn';
+            return vm.$http.post(url, queryParams)
                 .then(
-                    (successData)=> {
-                        if (resetCacheKey != '') {
-                            let httpCache = vm.$cacheFactory.get('$http');
-                            for (let j:number = 0; j < HttpCacheOrange.keys.length; j++) {
-                                if (HttpCacheOrange.keys[j].indexOf(resetCacheKey) != -1) {
-                                    httpCache.remove(HttpCacheOrange.keys[j]);
-                                }
+                (successData) => {
+                    if (resetCacheKey != '') {
+                        let httpCache = vm.$cacheFactory.get('$http');
+                        for (let j: number = 0; j < HttpCacheOrange.keys.length; j++) {
+                            if (HttpCacheOrange.keys[j].indexOf(resetCacheKey) != -1) {
+                                httpCache.remove(HttpCacheOrange.keys[j]);
                             }
                         }
-                        return successData;
-                    },
-                    (errorData)=> {
-                        return errorData;
                     }
+                    return successData;
+                },
+                (errorData) => {
+                    return errorData;
+                }
                 );
 
         }
 
-        public put(url:string, params:any, resetCacheKey:any = {}):ng.IPromise<any> {
+        public put(url: string, params: any, resetCacheKey: any = {}): ng.IPromise<any> {
             let vm = this;
 
-            let _search:any = {
+            let _search: any = {
                 params: params
             };
 
             return vm.$http.get(url, _search)
                 .then(
-                    (successData)=> {
-                        if (resetCacheKey != {}) {
-                            let httpCache = vm.$cacheFactory.get('$http');
-                            let key = resetCacheKey.url + vm.utils.extractProperties(resetCacheKey._search.params);
-                            httpCache.remove(key);
-                        }
-                        return successData;
-                    },
-                    (errorData)=> {
-                        return errorData;
+                (successData) => {
+                    if (resetCacheKey != {}) {
+                        let httpCache = vm.$cacheFactory.get('$http');
+                        let key = resetCacheKey.url + vm.utils.extractProperties(resetCacheKey._search.params);
+                        httpCache.remove(key);
                     }
+                    return successData;
+                },
+                (errorData) => {
+                    return errorData;
+                }
                 );
 
         }
@@ -125,15 +135,15 @@ module OrangeFeSARQ.Services {
          * @return {Object} Type ng.IPromise<any>
          */
 
-        public gett(url:string, params:any, time:number = (1000 * 0.5 * 60), refresh:boolean):ng.IPromise<any> {
+        public gett(url: string, params: any, time: number = (1000 * 0.5 * 60), refresh: boolean): ng.IPromise<any> {
             let vm = this;
             if (params && params.urlParams && params.urlParams.length > 0) {
-                for (let i:number = 0; i < params.urlParams.length; i++) {
+                for (let i: number = 0; i < params.urlParams.length; i++) {
                     url += '/' + params.urlParams[i]
                 }
                 url += '?'
             }
-            let _search:any;
+            let _search: any;
             let key = url;
             if (params && params.queryParams) {
                 _search = {
@@ -144,24 +154,24 @@ module OrangeFeSARQ.Services {
 
             let httpCache = vm.$cacheFactory.get('$http');
 
-            let cacheResponse:any = httpCache.get(key);
+            let cacheResponse: any = httpCache.get(key);
             if (!cacheResponse || refresh || cacheResponse.expireDate < (new Date()).getTime()) {
                 return vm.$http.get(url, _search)
                     .then(
-                        (successData)=> {
-                            // console.info("LLAMADA CORRECTA URL " + successData.config.url, successData);
-                            let d = {responseData: successData, expireDate: (new Date()).getTime() + time};
-                            if (HttpCacheOrange.keys.indexOf(key) == -1) {
-                                HttpCacheOrange.keys.push(key);
-                            }
-                            httpCache.put(key, d);
-                            return successData;
-                        },
-                        (errorData)=> {
-                            // console.error("LLAMADA ERRONEA A URL " + errorData.config.url, errorData);
-
-                            return errorData;
+                    (successData) => {
+                        // console.info("LLAMADA CORRECTA URL " + successData.config.url, successData);
+                        let d = { responseData: successData, expireDate: (new Date()).getTime() + time };
+                        if (HttpCacheOrange.keys.indexOf(key) == -1) {
+                            HttpCacheOrange.keys.push(key);
                         }
+                        httpCache.put(key, d);
+                        return successData;
+                    },
+                    (errorData) => {
+                        // console.error("LLAMADA ERRONEA A URL " + errorData.config.url, errorData);
+
+                        return errorData;
+                    }
                     );
             } else {
                 let promise = vm.$q.defer();
