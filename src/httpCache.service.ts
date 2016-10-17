@@ -56,9 +56,9 @@ module OrangeFeSARQ.Services {
 
             let _search: any;
             let key = url;
-            let queryParams = JSON.stringify(params.queryParams);
+
             // vm.$http.defaults.headers.post['Content-Type'] = 'text/plainn';
-            return vm.$http.post(url, queryParams)
+            return vm.$http.post(url, params.queryParams)
                 .then(
                 (successData) => {
                     if (resetCacheKey != '') {
