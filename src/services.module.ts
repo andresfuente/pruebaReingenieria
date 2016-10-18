@@ -1,7 +1,7 @@
 module OrangeFeSARQ.Constant {
     'use strict';
 
-    angular.module('servicesCommons')
+    angular.module('servicesCommons',[])
         .service('userSrv', OrangeFeSARQ.Services.UserSrv)
         .service('utils', OrangeFeSARQ.Services.Utils)
         .service('vapListSrv', OrangeFeSARQ.Services.VapListSrv)
