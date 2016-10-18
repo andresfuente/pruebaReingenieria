@@ -161,7 +161,7 @@ module OrangeFeSARQ.Services {
             return true
           else
             return false
-        } 
+        }
 
 
 
@@ -291,6 +291,9 @@ module OrangeFeSARQ.Services {
             let vm = this;
             if(oData.includes('http')){
                 return oData;
+            }
+            else if(oData === ''){
+                return '#/';
             }
             else{
                 return '#/' + oData;
