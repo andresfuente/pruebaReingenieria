@@ -293,7 +293,7 @@ module OrangeFeSARQ.Services {
                 return oData;
             }
             else if(oData === ''){
-                return '#/';
+                return '#/'; 
             }
             else{
                 return '#/' + oData;
