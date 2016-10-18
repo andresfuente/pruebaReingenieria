@@ -12,6 +12,8 @@ module OrangeFeSARQ.Services {
 
         public keys:any;
 
+
+
         constructor(private httpCacheOrange, private genericConstant, private owcsIdsConstant, private $injector) {
             let vm = this;
             vm.keys = vm.owcsIdsConstant.owcs;
@@ -64,7 +66,10 @@ module OrangeFeSARQ.Services {
          */
         changeComp(element) {
           element.compId = 'no_component_comp';
-          element.labelAngular = "<no-component-comp></no-component-comp>"
+          element.labelAngular = "<no-component-comp></no-component-comp>";
+          element.errMessage = "texto";
+          element.errImage = "img";
+          element.title = "Modulo no encontrado";
           return element;
         }
         /**
@@ -108,6 +113,8 @@ module OrangeFeSARQ.Services {
                     (metaInfoResponse) => {
                         if (metaInfoResponse.data) {
                             let layoutMetaData = metaInfoResponse.data;
+
+                            console.debug('json: ', layoutMetaData);
 
                             layoutMetaData.topSection = vm.checkCompId(layoutMetaData.topSection);
                             layoutMetaData.centralSection = vm.checkCompId(layoutMetaData.centralSection);
