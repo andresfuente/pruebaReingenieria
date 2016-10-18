@@ -61,9 +61,4 @@ module OrangeFeSARQ.Services {
         }
 
     }
-
-    // Registration
-    angular.module('contracts', [])
-        .service('contractsSrv', ContractsSrv);
-
 }

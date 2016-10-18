@@ -12,7 +12,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
 
         constructor(private $injector) {
-        }
+        } 
 
         escapeHtml(source: string) {
             let entityMap = {
@@ -159,9 +159,9 @@ module OrangeFeSARQ.Services {
 
            if (nifRexp.test(str))
             return true
-          else
+          else 
             return false
-        }
+        } 
 
 
 
@@ -291,9 +291,6 @@ module OrangeFeSARQ.Services {
             let vm = this;
             if(oData.includes('http')){
                 return oData;
-            }
-            else if(oData === ''){
-                return '#/'; 
             }
             else{
                 return '#/' + oData;

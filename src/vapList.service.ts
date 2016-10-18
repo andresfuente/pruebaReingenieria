@@ -1,4 +1,4 @@
-module vapList.Services {
+module OrangeFeSARQ.Services {
     'use strict';
     /**
      */
@@ -33,7 +33,4 @@ module vapList.Services {
                 });
         }
     }
-	
-    angular.module('VapListServiceModule', [])
-        .service('vapListSrv', vapList.Services.VapListSrv);
 }

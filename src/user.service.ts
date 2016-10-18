@@ -1,4 +1,4 @@
-module FdC.Services {
+module OrangeFeSARQ.Services {
     'use strict';
     /**
      * @ngdoc service
@@ -46,7 +46,4 @@ module FdC.Services {
         }
 
     }
-
-    angular.module('userSrv', [])
-        .service('userSrv', UserSrv);
 }
