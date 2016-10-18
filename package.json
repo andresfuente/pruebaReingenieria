@@ -1,8 +1,8 @@
 {
   "name": "orange-services",
   "title": "Orange-services",
-  "version": "0.2.0",
-  "description": "Contiene los diversos servicios que consume la app",
+  "version": "0.3.0",
+  "description": "Contiene los diversos servicios no core.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
