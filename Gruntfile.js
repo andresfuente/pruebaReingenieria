@@ -27,10 +27,7 @@ module.exports = function (grunt) {
             dist: {
                 src: [
 				     'build/**/*service.js',
-                    'build/**/*controller.js',
-                    'build/types/**/*.js',
-                    'build/**/*component.js',
-                    'build/**/*.module.js',
+				     'build/**/*.js'
 				],
                 dest: 'dist/<%= pkg.name %>.js'
             }
