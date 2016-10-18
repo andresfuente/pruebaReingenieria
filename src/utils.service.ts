@@ -159,9 +159,9 @@ module OrangeFeSARQ.Services {
 
            if (nifRexp.test(str))
             return true
-          else
+          else 
             return false
-        }
+        } 
 
 
 
@@ -292,13 +292,12 @@ module OrangeFeSARQ.Services {
             if(oData.includes('http')){
                 return oData;
             }
-            else if(oData === ''){
-                return '#/'; 
-            }
             else{
                 return '#/' + oData;
             }
         }
 
     }
+    angular.module('utils', [])
+        .service('utils', Utils);
 }
