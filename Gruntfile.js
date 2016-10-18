@@ -28,6 +28,7 @@ module.exports = function (grunt) {
                 src: [
 				     'build/**/*service.js',
 				     'build/**/*.js'
+					 
 				],
                 dest: 'dist/<%= pkg.name %>.js'
             }
