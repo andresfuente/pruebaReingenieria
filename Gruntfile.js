@@ -12,7 +12,10 @@ module.exports = function (grunt) {
                 tsconfig: true
             }
         },
-
+		clean: {
+			dev: ['./.tscache', './build', './dist']
+		}
+		
         concat: {
             options: {
                 banner: '/**************************************************************************\n' +
@@ -132,7 +135,8 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-string-replace');
-    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-concat');	
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -144,5 +148,5 @@ module.exports = function (grunt) {
     grunt.registerTask('str', ['string-replace']);
     grunt.registerTask('rejs', ['string-replace:js']);
 
-    grunt.registerTask('default', ['ts','string-replace:html', 'string-replace:js', 'concat',  'uglify']);
+    grunt.registerTask('default', ['clean','ts','string-replace:html', 'string-replace:js', 'concat',  'uglify']);
 };
