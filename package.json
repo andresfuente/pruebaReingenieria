@@ -1,7 +1,7 @@
 {
   "name": "orange-services",
   "title": "Orange-services",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Contiene los diversos servicios que consume la app",
   "main": "index.js",
   "scripts": {
