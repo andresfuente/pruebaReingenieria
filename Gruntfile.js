@@ -14,7 +14,7 @@ module.exports = function (grunt) {
         },
 		clean: {
 			dev: ['./.tscache', './build', './dist']
-		}
+		},
 		
         concat: {
             options: {
