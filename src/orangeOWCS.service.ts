@@ -12,6 +12,11 @@ module OrangeFeSARQ.Services {
 
         public keys:any;
 
+        public errMessage:string;
+        public errImage:string;
+
+
+
         constructor(private httpCacheOrange, private genericConstant, private owcsIdsConstant, private $injector) {
             let vm = this;
             vm.keys = vm.owcsIdsConstant.owcs;
@@ -63,8 +68,12 @@ module OrangeFeSARQ.Services {
          Ssutituye los componentes no validos
          */
         changeComp(element) {
+            let vm = this;
           element.compId = 'no_component_comp';
-          element.labelAngular = "<no-component-comp></no-component-comp>"
+          element.labelAngular = "<no-component-comp></no-component-comp>";
+          element.errMessage = vm.errMessage;
+          element.errImage = vm.errImage;
+
           return element;
         }
         /**
@@ -109,6 +118,9 @@ module OrangeFeSARQ.Services {
                         if (metaInfoResponse.data) {
                             let layoutMetaData = metaInfoResponse.data;
 
+                            vm.errMessage = layoutMetaData.errorModule.desErrorModule;
+                            vm.errImage = layoutMetaData.errorModule.imageErrorModule.imageFile_bloblink_;
+
                             layoutMetaData.topSection = vm.checkCompId(layoutMetaData.topSection);
                             layoutMetaData.centralSection = vm.checkCompId(layoutMetaData.centralSection);
                             layoutMetaData.leftSection = vm.checkCompId(layoutMetaData.leftSection);
@@ -123,7 +135,7 @@ module OrangeFeSARQ.Services {
                             vm.setDataInStore(layoutMetaData.rightSection);
                             vm.setDataInStore(layoutMetaData.bottomSection);
                             vm.setDataFooter(layoutMetaData.footerSection);
-                                  vm.setDataHeader(layoutMetaData.headerSection);
+                            vm.setDataHeader(layoutMetaData.headerSection);
 
                             return layoutMetaData;
                         }
