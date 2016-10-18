@@ -298,6 +298,4 @@ module OrangeFeSARQ.Services {
         }
 
     }
-    angular.module('utils', [])
-        .service('utils', Utils);
 }
