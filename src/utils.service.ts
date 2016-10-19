@@ -292,7 +292,7 @@ module OrangeFeSARQ.Services {
             if(oData.includes('http')){
                 return oData;
             }
-            else if(onData === ''){
+            else if(oData === ''){
 				return '#/';
             }
 			else{
