@@ -1,13 +1,13 @@
 {
   "name": "orange-services",
   "title": "Orange-services",
-  "version": "0.5.3", 
+  "version": "0.5.4", 
   "description": "Contiene los diversos servicios no core.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Jaime Cardona Villegas", 
+  "author": "Jaime Cardona Villegas",
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
@@ -22,7 +22,7 @@
     "grunt-contrib-concat": "^0.4.0",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-uglify": "^0.4.0",
-    "grunt-contrib-watch": "^0.6.1",	
+    "grunt-contrib-watch": "^0.6.1",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-postcss": "^0.8.0",
     "grunt-sass": "^1.1.0",
