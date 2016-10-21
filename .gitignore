@@ -22,3 +22,6 @@ html-report
 /node_modules
 /.idea
 /.tscache
+develop.bat
+uat.bat
+push.bat

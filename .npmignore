@@ -1,6 +1,7 @@
 .tscache
 bin
 source
+build
 src
 test
 typings
@@ -8,3 +9,6 @@ typings.json
 tsconfig.json
 .scss-lint.yml
 .idea
+develop.bat
+uat.bat
+push.bat
