@@ -16,7 +16,6 @@ module OrangeFeSARQ.Constant {
             productCatalogSrv.getProductSpecification()
                 .then((response) => {
                     productCatalogStore.specification = response;
-                    console.debug("\n\n\n STORE | SPECIFICATION ", productCatalogStore.specification);
                 })
                 .catch((error) => {
 
@@ -24,13 +23,9 @@ module OrangeFeSARQ.Constant {
             productCatalogSrv.getProductOffering()
                 .then((response) => {
                     productCatalogStore.offering = response;
-                    console.debug("\n\n\n STORE | OFFERING ", productCatalogStore.offering);
                 })
                 .catch((error) => {
 
                 });
         })
-
-
-
 }
