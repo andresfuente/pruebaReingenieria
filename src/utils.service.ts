@@ -13,7 +13,7 @@ module OrangeFeSARQ.Services {
 
         constructor(private $injector) {
         } 
-
+ 
         escapeHtml(source: string) {
             let entityMap = {
                 "&": "&amp;",
