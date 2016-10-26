@@ -18,17 +18,27 @@ module OrangeFeSARQ.Services {
             this._offering = value;
         }
 
+        getProduct(tmcode): any {
+            let vm = this;
+            let product: any;
+            if (tmcode) {
+                product = {};
+                product.specification = vm.getCatalogSpecificationByTmcode(tmcode);
+                product.offering = vm.getCatalogOfferingByTmcode(tmcode);
+            }
+            return product;
+        }
+
         getCatalogSpecificationByTmcode(tmcode): any {
             let vm = this;
             let catalog: any = vm.specification;
             let productID: number;
-            let product: Array<any> = [];
             if (tmcode && catalog) {
                 let length: number = catalog.length || 0;
                 for (let i = 0; i < length; i++) {
-                    let product: any = catalog[i];
-                    if (product && tmcode === product.id) {
-                        return product
+                    let element: any = catalog[i];
+                    if (element && tmcode === element.id) {
+                        return element
                     }
                 }
             }
@@ -40,20 +50,21 @@ module OrangeFeSARQ.Services {
             let catalog = vm.offering;
             let offer: any;
             offer = {};
-            let listOffer = [];
+            // let listOffer = [];
             if (tmcode && catalog) {
                 let length = catalog.length || 0;
                 for (let i = 0; i < length; i++) {
-                    let product = catalog[i];
-                    let specification = product.productSpecification;
+                    let element = catalog[i];
+                    let specification = element.productSpecification;
                     if (specification && tmcode === specification.id) {
-                        offer.productSpecification = product.productSpecification;
-                        offer.productOfferingPrice = product.productOfferingPrice;
-                        listOffer.push(offer);
+                        return element;
+                        // offer.productSpecification = element.productSpecification;
+                        // offer.productOfferingPrice = element.productOfferingPrice;
+                        // listOffer.push(offer);
                     }
                 }
             }
-            return listOffer;
+            return null;
         }
     }
 }
