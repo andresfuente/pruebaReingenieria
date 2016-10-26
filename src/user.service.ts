@@ -31,7 +31,7 @@ module OrangeFeSARQ.Services {
 			
 			switch(param) {
 				case 'individualPublicId':
-					param = 'residencial';
+					param = 'residential';
 					break;
 				case 'publicKey':
 					param = 'telephoneNumber';
