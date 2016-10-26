@@ -28,13 +28,25 @@ module OrangeFeSARQ.Services {
          */
         getUser(param:string, clientId:string):any {
             let vm = this;
+			
+			switch(param) {
+				case 'individualPublicId':
+					param = 'residencial';
+					break;
+				case 'publicKey':
+					param = 'telephoneNumber';
+					break;			
+			}
+			
+			
             let _search:Object = {
                 queryParams: {
-                    [param]: clientId
+                  
                 },
-                urlParams: ['orange', 'customerView', 'get']
+                urlParams: ['orange', 'customerView', 'get', param , clientId]
 
             };
+			
             return vm.httpCacheOrange.gett(vm.clientAPIUrl, _search)
                 .then(
                     (response)=> {
