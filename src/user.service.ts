@@ -43,7 +43,7 @@ module OrangeFeSARQ.Services {
                 queryParams: {
                   
                 },
-                urlParams: ['orange', 'customerView', 'get', param , clientId]
+                urlParams: ['orange', 'customerView',  param , clientId]
 
             };
 			
