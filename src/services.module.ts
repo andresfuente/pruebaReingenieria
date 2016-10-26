@@ -13,19 +13,21 @@ module OrangeFeSARQ.Constant {
 
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService
             , productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
-            productCatalogSrv.getProductSpecification()
-                .then((response) => {
-                    productCatalogStore.specification = response;
-                })
-                .catch((error) => {
+			if (navigator.userAgent.indexOf('PhantomJS') < 1) {
+				productCatalogSrv.getProductSpecification()
+					.then((response) => {
+						productCatalogStore.specification = response;
+					})
+					.catch((error) => {
 
-                });
-            productCatalogSrv.getProductOffering()
-                .then((response) => {
-                    productCatalogStore.offering = response;
-                })
-                .catch((error) => {
+					});
+				productCatalogSrv.getProductOffering()
+					.then((response) => {
+						productCatalogStore.offering = response;
+					})
+					.catch((error) => {
 
-                });
+					});
+			}
         })
 }
