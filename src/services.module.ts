@@ -10,6 +10,7 @@ module OrangeFeSARQ.Constant {
         .service('tmcodeTranslateSrv', OrangeFeSARQ.Services.TmCodeTranslateSrv)
         .service('productCatalogSrv', OrangeFeSARQ.Services.ProductCatalogService)
         .service('productCatalogStore', OrangeFeSARQ.Services.ProductCatalogStore)
+		.service('bucketBalanceSrv', OrangeFeSARQ.Services.BucketBalanceSrv)
 
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService
             , productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
