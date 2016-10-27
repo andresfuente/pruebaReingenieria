@@ -1,4 +1,4 @@
-module OrangeFeSARQ.Service{
+module OrangeFeSARQ.Services{
     'use strict';
 
     export class BucketBalanceSrv {
