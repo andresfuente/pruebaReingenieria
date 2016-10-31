@@ -278,7 +278,6 @@ module OrangeFeSARQ.Services {
             if (window.location.href.indexOf('https') < 0) {
                 console[type]('LOG de desarrollo: ' + new Date() + ' ' + mesage, param ? param : null);
             }
-
         }
 
 
@@ -289,13 +288,11 @@ module OrangeFeSARQ.Services {
 
         typeHref(oData:any){
             let vm = this;
-            if(oData.includes('http')){
-                return oData;
-            }
-            else if(oData === ''){
-				return '#/';
-            }
-			else{
+			if(!oData){
+                return '#/';
+			} else if(oData && oData.includes('http')){
+				return oData;
+            }else {
 				return '#/' + oData;
 			}
         }
