@@ -12,10 +12,10 @@ module.exports = function (grunt) {
                 tsconfig: true
             }
         },
-		clean: {
-			dev: ['./.tscache', './build', './dist']
-		},
-		
+        clean: {
+            dev: ['./.tscache', './build', './dist']
+        },
+
         concat: {
             options: {
                 banner: '/**************************************************************************\n' +
@@ -29,10 +29,10 @@ module.exports = function (grunt) {
 
             dist: {
                 src: [
-				     'build/**/*service.js',
-				     'build/**/*.js'
-					 
-				],
+                    'build/**/*service.js',
+                    'build/**/*.js'
+
+                ],
                 dest: 'dist/<%= pkg.name %>.js'
             }
         },
@@ -128,25 +128,93 @@ module.exports = function (grunt) {
                         }
                     ]
                 }
+            },
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: 'build/',
+                    src: '**/*',
+                    dest: 'build/'
+                }],
+                options: {
+                    replacements: [{
+                        pattern: /(}\)\()(.*\|\|.*;)/g,
+                        replacement: '$1/* istanbul ignore next */$2'
+                    }]
+                }
             }
 
+        },
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
+            }
+        },
+        remapIstanbul: {
+            dist: {
+                src: "./coverage/test-raw-reports/coverage.json",
+                options: {
+                    fail: true,
+                    reports: {
+                        "html": "./coverage/lcov-report",
+                        "json": "./coverage/test-raw-reports/coverage-final.json"
+                    }
+                }
+            }
+        },
+
+        coverage: {
+            check: {
+                options: {
+                    thresholds: {
+                        branches: 70,
+                        functions: 70,
+                        lines: 70,
+                        statements: 70
+                    },
+                    dir: "./coverage"
+                }
+            }
+        },
+
+        dtsGenerator: {
+            options: {
+                exclude: ['node_modules/**', 'typings/**', 'test/**/**'],
+                name: 'services',
+                project: './',
+                out: 'dist/typings/services.d.ts'
+            },
+            default: {
+                src: ['/path/to/package-directory/**/*.ts']
+            }
         }
 
     });
 
     grunt.loadNpmTasks('grunt-string-replace');
-    grunt.loadNpmTasks('grunt-contrib-concat');	
-    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-ts');
-    grunt.loadNpmTasks("grunt-tslint");
+    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('remap-istanbul');
+    grunt.loadNpmTasks('grunt-istanbul-coverage');
+    grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-autoprefixer');
+    grunt.loadNpmTasks('grunt-postcss');
+    grunt.loadNpmTasks('dts-generator');
+    grunt.loadNpmTasks('grunt-ngdocs');
 
 
     grunt.registerTask('ts-linter', ['ts', 'tslint']);
     grunt.registerTask('str', ['string-replace']);
     grunt.registerTask('rejs', ['string-replace:js']);
 
-    grunt.registerTask('default', ['clean','ts','string-replace:html', 'string-replace:js', 'concat',  'uglify']);
+    grunt.registerTask('test', ['string-replace:dist', 'karma:unit']);  // ['jshint', 'karma']
+    grunt.registerTask('generate-coverage-report', ['clean:coverage', 'test', 'remapIstanbul', 'coverage']);
+    grunt.registerTask('dts-generate', ['dtsGenerator']);
+
+    grunt.registerTask('default', ['clean', 'ts', 'string-replace:html', 'string-replace:js', 'concat', 'uglify', 'dts-generate']);
 };

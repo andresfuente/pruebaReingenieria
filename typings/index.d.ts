@@ -7,4 +7,3 @@
 /// <reference path="globals/jasmine/index.d.ts" />
 /// <reference path="globals/jquery/index.d.ts" />
 /// <reference path="globals/lodash/index.d.ts" />
-/// <reference path="orange/notification-center/index.d.ts" />

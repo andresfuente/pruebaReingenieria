@@ -19,6 +19,7 @@
     "exclude": [
         "jspm_packages",
         "node_modules",
+        "dist/typings/services.d.ts",
         "scaffolding",
         "typings/main",
         "typings/main.d.ts"
