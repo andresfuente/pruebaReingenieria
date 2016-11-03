@@ -54,7 +54,7 @@ module OrangeFeSARQ.Services {
 							localStorage.setItem('id', response.customer.individual.id);
 						}
 						else {
-							localStorage.setItem('id', response.customer.organization.id);
+							localStorage.setItem( 'id', response.customer.organization.id);
 						}
                         return response.data;
                     },
