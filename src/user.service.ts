@@ -50,6 +50,12 @@ module OrangeFeSARQ.Services {
             return vm.httpCacheOrange.gett(vm.clientAPIUrl, _search)
                 .then(
                     (response)=> {
+						if (response.customer.individual && response.customer.individual.id) {
+							vm.localStorageManager.setEntry('id', response.customer.individual.id);
+						}
+						else {
+							vm.localStorageManager.setEntry('id', response.customer.organization.id);
+						}
                         return response.data;
                     },
                     (error)=> {
