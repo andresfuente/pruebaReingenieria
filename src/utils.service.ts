@@ -87,8 +87,8 @@ module OrangeFeSARQ.Services {
         }
 
         extractProperties(obj) {
-            var properties = "";
-            for (var prop in obj) {
+            let properties = "";
+            for (let prop in obj) {
                 if (typeof obj[prop] != 'function') {
                     properties += prop + obj[prop];
                 }
@@ -124,6 +124,14 @@ module OrangeFeSARQ.Services {
                     return error;
                 });
         }
+		
+		isNie(document: string): boolean {
+
+            if (document.indexOf('X') == 0 || document.indexOf('Y') == 0 || document.indexOf('T') == 0) {
+                return (/^[XYZ]{1}[0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i.test(document))
+            }
+			return false;
+        }
 
         isNifNie(document: string): boolean {
             let numero: number;
@@ -154,8 +162,8 @@ module OrangeFeSARQ.Services {
         }
 
         isNif(document: string): boolean {
-           var nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
-           var str = document.toString().toUpperCase();
+           let nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+           let str = document.toString().toUpperCase();
 
            if (nifRexp.test(str))
             return true
@@ -168,27 +176,27 @@ module OrangeFeSARQ.Services {
 
         isCif(cif: string): boolean {
             cif = cif.toUpperCase();
-            var cifRegEx1 = /^[ABEH][0-9]{8}$/i;
-            var cifRegEx2 = /^[KPQS][0-9]{7}[A-J]$/i;
-            var cifRegEx3 = /^[CDFGJLMNRUVW][0-9]{7}[0-9A-J]$/i;
+            let cifRegEx1 = /^[ABEH][0-9]{8}$/i;
+            let cifRegEx2 = /^[KPQS][0-9]{7}[A-J]$/i;
+            let cifRegEx3 = /^[CDFGJLMNRUVW][0-9]{7}[0-9A-J]$/i;
             if (cifRegEx1.test(cif) || cifRegEx2.test(cif) || cifRegEx3.test(cif)) {
-                var control = cif.charAt(cif.length - 1);
-                var suma_A = 0;
-                var suma_B = 0;
-                for (var i = 1; i < 8; i++) {
+                let control = cif.charAt(cif.length - 1);
+                let suma_A = 0;
+                let suma_B = 0;
+                for (let i = 1; i < 8; i++) {
                     if (i % 2 == 0) suma_A += parseInt(cif.charAt(i));
                     else {
-                        var t = (parseInt(cif.charAt(i)) * 2) + "";
-                        var p = 0;
-                        for (var j = 0; j < t.length; j++) {
+                        let t = (parseInt(cif.charAt(i)) * 2) + "";
+                        let p = 0;
+                        for (let j = 0; j < t.length; j++) {
                             p += parseInt(t.charAt(j));
                         }
                         suma_B += p;
                     }
                 }
-                var suma_C = (suma_A + suma_B) + "";
-                var suma_D = (10 - parseInt(suma_C.charAt(suma_C.length - 1))) % 10;
-                var letras = "JABCDEFGHI";
+                let suma_C = (suma_A + suma_B) + "";
+                let suma_D = (10 - parseInt(suma_C.charAt(suma_C.length - 1))) % 10;
+                let letras = "JABCDEFGHI";
                 if (control >= "0" && control <= "9") return (parseInt(control) == suma_D);
                 else return (control == letras.charAt(suma_D));
             }
