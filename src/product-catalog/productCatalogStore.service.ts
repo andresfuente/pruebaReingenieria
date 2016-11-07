@@ -14,7 +14,7 @@ module OrangeFeSARQ.Services {
             return this._offering;
         }
         get listRates(): any {
-            return this._offering;
+            return this._listRates;
         }
         set specification(value: any) {
             this._specification = value;
@@ -23,7 +23,7 @@ module OrangeFeSARQ.Services {
             this._offering = value;
         }
         set listRates(value: any) {
-            this._offering = value;
+            this._listRates = value;
         }
 
         getProduct(tmcode): any {

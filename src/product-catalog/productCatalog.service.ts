@@ -60,7 +60,7 @@ module OrangeFeSARQ.Services {
 
         getFamilyRates(): any {
             let vm = this;
-            let url = 'http://10.113.46.150:7003/sites/REST/controller/ResourcesController/eCareResidencial/getRates';
+            let url = vm.genericConstant.getRatesOwcs;
             return vm.httpCacheOrange.gett(url)
                 .then(function(response) {
                     return response.data;

@@ -10,25 +10,32 @@ module OrangeFeSARQ.Constant {
         .service('tmcodeTranslateSrv', OrangeFeSARQ.Services.TmCodeTranslateSrv)
         .service('productCatalogSrv', OrangeFeSARQ.Services.ProductCatalogService)
         .service('productCatalogStore', OrangeFeSARQ.Services.ProductCatalogStore)
-		.service('bucketBalanceSrv', OrangeFeSARQ.Services.BucketBalanceSrv)
+        .service('bucketBalanceSrv', OrangeFeSARQ.Services.BucketBalanceSrv)
 
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService
             , productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
-			if (navigator.userAgent.indexOf('PhantomJS') < 1) {
-				productCatalogSrv.getProductSpecification()
-					.then((response) => {
-						productCatalogStore.specification = response;
-					})
-					.catch((error) => {
+            if (navigator.userAgent.indexOf('PhantomJS') < 1) {
+                productCatalogSrv.getProductSpecification()
+                    .then((response) => {
+                        productCatalogStore.specification = response;
+                    })
+                    .catch((error) => {
 
-					});
-				productCatalogSrv.getProductOffering()
-					.then((response) => {
-						productCatalogStore.offering = response;
-					})
-					.catch((error) => {
+                    });
+                productCatalogSrv.getProductOffering()
+                    .then((response) => {
+                        productCatalogStore.offering = response;
+                    })
+                    .catch((error) => {
 
-					});
-			}
+                    });
+                productCatalogSrv.getFamilyRates()
+                    .then((response) => {
+                        productCatalogStore.listRates = response;
+                    })
+                    .catch((error) => {
+
+                    });
+            }
         })
 }
