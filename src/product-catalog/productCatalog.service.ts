@@ -12,6 +12,8 @@ module OrangeFeSARQ.Services {
         public $q: any;
         constructor(public $injector) {
             let vm = this;
+            const OSP: string = 'OSP';
+            
             vm.httpCacheOrange = $injector.get('httpCacheOrange');
             vm.$q = $injector.get('$q');
             vm.genericConstant = $injector.get('genericConstant');
@@ -19,7 +21,6 @@ module OrangeFeSARQ.Services {
             vm.productCatalogAPIUrl = vm.genericConstant.productCatalog;
             // vm.productCatalogAPIUrl = 'api/daf2/APIProductCatalogOSP/1';
 
-            const OSP: string = 'OSP';
             vm.sufixProductSpecification = ['productSpecification', OSP];
             vm.sufixProductOffering = ['productOffering', OSP];
 
@@ -51,6 +52,18 @@ module OrangeFeSARQ.Services {
             return vm.httpCacheOrange.gett(vm.productCatalogAPIUrl, _search)
                 .then(function(response) {
                     return response.data.productOffering;
+                })
+                .catch(function(error) {
+                    return error;
+                });
+        }
+
+        getFamilyRates(): any {
+            let vm = this;
+            let url = 'http://10.113.46.150:7003/sites/REST/controller/ResourcesController/eCareResidencial/getRates';
+            return vm.httpCacheOrange.gett(url)
+                .then(function(response) {
+                    return response.data;
                 })
                 .catch(function(error) {
                     return error;

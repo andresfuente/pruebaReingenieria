@@ -5,16 +5,24 @@ module OrangeFeSARQ.Services {
         }
         private _specification: any;
         private _offering: any;
+        private _listRates: any;
+
         get specification(): any {
             return this._specification;
         }
         get offering(): any {
             return this._offering;
         }
+        get listRates(): any {
+            return this._offering;
+        }
         set specification(value: any) {
             this._specification = value;
         }
         set offering(value: any) {
+            this._offering = value;
+        }
+        set listRates(value: any) {
             this._offering = value;
         }
 
