@@ -2,19 +2,26 @@ module OrangeFeSARQ.Services {
     'use strict';
     /**
      */
-    export class VapListSrv {
-        static $inject = ['httpCacheOrange', '$q', 'genericConstant'];
-        public vapDataApiUrl: string;
+    export class VapListSrv extends OrangeFeSARQ.Services.ParentService {
+        static $inject = ['$injector'];
+        private url: string;
+        private genericConstant;
+		private vapDataApiUrl;
 
-        constructor(private httpCacheOrange, private $q, private genericConstant) {
+        constructor(public $injector) {
+            super($injector);
             let vm = this;
-            vm.vapDataApiUrl = vm.genericConstant.vapDataUrl;
-            vm.httpCacheOrange;
-            vm.$q;
+
+            vm.setInjections($injector);
         }
 
-        /**
-         */
+        setInjections($injector) {
+            let vm = this;
+            vm.genericConstant = $injector.get("genericConstant");
+            vm.vapDataApiUrl = vm.genericConstant.vapDataUrl;
+        }
+
+
         getVapData(msisdn: string, ID: string): any {
             let vm = this;
             let _search:Object = {
@@ -24,7 +31,7 @@ module OrangeFeSARQ.Services {
                   },
                 urlParams: ['vapData', 'OSP']
             };
-            return vm.httpCacheOrange.gett(vm.vapDataApiUrl, _search)
+            return vm.httpCacheGett(vm.vapDataApiUrl, _search)
                 .then(function (response) {
                     return response.data;
                 })

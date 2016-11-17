@@ -8,6 +8,8 @@ module servicesCommons.Tests.Controllers {
 
 
         beforeEach(() => {
+            angular.mock.module('ngCookies');
+            angular.mock.module('orange-arq-common');
             angular.mock.module('genericConstant');
             angular.mock.module('httpCache');
             angular.mock.module('servicesCommons');

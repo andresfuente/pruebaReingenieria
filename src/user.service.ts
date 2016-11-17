@@ -7,16 +7,20 @@ module OrangeFeSARQ.Services {
      * #rest
      * Servicio que busca un cliente en funcion de distintos parámetros
      */
-    export interface IUserSrv {
-        getUser(param:string, clientId:string):any;
-    }
+    export class UserSrv extends OrangeFeSARQ.Services.ParentService {
+        static $inject = ['$injector'];
+        public clientAPIUrl: string;
+        public genericConstant;
 
-    export class UserSrv implements IUserSrv {
-        static $inject = ['$http', 'genericConstant', 'httpCacheOrange'];
-        public clientAPIUrl:string;
-
-        constructor(private $http, private genericConstant, private httpCacheOrange) {
+        constructor($injector) {
+            super($injector);
             let vm = this;
+            vm.setInjections($injector);
+        }
+
+        setInjections($injector) {
+            let vm = this;
+            vm.genericConstant = $injector.get("genericConstant");
             vm.clientAPIUrl = vm.genericConstant.customerView;
         }
 
@@ -26,36 +30,34 @@ module OrangeFeSARQ.Services {
          * @methodOf locator.UserSrv
          * @returns {object} Devuelve una promesa con el response
          */
-        getUser(param:string, clientId:string):any {
+        getUser(param: string, clientId: string): any {
             let vm = this;
-			
-			switch(param) {
-				case 'individualPublicId':
-					param = 'residential';
-					break;
-				case 'publicKey':
-					param = 'telephoneNumber';
-					break;			
-			}
-			
-			
-            let _search:Object = {
-                queryParams: {
-                  
-                },
-                urlParams: ['orange', 'customerView',  param , clientId]
+
+            switch (param) {
+                case 'individualPublicId':
+                    param = 'residential';
+                    break;
+                case 'publicKey':
+                    param = 'telephoneNumber';
+                    break;
+            }
+
+
+            let _search: Object = {
+                queryParams: {},
+                urlParams: ['orange', 'customerView', param, clientId]
 
             };
-			
-            return vm.httpCacheOrange.gett(vm.clientAPIUrl, _search)
+
+            return vm.httpCacheGett(vm.clientAPIUrl, _search)
                 .then(
                     (response)=> {
-						if (response.data.customer.individual && response.data.customer.individual.id) {
-							localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
-						}
-						else {
-							localStorage.setItem( 'id', JSON.stringify(response.data.customer.organization.id));
-						}
+                        if (response.data.customer.individual && response.data.customer.individual.id) {
+                            localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
+                        }
+                        else {
+                            localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
+                        }
                         return response.data;
                     },
                     (error)=> {

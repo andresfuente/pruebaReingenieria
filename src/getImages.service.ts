@@ -1,37 +1,34 @@
 module OrangeFeSARQ.Services {
     'use strict';
 
-    export class getImagesSrv {
+    export class getImagesSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
         private url: string;
         private genericConstant;
-        private httpCacheOrange;
 
         constructor(public $injector) {
-           let vm = this;
+            super($injector);
+            let vm = this;
 
             vm.setInjections($injector);
         }
 
 
-        setInjections($injector){
-            let vm  =this;
+        setInjections($injector) {
+            let vm = this;
             vm.genericConstant = $injector.get("genericConstant");
-            vm.httpCacheOrange = $injector.get("httpCacheOrange");
         }
 
-        getData(){
+        getData() {
             let vm = this;
-            let _search:Object = {
-                queryParams: {
-
-                },
+            let _search: Object = {
+                queryParams: {},
                 urlParams: []
 
             };
 
-            return vm.httpCacheOrange.gett(vm.genericConstant.getImagesOwcs)
-            .then(
+            return vm.httpCacheGett(vm.genericConstant.getImagesOwcs, _search)
+                .then(
                     (successData)=> {
                         return successData;
                     },
@@ -41,4 +38,6 @@ module OrangeFeSARQ.Services {
                 );
         }
     }
+    angular.module('getImagesSrvModule', [])
+        .service('getImagesSrv', OrangeFeSARQ.Services.getImagesSrv);
 }

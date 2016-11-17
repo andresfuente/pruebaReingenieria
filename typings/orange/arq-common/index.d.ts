@@ -1,8 +1,17 @@
+declare module OrangeFeSARQ.Components {
+    class ParentComponent implements ng.IComponentOptions {
+        templateUrl: string | Function;
+        controller: string | Function | (string | Function)[];
+        bindings: any | Function | (any | Function)[];
+        constructor();
+        setBindings(bindings: any): void;
+    }
+}
 declare module renderContent {
 }
 declare module renderContent.Components {
     /**
-     */
+    */
     class RenderContentComp implements ng.IComponentOptions {
         bindings: {
             [binding: string]: string;
@@ -34,7 +43,7 @@ declare module OrangeFeSARQ {
 }
 declare module OrangeFeSARQ.Components {
     /**
-     */
+    */
     class RenderLayoutComp implements ng.IComponentOptions {
         bindings: {
             [binding: string]: string;
@@ -71,7 +80,53 @@ declare module OrangeFeSARQ.Controllers {
         setBindData(): void;
         initComp(): void;
     }
-    /** Main Arquitecture Controller */
+    /**
+     * @ngdoc controller
+     * @name OrangeFeSARQ.Controllers:parentController
+     * @description
+     * Controlador padre que inyecta servicios básicos de las aplicaciones.
+     * Estos servicios estan accesibles desde las siguientes variables:
+     * ```js
+     * public isFinished = false;
+     * static shared : any = {};
+     * public httpCacheOrange : OrangeFeSARQ.Services.HttpCache;
+     * public $rootRouter;
+     * public $window;
+     * public $location;
+     * public genericConstant;
+     * public literalConstant;
+     * public orangeOwcs : OrangeFeSARQ.Services.OrangeOwcs;
+     * public customerViewStore : OrangeFeSARQ.Services.CustomerViewStore;
+     * public notificationCenterSrv;
+     * public informationCenterSrv;
+     * public LoadCenterSrv;
+     * public msisdnStore : OrangeFeSARQ.Services.MsisdnStore;
+     * public utils;
+     * public localStorageManager : OrangeFeSARQ.Services.LocalStorageManager;
+     * public sessionStorageManager : OrangeFeSARQ.Services.SessionStorageManager;
+     * public userService : OrangeFeSARQ.Services.CustomerView;
+     * public $filter;
+     * public $q;
+     * private logger : OrangeFeSARQ.Services.LoggingManager;
+     * public messageCatalog : OrangeFeSARQ.Services.MessageCatalog;
+     * public config : OrangeFeSARQ.Models.APPConfig;
+     * public assetid: string;
+     * public assettype: string;
+     * public compName: string;
+     * ```
+     *
+     * @example
+     * ```js
+     * export class ComCtrl extends OrangeFeSARQ.Controllers.ParentController{
+     *         static $inject = ['$injector'];
+     *
+     *         constructor($injector) {
+     *             super($injector);
+     *             let vm = this;
+     * }
+     * ```
+     *
+     */
     class ParentController implements IParentController {
         $injector: any;
         static $inject: string[];
@@ -96,14 +151,152 @@ declare module OrangeFeSARQ.Controllers {
         userService: OrangeFeSARQ.Services.CustomerView;
         $filter: any;
         $q: any;
+        private logger;
         messageCatalog: OrangeFeSARQ.Services.MessageCatalog;
+        config: OrangeFeSARQ.Models.Component;
         private _class;
         private _find;
         index: number;
         testLog: any;
+        assetid: string;
+        assettype: string;
+        compName: string;
         constructor($injector: any);
         getIndex(): number;
         $onDestroy(): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Controllers:parentController#info
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @param {string} messageCode codigo del mensaje
+         * @param {string} message Contenido del mensaje
+         * @description
+         * genera una traza de info en consola o la envia a un MS en función de la configuración del componente
+         * @example
+         * ```js
+         *  vm.info('messageCode','message')
+         * ```
+         * @return {void} void
+         */
+        info(messageCode: string, message: string): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Controllers:parentController#warn
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @param {string} messageCode codigo del mensaje
+         * @param {string} message Contenido del mensaje
+         * @description
+         * genera una traza de warn en consola o la envia a un MS en función de la configuración del componente
+         * @example
+         * ```js
+         *  vm.warn('messageCode','message')
+         * ```
+         * @return {void} void
+         */
+        warn(messageCode: string, message: string): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Controllers:parentController#error
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @param {string} errorCode codigo de error
+         * @param {string} errorMessage mensaje de error
+         * @description
+         * genera una traza de error en consola o la envia a un MS en función de la configuración del componente
+         * @example
+         * ```js
+         *  vm.error('errorCode','errorMessage')
+         * ```
+         * @return {void} void
+         */
+        error(errorCode: string, errorMessage: string): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Controllers:parentController#newProcess
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @description
+         * Genera un nuevo ID de proceso con el fin de tener tener trazabilidad sobre todas las peticiones en el backend
+         * @example
+         * ```js
+         *  vm.newProcess();
+         * ```
+         * @return {void} void
+         */
+        newProcess(): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Controllers:parentController#finishProcess
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @description
+         * Finaliza un proceso funcionali cambiando el ID de proceso a 001 (navegación basica por el portal)
+         * @example
+         * ```js
+         *  vm.finishProcess();
+         * ```
+         * @return {void} void
+         */
+        finishProcess(): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:parentController#httpCacheGett
+
+         * @param {string} url de la api sin parametros.
+         * @param {Object} params Parámetros en queryString y path.
+         * @param {boolean=} [refresh=false] Invalida la cache por defecto false
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @description
+         * Servicio de cache con configuracion de componente.
+         * @example
+         * ```js
+         * let _search:Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get']
+         *    };
+         *  vm.httpCacheGett("URL", _search);
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpCacheGett(url: string, params: any, refresh?: boolean): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:parentController#httpCacheGeth
+         * @param {string} url de la api sin parametros.
+         * @param {Object} params Parámetros en queryString y path.
+         * @param {Object} headers parametros  de cabecera http.
+         * @param {boolean=} [refresh=false] Invalida la cache por defecto false
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @description
+         * Servicio de cache con configuracion de componente ( pasandole cabeceras).
+         * @example
+         * ```js
+         * let _search:Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get']
+         *    };
+         * let _headers =  {
+         * 'Component-Name': 'locator'
+         * }
+         *  vm.httpCacheGeth("URL", _search, _headers);
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpCacheGeth(url: string, params: any, headers: any, refresh?: boolean): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:parentController#saveInSession
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @description
+         * Guarda en el sessionStorage el catalog de mensajes (recursos),
+         * CustomerView y msisdn, solo debe llamarse cuando sea necesario recargar la SPA
+         * @example
+         * ```js
+         *  vm.saveInSession();
+         * ```
+         * @return {void} void
+         */
         saveInSession(): void;
         setInjections($injector: any): void;
         setBindData(): void;
@@ -111,6 +304,8 @@ declare module OrangeFeSARQ.Controllers {
         prepareTest(params: any[], functions: any[]): void;
         showModalMessage(typeMsg: number, title?: string, message?: string): void;
         setLogTestValue(name: any, value: any): void;
+        checkRecoverType(): void;
+        getName(vm: any): string;
     }
 }
 declare module OrangeFeSARQ.Filters {
@@ -122,21 +317,71 @@ declare module OrangeFeSARQ.Filters {
     function OWCSSanitizeHtml($sce: any): Function;
 }
 declare module OrangeFeSARQ.Models {
+    /**
+     * @ngdoc object
+     * @name OrangeFeSARQ.Models:Logger
+     * @description
+     * Clase que guarda la configuración de logs para cada componente.
+     * ```js
+     * fileAppender: boolean;
+     * consoleAppender: boolean;
+     * ```
+     */
     class Logger {
-        fileAppender: boolean;
-        consoleAppender: boolean;
+        fileAppender: string;
+        consoleAppender: string;
         constructor();
     }
+    /**
+     * @ngdoc object
+     * @name OrangeFeSARQ.Models:Cache
+     * @description
+     * Clase que guarda la configuración de cache para cada componente.
+     * ```js
+     * enabled: boolean;
+     * expirationTime: number;
+     * ```
+     */
     class Cache {
         enabled: boolean;
         expirationTime: number;
-        autoUpdate: boolean;
+        constructor();
     }
-    class APPConfig {
+    /**
+     * @ngdoc object
+     * @name OrangeFeSARQ.Models:Component
+     * @description
+     * Clase wrapper de Cache y Logger para cada componente.
+     * ```js
+     * componentName: string;
+     * logger: Logger;
+     * Cache: Cache;
+     * ```
+     */
+    class Component {
         componentName: string;
         logger: Logger;
-        Cache: Cache;
+        cache: Cache;
         constructor();
+    }
+    class API {
+        APIPath: string;
+        cache: Cache;
+        constructor();
+    }
+    /**
+     * @ngdoc object
+     * @name OrangeFeSARQ.Models:APPConfig
+     * @description
+     * Clase wrapper para componentes y APIs.
+     * ```js
+     * components: Component[];
+     * APIs: API[];
+     * ```
+     */
+    class APPConfig {
+        components: Component[];
+        APIs: API[];
     }
 }
 declare module OrangeFeSARQ.Models {
@@ -182,6 +427,22 @@ declare module OrangeFeSARQ.Models {
     }
 }
 declare module OrangeFeSARQ.Models {
+    /**
+     * @ngdoc object
+     * @name OrangeFeSARQ.Models:Trace
+     * @description
+     * Clase que guarda información de la traza que utilizara el servicio loggerSrv
+     * ```js
+     *  app: string;
+     *  component: string;
+     *  code: string;
+     *  message: string;
+     *  datetime: string;
+     *  sessionId: string;
+     *  msisdn : string;
+     *  level: string;
+     * ```
+     */
     class Trace {
         app: string;
         component: string;
@@ -283,11 +544,127 @@ declare module OrangeFeSARQ.Services {
     }
 }
 declare module OrangeFeSARQ.Services {
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:ParentService
+     * @description
+     * Controlador padre que inyecta servicios básicos de las aplicaciones.
+     * Estos servicios estan accesibles desde las siguientes variables:
+     * ```js
+     * public httpCacheOrange : OrangeFeSARQ.Services.HttpCache;
+     * ```
+     *
+     * @example
+     * ```js
+     * export class serviceSrv extends OrangeFeSARQ.Services.ParentService{
+     *
+     *         constructor(public $injector) {
+     *             super($injector);
+     *             let vm = this;
+     * }
+     * ```
+     *
+     */
+    class ParentService {
+        $injector: any;
+        static $inject: string[];
+        private httpCacheOrange;
+        constructor($injector: any);
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentService#httpCacheGett
+
+         * @param {string} url de la api sin parametros.
+         * @param {Object} params Parámetros en queryString y path.
+         * @param {boolean=} [refresh=false] Invalida la cache por defecto false
+         * @methodOf OrangeFeSARQ.Services:ParentService
+         * @description
+         * Servicio de cache con configuracion de API.
+         * @example
+         * ```js
+         * let _search:Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get']
+         *    };
+         *  vm.httpCacheGett("URL", _search);
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpCacheGett(url: string, params: any, refresh?: boolean): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentService#httpCacheGeth
+         * @param {string} url de la api sin parametros.
+         * @param {Object} params Parámetros en queryString y path.
+         * @param {Object} headers parametros  de cabecera http.
+         * @param {boolean=} [refresh=false] Invalida la cache por defecto false
+         * @methodOf OrangeFeSARQ.Services:ParentService
+         * @description
+         * Servicio de cache con configuracion de API (pasandole cabeceras).
+         * @example
+         * ```js
+         * let _search:Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get']
+         *    };
+         * let _headers =  {
+         * 'Component-Name': 'locator'
+         * }
+         *  vm.httpCacheGeth("URL", _search, _headers);
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpCacheGeth(url: string, params: any, headers: any, refresh?: boolean): ng.IPromise<any>;
+    }
+}
+declare module OrangeFeSARQ.Services {
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:appConfigSrv
+     *@module AppConfigManager
+     * @description
+     * Servicio que carga el fichero de configuración de componentes appConfig.json para que  dicha configuración
+     * este accesible desde los distintos componentes
+     */
     class AppConfigManager implements ng.IServiceProvider {
-        private appConfig;
+        private appConfigComponents;
+        private appConfigAPIs;
         constructor();
         init: () => void;
-        getConfig: (componentName: string) => Models.APPConfig;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:appConfigSrv#getComponentConfig
+         * @param {string} componentName nombre del componente (modulo).
+         * @methodOf OrangeFeSARQ.Services:appConfigSrv
+         * @description
+         * Devuelve la configuración asociada al componente:
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.appConfig.getComponentConfig('componentName')
+         * ```
+         * @return {OrangeFeSARQ.Models.Component} Component
+         */
+        getComponentConfig: (componentName: string) => Models.Component;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:appConfigSrv#getAPIConfig
+         * @param {string} APIPath Path de la API a invocar.
+         * @methodOf OrangeFeSARQ.Services:appConfigSrv
+         * @description
+         * Devuelve la configuración asociada al componente:
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.appConfig.getAPIConfig('APIName')
+         * ```
+         * @return {OrangeFeSARQ.Models.Component} Component
+         */
+        getAPIConfig: (APIPath: string) => Models.API;
         $get(): AppConfigManager;
     }
 }
@@ -297,23 +674,48 @@ declare module OrangeFeSARQ.Services {
         setCookie(cookieName: string, cookieValue: string, expiresIn: number): void;
         removeCookie(cookieName: string): void;
     }
-    /** Cookie manager to work with cookies */
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:cookieSrv
+     * @module cookieManager
+     * @description
+     * Interfaz para manejo de cookies del navegador
+     */
     class CookieManager implements ICookieManager {
         constructor();
-        /** Obtains a cookie from the parameter name
-         *    - name [string]: the name for the cookie to get
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:cookieSrv#setEntry
+         * @param {string} name nombre de la cookie a recuperar.
+         * @methodOf OrangeFeSARQ.Services:cookieSrv
+         * @description
+         * getter para cookies
+         *
+         * @return {object} cookie
          */
         getCookie(name: string): string;
         /**
-         * Set a cookie with a name, value and expires values from parameters
-         *    - cookieName [string]: The name for the cookie to be set
-         *    - cookieValue [string]: The value for the cookie to be set
-         *    - expiresIn [number]: The seconds for the cookie to be expired
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:cookieSrv#setCookie
+         * @param {string} cookieName nombre de la cookie a crear.
+         * @param {string} cookieValue contenido de la cookie.
+         * @param {number} TTL TTL de la cookie en segundos.
+         * @methodOf OrangeFeSARQ.Services:cookieSrv
+         * @description
+         * crea una nueva cookie a partir de los parametros de entrada
+         *
+         * @return {void} void
          */
         setCookie(cookieName: string, cookieValue: string, expiresIn: number): void;
         /**
-         *    Remove the cookie given by cookieName name
-         *    - cookieName [string]: the name of the cookie to be deleted
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:cookieSrv#removeCookie
+         * @param {string} cookieName nombre de la cookie a crear.
+         * @methodOf OrangeFeSARQ.Services:cookieSrv
+         * @description
+         * elimina una cookie a partir de su ID.
+         *
+         * @return {void} void
          */
         removeCookie(cookieName: string): void;
     }
@@ -331,9 +733,9 @@ declare module OrangeFeSARQ.Services {
      * Servicio que recupera información del usuario (customerView) y la almacena.
      * este accesible desde los distintos componentes
      */
-    class CustomerView implements ICustomerView {
+    class CustomerView extends OrangeFeSARQ.Services.ParentService implements ICustomerView {
         private $http;
-        private $injector;
+        $injector: any;
         static $inject: string[];
         clientAPIUrl: string;
         private _info;
@@ -389,9 +791,45 @@ declare module OrangeFeSARQ.Services {
     }
 }
 declare module OrangeFeSARQ.Services {
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:customerViewStore
+     * @module customerViewStore
+     * @description
+     * Store con la info del customerView
+     */
     class CustomerViewStore {
         constructor();
         private _info;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:customerViewStore#info
+         * @methodOf OrangeFeSARQ.Services:customerViewStore
+         * @description
+         * getter del customerView.
+         * Se desaconseja utilizar este servicio, para persisir y acceder al customerView se dispone del servicio userService
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.customerViewStore.info()
+         * ```
+         * @return {object} info
+         */
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:customerViewStore#info
+         * @param {object} JSON del CustomerView a persistir.
+         * @methodOf OrangeFeSARQ.Services:customerViewStore
+         * @description
+         * setter del customerView
+         * Se desaconseja utilizar este servicio, para persisir y acceder al customerView se dispone del servicio userService
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.customerViewStore.info(JSON)
+         * ```
+         * @return {void} void
+         */
         info: any;
     }
 }
@@ -433,10 +871,11 @@ declare module OrangeFeSARQ.Services {
 declare module OrangeFeSARQ.Services {
     /**
      * @ngdoc service
-     * @name OrangeFeSARQ.Services:HttpCacheOrange
+     * @name OrangeFeSARQ.Services:httpCacheOrange
+     *@module httpCache
      * @description
-     * Clase que va a gestionar todas las peticiones Http de la aplicacion
-     * se va a encargar de gestionar la cache en las peticiones get y de invalidar
+     * Servicio que  gestiona todas las peticiones HTTP de la aplicacion.
+     * cacheado de peticiones GET en función de la configuración propia del componente
      * en caso de que sea necesario
      */
     class HttpCache {
@@ -448,11 +887,11 @@ declare module OrangeFeSARQ.Services {
         constructor($http: ng.IHttpService, $q: ng.IQService, $cacheFactory: ng.ICacheFactoryService);
         /**
          * @ngdoc method
-         * @name OrangeFeSARQ.Services:HttpCacheOrange#post
+         * @name OrangeFeSARQ.Services:httpCacheOrange#post
          * @param {string} url de la api sin parametros.
          * @param {Object} requestParams Parámetros
          * @param {string=} [resetCacheKey=''] restea las llamadas a una url
-         * @methodOf OrangeFeSARQ.Services:HttpCacheOrange
+         * @methodOf OrangeFeSARQ.Services:httpCacheOrange
          * @description
          * realiza la peticion post, los parámetros que recibe son:
          * @example
@@ -476,12 +915,13 @@ declare module OrangeFeSARQ.Services {
         extractProperties(obj: any): string;
         /**
          * @ngdoc method
-         * @name OrangeFeSARQ.Services:HttpCacheOrange#get
+         * @name OrangeFeSARQ.Services:httpCacheOrange#gett
+
          * @param {string} url de la api sin parametros.
-         * @param {Object} params Parámetros en el siguiente formato  .
-         * @param {number=} [time=(1000 * 0.5 * 60)] Tiempo de vida de la cache por defecto 5 mimutos.
+         * @param {Object} params Parámetros en queryString y path.
+         * @param {number=} [time=(1000 * 5 * 60)] Tiempo de vida de la cache por defecto 5 mimutos.
          * @param {boolean=} [refresh=false] Invalida la cache por defecto false
-         * @methodOf OrangeFeSARQ.Services:HttpCacheOrange
+         * @methodOf OrangeFeSARQ.Services:httpCacheOrange
          * @description
          * realiza la peticion get
          * @example
@@ -506,7 +946,96 @@ declare module OrangeFeSARQ.Services {
          *
          * @return {Object} Type ng.IPromise<any>
          */
-        gett(url: string, params: any, time: number, refresh: boolean): ng.IPromise<any>;
+        gett(url: string, params: any, time?: number, refresh?: boolean): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:httpCacheOrange#gettConfig
+         * @param {string} url de la api sin parametros.
+         * @param {Object} params Parámetros en queryString y path.
+         * @param {object} Configuracion de cache del componente.
+         * @param {boolean=} [refresh=false] Invalida la cache por defecto false
+         * @methodOf OrangeFeSARQ.Services:httpCacheOrange
+         * @description
+         * Servicio de cache con configuracion de componente.
+         * @example
+         * Ver implementacion ParentController.httpCacheGett
+         */
+        gettConfig(url: string, params: any, componentConfig: OrangeFeSARQ.Models.Cache, APIConfig: OrangeFeSARQ.Models.Cache, refresh?: boolean): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:httpCacheOrange#getth
+         * @param {string} url de la api sin parametros.
+         * @param {Object} params Parámetros en queryString y path.
+         * @param {Object} headers Cabecera de la petición.
+         * @param {number=} [time=(1000 * 5 * 60)] Tiempo de vida de la cache por defecto 5 mimutos.
+         * @param {boolean=} [refresh=false] Invalida la cache por defecto false
+         * @methodOf OrangeFeSARQ.Services:httpCacheOrange
+         * @description
+         * realiza una peticion GET pasandole una parametros en el header
+         * @example
+         * Typical usage
+         * ```js
+         * let vm = this;
+         * let _search:Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get']
+
+         *    };
+         * let _headers =  {
+         * 'Component-Name': 'locator'
+         * }
+         * return vm.httpCacheOrange.getth(vm.clientAPIUrl, _search, _headers)
+         * .then(function (response) {
+         *            return response.data;
+         *        })
+         * .catch(function (error) {
+         *             return error;
+         *        });
+         * ```
+         *
+         * @return {Object} Type ng.IPromise<any>
+         */
+        getth(url: string, params: any, headers: any, time?: number, refresh?: boolean): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:httpCacheOrange#getthConfig
+         * @param {string} url de la api sin parametros.
+         * @param {Object} params Parámetros en queryString y path.
+         * @param {Object} headers Cabecera de la petición.
+         * @param {object} Configuracion de cache del componente.
+         * @param {boolean=} [refresh=false] Invalida la cache por defecto false
+         * @methodOf OrangeFeSARQ.Services:httpCacheOrange
+         * @description
+         * Servicio de cache con configuracion de componente ( con pase de cabeceras).
+         * @example
+         * Ver implementacion ParentController.httpCacheGeth
+         * ```js
+         * let vm = this;
+         * let _search:Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get']
+         *    };
+         * let _headers =   {
+         * 'Component-Name': 'locator'
+         * }
+         * return vm.httpCacheOrange.getthConfig(vm.clientAPIUrl, _search, _headers)
+         * .then(function (response) {
+         *            return response.data;
+         *        })
+         * .catch(function (error) {
+         *             return error;
+         *        });
+         * ```
+         *
+         * @return {Object} Type ng.IPromise<any>
+         */
+        getthConfig(url: string, params: any, headers: any, componentConfig: OrangeFeSARQ.Models.Cache, APIConfig: OrangeFeSARQ.Models.Cache, refresh?: boolean): ng.IPromise<any>;
+        private getConfig(componentConfig, APIConfig, key, url, _search, refresh);
+        mixCache(cacheComp: OrangeFeSARQ.Models.Cache, cacheAPI: OrangeFeSARQ.Models.Cache): OrangeFeSARQ.Models.Cache;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -521,19 +1050,18 @@ declare module OrangeFeSARQ.Services {
      */
     class HttpErrorInterceptor implements IInterceptor {
         private $q;
-        private userInfoSrv;
         static $inject: string[];
-        static Factory($q: ng.IQService, userInfoSrv: OrangeFeSARQ.Services.IUserInfo): HttpErrorInterceptor;
-        constructor($q: ng.IQService, userInfoSrv: OrangeFeSARQ.Services.IUserInfo);
+        static Factory($q: ng.IQService): HttpErrorInterceptor;
+        constructor($q: ng.IQService);
         request: (config: any) => ng.IPromise<any>;
         response: (responseSuccess: any) => ng.IPromise<any>;
         requestError: (requestFailure: any) => ng.IPromise<any>;
         /**
-         Response error. May be of interest the following fields:
-         - responseFailure.status: HTTP error code
-         - responseFailure.data: probably, the error returned
-         - responseFailure.config: headers, method, url, transformers
-         */
+            Response error. May be of interest the following fields:
+                - responseFailure.status: HTTP error code
+                - responseFailure.data: probably, the error returned
+                - responseFailure.config: headers, method, url, transformers
+        */
         responseError: (responseFailure: any) => ng.IPromise<any>;
     }
 }
@@ -543,50 +1071,207 @@ declare module OrangeFeSARQ.Services {
         setEntry(key: string, value: any): any;
         removeEntry(key: string): void;
     }
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:localStorageSrv
+     * @module localStorageManager
+     * @description
+     * Interfaz del localStorage de HTML
+     */
     class LocalStorageManager implements ILocalStorageManager {
         constructor();
         /**
-         Recover a property from localStorage
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:localStorageSrv#getEntry
+         * @param {string} key ID del objeto a recuperar.
+         * @methodOf OrangeFeSARQ.Services:localStorageSrv
+         * @description
+         * getter del localStorage
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.localStorageManager.getEntry('key')
+         * ```
+         * @return {object} JSON
          */
         getEntry(key: string): any;
         /**
-         Save the object in the property key in localStorage
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:localStorageSrv#setEntry
+         * @param {string} key ID del objeto a guardar.
+         * @param {object} object objeto a guardar.
+         * @methodOf OrangeFeSARQ.Services:localStorageSrv
+         * @description
+         * setter del localStorage
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.localStorageManager.setEntry('key',object)
+         * ```
+         * @return {void} void
          */
         setEntry(key: string, object: any): any;
         /**
-         Removes a property key in localStorage
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:localStorageSrv#removeEntry
+         * @param {string} key ID del objeto a eliminar.
+         * @methodOf OrangeFeSARQ.Services:localStorageSrv
+         * @description
+         * Elimina un objeto del localStorage a partir de su ID
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.localStorageManager.removeEntry('key')
+         * ```
+         * @return {void} void
          */
         removeEntry(key: string): void;
     }
 }
 declare module OrangeFeSARQ.Services {
     interface ILoggingManager {
-        info(componentName: string, errorCode: string, errrorMessage: string, newProcess: boolean): void;
-        warn(componentName: string, errorCode: string, errrorMessage: string): void;
-        error(componentName: string, errorCode: string, errrorMessage: string): void;
+        info(componentName: string, errorCode: string, errrorMessage: string, loggerAppenders: OrangeFeSARQ.Models.Logger): void;
+        warn(componentName: string, errorCode: string, errrorMessage: string, loggerAppenders: OrangeFeSARQ.Models.Logger): void;
+        error(componentName: string, errorCode: string, errrorMessage: string, loggerAppenders: OrangeFeSARQ.Models.Logger): void;
         critical(componentName: string, errorCode: string, errrorMessage: string): void;
         sendTraces(trace: OrangeFeSARQ.Models.Trace): void;
     }
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:loggerSrv
+     * @module loggingManager
+     * @description
+     * Servicio que gestiona las trazas de los SPA, tanto por consola como contra un servicio de backends.
+     */
     class LoggingManager implements ILoggingManager {
         private $http;
         private $log;
-        private AppConfig;
+        private appConfigSrv;
         private uuidSrv;
         private msisdnStore;
+        private genericConstant;
         static $inject: string[];
-        constructor($http: ng.IHttpService, $log: ng.ILogService, AppConfig: OrangeFeSARQ.Services.AppConfigManager, uuidSrv: OrangeFeSARQ.Services.IUUID, msisdnStore: OrangeFeSARQ.Services.MsisdnStore);
+        constructor($http: ng.IHttpService, $log: ng.ILogService, appConfigSrv: OrangeFeSARQ.Services.AppConfigManager, uuidSrv: OrangeFeSARQ.Services.IUUID, msisdnStore: OrangeFeSARQ.Services.MsisdnStore, genericConstant: any);
         sendTraces: (trace: Models.Trace) => void;
         traceConsole: (trace: Models.Trace) => void;
-        info: (componentName: string, errorCode: string, errrorMessage: string, newProcess: boolean) => void;
-        warn: (componentName: string, errorCode: string, errorMessage: string) => void;
-        error: (componentName: string, errorCode: string, errorMessage: string) => void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:loggerSrv#info
+         * @param {string} componentName nombre del componente (modulo).
+         * @param {string} errorCode código de error.
+         * @param {string} errorMessage mensaje de error.
+         * @param {object} loggerAppenders configuracion de logging para ese componente.
+         * @methodOf OrangeFeSARQ.Services:loggerSrv
+         * @description
+         * Genera una traza de info en consola y/o backends, dependiente de la configuración de componente (appConfig.json).
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.logger.info('componentName', '001', 'mensaje, error generico', false);
+         * ```
+         *
+         * @return {void} void
+         */
+        info: (componentName: string, errorCode: string, errrorMessage: string, loggerAppenders: Models.Logger) => void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:loggerSrv#warn
+         * @param {string} componentName nombre del componente (modulo).
+         * @param {string} errorCode código de error.
+         * @param {string} errorMessage mensaje de error.
+         * @param {object} loggerAppenders configuracion de logging para ese componente.
+         * @methodOf OrangeFeSARQ.Services:loggerSrv
+         * @description
+         * Genera una traza de warning en consola y/o backends, dependiente de la configuración de componente (appConfig.json).
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.logger.warn('componentName', '001', 'mensaje, error generico', false);
+         * ```
+         *
+         * @return {void} void
+         */
+        warn: (componentName: string, errorCode: string, errorMessage: string, loggerAppenders: Models.Logger) => void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:loggerSrv#error
+         * @param {string} componentName nombre del componente (modulo).
+         * @param {string} errorCode código de error.
+         * @param {string} errorMessage mensaje de error.
+         * @param {object} loggerAppenders configuracion de logging para ese componente.
+         * @methodOf OrangeFeSARQ.Services:loggerSrv
+         * @description
+         * Genera una traza de error en consola y/o backends, dependiente de la configuración de componente (appConfig.json).
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.logger.error('componentName', '001', 'mensaje, error generico', false);
+         * ```
+         *
+         * @return {void} void
+         */
+        error: (componentName: string, errorCode: string, errorMessage: string, loggerAppenders: Models.Logger) => void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:loggerSrv#error
+         * @param {string} componentName nombre del componente (modulo).
+         * @param {string} errorCode código de error.
+         * @param {string} errorMessage mensaje de error.
+         * @param {boolean} newProcess indicador de nuevo proceso funcional de la app.
+
+         * @methodOf OrangeFeSARQ.Services:loggerSrv
+         * @description
+         * Genera una traza de error critico en consola y/o backends, dependiente de la configuración de componente (appConfig.json).
+         * No debe invocarse programaticamente desde las aplicaciones, es llamado cuando se da algun error Javascript.
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.logger.error('componentName', '001', 'mensaje, error generico', false);
+         * ```
+         *
+         * @return {void} void
+         */
         critical: (componentName: string, errorCode: string, errorMessage: string) => void;
     }
 }
 declare module OrangeFeSARQ.Services {
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:msisdnStore
+     * @module msisdnStore
+     * @description
+     * Store del misdn
+     */
     class MsisdnStore {
         private _msisdn;
         constructor();
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:msisdnStore#msidn
+         * @methodOf OrangeFeSARQ.Services:msisdnStore
+         * @description
+         * getter del msisdn
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.msisdnStore.msisdn()
+         * ```
+         * @return {string} msisdn
+         */
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:msisdnStore#msidn
+         * @param {string} misdn misdn a guardar.
+         * @methodOf OrangeFeSARQ.Services:msisdnStore
+         * @description
+         * setter del msisdn
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.msisdnStore.msisdn('value')
+         * ```
+         * @return {void} void
+         */
         msisdn: string;
     }
 }
@@ -617,6 +1302,11 @@ declare module OrangeFeSARQ.Services {
          Recover a property from sessionStorage
          */
         getLayoutMetada(key: string, exp?: number): any;
+        getLayoutMetadaPosition(key: string, exp?: number): any;
+        getComponentMetadata(type: any, key: string, exp?: number): any;
+        changeLayaoutMetada(layoutMetaData: any): any;
+        changeSection(section: any): any;
+        addAsset(comp: any): any;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -639,40 +1329,67 @@ declare module OrangeFeSARQ.Services {
         setEntry(key: string, value: any): any;
         removeEntry(key: string): void;
     }
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:sessionStorageSrv
+     * @module sessionStorageManager
+     * @description
+     * Interfaz del sessionStorage
+     */
     class SessionStorageManager implements ISessionStorageManager {
         constructor();
         /**
-         Recover a property from sessionStorage
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:sessionStorageSrv#getEntry
+         * @param {string} key ID del objeto a recuperar.
+         * @methodOf OrangeFeSARQ.Services:sessionStorageSrv
+         * @description
+         * getter del sessionStorage
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.sessionStorageManager.getEntry('key')
+         * ```
+         * @return {object} objeto persistido en la sesion
          */
         getEntry(key: string): any;
         /**
-         Save the object in the property key in sessionStorage
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:sessionStorageSrv#setEntry
+         * @param {string} key ID del objeto a guardar.
+         * @param {object} object objeto a guardar.
+         * @methodOf OrangeFeSARQ.Services:sessionStorageSrv
+         * @description
+         * setter del sessionStorage
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.sessionStorageManager.setEntry('key', object)
+         * ```
+         * @return {void} void
          */
         setEntry(key: string, object: any): any;
         /**
-         Removes a property key in sessionStorage
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:sessionStorageSrv#removeEntry
+         * @param {string} key ID del objeto a eliminar.
+         * @methodOf OrangeFeSARQ.Services:sessionStorageSrv
+         * @description
+         * elimina un objeto del sessionStorage a partir de su ID
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.sessionStorageManager.removeEntry('key')
+         * ```
+         * @return {void} void
          */
         removeEntry(key: string): void;
     }
 }
 declare module OrangeFeSARQ.Services {
-    interface IUserInfo {
-        changeCurrentLineSelected(newMsisdn: string): void;
-        setUserRol(rol: string): void;
-        getUserRol(): string;
-    }
-    class UserInfo implements IUserInfo {
-        private userRol;
-        constructor();
-        changeCurrentLineSelected: (newMsisdn: string) => void;
-        setUserRol: (rol: string) => void;
-        getUserRol: () => string;
-    }
-}
-declare module OrangeFeSARQ.Services {
     /**
-     *    HTTP Generic error interceptor
-     */
+    *    HTTP Generic error interceptor
+    */
     class HttpUUIDInterceptor implements ng.IHttpInterceptor {
         private $q;
         private uuidSrv;
@@ -687,17 +1404,22 @@ declare module OrangeFeSARQ.Services {
         roundTwoDigits(num: number): string;
         generateSessionId(appId: string): void;
         newProcess(): void;
+        finishProcess(): void;
         getProcessId(): string;
     }
     /**
-     * @ngdoc controller
-     * @name dashboard.controller:ControllerName
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:uuidSrv
+     * @module uuidManager
      * @description
-     * A description of the controller, service or filter
+     * Servicio que genera los ID de sesión y transacciones (procesos).
+     * Interno de arquitectura, no utilizar desde SPA
      */
     class UUID implements ng.IServiceProvider {
         private sessionId;
         private processId;
+        private processCount;
+        private lastSessionIdSegment;
         constructor();
         generateRandomSequence: () => string;
         roundTwoDigits: (num: number) => string;
@@ -706,6 +1428,7 @@ declare module OrangeFeSARQ.Services {
         getProcessId: () => string;
         generateSessionId: (appId: string) => void;
         newProcess: () => void;
+        finishProcess: () => void;
     }
 }
 declare module OrangeFeSARQ.Tests.Filters {

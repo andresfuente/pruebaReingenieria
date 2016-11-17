@@ -1,22 +1,20 @@
 module OrangeFeSARQ.Services{
     'use strict';
 
-    export class BucketBalanceSrv {
-        static $inject = ['$injector', '$q'];
+    export class BucketBalanceSrv extends OrangeFeSARQ.Services.ParentService {
+        static $inject = ['$injector'];
         public bucketBalanceAPIUrl: string;
         public searchUrl: string;
-        public httpCacheOrange;
         public genericConstant;
 
-        constructor(public $injector, private $q) {
+        constructor(public $injector) {
+            super($injector);
             let vm = this;
-            vm.setInjections($injector);           
-
+            vm.setInjections($injector);
         }
 
         setInjections($injector) {
             let vm = this;
-            vm.httpCacheOrange = $injector.get('httpCacheOrange');
             vm.genericConstant = $injector.get('genericConstant');
         }
 
@@ -43,7 +41,7 @@ module OrangeFeSARQ.Services{
                 //TO-DO: para llamar a la api
                 _search.queryParams.productBucket = 'bonus';  
             }
-            return vm.httpCacheOrange.gett(vm.bucketBalanceAPIUrl, _search)
+            return vm.httpCacheGett(vm.bucketBalanceAPIUrl, _search)
             //return vm.httpCacheOrange.gett(vm.bucketBalanceAPIUrl, {})
                 .then(function (response) {
                     return response.data;

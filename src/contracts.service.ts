@@ -1,23 +1,28 @@
 module OrangeFeSARQ.Services {
     'use strict';
 
-     /**
+    /**
      * @ngdoc service
      * @name contract.ContractSrv
      * @description
      * #rest
      * Servicio que busca los tipos de contrato
      */
+    export class ContractsSrv extends OrangeFeSARQ.Services.ParentService {
+        static $inject = ['$injector'];
+        public genericConstant;
 
-    export interface IContractsSrv {
-        getPrepagoLines(products: any): any;
-        getPospagoLines(products: any): any;
-        getContract(products: any, msisdn: any): any;
-    }
+        constructor($injector) {
+            super($injector);
+            let vm = this;
+            vm.setInjections($injector);
+        }
 
-    export class ContractsSrv implements IContractsSrv {
+        setInjections($injector) {
+            let vm = this;
+            vm.genericConstant = $injector.get('genericConstant');
+        }
 
-        constructor() { }
         /**
          * @ngdoc method
          * @name #getVap
@@ -38,7 +43,7 @@ module OrangeFeSARQ.Services {
         getPospagoLines = (products: any): any => {
         }
 
-        
+
         /**
          * @ngdoc method
          * @name #getVap
@@ -48,16 +53,16 @@ module OrangeFeSARQ.Services {
          */
         getContract = (products: any, msisdn: string): string => {
             for (let i in products) {
-                    if (products[i].productCharacteristic) {
-                        for (let j in products[i].productCharacteristic) {
-                            if (products[i].productCharacteristic[j].name === "MSISDN") {
-                                if (products[i].productCharacteristic[j].value === msisdn) {
-                                    return products[i].ospProductType;
-                                }
+                if (products[i].productCharacteristic) {
+                    for (let j in products[i].productCharacteristic) {
+                        if (products[i].productCharacteristic[j].name === "MSISDN") {
+                            if (products[i].productCharacteristic[j].value === msisdn) {
+                                return products[i].ospProductType;
                             }
                         }
                     }
                 }
+            }
         }
 
     }

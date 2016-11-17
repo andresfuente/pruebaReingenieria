@@ -7,19 +7,18 @@ module OrangeFeSARQ.Services {
      * #rest
      * Servicio que busca un cliente en funcion de distintos parámetros
      */
-    export class AmortizationSrv {
+    export class AmortizationSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
-        public httpCacheOrange;
         public genericConstant;
 
         constructor(public $injector) {
+            super($injector);
             let vm = this;
             vm.setInjections($injector);
         }
 
         setInjections($injector) {
             let vm = this;
-            vm.httpCacheOrange = $injector.get('httpCacheOrange');
             vm.genericConstant = $injector.get('genericConstant');
         }
 
@@ -29,9 +28,9 @@ module OrangeFeSARQ.Services {
          * @methodOf amortization.AmortizationSrv
          * @returns {object} Devuelve una promesa con el response
          */
-        getVap(msisdn:string, id:string):any {
+        getVap(msisdn: string, id: string): any {
             let vm = this;
-            let _search:Object = {
+            let _search: Object = {
                 queryParams: {
                     msisdn: msisdn,
                     ID: id
@@ -39,7 +38,7 @@ module OrangeFeSARQ.Services {
                 urlParams: []
 
             };
-            return vm.httpCacheOrange.gett(vm.genericConstant.amortizationApi, _search)
+            return vm.httpCacheGett(vm.genericConstant.amortizationApi, _search)
                 .then(
                     (response)=> {
                         return response.data;

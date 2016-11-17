@@ -20,9 +20,10 @@ module.exports = function(config) {
             './node_modules/nvd3/build/nv.d3.js',
             './node_modules/angular-nvd3/dist/angular-nvd3.js',
 
-            // './node_modules/orange-arq-common/dist/vendor/vendor.js',
+            './node_modules/orange-arq-common/dist/vendor/vendor.js',
             './node_modules/angular-mocks/angular-mocks.js',
             './node_modules/orange-angular-router/dist/angular/router/angular1/angular_1_router.js',
+            './node_modules/orange-arq-common/dist/app/orange-arq-common.js',
 
 
             './build/test/libs/*.js',

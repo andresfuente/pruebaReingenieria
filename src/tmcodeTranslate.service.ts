@@ -1,27 +1,42 @@
 module OrangeFeSARQ.Services {
     'use strict';
 
-    export class TmCodeTranslateSrv {
-        static $inject = ['httpCacheOrange','$q', 'genericConstant'];
-        public productCatalogAPIUrl:string;
+    export class TmCodeTranslateSrv extends OrangeFeSARQ.Services.ParentService {
+        static $inject = ['$injector'];
+        private url: string;
+        private genericConstant;
+        public productCatalogAPIUrl: string;
 
 
-        constructor(private httpCacheOrange, private $q ,private genericConstant) {
+        constructor(public $injector) {
+            super($injector);
             let vm = this;
-            vm.productCatalogAPIUrl = "/mock/API/productCatalog.json";
 
+            vm.setInjections($injector);
         }
 
-        httpProductCatalog = function(tmcode): any {
-          let vm = this;
+        setInjections($injector) {
+            let vm = this;
+            vm.genericConstant = $injector.get("genericConstant");
+            vm.productCatalogAPIUrl = "/mock/API/productCatalog.json";
+        }
 
-          return vm.httpCacheOrange.gett(vm.productCatalogAPIUrl)
-              .then(function(response) {
-                  return response.data;
-              })
-              .catch(function(err) {
-                 return err;
-              });
+        httpProductCatalog = function (tmcode): any {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams: {},
+                urlParams: []
+
+            };
+
+            return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (err) {
+                    return err;
+                });
 
         }
 
