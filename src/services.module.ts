@@ -46098,7 +46098,7 @@ module OrangeFeSARQ.Constant {
 				
 				
 				
-productCatalogStore = [
+productCatalogStore.offering = [
     {
       "id": null,
       "href": null,
