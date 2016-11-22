@@ -306,7 +306,7 @@ module OrangeFeSARQ.Services {
 
         /**
         * Return true if paramether phone begin with +34 || 8 || 9
-        */
+        */  
         isFixedLine(phone: number) {
             if (phone) {
                 let phoneStr: string = phone.toString();
