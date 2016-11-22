@@ -12,8 +12,8 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
 
         constructor(private $injector) {
-        }  
- 
+        }
+
         escapeHtml(source: string) {
             let entityMap = {
                 "&": "&amp;",
@@ -116,21 +116,21 @@ module OrangeFeSARQ.Services {
 
             return userService.getUser(searchUrl, value)
                 .then(
-                    (response) => {
-                        return response;
-                    }
+                (response) => {
+                    return response;
+                }
                 )
                 .catch(function(error) {
                     return error;
                 });
         }
-		
-		isNie(document: string): boolean {
+
+        isNie(document: string): boolean {
 
             if (document.indexOf('X') == 0 || document.indexOf('Y') == 0 || document.indexOf('T') == 0) {
                 return (/^[XYZ]{1}[0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i.test(document))
             }
-			return false;
+            return false;
         }
 
         isNifNie(document: string): boolean {
@@ -162,14 +162,14 @@ module OrangeFeSARQ.Services {
         }
 
         isNif(document: string): boolean {
-           let nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
-           let str = document.toString().toUpperCase();
+            let nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+            let str = document.toString().toUpperCase();
 
-           if (nifRexp.test(str))
-            return true
-          else 
-            return false
-        } 
+            if (nifRexp.test(str))
+                return true
+            else
+                return false
+        }
 
 
 
@@ -275,7 +275,6 @@ module OrangeFeSARQ.Services {
         }
 
         getIsMsisdn(msisdn: string): boolean {
-
             if (msisdn.length === 9 && (msisdn.charAt(0) === '6' || msisdn.charAt(0) === '7')) {
                 return true;
             }
@@ -294,15 +293,30 @@ module OrangeFeSARQ.Services {
             return val.replace(removeSpaces, '');
         }
 
-        typeHref(oData:any){
+        typeHref(oData: any) {
             let vm = this;
-			if(!oData){
+            if (!oData) {
                 return '#/';
-			} else if(oData && oData.includes('http')){
-				return oData;
-            }else {
-				return '#/' + oData;
-			}
+            } else if (oData && oData.includes('http')) {
+                return oData;
+            } else {
+                return '#/' + oData;
+            }
+        }
+
+        /**
+        * Return true if paramether phone begin with +34 || 8 || 9
+        */
+        isFixedLine(phone: number) {
+            if (phone) {
+                let phoneStr: string = phone.toString();
+                let regFixed = /^((\+?34)?(8|9))\d+$/;
+                // let regMobile = /^((6|7)|\+?34(6|7))/;
+                if (phoneStr.match(regFixed)) {
+                    return true;
+                }
+                return false;
+            }
         }
 
     }
