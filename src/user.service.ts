@@ -52,12 +52,15 @@ module OrangeFeSARQ.Services {
             return vm.httpCacheGett(vm.clientAPIUrl, _search)
                 .then(
                 (response) => {
-                    if (response.data.customer.individual && response.data.customer.individual.id) {
-                        localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
-                    }
-                    else {
-                        localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
-                    }
+					 if (response.data && response.data.customer){
+						if (response.data.customer.individual && response.data.customer.individual.id) {
+							localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
+						}
+						else {
+							localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
+						}
+					 }
+                    
                     return response.data;
                 },
                 (error) => {
