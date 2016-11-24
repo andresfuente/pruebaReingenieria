@@ -28,7 +28,7 @@ module OrangeFeSARQ.Services {
          * @methodOf amortization.AmortizationSrv
          * @returns {object} Devuelve una promesa con el response
          */
-        getVap(msisdn: string, id: string): any {
+        getVap(msisdn: string, id: string, componentName:string="payPendingPaymentComp"): any {
             let vm = this;
             let _search: Object = {
                 queryParams: {
@@ -38,7 +38,7 @@ module OrangeFeSARQ.Services {
                 urlParams: []
 
             };
-            return vm.httpCacheGett(vm.genericConstant.amortizationApi, _search)
+            return vm.httpCacheGett(vm.genericConstant.amortizationApi, _search,componentName)
                 .then(
                     (response)=> {
                         return response.data;

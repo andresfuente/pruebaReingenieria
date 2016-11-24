@@ -21,7 +21,7 @@ module OrangeFeSARQ.Services {
             vm.productCatalogAPIUrl = "/mock/API/productCatalog.json";
         }
 
-        httpProductCatalog = function (tmcode): any {
+        httpProductCatalog = function (tmcode, componentName: string = 'borrarComp'): any {
             let vm = this;
 
             let _search: Object = {
@@ -30,7 +30,7 @@ module OrangeFeSARQ.Services {
 
             };
 
-            return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
+            return vm.httpCacheGett(vm.productCatalogAPIUrl, _search, componentName)
                 .then(function (response) {
                     return response.data;
                 })

@@ -18,7 +18,7 @@ module OrangeFeSARQ.Services{
             vm.genericConstant = $injector.get('genericConstant');
         }
 
-        getBalanceByMsisdn(msisdn: string, param: string): any {
+        getBalanceByMsisdn(msisdn: string, param: string, componentName:string='moreMegasComp'): any {
             let vm = this;
             let _search: any;
             vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalance;            
@@ -41,7 +41,7 @@ module OrangeFeSARQ.Services{
                 //TO-DO: para llamar a la api
                 _search.queryParams.productBucket = 'bonus';  
             }
-            return vm.httpCacheGett(vm.bucketBalanceAPIUrl, _search)
+            return vm.httpCacheGett(vm.bucketBalanceAPIUrl, _search, componentName)
             //return vm.httpCacheOrange.gett(vm.bucketBalanceAPIUrl, {})
                 .then(function (response) {
                     return response.data;

@@ -30,7 +30,7 @@ module OrangeFeSARQ.Services {
          * @methodOf locator.UserSrv
          * @returns {object} Devuelve una promesa con el response
          */
-        getUser(param: string, clientId: string): any {
+        getUser(param: string, clientId: string,componentName:string='locatorComp'): any {
             let vm = this;
 
             switch (param) {
@@ -48,7 +48,7 @@ module OrangeFeSARQ.Services {
 
             };
 
-            return vm.httpCacheGett(vm.clientAPIUrl, _search)
+            return vm.httpCacheGett(vm.clientAPIUrl, _search,componentName)
                 .then(
                 (response) => {
 					 if (response.data && response.data.customer){

@@ -6,7 +6,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
         private url: string;
         private genericConstant;
-		private vapDataApiUrl;
+        private vapDataApiUrl;
 
         constructor(public $injector) {
             super($injector);
@@ -22,16 +22,16 @@ module OrangeFeSARQ.Services {
         }
 
 
-        getVapData(msisdn: string, ID: string): any {
+        getVapData(msisdn: string, ID: string, componentName: string = 'pendingPaymentComp'): any {
             let vm = this;
-            let _search:Object = {
+            let _search: Object = {
                 queryParams: {
-                      msisdn: msisdn,
-                      ID: ID
-                  },
+                    msisdn: msisdn,
+                    ID: ID
+                },
                 urlParams: ['vapData', 'OSP']
             };
-            return vm.httpCacheGett(vm.vapDataApiUrl, _search)
+            return vm.httpCacheGett(vm.vapDataApiUrl, _search, componentName)
                 .then(function (response) {
                     return response.data;
                 })

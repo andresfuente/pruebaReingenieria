@@ -11,7 +11,7 @@ declare module renderContent {
 }
 declare module renderContent.Components {
     /**
-    */
+     */
     class RenderContentComp implements ng.IComponentOptions {
         bindings: {
             [binding: string]: string;
@@ -43,7 +43,7 @@ declare module OrangeFeSARQ {
 }
 declare module OrangeFeSARQ.Components {
     /**
-    */
+     */
     class RenderLayoutComp implements ng.IComponentOptions {
         bindings: {
             [binding: string]: string;
@@ -113,6 +113,7 @@ declare module OrangeFeSARQ.Controllers {
      * public assetid: string;
      * public assettype: string;
      * public compName: string;
+     * public popupSrv : any;
      * ```
      *
      * @example
@@ -154,6 +155,7 @@ declare module OrangeFeSARQ.Controllers {
         private logger;
         messageCatalog: OrangeFeSARQ.Services.MessageCatalog;
         config: OrangeFeSARQ.Models.Component;
+        popupSrv: any;
         private _class;
         private _find;
         index: number;
@@ -576,6 +578,7 @@ declare module OrangeFeSARQ.Services {
 
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
+         * @param {string} componentName Nombre del componente desde el que se invoca el servicio para gestionar la respuesta con el catalogo, por defecto "noComponent"
          * @param {boolean=} [refresh=false] Invalida la cache por defecto false
          * @methodOf OrangeFeSARQ.Services:ParentService
          * @description
@@ -592,13 +595,14 @@ declare module OrangeFeSARQ.Services {
          * ```
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
-        httpCacheGett(url: string, params: any, refresh?: boolean): ng.IPromise<any>;
+        httpCacheGett(url: string, params: any, componentName?: string, refresh?: boolean): ng.IPromise<any>;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:ParentService#httpCacheGeth
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
          * @param {Object} headers parametros  de cabecera http.
+         * @param {string} componentName Nombre del componente desde el que se invoca el servicio para gestionar la respuesta con el catalogo, por defecto "noComponent"
          * @param {boolean=} [refresh=false] Invalida la cache por defecto false
          * @methodOf OrangeFeSARQ.Services:ParentService
          * @description
@@ -618,7 +622,7 @@ declare module OrangeFeSARQ.Services {
          * ```
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
-        httpCacheGeth(url: string, params: any, headers: any, refresh?: boolean): ng.IPromise<any>;
+        httpCacheGeth(url: string, params: any, headers: any, componentName?: string, refresh?: boolean): ng.IPromise<any>;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -739,6 +743,7 @@ declare module OrangeFeSARQ.Services {
         static $inject: string[];
         clientAPIUrl: string;
         private _info;
+        private _usageReport;
         genericConstant: any;
         httpCache: any;
         customerViewStoreSrv: OrangeFeSARQ.Services.CustomerViewStore;
@@ -776,6 +781,20 @@ declare module OrangeFeSARQ.Services {
         getInfo: () => any;
         /**
          * @ngdoc method
+         * @name OrangeFeSARQ.Services:customerViewSrv#getUsageReport
+         * @methodOf OrangeFeSARQ.Services:customerViewSrv
+         * @description
+         * Recupera la informacion del customerView B2B, usageReport sin invocar al servicio de backend
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.userService.getUsageReport()
+         * ```
+         * @return {object} JSON usageReport
+         */
+        getUsageReport: () => any;
+        /**
+         * @ngdoc method
          * @name OrangeFeSARQ.Services:customerViewSrv#setInfo
          * @methodOf OrangeFeSARQ.Services:customerViewSrv
          * @description
@@ -787,7 +806,7 @@ declare module OrangeFeSARQ.Services {
          * ```
          * @return {void} void
          */
-        setInfo: (json: any) => void;
+        setCustomer: (json: any) => void;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -801,6 +820,7 @@ declare module OrangeFeSARQ.Services {
     class CustomerViewStore {
         constructor();
         private _info;
+        private _usageReport;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:customerViewStore#info
@@ -826,11 +846,41 @@ declare module OrangeFeSARQ.Services {
          * @example
          * Se hace uso del servicio con herencia de ParentController
          * ```js
-         *  vm.customerViewStore.info(JSON)
+         *  vm.customerViewStore.info = JSON
          * ```
          * @return {void} void
          */
         info: any;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:customerViewStore#usageReport
+         * @methodOf OrangeFeSARQ.Services:customerViewStore
+         * @description
+         * getter del usageReport para CustomerB2B.
+         * Se desaconseja utilizar este servicio, para persisir y acceder al customerView se dispone del servicio userService
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.customerViewStore.usageReport()
+         * ```
+         * @return {object} usageReport
+         */
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:customerViewStore#usageReport
+         * @param {object} JSON del CustomerView.usageReport a persistir.
+         * @methodOf OrangeFeSARQ.Services:customerViewStore
+         * @description
+         * setter del usageReport para CustomerB2B
+         * Se desaconseja utilizar este servicio, para persisir y acceder al customerView se dispone del servicio userService
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.customerViewStore.usageReport = JSON
+         * ```
+         * @return {void} void
+         */
+        usageReport: any;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -1057,11 +1107,11 @@ declare module OrangeFeSARQ.Services {
         response: (responseSuccess: any) => ng.IPromise<any>;
         requestError: (requestFailure: any) => ng.IPromise<any>;
         /**
-            Response error. May be of interest the following fields:
-                - responseFailure.status: HTTP error code
-                - responseFailure.data: probably, the error returned
-                - responseFailure.config: headers, method, url, transformers
-        */
+         Response error. May be of interest the following fields:
+         - responseFailure.status: HTTP error code
+         - responseFailure.data: probably, the error returned
+         - responseFailure.config: headers, method, url, transformers
+         */
         responseError: (responseFailure: any) => ng.IPromise<any>;
     }
 }
@@ -1130,10 +1180,10 @@ declare module OrangeFeSARQ.Services {
 }
 declare module OrangeFeSARQ.Services {
     interface ILoggingManager {
-        info(componentName: string, errorCode: string, errrorMessage: string, loggerAppenders: OrangeFeSARQ.Models.Logger): void;
-        warn(componentName: string, errorCode: string, errrorMessage: string, loggerAppenders: OrangeFeSARQ.Models.Logger): void;
-        error(componentName: string, errorCode: string, errrorMessage: string, loggerAppenders: OrangeFeSARQ.Models.Logger): void;
-        critical(componentName: string, errorCode: string, errrorMessage: string): void;
+        info(componentName: string, messageCode: string, message: string, loggerAppenders: OrangeFeSARQ.Models.Logger): void;
+        warn(componentName: string, messageCode: string, message: string, loggerAppenders: OrangeFeSARQ.Models.Logger): void;
+        error(componentName: string, errorCode: string, errorMessage: string, loggerAppenders: OrangeFeSARQ.Models.Logger): void;
+        critical(componentName: string, errorCode: string, errorMessage: string): void;
         sendTraces(trace: OrangeFeSARQ.Models.Trace): void;
     }
     /**
@@ -1158,8 +1208,8 @@ declare module OrangeFeSARQ.Services {
          * @ngdoc method
          * @name OrangeFeSARQ.Services:loggerSrv#info
          * @param {string} componentName nombre del componente (modulo).
-         * @param {string} errorCode código de error.
-         * @param {string} errorMessage mensaje de error.
+         * @param {string} messageCode código del mensaje.
+         * @param {string} message mensaje .
          * @param {object} loggerAppenders configuracion de logging para ese componente.
          * @methodOf OrangeFeSARQ.Services:loggerSrv
          * @description
@@ -1172,13 +1222,13 @@ declare module OrangeFeSARQ.Services {
          *
          * @return {void} void
          */
-        info: (componentName: string, errorCode: string, errrorMessage: string, loggerAppenders: Models.Logger) => void;
+        info: (componentName: string, messageCode: string, message: string, loggerAppenders: Models.Logger) => void;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:loggerSrv#warn
          * @param {string} componentName nombre del componente (modulo).
-         * @param {string} errorCode código de error.
-         * @param {string} errorMessage mensaje de error.
+         * @param {string} messageCode código del mensaje.
+         * @param {string} message mensaje .
          * @param {object} loggerAppenders configuracion de logging para ese componente.
          * @methodOf OrangeFeSARQ.Services:loggerSrv
          * @description
@@ -1191,7 +1241,7 @@ declare module OrangeFeSARQ.Services {
          *
          * @return {void} void
          */
-        warn: (componentName: string, errorCode: string, errorMessage: string, loggerAppenders: Models.Logger) => void;
+        warn: (componentName: string, messageCode: string, message: string, loggerAppenders: Models.Logger) => void;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:loggerSrv#error
@@ -1388,8 +1438,8 @@ declare module OrangeFeSARQ.Services {
 }
 declare module OrangeFeSARQ.Services {
     /**
-    *    HTTP Generic error interceptor
-    */
+     *    HTTP Generic error interceptor
+     */
     class HttpUUIDInterceptor implements ng.IHttpInterceptor {
         private $q;
         private uuidSrv;
