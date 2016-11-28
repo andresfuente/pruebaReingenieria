@@ -5,7 +5,7 @@ module OrangeFeSARQ.Services {
     export class VapListSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
         private url: string;
-        private genericConstant;
+        public genericConstant;
         private vapDataApiUrl;
 
         constructor(public $injector) {

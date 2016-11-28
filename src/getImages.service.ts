@@ -4,7 +4,7 @@ module OrangeFeSARQ.Services {
     export class getImagesSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
         private url: string;
-        private genericConstant;
+        public genericConstant;
 
         constructor(public $injector) {
             super($injector);

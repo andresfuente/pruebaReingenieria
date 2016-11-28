@@ -4,7 +4,7 @@ module OrangeFeSARQ.Services {
     export class TmCodeTranslateSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
         private url: string;
-        private genericConstant;
+        public genericConstant;
         public productCatalogAPIUrl: string;
 
 
