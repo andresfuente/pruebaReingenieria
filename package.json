@@ -53,7 +53,7 @@
     "grunt-ngdocs": "^0.2.10",
     "dts-generator": "^1.7.0",
     "orange-angular-router": "0.1.0",
-    "orange-arq-common": "0.7.0-SNAPSHOT.3",
+    "orange-arq-common": "0.7.0-SNAPSHOT.4",
     "orange-variables-sass": "1.7.0-RC",
     "orange-notification-center": "1.7.0-RC"
   }

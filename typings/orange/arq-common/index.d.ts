@@ -114,6 +114,7 @@ declare module OrangeFeSARQ.Controllers {
      * public assettype: string;
      * public compName: string;
      * public popupSrv : any;
+     * public compNameToError : string;
      * ```
      *
      * @example
@@ -163,6 +164,7 @@ declare module OrangeFeSARQ.Controllers {
         assetid: string;
         assettype: string;
         compName: string;
+        compNameToError: string;
         constructor($injector: any);
         getIndex(): number;
         $onDestroy(): void;
@@ -554,6 +556,7 @@ declare module OrangeFeSARQ.Services {
      * Estos servicios estan accesibles desde las siguientes variables:
      * ```js
      * public httpCacheOrange : OrangeFeSARQ.Services.HttpCache;
+     * public genericConstant;
      * ```
      *
      * @example
@@ -570,7 +573,8 @@ declare module OrangeFeSARQ.Services {
     class ParentService {
         $injector: any;
         static $inject: string[];
-        private httpCacheOrange;
+        httpCacheOrange: OrangeFeSARQ.Services.HttpCache;
+        genericConstant: any;
         constructor($injector: any);
         /**
          * @ngdoc method
@@ -1338,8 +1342,6 @@ declare module OrangeFeSARQ.Services {
         keys: any;
         constructor(httpCacheOrange: any, genericConstant: any, owcsIdsConstant: any, $injector: any);
         setDataInStore(section: any): void;
-        setDataHeader(section: any): void;
-        setDataFooter(section: any): void;
         /**
          Ssutituye los componentes no validos
          */
