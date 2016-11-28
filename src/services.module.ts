@@ -15,7 +15,7 @@ module OrangeFeSARQ.Constant {
 		.service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter)	
 		.run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
-                getImagesSrv.getData().then(
+                getHeaderFooterSrv.getData().then(
                     (response)=> {
                         // Guardo datos en ParentController
                         if(OrangeFeSARQ.Controllers.ParentController.shared === undefined){
