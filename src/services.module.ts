@@ -12,8 +12,21 @@ module OrangeFeSARQ.Constant {
         .service('productCatalogStore', OrangeFeSARQ.Services.ProductCatalogStore)
         .service('bucketBalanceSrv', OrangeFeSARQ.Services.BucketBalanceSrv)
 		.service('getImagesSrv', OrangeFeSARQ.Services.getImagesSrv)	
-        .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService
-            , productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
+		.service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter)	
+		.run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter) => {
+            if (navigator.userAgent.indexOf('PhantomJS') < 1) {
+                getImagesSrv.getData().then(
+                    (response)=> {
+                        // Guardo datos en ParentController
+                        if(OrangeFeSARQ.Controllers.ParentController.shared === undefined){
+                            OrangeFeSARQ.Controllers.ParentController.shared = {};
+                        }
+                        OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore= response.data.data;
+                    }
+                );
+            }
+        })
+        .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
 
 				productCatalogSrv.getProductSpecification()
@@ -41,7 +54,7 @@ module OrangeFeSARQ.Constant {
                     });
             }
         })
-		 .run((getImagesSrv: OrangeFeSARQ.Services.getImagesSrv) => {
+		.run((getImagesSrv: OrangeFeSARQ.Services.getImagesSrv) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
                 getImagesSrv.getData().then(
                     (response)=> {
