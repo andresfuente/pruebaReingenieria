@@ -37,5 +37,5 @@ module OrangeFeSARQ.Services {
         }
     }
     angular.module('getHeaderFooterModule', [])
-        .service('getHeaderFooter', OrangeFeSARQ.Services.GetHeaderFooter);
+        .service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter);
 }
