@@ -89,7 +89,18 @@ module.exports = function (grunt) {
             }
         },
 
-
+		scsslint: {
+            options: {
+                bundleExec: false,
+                config: '.scss-lint.yml',
+                reporterOutput: 'scss-lint-report.xml',  // The jUnit XML file to save the output to
+                //reporterOutput: 'null',
+                colorizeOutput: true
+            },
+            files: [
+                './src/styles/scss/*.scss',
+            ]
+        },
         'string-replace': {
             html: {
                 files: {
@@ -208,9 +219,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('dts-generator');
     grunt.loadNpmTasks('grunt-ngdocs');
+	
+    grunt.loadNpmTasks("grunt-tslint");
+    grunt.loadNpmTasks('grunt-scss-lint');
+	
 
-
-    grunt.registerTask('ts-linter', ['ts', 'tslint']);
+    grunt.registerTask('ts-linter', ['ts', 'tslint']);	
+    grunt.registerTask('scss-linter', ['scsslint']);
     grunt.registerTask('str', ['string-replace']);
     grunt.registerTask('rejs', ['string-replace:js']);
 
