@@ -226,6 +226,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('ts-linter', ['ts', 'tslint']);	
     grunt.registerTask('scss-linter', ['scsslint']);
+	
     grunt.registerTask('str', ['string-replace']);
     grunt.registerTask('rejs', ['string-replace:js']);
 
