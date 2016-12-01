@@ -324,7 +324,7 @@ module OrangeFeSARQ.Services {
          */
 		isImage(src) {
             let vm = this;
-			$q = vm.$injector.get('$q');
+			let $q = vm.$injector.get('$q');
             let deferred = $q.defer();
             let image = new Image();
 
