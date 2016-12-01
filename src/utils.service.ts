@@ -318,6 +318,26 @@ module OrangeFeSARQ.Services {
                 return false;
             }
         }
+		
+		/**
+         * Comprueba si la URL contiene una IMG
+         */
+		isImage(src) {
+            let vm = this;
+            let deferred = vm.$q.defer();
+            let image = new Image();
+
+            image.onerror = function() {
+                deferred.resolve(false);
+            };
+            image.onload = function() {
+                deferred.resolve(true);
+            };
+
+            image.src = src;
+
+            return deferred.promise;
+        }
 
     }
     angular.module('utils', [])
