@@ -21,7 +21,7 @@ module OrangeFeSARQ.Constant {
                         if(OrangeFeSARQ.Controllers.ParentController.shared === undefined){
                             OrangeFeSARQ.Controllers.ParentController.shared = {};
                         }
-                        OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore= response.data;
+                        OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore= response.data.data;
                     }
                 );
             }
