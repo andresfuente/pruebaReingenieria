@@ -340,6 +340,9 @@ module OrangeFeSARQ.Services {
             return deferred.promise;
         }
         
+		/**
+         * Comprueba si un email tiene el formato correcto
+         */
         checkFormatEmail(email: string){
             let vm = this;
             //let format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
@@ -350,6 +353,37 @@ module OrangeFeSARQ.Services {
             return false;
             
         }
+		
+		/**
+         * devuelve el tipo producto de una linea, pasandole como parametro un array(productos del customer view y el msisdn)
+         */
+		getProductType(products: any, msisdn: string) {
+			let vm = this;
+			if(products && products.length > 0){
+				let sizeProducts = products.length;
+				let found = false;
+				let i = 0;
+				while ( i < sizeProducts && !found) {
+					//si estoy buscando el id
+					let sizePC = products[i].productCharacteristic.length;
+					if(products[i].productCharacteristic && sizePC > 0){
+						let productCh = products[i].productCharacteristic;
+						let sizeCh = productCh.length;
+						//recorro el product caracteristic de este producto
+						let it = 0;
+						while (it < sizeCh && !found) {
+							if(productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
+								found = true;
+								return products[i].ospProductType;
+							}
+							++it;
+						}
+					}
+					++i;
+				}
+			}
+			return null;
+		}
 
     }
     angular.module('utils', [])
