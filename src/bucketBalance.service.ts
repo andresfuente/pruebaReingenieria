@@ -12,6 +12,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.setInjections($injector);
         }
+		
 
         setInjections($injector) {
             let vm = this;

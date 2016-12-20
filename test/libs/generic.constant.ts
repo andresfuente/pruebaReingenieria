@@ -8,7 +8,7 @@ module OrangeFeSARQ.Constant {
 
             customerView: 'api/daf2/APICustomerViewOSP/1',//orange/customerView/get?
             linesUsage: 'api/daf2/APILinesUsage/1', ///orange/linesUsage/get?
-            bucketBalance: 'api/daf2/APIBucketBalance/1', //orange/usageReport/get?
+            bucketBalance: 'api/daf2/APIBucketBalance', //orange/usageReport/get?
             productCatalog: 'api/usageReport',
             changeOffer: 'api/daf2/APIChangeOffer/1/changeOffer',
             activityRegister: 'api/daf2/APIActivityRegister/1/activityRegister?',
