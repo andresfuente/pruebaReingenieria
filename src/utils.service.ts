@@ -387,6 +387,7 @@ module OrangeFeSARQ.Services {
 		
 		fillOwcsStores(layoutMetaData:any){
 			let vm = this;
+			OrangeFeSARQ.Controllers.ParentController.shared.owcsStores = {};
 			vm.setDataInStore(layoutMetaData.topSection);
 			vm.setDataInStore(layoutMetaData.centralSection);
 			vm.setDataInStore(layoutMetaData.leftSection);
