@@ -384,6 +384,33 @@ module OrangeFeSARQ.Services {
 			}
 			return null;
 		}
+		
+		fillOwcsStores(layoutMetaData:any){
+			let vm = this;
+			vm.setDataInStore(layoutMetaData.topSection);
+			vm.setDataInStore(layoutMetaData.centralSection);
+			vm.setDataInStore(layoutMetaData.leftSection);
+			vm.setDataInStore(layoutMetaData.rightSection);
+			vm.setDataInStore(layoutMetaData.bottomSection);
+			vm.setDataInStore(layoutMetaData.footerSection);
+			vm.setDataInStore(layoutMetaData.headerSection);
+		}
+		
+		setDataInStore(section): void {
+            let vm = this;
+            for (let i: number = 0; i < section.length; i++) {
+
+                OrangeFeSARQ.Controllers.ParentController.shared.owcsStores[_.camelCase(section[i].compId) + 'OWCSStore'] = {section: section[i]};
+
+                if (section[i].listModuleButton) {
+					vm.setDataInStore(section[i].listModuleButton);
+				}
+
+				if (section[i].listModule) {
+					vm.setDataInStore(section[i].listModule);
+				}
+            }
+        }
 
     }
     angular.module('utils', [])
