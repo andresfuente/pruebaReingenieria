@@ -1,7 +1,7 @@
-module account.Services {
+module OrangeFeSARQ.Services {
     'use strict';
 
-    export class accountSrv extends OrangeFeSARQ.Services.ParentService  {
+    export class AccountSrv extends OrangeFeSARQ.Services.ParentService  {
         static $inject = ['$injector'];
         private url: string;
         private urlMock: string;
