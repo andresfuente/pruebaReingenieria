@@ -11,9 +11,10 @@ module OrangeFeSARQ.Constant {
         .service('productCatalogSrv', OrangeFeSARQ.Services.ProductCatalogService)
         .service('productCatalogStore', OrangeFeSARQ.Services.ProductCatalogStore)
         .service('bucketBalanceSrv', OrangeFeSARQ.Services.BucketBalanceSrv)
-		.service('getImagesSrv', OrangeFeSARQ.Services.getImagesSrv)	
-		.service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter)	
-		.run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter) => {
+        .service('getImagesSrv', OrangeFeSARQ.Services.getImagesSrv)
+        .service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter)
+        .service('accountSrv', OrangeFeSARQ.Services.AccountSrv)
+        .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
                 getHeaderFooterSrv.getData().then(
                     (response)=> {
@@ -29,7 +30,7 @@ module OrangeFeSARQ.Constant {
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
 
-				productCatalogSrv.getProductSpecification()
+                productCatalogSrv.getProductSpecification()
                     .then((response) => {
                         productCatalogStore.specification = response;
                     })
@@ -44,7 +45,7 @@ module OrangeFeSARQ.Constant {
 
                     });
 
-		
+        
                 productCatalogSrv.getFamilyRates()
                     .then((response) => {
                         productCatalogStore.listRates = response;
@@ -54,7 +55,7 @@ module OrangeFeSARQ.Constant {
                     });
             }
         })
-		.run((getImagesSrv: OrangeFeSARQ.Services.getImagesSrv) => {
+        .run((getImagesSrv: OrangeFeSARQ.Services.getImagesSrv) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
                 getImagesSrv.getData().then(
                     (response)=> {
