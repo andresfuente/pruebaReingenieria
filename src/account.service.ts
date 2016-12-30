@@ -1,7 +1,7 @@
 module OrangeFeSARQ.Services {
     'use strict';
 
-    export class AccountSrv extends OrangeFeSARQ.Services.ParentService  {
+    export class AccountSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
         private url: string;
         private urlMock: string;
@@ -13,6 +13,7 @@ module OrangeFeSARQ.Services {
             vm.url = vm.genericConstant.productInventory;
             vm.urlRedirectEmail = vm.genericConstant.fixedServices;
             vm.urlMock = '/mock/API/productInventoryGetEmails.json';
+            vm.setInjections($injector);
         }
 
         setInjections($injector) {
