@@ -116,11 +116,11 @@ module OrangeFeSARQ.Services {
 
             return userService.getUser(searchUrl, value)
                 .then(
-                (response) => {
-                    return response;
-                }
+                    (response) => {
+                        return response;
+                    }
                 )
-                .catch(function(error) {
+                .catch(function (error) {
                     return error;
                 });
         }
@@ -170,8 +170,6 @@ module OrangeFeSARQ.Services {
             else
                 return false
         }
-
-
 
 
         isCif(cif: string): boolean {
@@ -298,15 +296,15 @@ module OrangeFeSARQ.Services {
             if (!oData) {
                 return '#/';
             } else if (oData && oData.includes('http')) {
-                return oData; 
+                return oData;
             } else {
                 return '#/' + oData;
             }
         }
 
         /**
-        * Return true if paramether phone begin with +34 || 8 || 9
-        */
+         * Return true if paramether phone begin with +34 || 8 || 9
+         */
         isFixedLine(phone: number) {
             if (phone) {
                 let phoneStr: string = phone.toString();
@@ -318,7 +316,7 @@ module OrangeFeSARQ.Services {
                 return false;
             }
         }
-        
+
         /**
          * Comprueba si la URL contiene una IMG
          */
@@ -328,10 +326,10 @@ module OrangeFeSARQ.Services {
             let deferred = $q.defer();
             let image = new Image();
 
-            image.onerror = function() {
+            image.onerror = function () {
                 deferred.resolve(false);
             };
-            image.onload = function() {
+            image.onload = function () {
                 deferred.resolve(true);
             };
 
@@ -339,11 +337,11 @@ module OrangeFeSARQ.Services {
 
             return deferred.promise;
         }
-        
-		/**
+
+        /**
          * Comprueba si un email tiene el formato correcto
          */
-        checkFormatEmail(email: string){
+        checkFormatEmail(email: string) {
             let vm = this;
             //let format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
             let format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -351,66 +349,71 @@ module OrangeFeSARQ.Services {
                 return true;
             }
             return false;
-            
+
         }
-		
-		/**
+
+        /**
          * devuelve el tipo producto de una linea, pasandole como parametro un array(productos del customer view y el msisdn)
          */
-		getProductType(products: any, msisdn: string) {
-			let vm = this;
-			if(products && products.length > 0){
-				let sizeProducts = products.length;
-				let found = false;
-				let i = 0;
-				while ( i < sizeProducts && !found) {
-					//si estoy buscando el id
-					let sizePC = products[i].productCharacteristic.length;
-					if(products[i].productCharacteristic && sizePC > 0){
-						let productCh = products[i].productCharacteristic;
-						let sizeCh = productCh.length;
-						//recorro el product caracteristic de este producto
-						let it = 0;
-						while (it < sizeCh && !found) {
-							if(productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
-								found = true;
-								return products[i].ospProductType;
-							}
-							++it;
-						}
-					}
-					++i;
-				}
-			}
-			return null;
-		}
-		
-		fillOwcsStores(layoutMetaData:any){
-			let vm = this;
-			OrangeFeSARQ.Controllers.ParentController.shared.owcsStores = {};
-			vm.setDataInStore(layoutMetaData.topSection);
-			vm.setDataInStore(layoutMetaData.centralSection);
-			vm.setDataInStore(layoutMetaData.leftSection);
-			vm.setDataInStore(layoutMetaData.rightSection);
-			vm.setDataInStore(layoutMetaData.bottomSection);
-			vm.setDataInStore(layoutMetaData.footerSection);
-			vm.setDataInStore(layoutMetaData.headerSection);
-		}
-		
-		setDataInStore(section): void {
+        getProductType(products: any, msisdn: string) {
+            let vm = this;
+            if (products && products.length > 0) {
+                let sizeProducts = products.length;
+                let found = false;
+                let i = 0;
+                while (i < sizeProducts && !found) {
+                    //si estoy buscando el id
+                    let sizePC = products[i].productCharacteristic.length;
+                    if (products[i].productCharacteristic && sizePC > 0) {
+                        let productCh = products[i].productCharacteristic;
+                        let sizeCh = productCh.length;
+                        //recorro el product caracteristic de este producto
+                        let it = 0;
+                        while (it < sizeCh && !found) {
+                            if (productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
+                                found = true;
+                                return products[i].ospProductType;
+                            }
+                            ++it;
+                        }
+                    }
+                    ++i;
+                }
+            }
+            return null;
+        }
+
+        fillOwcsStores(layoutMetaData: any) {
+            let vm = this;
+            OrangeFeSARQ.Controllers.ParentController.shared.owcsStores = {};
+            vm.setDataInStore(layoutMetaData.topSection);
+            vm.setDataInStore(layoutMetaData.centralSection);
+            vm.setDataInStore(layoutMetaData.leftSection);
+            vm.setDataInStore(layoutMetaData.rightSection);
+            vm.setDataInStore(layoutMetaData.bottomSection);
+            vm.setDataInStore(layoutMetaData.footerSection);
+            vm.setDataInStore(layoutMetaData.headerSection);
+        }
+
+        setDataInStore(section): void {
             let vm = this;
             for (let i: number = 0; i < section.length; i++) {
 
                 OrangeFeSARQ.Controllers.ParentController.shared.owcsStores[_.camelCase(section[i].compId) + 'OWCSStore'] = {section: section[i]};
 
                 if (section[i].listModuleButton) {
-					vm.setDataInStore(section[i].listModuleButton);
-				}
+                    vm.setDataInStore(section[i].listModuleButton);
+                }
 
-				if (section[i].listModule) {
-					vm.setDataInStore(section[i].listModule);
-				}
+                if (section[i].listModule) {
+                    vm.setDataInStore(section[i].listModule);
+                }
             }
+        }
+
+        isset(val: any): boolean {
+            let vm = this;
+            return val !== null && val !== 'undefined' && val !== undefined && val;
         }
 
     }
