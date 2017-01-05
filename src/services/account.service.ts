@@ -52,7 +52,7 @@ module OrangeFeSARQ.Services {
                 urlParams: ['email', 'new']
             };
             // Llamada al post con la url +  datos + url para descachear
-            return vm.httpCacheOrange.put(vm.urlRedirectEmail, _search, componentName)
+            return vm.httpPut(vm.urlRedirectEmail, _search, componentName)
                 .then(function (response) {
                     return response.data;
                 })
@@ -61,6 +61,26 @@ module OrangeFeSARQ.Services {
                 });
 
         }
+		
+		checkMail(data: newAccount.Models.NewMailRequest,componentName = 'new-account-comp') : ng.IPromise <any>{ 
+			let vm = this;
+
+            let _search: Object = {
+                queryParams: {
+					login:data.accountLogin,
+					domain:data.accountDomain
+				},
+                urlParams: ['email', 'check']
+            };
+            // Llamada al post con la url +  datos + url para descachear
+            return vm.httpCacheGett(vm.urlRedirectEmail, _search, componentName)
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (error) {
+                    return error;
+                });
+		}
 
         redirectEmail(userLogin: string, userDomain: string, userEmail: string, userOperation: string): any {
             let vm = this;

@@ -7,11 +7,31 @@ declare module OrangeFeSARQ.Components {
         setBindings(bindings: any): void;
     }
 }
+declare module OrangeFeSARQ {
+}
+declare module OrangeFeSARQ.Components {
+    class GraphsCom {
+        controller: string | Function;
+        controllerAs: string;
+        template: string | Function;
+        bindings: {
+            [binding: string]: string;
+        };
+        constructor();
+    }
+}
+declare module graphs.controller {
+    class GraphsController {
+        private options;
+        private optionsController;
+        constructor();
+    }
+}
 declare module renderContent {
 }
 declare module renderContent.Components {
     /**
-     */
+    */
     class RenderContentComp implements ng.IComponentOptions {
         bindings: {
             [binding: string]: string;
@@ -42,8 +62,40 @@ declare module renderContent.Controllers {
 declare module OrangeFeSARQ {
 }
 declare module OrangeFeSARQ.Components {
+    class RenderDynamicLayoutComp implements ng.IComponentOptions {
+        bindings: {
+            [binding: string]: string;
+        };
+        controller: string | Function;
+        template: string | Function;
+        controllerAs: string;
+        constructor();
+    }
+}
+declare module OrangeFeSARQ.Controllers {
     /**
+     * @ngdoc controller
+     * @name renderLayout.Controllers:RenderDynamicLayoutCtrl
+     * @description
+     * Controlador de renderLayout
      */
+    class RenderDymamicLayoutCtrl extends OrangeFeSARQ.Controllers.ParentController {
+        $injector: any;
+        $scope: ng.IScope;
+        $sce: ng.ISCEService;
+        static $inject: string[];
+        private dynamicLayoutMetaData;
+        body: any;
+        private flexGridW;
+        constructor($injector: any, $scope: ng.IScope, $sce: ng.ISCEService);
+        genLayout(): void;
+    }
+}
+declare module OrangeFeSARQ {
+}
+declare module OrangeFeSARQ.Components {
+    /**
+    */
     class RenderLayoutComp implements ng.IComponentOptions {
         bindings: {
             [binding: string]: string;
@@ -65,6 +117,28 @@ declare module OrangeFeSARQ.Controllers {
         static $inject: string[];
         layoutMetaData: any;
         constructor($injector: any);
+    }
+}
+declare module OrangeFeSARQ {
+}
+declare module OrangeFeSARQ.Components {
+    class ValidatorCom {
+        controller: string | Function;
+        controllerAs: string;
+        template: string | Function;
+        bindings: {
+            [binding: string]: string;
+        };
+        constructor();
+    }
+}
+declare module validator.controller {
+    class ValidatorController {
+        private valid;
+        private validation;
+        private validator;
+        constructor();
+        validador: () => void;
     }
 }
 declare module OrangeFeSARQ.Controllers {
@@ -165,6 +239,9 @@ declare module OrangeFeSARQ.Controllers {
         assettype: string;
         compName: string;
         compNameToError: string;
+        private watcher;
+        private watcherDestroy;
+        $http: ng.IHttpService;
         constructor($injector: any);
         getIndex(): number;
         $onDestroy(): void;
@@ -215,6 +292,29 @@ declare module OrangeFeSARQ.Controllers {
         error(errorCode: string, errorMessage: string): void;
         /**
          * @ngdoc method
+         * @name OrangeFeSARQ.Controllers:parentController#watch
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @param {Function} watchExpression watchExpression.
+         * @param {Fuction} listener listener.
+         * @param {boolean=} [destroy=true] elimina el watcher tras el destroy del componente
+         * @description
+         * Crea un watcher gestionable por el componente
+         * @example
+         * ```js
+         *  vm.watch(function () { return vm.msisdnStore.msisdn; }, function (newValue, oldValue) {
+         *          if (newValue !== oldValue) {
+         *              if (vm.msisdnStore.msisdn) {
+         *                   vm.msisdn = vm.msisdnStore.msisdn;
+         *                   vm.callExpeditService();
+         *               }
+         *           }
+         *       });
+         * ```
+         * @return {void} void
+         */
+        watch(watchExpression: Function, listener: Function, destroy?: boolean): void;
+        /**
+         * @ngdoc method
          * @name OrangeFeSARQ.Controllers:parentController#newProcess
          * @methodOf OrangeFeSARQ.Controllers:parentController
          * @description
@@ -241,7 +341,7 @@ declare module OrangeFeSARQ.Controllers {
         finishProcess(): void;
         /**
          * @ngdoc method
-         * @name OrangeFeSARQ.Services:parentController#httpCacheGett
+         * @name OrangeFeSARQ.Controllers:parentController#httpCacheGett
 
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
@@ -264,7 +364,7 @@ declare module OrangeFeSARQ.Controllers {
         httpCacheGett(url: string, params: any, refresh?: boolean): ng.IPromise<any>;
         /**
          * @ngdoc method
-         * @name OrangeFeSARQ.Services:parentController#httpCacheGeth
+         * @name OrangeFeSARQ.Controllers:parentController#httpCacheGeth
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
          * @param {Object} headers parametros  de cabecera http.
@@ -290,7 +390,7 @@ declare module OrangeFeSARQ.Controllers {
         httpCacheGeth(url: string, params: any, headers: any, refresh?: boolean): ng.IPromise<any>;
         /**
          * @ngdoc method
-         * @name OrangeFeSARQ.Services:parentController#saveInSession
+         * @name OrangeFeSARQ.Controllers:parentController#saveInSession
          * @methodOf OrangeFeSARQ.Controllers:parentController
          * @description
          * Guarda en el sessionStorage el catalog de mensajes (recursos),
@@ -302,6 +402,74 @@ declare module OrangeFeSARQ.Controllers {
          * @return {void} void
          */
         saveInSession(): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Controllers:parentController#httpPut
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @param {string} url de la api sin parametros.
+         * @param {any} data JSON con el body de la petición, PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición PUT HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         * let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get'],
+         *        body: { }
+         *    };
+         *  vm.httpPut('URL', data);
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpPut(url: string, data: any, config?: {}): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+     * @name OrangeFeSARQ.Controllers:parentController#httpPost
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @param {string} url de la api sin parametros.
+     * @param {any} data JSON con el body de la petición, PathParameters y QueryString.
+     * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición POST HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         * let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get'],
+         *        body: { }
+         *    };
+     *  vm.httpPost('URL', data);
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpPost(url: string, data: any, config?: {}): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Controllers:parentController#httpDelete
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @param {string} url de la api sin parametros.
+         * @param {any} data PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición DELETE HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         *         let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get']
+         *    };
+         *  vm.httpDelete('URL', data);
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpDelete(url: string, data: any, config?: {}): ng.IPromise<any>;
         setInjections($injector: any): void;
         setBindData(): void;
         initComp(): void;
@@ -386,6 +554,75 @@ declare module OrangeFeSARQ.Models {
     class APPConfig {
         components: Component[];
         APIs: API[];
+    }
+}
+declare module OrangeFeSARQ.Models {
+    interface RowContent {
+        queryMode: boolean;
+        listLabel: any[];
+        listOption: any[];
+        colorChartAlternative?: any;
+        listDeepLink: any[];
+        managementMode: boolean;
+        title: string;
+        subtitleMoreInfo?: any;
+        listImage: any[];
+        labelAngular: string;
+        emptyMessage: string;
+        urlMoreInfo: string;
+        listMessageValidation: any[];
+        id: any;
+        listModule: any[];
+        accordion: boolean;
+        modeMoreInfo: string;
+        numMax: number;
+        listPages: any[];
+        richText: any[];
+        assetType: string;
+        listModuleSwitch: any[];
+        compId: string;
+        colorChart?: any;
+        moreInformacion?: any;
+        listTable: any[];
+        subtitle?: any;
+        information?: any;
+        titleMoreInfo: string;
+        desc?: any;
+        moduleMode?: any;
+        parents: any[];
+    }
+    interface CentralSection {
+        rowContent: RowContent[];
+        name: string;
+        rating: number;
+        flexGridWidth: string;
+        assetType: string;
+    }
+    interface DynamicLayout {
+        c: string;
+        footer: boolean;
+        centralSection: CentralSection[];
+        locale: string;
+        layoutId: string;
+        headerSection: any[];
+        topSection: any[];
+        bottomSection: any[];
+        site: string;
+        footerSection: any[];
+        leftSection: any[];
+        header: boolean;
+        rightSection: any[];
+        cid: number;
+    }
+    class DynamicLayoutRow {
+        cells: DynamicLayoutCell[];
+        constructor();
+    }
+    class DynamicLayoutCell {
+        labelSection: string;
+        style: string;
+        compId: string;
+        constructor();
     }
 }
 declare module OrangeFeSARQ.Models {
@@ -485,6 +722,7 @@ declare module OrangeFeSARQ.Services {
         response: (responseSuccess: any) => ng.IPromise<any>;
         responseError: (responseFailure: any) => ng.IPromise<any>;
         private checkResponse;
+        private camelToUnderscoreTrimmer(value);
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -575,6 +813,7 @@ declare module OrangeFeSARQ.Services {
         static $inject: string[];
         httpCacheOrange: OrangeFeSARQ.Services.HttpCache;
         genericConstant: any;
+        private $http;
         constructor($injector: any);
         /**
          * @ngdoc method
@@ -582,7 +821,8 @@ declare module OrangeFeSARQ.Services {
 
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
-         * @param {string} componentName Nombre del componente desde el que se invoca el servicio para gestionar la respuesta con el catalogo, por defecto "noComponent"
+         * @param {string} componentName Nombre del componente desde el que se invoca el servicio para
+         *  gestionar la respuesta con el catalogo, por defecto "noComponent"
          * @param {boolean=} [refresh=false] Invalida la cache por defecto false
          * @methodOf OrangeFeSARQ.Services:ParentService
          * @description
@@ -606,7 +846,8 @@ declare module OrangeFeSARQ.Services {
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
          * @param {Object} headers parametros  de cabecera http.
-         * @param {string} componentName Nombre del componente desde el que se invoca el servicio para gestionar la respuesta con el catalogo, por defecto "noComponent"
+           * @param {string} componentName Nombre del componente desde el que se invoca
+           * el servicio para gestionar la respuesta con el catalogo, por defecto "noComponent"
          * @param {boolean=} [refresh=false] Invalida la cache por defecto false
          * @methodOf OrangeFeSARQ.Services:ParentService
          * @description
@@ -627,6 +868,74 @@ declare module OrangeFeSARQ.Services {
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
         httpCacheGeth(url: string, params: any, headers: any, componentName?: string, refresh?: boolean): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentService#httpPut
+         * @methodOf OrangeFeSARQ.Services:ParentService
+         * @param {string} url de la api sin parametros.
+         * @param {any} data JSON con el body de la petición, PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición PUT HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         * let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get'],
+         *        body: { }
+         *    };
+         *  vm.httpPut('URL', data, 'loginComp');
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpPut(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentService#httpPost
+         * @methodOf OrangeFeSARQ.Services:ParentService
+         * @param {string} url de la api sin parametros.
+         * @param {any} data JSON con el body de la petición, PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición POST HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         * let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get'],
+         *        body: { }
+         *    };
+         *  vm.httpPost('URL', data, 'loginComp');
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpPost(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentService#httpDelete
+         * @methodOf OrangeFeSARQ.Services:ParentService
+         * @param {string} url de la api sin parametros.
+         * @param {any} data PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición DELETE HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         *          let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get']
+         *    };
+         *  vm.httpDelete('URL', data, 'loginComp');
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpDelete(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -742,7 +1051,6 @@ declare module OrangeFeSARQ.Services {
      * este accesible desde los distintos componentes
      */
     class CustomerView extends OrangeFeSARQ.Services.ParentService implements ICustomerView {
-        private $http;
         $injector: any;
         static $inject: string[];
         clientAPIUrl: string;
@@ -752,7 +1060,7 @@ declare module OrangeFeSARQ.Services {
         httpCache: any;
         customerViewStoreSrv: OrangeFeSARQ.Services.CustomerViewStore;
         sessionStorageSrv: OrangeFeSARQ.Services.SessionStorageManager;
-        constructor($http: any, $injector: any);
+        constructor($injector: any);
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:customerViewSrv#getUser
@@ -760,7 +1068,8 @@ declare module OrangeFeSARQ.Services {
          * @param {string} clientId ID del cliente a buscar.
          * @methodOf OrangeFeSARQ.Services:customerViewSrv
          * @description
-         * Devuelve y guarda la informacion del usuario del servicio de CustomerView, si existe en el sessionStorage la recupera y la borra, si no invoca a la API.
+         * Devuelve y guarda la informacion del usuario del servicio de CustomerView,
+         * si existe en el sessionStorage la recupera y la borra, si no invoca a la API.
          * @example
          * Se hace uso del servicio con herencia de ParentController
          * ```js
@@ -1093,33 +1402,6 @@ declare module OrangeFeSARQ.Services {
     }
 }
 declare module OrangeFeSARQ.Services {
-    interface IInterceptor {
-        request: Function;
-        requestError: Function;
-        response: Function;
-        responseError: Function;
-    }
-    /**
-     *    HTTP Generic error interceptor
-     */
-    class HttpErrorInterceptor implements IInterceptor {
-        private $q;
-        static $inject: string[];
-        static Factory($q: ng.IQService): HttpErrorInterceptor;
-        constructor($q: ng.IQService);
-        request: (config: any) => ng.IPromise<any>;
-        response: (responseSuccess: any) => ng.IPromise<any>;
-        requestError: (requestFailure: any) => ng.IPromise<any>;
-        /**
-         Response error. May be of interest the following fields:
-         - responseFailure.status: HTTP error code
-         - responseFailure.data: probably, the error returned
-         - responseFailure.config: headers, method, url, transformers
-         */
-        responseError: (responseFailure: any) => ng.IPromise<any>;
-    }
-}
-declare module OrangeFeSARQ.Services {
     interface ILocalStorageManager {
         getEntry(key: string): any;
         setEntry(key: string, value: any): any;
@@ -1204,8 +1486,10 @@ declare module OrangeFeSARQ.Services {
         private uuidSrv;
         private msisdnStore;
         private genericConstant;
+        private $rootElement;
         static $inject: string[];
-        constructor($http: ng.IHttpService, $log: ng.ILogService, appConfigSrv: OrangeFeSARQ.Services.AppConfigManager, uuidSrv: OrangeFeSARQ.Services.IUUID, msisdnStore: OrangeFeSARQ.Services.MsisdnStore, genericConstant: any);
+        private appName;
+        constructor($http: ng.IHttpService, $log: ng.ILogService, appConfigSrv: OrangeFeSARQ.Services.AppConfigManager, uuidSrv: OrangeFeSARQ.Services.IUUID, msisdnStore: OrangeFeSARQ.Services.MsisdnStore, genericConstant: any, $rootElement: ng.IRootElementService);
         sendTraces: (trace: Models.Trace) => void;
         traceConsole: (trace: Models.Trace) => void;
         /**
@@ -1354,25 +1638,12 @@ declare module OrangeFeSARQ.Services {
          Recover a property from sessionStorage
          */
         getLayoutMetada(key: string, exp?: number): any;
+        getDinamicLayoutMetada(key: string, exp?: number): any;
         getLayoutMetadaPosition(key: string, exp?: number): any;
         getComponentMetadata(type: any, key: string, exp?: number): any;
         changeLayaoutMetada(layoutMetaData: any): any;
         changeSection(section: any): any;
         addAsset(comp: any): any;
-    }
-}
-declare module OrangeFeSARQ.Services {
-    interface IApiOrchestator {
-    }
-    class ApiOrchestator implements IApiOrchestator {
-        private $http;
-        private orangeModelMapper;
-        private pendingOperations;
-        static $inject: string[];
-        constructor($http: ng.IHttpService);
-        get: (tag: string, url: string, cb: Function) => void;
-        existsDataModel: (tag: string) => boolean;
-        isPendingOperation: (tag: string) => boolean;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -1440,8 +1711,8 @@ declare module OrangeFeSARQ.Services {
 }
 declare module OrangeFeSARQ.Services {
     /**
-     *    HTTP Generic error interceptor
-     */
+    *    HTTP Generic error interceptor
+    */
     class HttpUUIDInterceptor implements ng.IHttpInterceptor {
         private $q;
         private uuidSrv;
