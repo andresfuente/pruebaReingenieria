@@ -29,6 +29,7 @@ module.exports = function (grunt) {
 
             dist: {
                 src: [
+                    'build/src/**/*models.js',
                     'build/src/**/*service.js',
                     'build/src/**/**.js',
 					
