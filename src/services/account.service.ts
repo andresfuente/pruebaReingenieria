@@ -62,6 +62,24 @@ module OrangeFeSARQ.Services {
 
         }
 		
+		passChange(data: newAccount.Models.PassChangeEmailRequest, componentName = 'new-account-comp'): ng.IPromise <newAccount.Models.PassChangeResponse> {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams: data,
+                urlParams: ['email', 'password']
+            };
+            // Llamada al post con la url +  datos + url para descachear
+            return vm.httpPost(vm.urlRedirectEmail, _search, componentName)
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (error) {
+                    return error;
+                });
+
+        }
+		
 		checkMail(data: newAccount.Models.NewMailRequest,componentName = 'new-account-comp') : ng.IPromise <any>{ 
 			let vm = this;
 
