@@ -32,7 +32,7 @@ module OrangeFeSARQ.Services {
 
             };
 
-            return vm.httpCacheGett(vm.urlRedirectEmail, _search, componentName)
+            return vm.httpCacheGett(vm.url, _search, componentName)
                 .then(function (response) {
                     return response.data;
                 })
