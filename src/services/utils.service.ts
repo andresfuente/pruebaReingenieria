@@ -266,7 +266,7 @@ module OrangeFeSARQ.Services {
 
         doDigest(): void {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
-                if (!angular.element(document.body).scope().$$phase) {
+                if (!angular.element(document.body) && !angular.element(document.body).scope().$$phase) {
                     angular.element(document.body).scope().$apply();
                 }
             }
