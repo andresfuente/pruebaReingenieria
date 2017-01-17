@@ -418,9 +418,8 @@ module OrangeFeSARQ.Services {
 		
 		objectHaveAnyProperty(obj :any) : boolean{
 				let j : number= 0;
-				for(let i:number=0; i<obj.length; i++) {
-					let ad :any = obj[i];
-					if (obj.hasOwnProperty(ad)) {
+				for (let key of Object.keys(obj)) {
+					if (obj.hasOwnProperty(key)) {
 						j++;
 					}
 				}
