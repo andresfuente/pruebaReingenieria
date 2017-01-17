@@ -420,7 +420,7 @@ module OrangeFeSARQ.Services {
 				let j : number= 0;
 				for(let i:number=0; i<obj.length; i++) {
 					let ad :any = obj[i];
-					if (ad.hasOwnProperty(prop)) {
+					if (obj.hasOwnProperty(ad)) {
 						j++;
 					}
 				}
