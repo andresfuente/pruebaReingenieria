@@ -418,7 +418,7 @@ module OrangeFeSARQ.Services {
 		
 		objectHaveAnyProperty(obj :any) : boolean{
 				let j : number= 0;
-				for(let prop in onj) {
+				for(let prop:any in obj) {
 					if (ad.hasOwnProperty(prop)) {
 						j++;
 					}
