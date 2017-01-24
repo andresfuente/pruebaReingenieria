@@ -28,7 +28,7 @@ module OrangeFeSARQ.Services {
                     idNumber: idNumber,
                     fixedNumber: msisdn
                 },
-                urlParams: ['productInventory', 'getEmails']
+                urlParams: [vm.genericConstant.marca, 'getEmails']
 
             };
 
