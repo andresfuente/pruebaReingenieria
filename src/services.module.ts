@@ -14,6 +14,7 @@ module OrangeFeSARQ.Constant {
         .service('getImagesSrv', OrangeFeSARQ.Services.getImagesSrv)
         .service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter)
         .service('accountSrv', OrangeFeSARQ.Services.AccountSrv)
+        .service('detailRateSrv', OrangeFeSARQ.Services.DetailRateSrv)
         .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
                 getHeaderFooterSrv.getData().then(

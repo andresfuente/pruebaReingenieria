@@ -415,6 +415,16 @@ module OrangeFeSARQ.Services {
             let vm = this;
             return val !== null && val !== 'undefined' && val !== undefined && val;
         }
+		
+		objectHaveAnyProperty(obj :any) : boolean{
+				let j : number= 0;
+				for (let key of Object.keys(obj)) {
+					if (obj.hasOwnProperty(key)) {
+						j++;
+					}
+				}
+					return j !== 0;
+			}
 
     }
     angular.module('utils', [])
