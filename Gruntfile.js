@@ -232,7 +232,7 @@ module.exports = function (grunt) {
     grunt.registerTask('rejs', ['string-replace:js']);
 
     grunt.registerTask('test', ['string-replace:dist', 'karma:unit']);  // ['jshint', 'karma']
-    grunt.registerTask('generate-coverage-report', ['clean:coverage', 'test', 'remapIstanbul', 'coverage']);
+    grunt.registerTask('generate-coverage-report', [ 'test', 'remapIstanbul', 'coverage']);
     grunt.registerTask('dts-generate', ['dtsGenerator']);
 
     grunt.registerTask('default', ['clean', 'ts', 'string-replace:html', 'string-replace:js', 'concat', 'uglify', 'dts-generate']);
