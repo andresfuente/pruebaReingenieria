@@ -266,7 +266,7 @@ module OrangeFeSARQ.Services {
 
         doDigest(): void {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
-                if (!angular.element(document.body).scope().$$phase) {
+                if (!angular.element(document.body) && !angular.element(document.body).scope().$$phase) {
                     angular.element(document.body).scope().$apply();
                 }
             }
@@ -430,6 +430,16 @@ module OrangeFeSARQ.Services {
             let vm = this;
             return val !== null && val !== 'undefined' && val !== undefined && val;
         }
+		
+		objectHaveAnyProperty(obj :any) : boolean{
+				let j : number= 0;
+				for (let key of Object.keys(obj)) {
+					if (obj.hasOwnProperty(key)) {
+						j++;
+					}
+				}
+					return j !== 0;
+			}
 
     }
     angular.module('utils', [])

@@ -31,11 +31,8 @@ module OrangeFeSARQ.Services {
         getVap(msisdn: string, id: string, componentName:string="payPendingPaymentComp"): any {
             let vm = this;
             let _search: Object = {
-                queryParams: {
-                    msisdn: msisdn,
-                    ID: id
-                },
-                urlParams: []
+                queryParams: {},
+                urlParams: ['vapData', 'OSP', id, msisdn]
 
             };
             return vm.httpCacheGett(vm.genericConstant.amortizationApi, _search,componentName)

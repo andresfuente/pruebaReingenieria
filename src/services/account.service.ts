@@ -20,7 +20,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
         }
 
-        getData(idType, idNumber, msisdn) {
+        getData(idType, idNumber, msisdn, componentName = 'new_account') {
             let vm = this;
             let _search: Object = {
                 queryParams: {
@@ -28,23 +28,20 @@ module OrangeFeSARQ.Services {
                     idNumber: idNumber,
                     fixedNumber: msisdn
                 },
-                urlParams: ['productInventory', 'getEmails']
+                urlParams: [vm.genericConstant.brand, 'getEmails']
 
             };
 
-            return vm.httpCacheOrange.gett(vm.url, _search)
-
-                .then(
-                    (successData)=> {
-                        return successData;
-                    },
-                    (errorData)=> {
-                        return errorData;
-                    }
-                );
+            return vm.httpCacheGett(vm.url, _search, componentName)
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (error) {
+                    return error;
+                });
         }
 
-        putMail(data: newAccount.Models.NewMailRequest, componentName = 'new-account-comp'): ng.IPromise <newAccount.Models.NewMailResponse> {
+        putMail(data: newAccount.Models.NewMailRequest, componentName = 'row_input_email'): ng.IPromise <newAccount.Models.NewMailResponse> {
             let vm = this;
 
             let _search: Object = {
@@ -62,7 +59,25 @@ module OrangeFeSARQ.Services {
 
         }
 		
-		checkMail(data: newAccount.Models.NewMailRequest,componentName = 'new-account-comp') : ng.IPromise <any>{ 
+		passChange(data: newAccount.Models.PassChangeEmailRequest, componentName = 'row_input_email'): ng.IPromise <newAccount.Models.PassChangeResponse> {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams: data,
+                urlParams: ['email', 'password']
+            };
+            // Llamada al post con la url +  datos + url para descachear
+            return vm.httpPost(vm.urlRedirectEmail, _search, componentName)
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (error) {
+                    return error;
+                });
+
+        }
+		
+		checkMail(data: newAccount.Models.NewMailRequest,componentName = 'row_input_email') : ng.IPromise <any>{ 
 			let vm = this;
 
             let _search: Object = {
@@ -82,7 +97,7 @@ module OrangeFeSARQ.Services {
                 });
 		}
 
-        redirectEmail(userLogin: string, userDomain: string, userEmail: string, userOperation: string): any {
+        redirectEmail(userLogin: string, userDomain: string, userEmail: string, userOperation: string, componentName = 'row_input_email'): any {
             let vm = this;
             let data = {
                 "login": userLogin.toLowerCase(),
@@ -95,7 +110,7 @@ module OrangeFeSARQ.Services {
                 urlParams: ['email', 'redirect']
             };
             // Llamada al post con la url +  datos + url para descachear
-            return vm.httpCacheOrange.post(vm.urlRedirectEmail, _search)
+			return vm.httpPost(vm.urlRedirectEmail, _search, componentName)
                 .then(function (response) {
                     return response.data;
                 })
@@ -104,7 +119,7 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-        getRedirectedAccount(userLogin: string, userDomain: string, componentName: string = 'rowInputEmailComp'): any {
+        getRedirectedAccount(userLogin: string, userDomain: string, componentName: string = 'row_input_email'): any {
             let vm = this;
             let _search: Object = {
                 queryParams: {
