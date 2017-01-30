@@ -316,6 +316,21 @@ module OrangeFeSARQ.Services {
                 return false;
             }
         }
+		
+		/**
+         * Return true if paramether phone begin with +34 || 6 || 7
+         */
+        isMobileLine(phone: number) {
+            if (phone) {
+                let phoneStr: string = phone.toString();
+                //let regFixed = /^((\+?34)?(8|9))\d+$/;
+                let regMobile = /^((6|7)|\+?34(6|7))/;
+                if (phoneStr.match(regMobile)) {
+                    return true;
+                }
+                return false;
+            }
+        }
 
         /**
          * Comprueba si la URL contiene una IMG
