@@ -14,11 +14,11 @@ module servicesCommons.Tests.Controllers {
             angular.mock.module('httpCache');
             angular.mock.module('servicesCommons');
         });
-
+		/*
         beforeEach(() => {
             inject(
                 function(_$injector_) {
-                    /* load data from mockjson */
+                    /* load data from mockjson * /
                     $injector = _$injector_;
                     jasmine.getJSONFixtures().clearCache();
                     jasmine.getJSONFixtures().fixturesPath = 'base/test/mock';
@@ -31,6 +31,6 @@ module servicesCommons.Tests.Controllers {
         it('utils Controller should be defined', function() {
             let a = { a:1,b:2 };
 			expect(a).toBeDefined();
-        });
+        });*/
     });
 }
