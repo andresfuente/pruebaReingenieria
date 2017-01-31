@@ -7,33 +7,42 @@ module.exports = function(config) {
             // './build/test/libs/commondep.test.js',
             './test/libs/jasmine-jquery.js',
             // // Load core framework
-            './node_modules/es6-shim/es6-shim.js',
-            './node_modules/angular/angular.js',
-
-
-
-
-
-            './node_modules/lodash/lodash.js',
-            './node_modules/d3/d3.js',
-            './node_modules/d3-axis/build/d3-axis.min.js',
-            './node_modules/nvd3/build/nv.d3.js',
-            './node_modules/angular-nvd3/dist/angular-nvd3.js',
+            // './node_modules/es6-shim/es6-shim.js',
+            // './node_modules/angular/angular.js',
+            //
+            //
+            //
+            //
+            //
+            // './node_modules/lodash/lodash.js',
+            // './node_modules/d3/d3.js',
+            // './node_modules/d3-axis/build/d3-axis.min.js', 
+            // './node_modules/nvd3/build/nv.d3.js',
+            // './node_modules/angular-nvd3/dist/angular-nvd3.js',
 
             './node_modules/orange-arq-common/dist/vendor/vendor.js',
             './node_modules/angular-mocks/angular-mocks.js',
             './node_modules/orange-angular-router/dist/angular/router/angular1/angular_1_router.js',
             './node_modules/orange-arq-common/dist/app/orange-arq-common.js',
+            './node_modules/orange-services/dist/orange-services.js',
+            './node_modules/orange-popup/dist/orange-popup.js',
+            './node_modules/orange-notification-center/dist/orange-notification-center.min.js',
 
 
             './build/test/libs/*.js',
+			
+			'./build/**/*fake*.js',
+			'./build/**/*constant.js',
+			'./build/**/*.model.js',
+			'./build/**/*.filter.js',
+			'./build/**/*service.js',
+			'./build/**/*controller.js',
+			'./build/types/**/*.js',
+			'./build/**/*component.js',
+			'./build/**/*.module.js',
 
-            './build/src/**/**.js',
-            './build/src/utils.service.js',
-
-            './build/src/*.module.js',
-
-            // Test Specs
+            // Test Specs          
+                 
             './build/test/src/**/**/*.js',
 
 
