@@ -44,7 +44,7 @@ module OrangeFeSARQ.Services {
 
             let _search: Object = {
                 queryParams: {},
-                urlParams: ['orange', 'customerView', param, clientId]
+                urlParams: [vm.genericConstant.brand, 'customerView', param, clientId]
 
             };
 
