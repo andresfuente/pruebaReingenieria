@@ -8,11 +8,11 @@ module OrangeFeSARQ.Services {
      * Servicio que busca un cliente en funcion de distintos parámetros
      */
     export class UserSrv extends OrangeFeSARQ.Services.ParentService {
-        static $inject = ['$injector'];
+        static $inject = ['$injector', '$q'];
         public clientAPIUrl: string;
         public genericConstant;
 
-        constructor($injector) {
+        constructor($injector, public $q) {
             super($injector);
             let vm = this;
             vm.setInjections($injector);
@@ -22,6 +22,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.genericConstant = $injector.get("genericConstant");
             vm.clientAPIUrl = vm.genericConstant.customerView;
+
         }
 
         /**
@@ -32,7 +33,7 @@ module OrangeFeSARQ.Services {
          */
         getUser(param: string, clientId: string,componentName:string='locatorComp'): any {
             let vm = this;
-
+            let promise = vm.$q.defer();
             switch (param) {
                 case 'individualPublicId':
                     param = 'residential';
@@ -59,11 +60,10 @@ module OrangeFeSARQ.Services {
 							localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
 						}
 					 }
-                    
-                    return response.data;
+                    promise.resolve(response.data);
                 },
                 (error) => {
-                    return error;
+                    promise.resolve(error.data);
                 });
         }
 
