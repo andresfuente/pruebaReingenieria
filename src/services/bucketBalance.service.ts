@@ -28,7 +28,7 @@ module OrangeFeSARQ.Services {
                     publicKey: msisdn,
                     productBucket: ''
                 },
-                urlParams: ['orange', 'usageReport', 'OSP']
+                urlParams: [vm.genericConstant.brand, 'usageReport', 'OSP']
 
             };
 
@@ -61,7 +61,7 @@ module OrangeFeSARQ.Services {
                     individualPublicId: nif,
                     productBucket: ''
                 },
-                urlParams: ['orange', 'usageReport', 'OSP']
+                urlParams: [vm.genericConstant.brand , 'usageReport', 'OSP']
             };
 
             if (param === 'Line') {
