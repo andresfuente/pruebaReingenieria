@@ -61,10 +61,13 @@ module OrangeFeSARQ.Services {
 						}
 					 }
                     promise.resolve(response.data);
+                    return promise.promise;
                 },
                 (error) => {
                     promise.reject(error.data);
+                    return promise.promise;
                 });
+           
         }
 
     }
