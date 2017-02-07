@@ -30,8 +30,6 @@ declare module graphs.controller {
 declare module renderContent {
 }
 declare module renderContent.Components {
-    /**
-    */
     class RenderContentComp implements ng.IComponentOptions {
         bindings: {
             [binding: string]: string;
@@ -94,8 +92,6 @@ declare module OrangeFeSARQ.Controllers {
 declare module OrangeFeSARQ {
 }
 declare module OrangeFeSARQ.Components {
-    /**
-    */
     class RenderLayoutComp implements ng.IComponentOptions {
         bindings: {
             [binding: string]: string;
@@ -342,7 +338,6 @@ declare module OrangeFeSARQ.Controllers {
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Controllers:parentController#httpCacheGett
-
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
          * @param {boolean=} [refresh=false] Invalida la cache por defecto false
@@ -427,11 +422,11 @@ declare module OrangeFeSARQ.Controllers {
         httpPut(url: string, data: any, config?: {}): ng.IPromise<any>;
         /**
          * @ngdoc method
-     * @name OrangeFeSARQ.Controllers:parentController#httpPost
+         * @name OrangeFeSARQ.Controllers:parentController#httpPost
          * @methodOf OrangeFeSARQ.Controllers:parentController
          * @param {string} url de la api sin parametros.
-     * @param {any} data JSON con el body de la petición, PathParameters y QueryString.
-     * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @param {any} data JSON con el body de la petición, PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
          * @description
          * Realiza una petición POST HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
          * @example
@@ -443,7 +438,7 @@ declare module OrangeFeSARQ.Controllers {
          *        urlParams: ['orange', 'customerView', 'get'],
          *        body: { }
          *    };
-     *  vm.httpPost('URL', data);
+         *  vm.httpPost('URL', data);
          * ```
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
@@ -476,7 +471,7 @@ declare module OrangeFeSARQ.Controllers {
         prepareTest(params: any[], functions: any[]): void;
         showModalMessage(typeMsg: number, title?: string, message?: string): void;
         setLogTestValue(name: any, value: any): void;
-        checkRecoverType(): void;
+        fillStore(): void;
         getName(vm: any): string;
     }
 }
@@ -557,15 +552,15 @@ declare module OrangeFeSARQ.Models {
     }
 }
 declare module OrangeFeSARQ.Models {
-    interface RowContent {
+    class RowContent {
         queryMode: boolean;
         listLabel: any[];
         listOption: any[];
-        colorChartAlternative?: any;
+        colorChartAlternative: any;
         listDeepLink: any[];
         managementMode: boolean;
         title: string;
-        subtitleMoreInfo?: any;
+        subtitleMoreInfo: any;
         listImage: any[];
         labelAngular: string;
         emptyMessage: string;
@@ -581,24 +576,24 @@ declare module OrangeFeSARQ.Models {
         assetType: string;
         listModuleSwitch: any[];
         compId: string;
-        colorChart?: any;
-        moreInformacion?: any;
+        colorChart: any;
+        moreInformacion: any;
         listTable: any[];
-        subtitle?: any;
-        information?: any;
+        subtitle: any;
+        information: any;
         titleMoreInfo: string;
-        desc?: any;
-        moduleMode?: any;
+        desc: any;
+        moduleMode: any;
         parents: any[];
     }
-    interface CentralSection {
+    class CentralSection {
         rowContent: RowContent[];
         name: string;
         rating: number;
         flexGridWidth: string;
         assetType: string;
     }
-    interface DynamicLayout {
+    class DynamicLayout {
         c: string;
         footer: boolean;
         centralSection: CentralSection[];
@@ -722,7 +717,7 @@ declare module OrangeFeSARQ.Services {
         response: (responseSuccess: any) => ng.IPromise<any>;
         responseError: (responseFailure: any) => ng.IPromise<any>;
         private checkResponse;
-        private camelToUnderscoreTrimmer(value);
+        private static camelToUnderscoreTrimmer(value);
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -730,6 +725,7 @@ declare module OrangeFeSARQ.Services {
         getMessage(id: string): OrangeFeSARQ.Models.Message;
         getErrorModule(): any;
         getCatalog(): OrangeFeSARQ.Models.CatalogMessage;
+        getGenericError(): any;
     }
     /**
      * @ngdoc service
@@ -782,6 +778,7 @@ declare module OrangeFeSARQ.Services {
          */
         getErrorModule: () => any;
         hasMessage: () => boolean;
+        getGenericError: () => any;
         getCatalog: () => Models.CatalogMessage;
     }
 }
@@ -818,7 +815,6 @@ declare module OrangeFeSARQ.Services {
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:ParentService#httpCacheGett
-
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
          * @param {string} componentName Nombre del componente desde el que se invoca el servicio para
@@ -846,8 +842,8 @@ declare module OrangeFeSARQ.Services {
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
          * @param {Object} headers parametros  de cabecera http.
-           * @param {string} componentName Nombre del componente desde el que se invoca
-           * el servicio para gestionar la respuesta con el catalogo, por defecto "noComponent"
+         * @param {string} componentName Nombre del componente desde el que se invoca
+         * el servicio para gestionar la respuesta con el catalogo, por defecto "noComponent"
          * @param {boolean=} [refresh=false] Invalida la cache por defecto false
          * @methodOf OrangeFeSARQ.Services:ParentService
          * @description
@@ -925,7 +921,7 @@ declare module OrangeFeSARQ.Services {
          * Realiza una petición DELETE HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
          * @example
          * ```js
-         *          let data : Object = {
+         *  let data : Object = {
          *        queryParams: {
          *             msisdn: msisdn
          *        },
@@ -942,7 +938,7 @@ declare module OrangeFeSARQ.Services {
     /**
      * @ngdoc service
      * @name OrangeFeSARQ.Services:appConfigSrv
-     *@module AppConfigManager
+     * @module AppConfigManager
      * @description
      * Servicio que carga el fichero de configuración de componentes appConfig.json para que  dicha configuración
      * este accesible desde los distintos componentes
@@ -1045,7 +1041,7 @@ declare module OrangeFeSARQ.Services {
     /**
      * @ngdoc service
      * @name OrangeFeSARQ.Services:customerViewSrv
-     *@module customerView
+     * @module customerView
      * @description
      * Servicio que recupera información del usuario (customerView) y la almacena.
      * este accesible desde los distintos componentes
@@ -1134,6 +1130,7 @@ declare module OrangeFeSARQ.Services {
         constructor();
         private _info;
         private _usageReport;
+        private _mdg;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:customerViewStore#info
@@ -1194,6 +1191,7 @@ declare module OrangeFeSARQ.Services {
          * @return {void} void
          */
         usageReport: any;
+        mdg: any;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -1235,7 +1233,7 @@ declare module OrangeFeSARQ.Services {
     /**
      * @ngdoc service
      * @name OrangeFeSARQ.Services:httpCacheOrange
-     *@module httpCache
+     * @module httpCache
      * @description
      * Servicio que  gestiona todas las peticiones HTTP de la aplicacion.
      * cacheado de peticiones GET en función de la configuración propia del componente
@@ -1252,7 +1250,7 @@ declare module OrangeFeSARQ.Services {
          * @ngdoc method
          * @name OrangeFeSARQ.Services:httpCacheOrange#post
          * @param {string} url de la api sin parametros.
-         * @param {Object} requestParams Parámetros
+         * @param {Object} params Parámetros
          * @param {string=} [resetCacheKey=''] restea las llamadas a una url
          * @methodOf OrangeFeSARQ.Services:httpCacheOrange
          * @description
@@ -1260,14 +1258,14 @@ declare module OrangeFeSARQ.Services {
          * @example
          * Typical usage
          * ```js
-         *  return vm.httpCacheOrange.post(vm.genericConstant.activityRegister, _search,'/sites/REST/controller/GridController/FichaCliente')
+         *  return vm.httpCacheOrange.post(vm.genericConstant.activityRegister,
+         *  _search,'/sites/REST/controller/GridController/FichaCliente')
          * .then(function (response) {
          *          return response.data;
          *       })
          * .catch(function (error) {
          *           return error;
-         *       });
-         *
+         *       })
          * }
          * ```
          *
@@ -1275,11 +1273,10 @@ declare module OrangeFeSARQ.Services {
          */
         post(url: string, params: any, resetCacheKey?: string): ng.IPromise<any>;
         put(url: string, params: any, resetCacheKey?: any): ng.IPromise<any>;
-        extractProperties(obj: any): string;
+        private static extractProperties(obj);
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:httpCacheOrange#gett
-
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
          * @param {number=} [time=(1000 * 5 * 60)] Tiempo de vida de la cache por defecto 5 mimutos.
@@ -1296,7 +1293,6 @@ declare module OrangeFeSARQ.Services {
          *             msisdn: msisdn
          *        },
          *        urlParams: ['orange', 'customerView', 'get']
-
          *    };
          * return vm.httpCacheOrange.gett(vm.clientAPIUrl, _search)
          * .then(function (response) {
@@ -1315,7 +1311,8 @@ declare module OrangeFeSARQ.Services {
          * @name OrangeFeSARQ.Services:httpCacheOrange#gettConfig
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
-         * @param {object} Configuracion de cache del componente.
+         * @param {object} componentConfig de cache del componente.
+         * @param {object} APIConfig de cache del api.
          * @param {boolean=} [refresh=false] Invalida la cache por defecto false
          * @methodOf OrangeFeSARQ.Services:httpCacheOrange
          * @description
@@ -1344,7 +1341,6 @@ declare module OrangeFeSARQ.Services {
          *             msisdn: msisdn
          *        },
          *        urlParams: ['orange', 'customerView', 'get']
-
          *    };
          * let _headers =  {
          * 'Component-Name': 'locator'
@@ -1367,7 +1363,8 @@ declare module OrangeFeSARQ.Services {
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
          * @param {Object} headers Cabecera de la petición.
-         * @param {object} Configuracion de cache del componente.
+         * @param {object} componentConfig de cache del componente.
+         * @param {object} APIConfig de cache del componente.
          * @param {boolean=} [refresh=false] Invalida la cache por defecto false
          * @methodOf OrangeFeSARQ.Services:httpCacheOrange
          * @description
@@ -1398,7 +1395,7 @@ declare module OrangeFeSARQ.Services {
          */
         getthConfig(url: string, params: any, headers: any, componentConfig: OrangeFeSARQ.Models.Cache, APIConfig: OrangeFeSARQ.Models.Cache, refresh?: boolean): ng.IPromise<any>;
         private getConfig(componentConfig, APIConfig, key, url, _search, refresh);
-        mixCache(cacheComp: OrangeFeSARQ.Models.Cache, cacheAPI: OrangeFeSARQ.Models.Cache): OrangeFeSARQ.Models.Cache;
+        private static mixCache(cacheComp, cacheAPI);
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -1556,7 +1553,6 @@ declare module OrangeFeSARQ.Services {
          * @param {string} errorCode código de error.
          * @param {string} errorMessage mensaje de error.
          * @param {boolean} newProcess indicador de nuevo proceso funcional de la app.
-
          * @methodOf OrangeFeSARQ.Services:loggerSrv
          * @description
          * Genera una traza de error critico en consola y/o backends, dependiente de la configuración de componente (appConfig.json).
@@ -1624,26 +1620,20 @@ declare module OrangeFeSARQ.Services {
         private $injector;
         static $inject: string[];
         keys: any;
+        private layoutsIds;
         constructor(httpCacheOrange: any, genericConstant: any, owcsIdsConstant: any, $injector: any);
         setDataInStore(section: any): void;
-        /**
-         Ssutituye los componentes no validos
-         */
         changeComp(element: any): any;
-        /**
-         Ssutituye los componentes no validos
-         */
         checkCompId(section: any): any;
-        /**
-         Recover a property from sessionStorage
-         */
         getLayoutMetada(key: string, exp?: number): any;
-        getDinamicLayoutMetada(key: string, exp?: number): any;
         getLayoutMetadaPosition(key: string, exp?: number): any;
         getComponentMetadata(type: any, key: string, exp?: number): any;
         changeLayaoutMetada(layoutMetaData: any): any;
         changeSection(section: any): any;
         addAsset(comp: any): any;
+        getAllLayoutIds(): void;
+        getDynamicViewLayoutMetada(key: string, exp?: number): any;
+        getDinamicLayoutMetada(key: string, exp?: number): any;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -1710,9 +1700,6 @@ declare module OrangeFeSARQ.Services {
     }
 }
 declare module OrangeFeSARQ.Services {
-    /**
-    *    HTTP Generic error interceptor
-    */
     class HttpUUIDInterceptor implements ng.IHttpInterceptor {
         private $q;
         private uuidSrv;
