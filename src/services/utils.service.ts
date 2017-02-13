@@ -432,14 +432,25 @@ module OrangeFeSARQ.Services {
         }
 		
 		objectHaveAnyProperty(obj :any) : boolean{
-				let j : number= 0;
-				for (let key of Object.keys(obj)) {
-					if (obj.hasOwnProperty(key)) {
-						j++;
-					}
+			let j : number= 0;
+			for (let key of Object.keys(obj)) {
+				if (obj.hasOwnProperty(key)) {
+					j++;
 				}
-					return j !== 0;
 			}
+				return j !== 0;
+		}
+		
+		isNumeric(number: string): boolean {
+            let vm = this;
+            let letras = 'abcdefghyjklmnñopqrstuvwxyz';
+            for (let i = 0; i < number.length; i++) {
+                if (letras.indexOf(number.charAt(i), 0) !== -1) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
     }
     angular.module('utils', [])
