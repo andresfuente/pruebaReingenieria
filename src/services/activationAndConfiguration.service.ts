@@ -5,8 +5,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
         private urlActivationAndConfiguration: string;
         private brand: string;
-        private requestModel: OrangeFeSARQ.Models.GetActivationAndConfigurationModel;
-        private responseModel: OrangeFeSARQ.Models.SetActivationAndConfigurationModel;
+        private requestModel: OrangeFeSARQ.Models.ActivationAndConfigurationModel;
 
         constructor(public $injector) {
             super($injector);
@@ -21,7 +20,7 @@ module OrangeFeSARQ.Services {
             vm.genericConstant = $injector.get('genericConstant');
         }
 
-        getData(msisdn: string, queryType: string, lineCategory: string, segment:string = '', componentName: string = 'row_switch_services'): ng.IPromise <OrangeFeSARQ.Models.GetActivationAndConfigurationModel> {
+        getData(msisdn: string, queryType: string, lineCategory: string, segment:string = '', componentName: string = 'row_switch_services'): ng.IPromise <OrangeFeSARQ.Models.ActivationAndConfigurationModel> {
             let vm = this;
             let _search: Object = {
                 queryParams: {
@@ -44,7 +43,7 @@ module OrangeFeSARQ.Services {
                 });
         }
         
-        changeStateService(data: OrangeFeSARQ.Models.SetActivationAndConfigurationModel, componentName = 'row_switch_services'): ng.IPromise <OrangeFeSARQ.Models.SetActivationAndConfigurationModel>  {
+        changeStateService(data: OrangeFeSARQ.Models.ActivationAndConfigurationModel, componentName = 'row_switch_services'): ng.IPromise <OrangeFeSARQ.Models.ActivationAndConfigurationModel>  {
             let vm = this;
             
             let _search: Object = {
