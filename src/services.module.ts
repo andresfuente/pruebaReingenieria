@@ -16,6 +16,7 @@ module OrangeFeSARQ.Constant {
         .service('accountSrv', OrangeFeSARQ.Services.AccountSrv)
         .service('detailRateSrv', OrangeFeSARQ.Services.DetailRateSrv)
 		.service('voiceMailPopUpSrv', OrangeFeSARQ.Services.VoiceMailPopUpSrv)
+		.service('activationAndConfigurationSrv', OrangeFeSARQ.Services.ActivationAndConfigurationSrv)
         .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
                 getHeaderFooterSrv.getData().then(
