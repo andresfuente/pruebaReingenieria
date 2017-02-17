@@ -20,7 +20,7 @@ module OrangeFeSARQ.Services {
             vm.genericConstant = $injector.get('genericConstant');
         }
 
-        getData(msisdn: string, queryType: string, lineCategory: string, segment:string = '', componentName: string = 'row_switch_services'): ng.IPromise <OrangeFeSARQ.Models.ActivationAndConfigurationModel> {
+        getData(msisdn: string, queryType: string, lineCategory: string, segment:string = '', componentName: string = 'row_switch_services'): ng.IPromise <any>{
             let vm = this;
             let _search: Object = {
                 queryParams: {
@@ -43,7 +43,7 @@ module OrangeFeSARQ.Services {
                 });
         }
         
-        changeStateService(data: OrangeFeSARQ.Models.ActivationAndConfigurationModel, componentName = 'row_switch_services'): ng.IPromise <OrangeFeSARQ.Models.ActivationAndConfigurationModel>  {
+        changeStateService(data: OrangeFeSARQ.Models.ActivationAndConfigurationModel, componentName = 'row_switch_services'): ng.IPromise <any>  {
             let vm = this;
             
             let _search: Object = {
