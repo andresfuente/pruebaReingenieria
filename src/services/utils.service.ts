@@ -14,6 +14,39 @@ module OrangeFeSARQ.Services {
         constructor(private $injector) {
         }
 
+		 /**
+         * @ngdoc service
+         * @name OrangeFeSARQ.Services:Utils
+         * @param {Object} miComponentCompOwcsStote Store que va a contener la información del store
+         * @methodOf OrangeFeSARQ.Services.Utils
+         * @description
+         * Devuelde los datos del Store en un formato más legible para usar en el html
+         */
+        getOWCS(miComponentCompOwcsStote:OrangeFeSARQ.Models.Owcs) : OrangeFeSARQ.Models.OwcsHtml {
+            let vm = this;
+            // Validamos que los datos del  store están llenos.
+            let owcsStore: OrangeFeSARQ.Models.OwcsHtml = new OrangeFeSARQ.Models.OwcsHtml();
+            if (miComponentCompOwcsStote && miComponentCompOwcsStote.section) {
+                owcsStore.emptyMessage = miComponentCompOwcsStote.section.emptyMessage;
+                owcsStore.accordion = miComponentCompOwcsStote.section.accordion;
+                owcsStore.title = miComponentCompOwcsStote.section.title;
+                if (miComponentCompOwcsStote.section.listLabel) {
+                    let section = miComponentCompOwcsStote.section;
+                    owcsStore.labels = vm.utils.getListValues(section.listLabel);
+                    owcsStore.links = vm.utils.getListValues(section.listDeepLink);
+                    owcsStore.modules = vm.utils.getListValues(section.listModule);
+                    owcsStore.images = vm.utils.getListValues(section.listImage);
+                    owcsStore.options = vm.utils.getListValues(section.listOption);
+                    owcsStore.pages = vm.utils.getListValues(section.listPages);
+                    owcsStore.tables = vm.utils.getListValues(section.listTable);
+                    owcsStore.moreInfos = vm.utils.getListValues(section.listMoreInfo);
+                    // Si necesitas otro array añadelo en utils
+                }
+            }
+            return owcsStore;
+        }
+		
+		
         escapeHtml(source: string) {
             let entityMap = {
                 "&": "&amp;",
