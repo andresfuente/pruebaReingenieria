@@ -485,7 +485,7 @@ module OrangeFeSARQ.Services {
             return true;
         }
 		
-		getListValues(arr:Array<string>, value:string = 'value'):Array<any>){
+		getListValues(arr:Array<string>, value:string = 'value'):Array<any>{
 			let vm = this;
 			let result ={};
 			for ( let i:number = 0; i< arr.length; i++){
