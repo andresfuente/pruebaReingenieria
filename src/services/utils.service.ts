@@ -14,39 +14,6 @@ module OrangeFeSARQ.Services {
         constructor(private $injector) {
         }
 
-		 /**
-         * @ngdoc service
-         * @name OrangeFeSARQ.Services:Utils
-         * @param {Object} miComponentCompOwcsStote Store que va a contener la información del store
-         * @methodOf OrangeFeSARQ.Services.Utils
-         * @description
-         * Devuelde los datos del Store en un formato más legible para usar en el html
-         */
-        getOWCS(miComponentCompOwcsStote:OrangeFeSARQ.Models.Owcs) : OrangeFeSARQ.Models.OwcsHtml {
-            let vm = this;
-            // Validamos que los datos del  store están llenos.
-            let owcsStore: OrangeFeSARQ.Models.OwcsHtml = new OrangeFeSARQ.Models.OwcsHtml();
-            if (miComponentCompOwcsStote && miComponentCompOwcsStote.section) {
-                owcsStore.emptyMessage = miComponentCompOwcsStote.section.emptyMessage;
-                owcsStore.accordion = miComponentCompOwcsStote.section.accordion;
-                owcsStore.title = miComponentCompOwcsStote.section.title;
-                if (miComponentCompOwcsStote.section.listLabel) {
-                    let section = miComponentCompOwcsStote.section;
-                    owcsStore.labels = vm.utils.getListValues(section.listLabel);
-                    owcsStore.links = vm.utils.getListValues(section.listDeepLink);
-                    owcsStore.modules = vm.utils.getListValues(section.listModule);
-                    owcsStore.images = vm.utils.getListValues(section.listImage);
-                    owcsStore.options = vm.utils.getListValues(section.listOption);
-                    owcsStore.pages = vm.utils.getListValues(section.listPages);
-                    owcsStore.tables = vm.utils.getListValues(section.listTable);
-                    owcsStore.moreInfos = vm.utils.getListValues(section.listMoreInfo);
-                    // Si necesitas otro array añadelo en utils
-                }
-            }
-            return owcsStore;
-        }
-		
-		
         escapeHtml(source: string) {
             let entityMap = {
                 "&": "&amp;",
@@ -349,8 +316,8 @@ module OrangeFeSARQ.Services {
                 return false;
             }
         }
-		
-		/**
+
+        /**
          * Return true if paramether phone begin with +34 || 6 || 7
          */
         isMobileLine(phone: number) {
@@ -389,7 +356,7 @@ module OrangeFeSARQ.Services {
         /**
          * Comprueba si un email tiene el formato correcto
          */
-        checkFormatEmail(email: string):boolean {
+        checkFormatEmail(email: string): boolean {
             let vm = this;
             //let format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
             let format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -463,18 +430,18 @@ module OrangeFeSARQ.Services {
             let vm = this;
             return val !== null && val !== 'undefined' && val !== undefined && val;
         }
-		
-		objectHaveAnyProperty(obj :any) : boolean{
-			let j : number= 0;
-			for (let key of Object.keys(obj)) {
-				if (obj.hasOwnProperty(key)) {
-					j++;
-				}
-			}
-				return j !== 0;
-		}
-		
-		isNumeric(number: string): boolean {
+
+        objectHaveAnyProperty(obj: any): boolean {
+            let j: number = 0;
+            for (let key of Object.keys(obj)) {
+                if (obj.hasOwnProperty(key)) {
+                    j++;
+                }
+            }
+            return j !== 0;
+        }
+
+        isNumeric(number: string): boolean {
             let vm = this;
             let letras = 'abcdefghyjklmnñopqrstuvwxyz';
             for (let i = 0; i < number.length; i++) {
@@ -484,17 +451,49 @@ module OrangeFeSARQ.Services {
             }
             return true;
         }
-		
-		getListValues(arr:Array<string>, value:string = 'value'):Array<any>{
-			let vm = this;
-			let result ={};
-			for ( let i:number = 0; i< arr.length; i++){
-				if(arr[i].name){
-					let code = _.camelCase(arr[i].name);
-					result[code] = arr[i][value];
-				}				
-			}
-		}
+        
+        /**
+         * @ngdoc service
+         * @name OrangeFeSARQ.Services:Utils
+         * @param {Object} miComponentCompOwcsStote Store que va a contener la información del store
+         * @methodOf OrangeFeSARQ.Services.Utils
+         * @description
+         * Devuelde los datos del Store en un formato más legible para usar en el html
+         */
+        getOWCS(miComponentCompOwcsStote: OrangeFeSARQ.Models.ComponentOwcs): OrangeFeSARQ.Models.OwcsHtml {
+            let vm = this;
+            // Validamos que los datos del  store están llenos.
+            let owcsStore: OrangeFeSARQ.Models.OwcsHtml;
+            if (miComponentCompOwcsStote && miComponentCompOwcsStote.section) {
+                owcsStore.emptyMessage = miComponentCompOwcsStote.section.emptyMessage;
+                owcsStore.accordion = miComponentCompOwcsStote.section.accordion;
+                owcsStore.title = miComponentCompOwcsStote.section.title;
+                if (miComponentCompOwcsStote.section.listLabel) {
+                    let section = miComponentCompOwcsStote.section;
+                    owcsStore.labels = vm.getListValues(section.listLabel);
+                    owcsStore.links = vm.getListValues(section.listDeepLink);
+                    owcsStore.modules = vm.getListValues(section.listModule);
+                    owcsStore.images = vm.getListValues(section.listImage);
+                    owcsStore.options = vm.getListValues(section.listOption);
+                    owcsStore.pages = vm.getListValues(section.listPages);
+                    owcsStore.tables = vm.getListValues(section.listTable);
+                    owcsStore.moreInfos = vm.getListValues(section.listMoreInfo);
+                    // Si necesitas otro array añadelo en utils
+                }
+            }
+            return owcsStore;
+        }
+
+        getListValues(arr: Array<any>, value: string = 'value'): any {
+            let vm = this;
+            let result = {};
+            for (let i: number = 0; i < arr.length; i++) {
+                if (arr[i].name) {
+                    let code = _.camelCase(arr[i].name);
+                    result[code] = arr[i][value];
+                }
+            }
+        }
 
     }
     angular.module('utils', [])
