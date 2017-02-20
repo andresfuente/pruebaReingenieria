@@ -1,8 +1,8 @@
 {
   "name": "orange-services",
   "title": "Orange-services",
-  "version": "1.12.0-SNAPSHOT.7",
-  "description": "Contiene los servicios  comunes no core.",
+  "version": "1.12.0-SNAPSHOT.8",
+  "description": "Contiene los servicios comunes no core.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
