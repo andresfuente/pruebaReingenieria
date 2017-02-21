@@ -13,6 +13,7 @@ module OrangeFeSARQ.Services {
         public popupVars = {};
         public isVisible: boolean;
         public voiceMailActive = {};
+		public showConfiguration: boolean;
         public ifBusy: string;
         public ifNoResponse: string;
         public ifPowerOff: string;

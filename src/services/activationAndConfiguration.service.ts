@@ -43,7 +43,7 @@ module OrangeFeSARQ.Services {
                 });
         }
         
-        changeStateService(data: OrangeFeSARQ.Models.ActivationAndConfigurationModel, componentName = 'row_switch_services'): ng.IPromise <any>  {
+        changeStateService(data: OrangeFeSARQ.Models.Service, componentName = 'row_switch_services'): ng.IPromise <any>  {
             let vm = this;
             
             let _search: Object = {
