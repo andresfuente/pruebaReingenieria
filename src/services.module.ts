@@ -10,7 +10,6 @@ module OrangeFeSARQ.Constant {
         .service('tmcodeTranslateSrv', OrangeFeSARQ.Services.TmCodeTranslateSrv)
         .service('productCatalogSrv', OrangeFeSARQ.Services.ProductCatalogService)
         .service('productCatalogStore', OrangeFeSARQ.Services.ProductCatalogStore)
-        .service('permanencyDetailsSrv', OrangeFeSARQ.Services.PermanencyDetailsSrv)
         .service('bucketBalanceSrv', OrangeFeSARQ.Services.BucketBalanceSrv)
         .service('getImagesSrv', OrangeFeSARQ.Services.getImagesSrv)
         .service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter)
