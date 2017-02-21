@@ -451,7 +451,7 @@ module OrangeFeSARQ.Services {
             }
             return true;
         }
-        
+
         /**
          * @ngdoc service
          * @name OrangeFeSARQ.Services:Utils
@@ -463,23 +463,22 @@ module OrangeFeSARQ.Services {
         getOWCS(miComponentCompOwcsStote: OrangeFeSARQ.Models.ComponentOwcs): OrangeFeSARQ.Models.OwcsHtml {
             let vm = this;
             // Validamos que los datos del  store están llenos.
-            let owcsStore: OrangeFeSARQ.Models.OwcsHtml;
+            let owcsStore: OrangeFeSARQ.Models.OwcsHtml = <OrangeFeSARQ.Models.OwcsHtml>{};
             if (miComponentCompOwcsStote && miComponentCompOwcsStote.section) {
                 owcsStore.emptyMessage = miComponentCompOwcsStote.section.emptyMessage;
                 owcsStore.accordion = miComponentCompOwcsStote.section.accordion;
                 owcsStore.title = miComponentCompOwcsStote.section.title;
-                if (miComponentCompOwcsStote.section.listLabel) {
-                    let section = miComponentCompOwcsStote.section;
-                    owcsStore.labels = vm.getListValues(section.listLabel);
-                    owcsStore.links = vm.getListValues(section.listDeepLink);
-                    owcsStore.modules = vm.getListValues(section.listModule);
-                    owcsStore.images = vm.getListValues(section.listImage);
-                    owcsStore.options = vm.getListValues(section.listOption);
-                    owcsStore.pages = vm.getListValues(section.listPages);
-                    owcsStore.tables = vm.getListValues(section.listTable);
-                    owcsStore.moreInfos = vm.getListValues(section.listMoreInfo);
-                    // Si necesitas otro array añadelo en utils
-                }
+                let section = miComponentCompOwcsStote.section;
+                owcsStore.labels = vm.getListValues(section.listLabel);
+                owcsStore.links = vm.getListValues(section.listDeepLink);
+                owcsStore.modules = vm.getListValues(section.listModule);
+                owcsStore.images = vm.getListValues(section.listImage);
+                owcsStore.options = vm.getListValues(section.listOption);
+                owcsStore.pages = vm.getListValues(section.listPages);
+                owcsStore.tables = vm.getListValues(section.listTable);
+                owcsStore.moreInfos = vm.getListValues(section.listMoreInfo);
+                owcsStore.richTexts = vm.getListValues(section.richText, 'html');
+                // Si necesitas otro array añadelo en utils
             }
             return owcsStore;
         }
@@ -493,6 +492,7 @@ module OrangeFeSARQ.Services {
                     result[code] = arr[i][value];
                 }
             }
+            return result;
         }
 
     }
