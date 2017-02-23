@@ -19,7 +19,7 @@ module OrangeFeSARQ.Services {
             vm.genericConstant = $injector.get('genericConstant');
         }
 
-        getData(msisdn: string, action: string, code: string, services: string, segment:string = '', componentName: string = 'orange_tv_contract'): ng.IPromise <any>{
+        getData(msisdn: string, action: string, code: string, services: string = '', segment:string = '', componentName: string = 'orange_tv_contract'): ng.IPromise <any>{
             let vm = this;
             let _search: Object = {
                 queryParams: {
