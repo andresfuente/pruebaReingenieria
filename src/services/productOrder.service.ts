@@ -29,7 +29,7 @@ module OrangeFeSARQ.Services {
 					services: services,
                     segment: segment
                 },
-                urlParams: [vm.brand, 'managOrangeTV', ]
+                urlParams: [vm.brand, 'managOrangeTV']
             };
 
             return vm.httpCacheGett(vm.urlProductOrder, _search, componentName)

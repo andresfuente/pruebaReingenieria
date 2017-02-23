@@ -32,7 +32,7 @@ module OrangeFeSARQ.Services {
             // vm.productCatalogAPIUrl = 'api/daf2/APIProductCatalogOSP/1';
 
             vm.sufixProductSpecification = ['productSpecification', vm.OSP];
-            vm.sufixProductOffering = ['productOffering', vm.OSP];
+            vm.sufixProductOffering = [vm.genericConstant.brand, 'productOffering', vm.OSP];
         }
 
         // daf2/APIProductCatalogOSP/1/productSpecification/OSP
