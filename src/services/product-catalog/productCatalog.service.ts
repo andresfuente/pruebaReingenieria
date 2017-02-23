@@ -31,38 +31,38 @@ module OrangeFeSARQ.Services {
             vm.productCatalogAPIUrl = vm.genericConstant.productCatalog;
             // vm.productCatalogAPIUrl = 'api/daf2/APIProductCatalogOSP/1';
 
-            vm.sufixProductSpecification = ['productSpecification', vm.OSP];
+            vm.sufixProductSpecification = [vm.genericConstant.brand, 'productSpecification', vm.OSP];
             vm.sufixProductOffering = [vm.genericConstant.brand, 'productOffering', vm.OSP];
         }
 
         // daf2/APIProductCatalogOSP/1/productSpecification/OSP
         // daf2/APIProductCatalogOSP/1/productOffering/OSP
-		getProductSpecification(): any {
+        getProductSpecification(): any {
             let vm = this;
             let _search: Object = {
                 queryParams: {},
                 urlParams: vm.sufixProductSpecification
             };
             return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
-                .then(function (response) {
+                .then(function(response) {
                     return response.data.productSpecification;
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     return error;
                 });
         }
 
-		getProductOffering(): any {
+        getProductOffering(): any {
             let vm = this;
             let _search: Object = {
                 queryParams: {},
                 urlParams: vm.sufixProductOffering
             };
             return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
-                .then(function (response) {
+                .then(function(response) {
                     return response.data.productOffering;
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     return error;
                 });
         }
@@ -72,13 +72,13 @@ module OrangeFeSARQ.Services {
             let _search: Object = {};
             let url = vm.genericConstant.getRatesOwcs;
             return vm.httpCacheGett(url, _search)
-                .then(function (response) {
+                .then(function(response) {
                     return response.data;
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     return error;
                 });
-        }	    
+        }
     }
 
 }
