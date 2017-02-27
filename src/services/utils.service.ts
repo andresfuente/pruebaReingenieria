@@ -116,11 +116,11 @@ module OrangeFeSARQ.Services {
 
             return userService.getUser(searchUrl, value)
                 .then(
-                    (response) => {
-                        return response;
-                    }
+                (response) => {
+                    return response;
+                }
                 )
-                .catch(function (error) {
+                .catch(function(error) {
                     return error;
                 });
         }
@@ -247,12 +247,14 @@ module OrangeFeSARQ.Services {
         }
 
         findByName(name, array, value = 'value') {
-            for (let i: number = 0; i < array.length; i++) {
-                if (array[i].name.replace(" ", "") === name.replace(" ", "")) {
-                    return array[i][value];
+            if (array && array.length >= 1){
+                for (let i: number = 0; i < array.length; i++) {
+                    if (array[i].name.replace(" ", "") === name.replace(" ", "")) {
+                        return array[i][value];
+                    }
                 }
-            }
             return null;
+          }
         }
 
         findByInArray(array, value, campo = 'name') {
@@ -341,10 +343,10 @@ module OrangeFeSARQ.Services {
             let deferred = $q.defer();
             let image = new Image();
 
-            image.onerror = function () {
+            image.onerror = function() {
                 deferred.resolve(false);
             };
-            image.onload = function () {
+            image.onload = function() {
                 deferred.resolve(true);
             };
 
@@ -414,7 +416,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             for (let i: number = 0; i < section.length; i++) {
 
-                OrangeFeSARQ.Controllers.ParentController.shared.owcsStores[_.camelCase(section[i].compId) + 'OWCSStore'] = {section: section[i]};
+                OrangeFeSARQ.Controllers.ParentController.shared.owcsStores[_.camelCase(section[i].compId) + 'OWCSStore'] = { section: section[i] };
 
                 if (section[i].listModuleButton) {
                     vm.setDataInStore(section[i].listModuleButton);
