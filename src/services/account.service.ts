@@ -34,14 +34,14 @@ module OrangeFeSARQ.Services {
 
             return vm.httpCacheGett(vm.url, _search, componentName)
                 .then(function (response) {
-                    return response.data;
+                    return response;
                 })
                 .catch(function (error) {
                     return error;
                 });
         }
 
-        putMail(data: newAccount.Models.NewMailRequest, componentName = 'row_input_email'): ng.IPromise <newAccount.Models.NewMailResponse> {
+        putMail(data: newAccount.Models.NewMailRequest, componentName = 'row_input_email'): ng.IPromise <any> {
             let vm = this;
 
             let _search: Object = {
@@ -51,7 +51,7 @@ module OrangeFeSARQ.Services {
             // Llamada al post con la url +  datos + url para descachear
             return vm.httpPut(vm.urlRedirectEmail, _search, componentName)
                 .then(function (response) {
-                    return response.data;
+                    return response;
                 })
                 .catch(function (error) {
                     return error;
@@ -69,9 +69,9 @@ module OrangeFeSARQ.Services {
             // Llamada al post con la url +  datos + url para descachear
             return vm.httpPost(vm.urlRedirectEmail, _search, componentName)
                 .then(function (response) {
-                    return response.data;
+                    return response;
                 })
-                .catch(function (error) {
+                .catch(function (error) {					
                     return error;
                 });
 
@@ -90,7 +90,7 @@ module OrangeFeSARQ.Services {
             // Llamada al post con la url +  datos + url para descachear
             return vm.httpCacheGett(vm.urlRedirectEmail, _search, componentName)
                 .then(function (response) {
-                    return response.data;
+                    return response;
                 })
                 .catch(function (error) {
                     return error;
@@ -112,7 +112,7 @@ module OrangeFeSARQ.Services {
             // Llamada al post con la url +  datos + url para descachear
 			return vm.httpPost(vm.urlRedirectEmail, _search, componentName)
                 .then(function (response) {
-                    return response.data;
+                    return response;
                 })
                 .catch(function (error) {
                     return error;

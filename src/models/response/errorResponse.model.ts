@@ -10,10 +10,12 @@ module OrangeFeSARQ.Models {
         private _message: string;
         private _description: string;
         private _infoURL: string;
+		private _title: string;
 
-        constructor(code: number = null, message: string = null, description: string = null, infoURL: string = null) {
+        constructor(code: number = null, message: string = null, title: string = null, description: string = null, infoURL: string = null) {
             this._code = code;
             this._message = message;
+			this._title = title;
             this._description = description;
             this._infoURL = infoURL;
         }
@@ -24,6 +26,14 @@ module OrangeFeSARQ.Models {
 
         set code(value: number) {
             this._code = value;
+        }
+		
+		get title(): string {
+            return this._title;
+        }
+
+        set title(value: string) {
+            this._title = value;
         }
 
         get message(): string {
@@ -56,6 +66,7 @@ module OrangeFeSARQ.Models {
         private _code: number;
         private _message: string;
         private _description: string;
+		private _title: string;
         private _infoURL: string;
         private _details: Array< OrangeFeSARQ.Models.DetailsResponse>;
 
@@ -65,6 +76,14 @@ module OrangeFeSARQ.Models {
 
         set code(value: number) {
             this._code = value;
+        }
+		
+		get title(): string {
+            return this._title;
+        }
+
+        set title(value: string) {
+            this._title = value;
         }
 
         get message(): string {
