@@ -9201,6 +9201,32 @@
         "parents": [],
         "$$hashKey": "object:22"
     },
+    "api_adslStatus": {
+        "adslStatus": {
+            "internetUser": "dao1909161238@orangeadsl",
+            "state": "5.99",
+            "stateDesc": "Solicitud de alta finalizada",
+            "phone": "911630678",
+            "encapsulated": "PPPoE",
+            "multiplexion": "LLC",
+            "vpi": "8",
+            "vci": "35",
+            "userName": "dao1909161238",
+            "adslPassword": "dao1909161238",
+            "dhcp": "DHCP",
+            "ipFija": "N",
+            "smtpServer": "smtp.orange.es",
+            "popServer": "pop.orange.es",
+            "email": "dao1909161238@orange.es",
+            "emailPassword": "123456789",
+            "realm": "orangeadsl",
+            "organization": "orange.es",
+            "personalPage": "http://perso.orange.es/dao1909161238",
+            "ftpUser": "dao1909161238@orange.es",
+            "ftpAcces": "ftp.orange.es"
+        },
+        "error": null
+    },
     "api_productCatalog": {
         "productSpecification": [{
             "ospTitulo": "Ardilla 8",
