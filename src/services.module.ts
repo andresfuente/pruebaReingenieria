@@ -1,6 +1,6 @@
 module OrangeFeSARQ.Constant {
     'use strict';
-
+		// tag prueba
     angular.module('servicesCommons', [])
         .service('userSrv', OrangeFeSARQ.Services.UserSrv)
         .service('utils', OrangeFeSARQ.Services.Utils)
