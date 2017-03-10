@@ -15,24 +15,13 @@ module OrangeFeSARQ.Constant {
         .service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter)
         .service('accountSrv', OrangeFeSARQ.Services.AccountSrv)
         .service('detailRateSrv', OrangeFeSARQ.Services.DetailRateSrv)
-		.service('voiceMailPopUpSrv', OrangeFeSARQ.Services.VoiceMailPopUpSrv)
-		.service('activationAndConfigurationSrv', OrangeFeSARQ.Services.ActivationAndConfigurationSrv)
-		.service('productOrderSrv', OrangeFeSARQ.Services.ProductOrderSrv)
-		.service('adslStatusSrv', OrangeFeSARQ.Services.AdslStatusService)
-		.service('adslStatusStore', OrangeFeSARQ.Services.AdslStatusStore)
-        .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter) => {
-            if (navigator.userAgent.indexOf('PhantomJS') < 1) {
-                getHeaderFooterSrv.getData().then(
-                    (response)=> {
-                        // Guardo datos en ParentController
-                        if(OrangeFeSARQ.Controllers.ParentController.shared === undefined){
-                            OrangeFeSARQ.Controllers.ParentController.shared = {};
-                        }
-                        OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore= response.data.data;
-                    }
-                );
-            }
-        })
+        .service('voiceMailPopUpSrv', OrangeFeSARQ.Services.VoiceMailPopUpSrv)
+        .service('activationAndConfigurationSrv', OrangeFeSARQ.Services.ActivationAndConfigurationSrv)
+        .service('productOrderSrv', OrangeFeSARQ.Services.ProductOrderSrv)
+        .service('adslStatusSrv', OrangeFeSARQ.Services.AdslStatusService)
+        .service('adslStatusStore', OrangeFeSARQ.Services.AdslStatusStore)
+        .service('getMenuItemsModule', OrangeFeSARQ.Services.GetMenuItemsService)
+
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
 
@@ -51,7 +40,7 @@ module OrangeFeSARQ.Constant {
 
                     });
 
-        
+
                 productCatalogSrv.getFamilyRates()
                     .then((response) => {
                         productCatalogStore.listRates = response;
@@ -64,15 +53,112 @@ module OrangeFeSARQ.Constant {
         .run((getImagesSrv: OrangeFeSARQ.Services.getImagesSrv) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
                 getImagesSrv.getData().then(
-                    (response)=> {
+                    (response) => {
                         console.log('data', response);
                         //guardo datos en ParentController
-                        if(OrangeFeSARQ.Controllers.ParentController.shared === undefined){
+                        if (OrangeFeSARQ.Controllers.ParentController.shared === undefined) {
                             OrangeFeSARQ.Controllers.ParentController.shared = {};
                         }
-                        OrangeFeSARQ.Controllers.ParentController.shared.staticImagesOwcs= response.data.data;
+                        OrangeFeSARQ.Controllers.ParentController.shared.staticImagesOwcs = response.data.data;
                     }
                 );
             }
         })
+        .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter) => {
+            if (navigator.userAgent.indexOf('PhantomJS') < 1) {
+                getHeaderFooterSrv.getData().then(
+                    (response) => {
+                        // Guardo datos en ParentController
+                        if (OrangeFeSARQ.Controllers.ParentController.shared === undefined) {
+                            OrangeFeSARQ.Controllers.ParentController.shared = {};
+                        }
+                        OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore = response.data.data;
+                    }
+                );
+            }
+        })
+        .run((utils: OrangeFeSARQ.Services.Utils,
+              msisdnStore: OrangeFeSARQ.Services.MsisdnStore,
+              getMenuItems: OrangeFeSARQ.Services.GetMenuItemsService,
+              menuStore: OrangeFeSARQ.Services.MenuStore, $rootScope, customerViewStore,
+              getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter) => {
+            if (navigator.userAgent.indexOf('PhantomJS') < 1) {
+                getHeaderFooterSrv.getData().then(
+                    (response) => {
+                        let fillCurrent = function () {
+                            if (msisdnStore.msisdn) {
+                                if (utils.isFixedLine(parseInt(msisdnStore.msisdn))) {
+                                    menuStore.current = menuStore.menu.fixed;
+                                } else {
+                                    let type = utils.getProductType(customerViewStore.info.product, msisdnStore.msisdn);
+                                    if (type === 'PREPAGO') {
+                                        menuStore.current = menuStore.menu.prepaid;
+                                    } else if (type === 'POSPAGO') {
+                                        menuStore.current = menuStore.menu.pospaid;
+                                    }
+                                }
+                            }
+                        };
+
+                        // Guardo datos en ParentController
+                        if (OrangeFeSARQ.Controllers.ParentController.shared === undefined) {
+                            OrangeFeSARQ.Controllers.ParentController.shared = {};
+                        }
+                        OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore = response.data.data;
+                        OrangeFeSARQ.Controllers.ParentController.shared.breadCrumbsStore = response.data.breadCrumbs;
+                        menuStore.menu = {
+                            pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
+                            prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
+                            fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
+
+                        };
+                        fillCurrent();
+                        $rootScope.$watch(
+                            () => msisdnStore.msisdn,
+                            (newValue, oldValue) => {
+                                fillCurrent();
+                            });
+                    }
+                );
+            }
+        });
+
+
+    //     if (OrangeFeSARQ.Controllers.ParentController.shared
+    //         && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
+    //         menuStore.menu = {
+    //             pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
+    //             prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
+    //             fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
+    //
+    //         };
+    //         fillCurrent();
+    //     } else {
+    //         $rootScope.$watch(
+    //             () => OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore,
+    //             (newValue, oldValue) => {
+    //                 if (OrangeFeSARQ.Controllers.ParentController.shared
+    //                     && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
+    //                     menuStore.menu = {
+    //                         pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
+    //                         prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
+    //                         fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
+    //                     };
+    //                     fillCurrent();
+    //                 }
+    //             });
+    //     }
+    //
+    //     let prepaid: boolean;
+    //     let pospaid: boolean;
+    //     let fixed: boolean;
+    //
+    //     $rootScope.$watch(
+    //         () => msisdnStore.msisdn,
+    //         (newValue, oldValue) => {
+    //             fillCurrent();
+    //         });
+    //
+    //
+    // }
 }

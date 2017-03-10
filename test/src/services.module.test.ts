@@ -13,6 +13,7 @@ module servicesCommons.Tests.Controllers {
             angular.mock.module('genericConstant');
             angular.mock.module('httpCache');
             angular.mock.module('servicesCommons');
+            angular.mock.module('getMenuItemsModule');
         });
 		
         beforeEach(() => {

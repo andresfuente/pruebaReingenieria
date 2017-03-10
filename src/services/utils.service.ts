@@ -111,7 +111,7 @@ module OrangeFeSARQ.Services {
             } else if (inputDocument === 'CIF' && vm.isCif(value)) {
                 searchUrl = "individualPublicId";
             } else if (inputDocument === 'PASSPORT' || inputDocument === 'RESIDENCE') {
-                searchUrl = "individualPublicId";
+                searchUrl = "residential";
             }
 
             return userService.getUser(searchUrl, value)
