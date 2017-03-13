@@ -50,6 +50,7 @@ module OrangeFeSARQ.Services {
     export class MenuStore {
         private _menu: Array<any>;
         private _current: any;
+		private _tab : string;
 
         constructor() {
         }
@@ -122,6 +123,41 @@ module OrangeFeSARQ.Services {
          */
         set current(value: any) {
             this._current = value;
+        }
+		
+		/**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:currentStore#tab
+         * @methodOf OrangeFeSARQ.Services:currentStore
+         * @description
+         * getter del tab
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.currentStore.current()
+         * ```
+         * @return {any} current
+         */
+        get tab(): any {
+            return this._tab;
+        }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:currentStore#tab
+         * @param {any} misdn misdn a guardar.
+         * @methodOf OrangeFeSARQ.Services:currentStore
+         * @description
+         * setter del tab
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.currentStore.current('value')
+         * ```
+         * @return {void} void
+         */
+        set tab(value: any) {
+            this._current = tab;
         }
     }
 
