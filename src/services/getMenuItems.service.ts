@@ -157,7 +157,7 @@ module OrangeFeSARQ.Services {
          * @return {void} void
          */
         set tab(value: any) {
-            this._current = tab;
+            this._tab = value;
         }
     }
 
