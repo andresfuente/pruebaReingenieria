@@ -47,6 +47,8 @@ module OrangeFeSARQ.Services {
                 param = 'business';
             } else if (param === 'publicKey') {
                 param = 'telephoneNumber';
+            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))){
+                param = 'residential';
             }
 
             let _search:Object = {
