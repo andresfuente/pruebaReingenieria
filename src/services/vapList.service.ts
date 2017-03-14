@@ -29,7 +29,7 @@ module OrangeFeSARQ.Services {
             let _search: Object = {
                 queryParams: {},
                 //cuando metamos la brand, lo meteremos como primer parámetro dentro de éste array (vm.brand) y así ya funcionaría.
-                urlParams: ['vapData', 'OSP', ID, msisdn]
+                urlParams: [vm.genericConstant.brand,'vapData', 'OSP', ID, msisdn]
             };
             return vm.httpCacheGett(vm.vapDataApiUrl, _search, componentName)
                 .then(function(response) {
