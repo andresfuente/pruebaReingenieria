@@ -21,6 +21,7 @@ module OrangeFeSARQ.Constant {
             bucketBalanceBonusAPIUrl: 'mock/API/productBucketBonus.json',
             productInventory: 'api/daf2/APIProductInventory/1',
             orangetvMultisimApi: 'mock/API/multisimmanagements.json',
+            hoot: '/api/hoot/v1',
 
 
             // translate:{
@@ -92,8 +93,8 @@ module OrangeFeSARQ.Constant {
 
 
 
-owcsPaymentRefillsManagement: '2462356393615', 
+            owcsPaymentRefillsManagement: '2462356393615',
 
-//##GENERATE COMPS 
-});
+            //##GENERATE COMPS
+        });
 }
