@@ -3,14 +3,14 @@ declare module OrangeFeSARQ {
 declare module OrangeFeSARQ.Components {
     class InformationCenterComponent implements ng.IComponentOptions {
         controller: Function;
-        templateUrl: string | Function;
+        template: string | Function;
         constructor();
     }
 }
 declare module OrangeFeSARQ.Components {
     class LoadCenterComponent implements ng.IComponentOptions {
         controller: Function;
-        templateUrl: string | Function;
+        template: string | Function;
         constructor();
     }
 }
@@ -27,9 +27,11 @@ declare module OrangeFeSARQ.Controllers {
         private messageToShow;
         static $inject: string[];
         informationCenterSrv: any;
+        callbackfunction: any;
         constructor($injector: any);
         setInjections($injector: any): void;
         initComp(): void;
+        setCallbackFunction(fun: any): void;
         closeMessage: () => void;
     }
 }
@@ -67,6 +69,7 @@ declare module OrangeFeSARQ.Services {
         private $timeout;
         messageToShow: Array<any>;
         static $inject: string[];
+        callbackfunction: any;
         constructor($timeout: ng.ITimeoutService);
         /** Queue a success alert message */
         addInformationMessage(typeMsg: number, title?: string, message?: string): void;

@@ -25,6 +25,7 @@ declare module graphs.controller {
         private options;
         private optionsController;
         constructor();
+        actualizarOpciones: () => void;
     }
 }
 declare module renderContent {
@@ -992,7 +993,7 @@ declare module OrangeFeSARQ.Services {
      * @name OrangeFeSARQ.Services:cookieSrv
      * @module cookieManager
      * @description
-     * Interfaz para manejo de cookies del navegador
+     * Interfaz para manejo de cookies de los navegadores
      */
     class CookieManager implements ICookieManager {
         constructor();
@@ -1616,15 +1617,13 @@ declare module OrangeFeSARQ.Services {
     class OrangeOwcs implements IOrangeOwcs {
         private httpCacheOrange;
         private genericConstant;
-        private owcsIdsConstant;
         private $injector;
         static $inject: string[];
         keys: any;
         private layoutsIds;
-        constructor(httpCacheOrange: any, genericConstant: any, owcsIdsConstant: any, $injector: any);
+        constructor(httpCacheOrange: any, genericConstant: any, $injector: any);
         setDataInStore(section: any): void;
         changeComp(element: any): any;
-        checkCompId(section: any): any;
         getLayoutMetada(key: string, exp?: number): any;
         getLayoutMetadaPosition(key: string, exp?: number): any;
         getComponentMetadata(type: any, key: string, exp?: number): any;
@@ -1740,16 +1739,4 @@ declare module OrangeFeSARQ.Services {
         newProcess: () => void;
         finishProcess: () => void;
     }
-}
-declare module OrangeFeSARQ.Tests.Filters {
-}
-declare module OrangeFeSARQ.Tests.Filters {
-}
-declare module OrangeFeSARQ.Tests.Services {
-}
-declare module OrangeFeSARQ.Tests.Services {
-}
-declare module OrangeFeSARQ.Tests.Services {
-}
-declare module OrangeFeSARQ.Tests.Services {
 }
