@@ -30,6 +30,8 @@ module OrangeFeSARQ.Services {
             return vm.httpCacheGett(vm.genericConstant.getImagesOwcs, _search)
                 .then(
                     (successData)=> {
+						let str:string = JSON.stringify(successData);
+                        successData= JSON.parse(str.replace(/"\/sites/g, '"sites'));
                         return successData;
                     },
                     (errorData)=> {
