@@ -64,14 +64,11 @@ module OrangeFeSARQ.Constant {
                 );
             }
         })
-        .run((getdataClientSrv: OrangeFeSARQ.Services.GetdataClientSrv) => {
+        .run((getDataClientSrv: OrangeFeSARQ.Services.GetdataClientSrv) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
-                getdataClientSrv.getData().then(
+                getDataClientSrv.getData().then(
                     (response) => {
-                        console.log('data', response);
-                        //lleno el customerViewStore
-
-
+                        console.log('data en servicesmodule', response);
                     }
                 );
             }
