@@ -9,25 +9,30 @@ module OrangeFeSARQ.Services {
         constructor(public $injector) {
             super($injector);
             let vm = this;
-
             vm.setInjections($injector);
         }
 
 
         setInjections($injector) {
             let vm = this;
-            vm.genericConstant = $injector.get("genericConstant");
+            vm.genericConstant = $injector.get('genericConstant');
         }
 
-        getData() {
+        getToken(msisdn: string, key: string, compName: string) {
             let vm = this;
-            let _search: Object = {
-                queryParams: {},
-                urlParams: []
+            let apiUrl: string = vm.genericConstant.token;
+            let brand: string = vm.genericConstant.brand;
 
+            let request: OrangeFeSARQ.Models.getToken_request = <OrangeFeSARQ.models.getToken_request>{};
+            request.inputString = msisdn;
+            request.key = key;
+
+            let _search: Object = {
+                queryParams: request,
+                urlParams: [brand, 'aes', 'encrypt']
             };
 
-            return vm.httpCacheGett(vm.genericConstant.getDataClient, _search)
+            return vm.httpCacheGett(vm.apiUrl, _search, compName)
                 .then(
                 (successData) => {
                     return successData;
@@ -38,6 +43,6 @@ module OrangeFeSARQ.Services {
                 );
         }
     }
-    angular.module('getDataClientSrvModule', [])
-        .service('getDataClientSrv', OrangeFeSARQ.Services.getImagesSrv);
+    angular.module('getTokenModule', [])
+        .service('getTokenSrv', OrangeFeSARQ.Services.GetTokenSrv);
 }
