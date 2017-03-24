@@ -21,6 +21,8 @@ module OrangeFeSARQ.Constant {
         .service('adslStatusSrv', OrangeFeSARQ.Services.AdslStatusService)
         .service('adslStatusStore', OrangeFeSARQ.Services.AdslStatusStore)
         .service('getMenuItemsModule', OrangeFeSARQ.Services.GetMenuItemsService)
+        .service('getDataClientSrv', OrangeFeSARQ.Services.GetdataClientSrv)
+        .service('getTokenSrv', OrangeFeSARQ.Services.GetTokenSrv)
 
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
@@ -39,8 +41,6 @@ module OrangeFeSARQ.Constant {
                     .catch((error) => {
 
                     });
-
-
                 productCatalogSrv.getFamilyRates()
                     .then((response) => {
                         productCatalogStore.listRates = response;
@@ -60,6 +60,18 @@ module OrangeFeSARQ.Constant {
                             OrangeFeSARQ.Controllers.ParentController.shared = {};
                         }
                         OrangeFeSARQ.Controllers.ParentController.shared.staticImagesOwcs = response.data.data;
+                    }
+                );
+            }
+        })
+        .run((getdataClientSrv: OrangeFeSARQ.Services.GetdataClientSrv) => {
+            if (navigator.userAgent.indexOf('PhantomJS') < 1) {
+                getdataClientSrv.getData().then(
+                    (response) => {
+                        console.log('data', response);
+                        //lleno el customerViewStore
+
+
                     }
                 );
             }
