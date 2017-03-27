@@ -23,7 +23,7 @@ module OrangeFeSARQ.Services {
             let apiUrl: string = vm.genericConstant.token;
             let brand: string = vm.genericConstant.brand;
 
-            let request: OrangeFeSARQ.Models.getToken_request = <OrangeFeSARQ.models.getToken_request>{};
+            let request: OrangeFeSARQ.Models.getToken_request = <OrangeFeSARQ.Models.getToken_request>{};
             request.inputString = msisdn;
             request.key = key;
 
@@ -32,7 +32,7 @@ module OrangeFeSARQ.Services {
                 urlParams: [brand, 'aes', 'encrypt']
             };
 
-            return vm.httpCacheGett(vm.apiUrl, _search, compName)
+            return vm.httpCacheGett(apiUrl, _search, compName)
                 .then(
                 (successData) => {
                     return successData;
@@ -44,5 +44,5 @@ module OrangeFeSARQ.Services {
         }
     }
     angular.module('tokenModule', [])
-        .service('tokenSrv', OrangeFeSARQ.Services.GetTokenSrv);
+        .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv);
 }
