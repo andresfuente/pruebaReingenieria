@@ -1,7 +1,7 @@
 module OrangeFeSARQ.Services {
     'use strict';
 
-    export class GetTokenSrv extends OrangeFeSARQ.Services.ParentService {
+    export class TokenSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
         private url: string;
         public genericConstant;
@@ -43,6 +43,6 @@ module OrangeFeSARQ.Services {
                 );
         }
     }
-    angular.module('getTokenModule', [])
-        .service('getTokenSrv', OrangeFeSARQ.Services.GetTokenSrv);
+    angular.module('tokenModule', [])
+        .service('tokenSrv', OrangeFeSARQ.Services.GetTokenSrv);
 }
