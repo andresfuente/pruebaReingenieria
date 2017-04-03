@@ -75,7 +75,7 @@ module OrangeFeSARQ.Services {
             return null;
         }
     
-		extractContratablesProducts(pOf){
+		extractContratablesProducts(pOf,pSp){
 
 			let contractingProducts = [];
 			for (let  i = 0; i < pOf.productOffering.length;i++ ){
