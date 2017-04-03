@@ -74,5 +74,32 @@ module OrangeFeSARQ.Services {
             }
             return null;
         }
-    }
+    
+		extractContratablesProducts(pOf){
+
+			let contractingProducts = [];
+			for (let  i = 0; i < pOf.productOffering.length;i++ ){
+				let  _pO = pOf.productOffering[i];
+
+				for (let  j = 0; j < pSp.productSpecification.length; j++ ){
+					let  _pS = pSp.productSpecification[j];
+					if(_pO.id === _pS.id){
+						contractingProducts.push(_pO.id);
+					}
+				}    
+			}   
+			return contractingProducts;
+		}
+		
+		isContractacted(product, pIn){
+			var isContractacted = false;
+			for (var i = 0; i < pIn.product.length;i++ ){
+				var _pI = pIn.product[i];
+				if(_pI.id === product){
+					isContractacted = true;
+				}
+			}
+			return isContractacted;
+		}
+	}
 }
