@@ -31,8 +31,8 @@ module OrangeFeSARQ.Services {
             vm.productCatalogAPIUrl = vm.genericConstant.productCatalog;
             // vm.productCatalogAPIUrl = 'api/daf2/APIProductCatalogOSP/1';
 
-            vm.sufixProductSpecification = [vm.genericConstant.brand, 'productSpecification', vm.OSP];
-            vm.sufixProductOffering = [vm.genericConstant.brand, 'productOffering', vm.OSP];
+            vm.sufixProductSpecification = [vm.genericConstant.brand, vm.genericConstant.site, 'productSpecification', vm.OSP];
+            vm.sufixProductOffering = [vm.genericConstant.brand, vm.genericConstant.site, 'productOffering', vm.OSP];
         }
 
         // daf2/APIProductCatalogOSP/1/productSpecification/OSP
