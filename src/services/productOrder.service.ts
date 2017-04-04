@@ -47,7 +47,7 @@ module OrangeFeSARQ.Services {
 		activateDesactivateProduct(msisdn: string, action: string, code: string, volumen: number= 0, price:number = 0, imei:string = '', componentName: string = 'generic_bonus'): ng.IPromise <any>{
 			 let vm = this;
 			 let queryParams = {};
-			 if(volumen !== 0 ){
+			 if(volumen !== 0 && price !== 0 ){
 				queryParams={
 					volumen : volumen,
 					price : price,
@@ -55,7 +55,7 @@ module OrangeFeSARQ.Services {
                     action: action,
 					idPromo: code,
 				};
-			 }else if(imei!==0){				 
+			 }else if(imei!==''){				 
 				queryParams={
 					imei : imei,
 					publicKey: msisdn,
@@ -67,7 +67,7 @@ module OrangeFeSARQ.Services {
                     publicKey: msisdn,
                     action: action,
 					idPromo: code
-                },
+                };
 			 }
 			 // TODO añadir la marca
             let _search: Object = {
