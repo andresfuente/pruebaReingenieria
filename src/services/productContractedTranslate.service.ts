@@ -23,10 +23,9 @@ module OrangeFeSARQ.Service {
             let vm = this;
             let _search: Object = {
                     queryParams: {
-                        publicKey: msisdn,
                         lineCategory: type
                     },
-                    urlParams: [brand, detail]
+                    urlParams: [brand, detail, msisdn]
             };
             return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName)
                 .then(function(response) {

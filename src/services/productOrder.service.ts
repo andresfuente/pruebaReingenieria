@@ -43,5 +43,48 @@ module OrangeFeSARQ.Services {
                     return error;
                 });
         }
+		
+		activateDesactivateProduct(msisdn: string, action: string, code: string, volumen: number= 0, price:number = 0, imei:string = '', componentName: string = 'generic_bonus'): ng.IPromise <any>{
+			 let vm = this;
+			 let queryParams = {};
+			 if(volumen !== 0 ){
+				queryParams={
+					volumen : volumen,
+					price : price,
+					publicKey: msisdn,
+                    action: action,
+					idPromo: code,
+				};
+			 }else if(imei!==0){				 
+				queryParams={
+					imei : imei,
+					publicKey: msisdn,
+                    action: action,
+					idPromo: code,
+				};
+			 }else{
+				queryParams= {
+                    publicKey: msisdn,
+                    action: action,
+					idPromo: code
+                },
+			 }
+			 // TODO añadir la marca
+            let _search: Object = {
+                queryParams : queryParams,
+                urlParams: ['productOrder', 'gestionOrange']
+            };
+
+            return vm.httpCacheGett(vm.urlProductOrder, _search, componentName)
+                .then((successData) => {
+                        return successData;
+                    },
+                    (errorData) => {
+                        return errorData;
+                    })
+                .catch(function (error) {
+                    return error;
+                });
+		}
     }
 }
