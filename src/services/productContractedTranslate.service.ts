@@ -1,4 +1,4 @@
-module contractedServices.Service {
+module OrangeFeSARQ.Service {
     'use strict';
 
     export class ProductContractedTranslateSrv extends OrangeFeSARQ.Services.ParentService {
