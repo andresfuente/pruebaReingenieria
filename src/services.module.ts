@@ -23,6 +23,7 @@ module OrangeFeSARQ.Constant {
         .service('getMenuItemsModule', OrangeFeSARQ.Services.GetMenuItemsService)
         .service('getDataClientSrv', OrangeFeSARQ.Services.GetdataClientSrv)
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
+        .service('productContractedTranslateSrv',OrangeFeSARQ.Service.ProductContractedTranslateSrv)
 
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
