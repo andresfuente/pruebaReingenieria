@@ -496,6 +496,26 @@ module OrangeFeSARQ.Services {
             }
             return result;
         }
+		
+		
+		/**
+         * @ngdoc service
+         * @name OrangeFeSARQ.Services:Utils
+         * @param {customerViewStore} 
+		 * @param {menuItems} 
+         * @methodOf OrangeFeSARQ.Services.Utils
+         * @description
+         * Parsea las urls del item menun que se le pasa como parámetro, sustituyendo el patrón ##nif##, por el documento del usuario logueado
+         */
+		parseUrlMenu(customerViewStore, menu): any{
+			if(customerViewStore && customerViewStore.loginData && customerViewStore.loginData.document && customerViewStore.loginData.document !== null) {
+				let document = customerViewStore.loginData.document;
+				let menuString = JSON.stringify(menu);
+				menuString = menuString.replace(/##nif##/g, document)
+				return JSON.parse(menuString);
+			}
+			return menu;
+		}
 
     }
     angular.module('utils', [])
