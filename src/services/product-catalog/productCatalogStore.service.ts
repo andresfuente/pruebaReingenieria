@@ -115,13 +115,13 @@ module OrangeFeSARQ.Services {
          * @name OrangeFeSARQ.Services:ProductCatalogStore#getProduct
          * @methodOf OrangeFeSARQ.Services:ProductCatalogStore
          * @description
-         * Busca un producto de en el productInventory
+         * Busca un producto de en el productInventory code es
          */
-        isContractacted(product, pIn) {
+        isContractacted(ospExternalCode, pIn) {
             let isContractacted = false;
             for (let i = 0; i < pIn.product.length; i++) {
                 let _pI = pIn.product[i];
-                if (_pI.id === product) {
+                if (_pI.ospIdCRM === ospExternalCode) {
                     isContractacted = true;
                 }
             }
@@ -161,7 +161,7 @@ module OrangeFeSARQ.Services {
             if (showables.length > 0) {
                 for (let i: number = 0; i < showables.length; i++) {
                     let p = showables[i];
-                    if (vm.isContractacted(p, pIn)) {
+                    if (vm.isContractacted(p.productSpecification.ospExternalCode, pIn)) {
                         result.push(p);
                     }
                 }
