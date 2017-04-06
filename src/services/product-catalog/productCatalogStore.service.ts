@@ -161,6 +161,23 @@ module OrangeFeSARQ.Services {
             if (showables.length > 0) {
                 for (let i: number = 0; i < showables.length; i++) {
                     let p = showables[i];
+                    if (!vm.isContractacted(p.productSpecification.ospExternalCode, pIn)) {
+                        result.push(p);
+                    }
+                }
+            }
+            return result;
+        }
+
+
+        getShowablesAndContractedProductsByComponentName(compName: string, pOf, pSp, pIn) {
+            let vm = this;
+            let result: Array<any> = new Array<any>();
+            let showables: Array<any> = vm.getShowablesProductsByComponentName(compName, pOf, pSp);
+
+            if (showables.length > 0) {
+                for (let i: number = 0; i < showables.length; i++) {
+                    let p = showables[i];
                     if (vm.isContractacted(p.productSpecification.ospExternalCode, pIn)) {
                         result.push(p);
                     }
