@@ -75,7 +75,7 @@ module OrangeFeSARQ.Services {
                 urlParams: ['productOrder', 'gestionOrange']
             };
 
-            return vm.httpCacheGett(vm.urlProductOrder, _search, componentName)
+            return vm.httpPost(vm.urlProductOrder, _search, componentName)
                 .then((successData) => {
                         return successData;
                     },
