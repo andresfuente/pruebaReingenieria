@@ -145,7 +145,7 @@ module OrangeFeSARQ.Services {
                 for (let j: number = 0; j < e.productSpecification.bundledProductSpecification.length; j++) {
                     let com = e.productSpecification.bundledProductSpecification[j];
                     if (com.id == compName) {
-                        result.push(com);
+                        result.push(e);
                     }
                 }
             }
