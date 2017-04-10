@@ -27,7 +27,6 @@ declare module OrangeFeSARQ.Controllers {
         private messageToShow;
         static $inject: string[];
         informationCenterSrv: any;
-        callbackfunction: any;
         constructor($injector: any);
         setInjections($injector: any): void;
         initComp(): void;
@@ -69,7 +68,7 @@ declare module OrangeFeSARQ.Services {
         private $timeout;
         messageToShow: Array<any>;
         static $inject: string[];
-        callbackfunction: any;
+        _callBack: any;
         constructor($timeout: ng.ITimeoutService);
         /** Queue a success alert message */
         addInformationMessage(typeMsg: number, title?: string, message?: string): void;

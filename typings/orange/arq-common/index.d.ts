@@ -1132,6 +1132,7 @@ declare module OrangeFeSARQ.Services {
         private _info;
         private _usageReport;
         private _mdg;
+        private _loginData;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:customerViewStore#info
@@ -1193,6 +1194,7 @@ declare module OrangeFeSARQ.Services {
          */
         usageReport: any;
         mdg: any;
+        loginData: any;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -1625,6 +1627,7 @@ declare module OrangeFeSARQ.Services {
         setDataInStore(section: any): void;
         changeComp(element: any): any;
         getLayoutMetada(key: string, exp?: number): any;
+        getLayoutMetadaConcat(key: string, exp?: number): any;
         getLayoutMetadaPosition(key: string, exp?: number): any;
         getComponentMetadata(type: any, key: string, exp?: number): any;
         changeLayaoutMetada(layoutMetaData: any): any;
