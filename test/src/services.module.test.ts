@@ -6,7 +6,6 @@ module servicesCommons.Tests.Controllers {
         let mockserver;
         let $injector;
 
-
         beforeEach(() => {
             angular.mock.module('ngCookies');
             angular.mock.module('orange-arq-common');
@@ -15,23 +14,22 @@ module servicesCommons.Tests.Controllers {
             angular.mock.module('servicesCommons');
             angular.mock.module('getMenuItemsModule');
         });
-		
+
         beforeEach(() => {
             inject(
-                function(_$injector_) {
+                function (_$injector_) {
                     /* load data from mockjson */
                     $injector = _$injector_;
                     jasmine.getJSONFixtures().clearCache();
                     jasmine.getJSONFixtures().fixturesPath = 'base/test/mock';
                     mockserver = getJSONFixture('mock-api-data.json');
 
-                    // utils = new OrangeFeSARQ.Services.Utils($injector);
+                    // - utils = new OrangeFeSARQ.Services.Utils($injector);
                 });
         });
-
-        it('utils Controller should be defined', function() {
-            let a = { a:1,b:2 };
-			expect(a).toBeDefined();
+        it('utils Controller should be defined', function () {
+            let a = { a: 1, b: 2 };
+            expect(a).toBeDefined();
         });
     });
 }
