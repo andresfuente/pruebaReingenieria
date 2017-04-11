@@ -5,7 +5,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
         public adslStatusAPIUrl: string;
 
-        //Injector vars
+        // Injector vars
         public genericConstant: any;
         public OSP: string = 'OSP';
 
@@ -19,8 +19,8 @@ module OrangeFeSARQ.Services {
 
         setInjections($injector) {
             let vm = this;
-            vm.genericConstant = $injector.get("genericConstant");
-            vm.adslStatusAPIUrl = "/mock/API/adslStatus.json";
+            vm.genericConstant = $injector.get('genericConstant');
+            vm.adslStatusAPIUrl = '/mock/API/adslStatus.json';
         }
 
         initComp() {
@@ -47,5 +47,4 @@ module OrangeFeSARQ.Services {
                 });
         }
     }
-
 }

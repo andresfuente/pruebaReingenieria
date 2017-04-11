@@ -104,14 +104,14 @@ module OrangeFeSARQ.Services {
             userService = vm.$injector.get('userSrv');
 
             inputDocument = inputDocument.trim().toUpperCase();
-            if (inputDocument == "MSISDN") {
-                searchUrl = "publicKey";
+            if (inputDocument === 'MSISDN') {
+                searchUrl = 'publicKey';
             } else if (inputDocument === 'NIF' && vm.isNifNie(value)) {
-                searchUrl = "individualPublicId";
+                searchUrl = 'individualPublicId';
             } else if (inputDocument === 'CIF' && vm.isCif(value)) {
-                searchUrl = "individualPublicId";
+                searchUrl = 'individualPublicId';
             } else if (inputDocument === 'PASSPORT' || inputDocument === 'RESIDENCE') {
-                searchUrl = "residential";
+                searchUrl = 'residential';
             }
 
             return userService.getUser(searchUrl, value)
@@ -120,7 +120,7 @@ module OrangeFeSARQ.Services {
                     return response;
                 }
                 )
-                .catch(function(error) {
+                .catch(function (error) {
                     return error;
                 });
         }
@@ -165,12 +165,12 @@ module OrangeFeSARQ.Services {
             let nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
             let str = document.toString().toUpperCase();
 
-            if (nifRexp.test(str))
-                return true
-            else
-                return false
+            if (nifRexp.test(str)) {
+                return true;
+            } else {
+                return false;
+            }
         }
-
 
         isCif(cif: string): boolean {
             cif = cif.toUpperCase();
@@ -182,8 +182,9 @@ module OrangeFeSARQ.Services {
                 let suma_A = 0;
                 let suma_B = 0;
                 for (let i = 1; i < 8; i++) {
-                    if (i % 2 == 0) suma_A += parseInt(cif.charAt(i));
-                    else {
+                    if (i % 2 == 0) {
+                        suma_A += parseInt(cif.charAt(i));
+                    } else {
                         let t = (parseInt(cif.charAt(i)) * 2) + "";
                         let p = 0;
                         for (let j = 0; j < t.length; j++) {
@@ -194,25 +195,29 @@ module OrangeFeSARQ.Services {
                 }
                 let suma_C = (suma_A + suma_B) + "";
                 let suma_D = (10 - parseInt(suma_C.charAt(suma_C.length - 1))) % 10;
-                let letras = "JABCDEFGHI";
-                if (control >= "0" && control <= "9") return (parseInt(control) == suma_D);
-                else return (control == letras.charAt(suma_D));
+                let letras = 'JABCDEFGHI';
+                if (control >= '0' && control <= '9') {
+                    return (parseInt(control) == suma_D);
+                } else {
+                    return (control == letras.charAt(suma_D));
+                }
+            } else {
+                return false;
             }
-            else return false;
         }
 
         getPrepagoLines(products: any): any {
-            // for (let i in products) {
-            //     if (products[i].productCharacteristic) {
-            //         for (let j in products[i].productCharacteristic) {
-            //             if (products[i].productCharacteristic[j].name === "MSISDN") {
-            //                 if (products[i].productCharacteristic[j].value === msisdn) {
-            //                     return products[i].ospProductType;
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
+            /* for (let i in products) {
+                if (products[i].productCharacteristic) {
+                    for (let j in products[i].productCharacteristic) {
+                        if (products[i].productCharacteristic[j].name === "MSISDN") {
+                            if (products[i].productCharacteristic[j].value === msisdn) {
+                                return products[i].ospProductType;
+                            }
+                        }
+                    }
+                }
+            }*/
         }
 
         /**
@@ -236,7 +241,7 @@ module OrangeFeSARQ.Services {
             for (let i in products) {
                 if (products[i].productCharacteristic) {
                     for (let j in products[i].productCharacteristic) {
-                        if (products[i].productCharacteristic[j].name === "MSISDN") {
+                        if (products[i].productCharacteristic[j].name === 'MSISDN') {
                             if (products[i].productCharacteristic[j].value === msisdn) {
                                 return products[i].ospProductType;
                             }
@@ -247,18 +252,18 @@ module OrangeFeSARQ.Services {
         }
 
         findByName(name, array, value = 'value') {
-            if (array && array.length >= 1){
-                for (let i: number = 0; i < array.length; i++) {
+            if (array && array.length >= 1) {
+                for (let i = 0; i < array.length; i++) {
                     if (array[i].name.replace(" ", "") === name.replace(" ", "")) {
                         return array[i][value];
                     }
                 }
-            return null;
-          }
+                return null;
+            }
         }
 
         findByInArray(array, value, campo = 'name') {
-            for (let i: number = 0; i < array.length; i++) {
+            for (let i = 0; i < array.length; i++) {
                 if (array[i][campo].replace(" ", "") === value.replace(" ", "")) {
                     return array[i];
                 }
@@ -287,7 +292,6 @@ module OrangeFeSARQ.Services {
             }
         }
 
-
         trim(val: string) {
             let removeSpaces = /\s*/g;
             return val.replace(removeSpaces, '');
@@ -311,7 +315,7 @@ module OrangeFeSARQ.Services {
             if (phone) {
                 let phoneStr: string = phone.toString();
                 let regFixed = /^((\+?34)?(8|9))\d+$/;
-                // let regMobile = /^((6|7)|\+?34(6|7))/;
+                // - let regMobile = /^((6|7)|\+?34(6|7))/;
                 if (phoneStr.match(regFixed)) {
                     return true;
                 }
@@ -325,7 +329,7 @@ module OrangeFeSARQ.Services {
         isMobileLine(phone: number) {
             if (phone) {
                 let phoneStr: string = phone.toString();
-                //let regFixed = /^((\+?34)?(8|9))\d+$/;
+                // - let regFixed = /^((\+?34)?(8|9))\d+$/;
                 let regMobile = /^((6|7)|\+?34(6|7))/;
                 if (phoneStr.match(regMobile)) {
                     return true;
@@ -343,10 +347,10 @@ module OrangeFeSARQ.Services {
             let deferred = $q.defer();
             let image = new Image();
 
-            image.onerror = function() {
+            image.onerror = function () {
                 deferred.resolve(false);
             };
-            image.onload = function() {
+            image.onload = function () {
                 deferred.resolve(true);
             };
 
@@ -360,7 +364,7 @@ module OrangeFeSARQ.Services {
          */
         checkFormatEmail(email: string): boolean {
             let vm = this;
-            //let format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+            // - let format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
             let format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
             if (email.match(format)) {
                 return true;
@@ -379,12 +383,12 @@ module OrangeFeSARQ.Services {
                 let found = false;
                 let i = 0;
                 while (i < sizeProducts && !found) {
-                    //si estoy buscando el id
+                    // Si estoy buscando el id
                     let sizePC = products[i].productCharacteristic.length;
                     if (products[i].productCharacteristic && sizePC > 0) {
                         let productCh = products[i].productCharacteristic;
                         let sizeCh = productCh.length;
-                        //recorro el product caracteristic de este producto
+                        // Recorro el product caracteristic de este producto
                         let it = 0;
                         while (it < sizeCh && !found) {
                             if (productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
@@ -414,8 +418,7 @@ module OrangeFeSARQ.Services {
 
         setDataInStore(section): void {
             let vm = this;
-            for (let i: number = 0; i < section.length; i++) {
-
+            for (let i = 0; i < section.length; i++) {
                 OrangeFeSARQ.Controllers.ParentController.shared.owcsStores[_.camelCase(section[i].compId) + 'OWCSStore'] = { section: section[i] };
 
                 if (section[i].listModuleButton) {
@@ -434,7 +437,7 @@ module OrangeFeSARQ.Services {
         }
 
         objectHaveAnyProperty(obj: any): boolean {
-            let j: number = 0;
+            let j = 0;
             for (let key of Object.keys(obj)) {
                 if (obj.hasOwnProperty(key)) {
                     j++;
@@ -488,7 +491,7 @@ module OrangeFeSARQ.Services {
         getListValues(arr: Array<any>, value: string = 'value'): any {
             let vm = this;
             let result = {};
-            for (let i: number = 0; i < arr.length; i++) {
+            for (let i = 0; i < arr.length; i++) {
                 if (arr[i].name) {
                     let code = _.camelCase(arr[i].name);
                     result[code] = arr[i][value];
@@ -496,28 +499,29 @@ module OrangeFeSARQ.Services {
             }
             return result;
         }
-		
-		
-		/**
+
+        /**
          * @ngdoc service
          * @name OrangeFeSARQ.Services:Utils
-         * @param {customerViewStore} 
-		 * @param {menuItems} 
+         * @param {customerViewStore}
+         * @param {menuItems} 
          * @methodOf OrangeFeSARQ.Services.Utils
          * @description
-         * Parsea las urls del item menun que se le pasa como parámetro, sustituyendo el patrón ##nif##, por el documento del usuario logueado
+         * Parsea las urls del item menun que se le pasa como parámetro,
+         * sustituyendo el patrón ##nif##, por el documento del usuario logueado
          */
-		parseUrlMenu(customerViewStore, menu): any{
-			if(customerViewStore && customerViewStore.loginData && customerViewStore.loginData.document && customerViewStore.loginData.document !== null) {
-				let document = customerViewStore.loginData.document;
-				let menuString = JSON.stringify(menu);
-				menuString = menuString.replace(/##nif##/g, document)
-				return JSON.parse(menuString);
-			}
-			return menu;
-		}
-
+        parseUrlMenu(customerViewStore, menu): any {
+            if (customerViewStore && customerViewStore.loginData && customerViewStore.loginData.document
+            && customerViewStore.loginData.document !== null) {
+                let document = customerViewStore.loginData.document;
+                let menuString = JSON.stringify(menu);
+                menuString = menuString.replace(/##nif##/g, document)
+                return JSON.parse(menuString);
+            }
+            return menu;
+        }
     }
+
     angular.module('utils', [])
         .service('utils', Utils);
 }

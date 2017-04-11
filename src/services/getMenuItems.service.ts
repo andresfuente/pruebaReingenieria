@@ -1,8 +1,6 @@
 module OrangeFeSARQ.Services {
     'use strict';
 
-    /**
-     */
     export class GetMenuItemsService extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
         private getMenuItemsUrl: any;
@@ -18,7 +16,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
         }
 
-        getMenuItems(): ng.IPromise<any > {
+        getMenuItems(): ng.IPromise<any> {
             let vm = this;
             let _search: any;
 
@@ -50,7 +48,7 @@ module OrangeFeSARQ.Services {
     export class MenuStore {
         private _menu: Array<any>;
         private _current: any;
-		private _tab : string;
+        private _tab: string;
 
         constructor() {
         }
@@ -124,8 +122,8 @@ module OrangeFeSARQ.Services {
         set current(value: any) {
             this._current = value;
         }
-		
-		/**
+
+        /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:currentStore#tab
          * @methodOf OrangeFeSARQ.Services:currentStore

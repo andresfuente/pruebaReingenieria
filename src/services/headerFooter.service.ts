@@ -12,7 +12,6 @@ module OrangeFeSARQ.Services {
             vm.setInjections($injector);
         }
 
-
         setInjections($injector) {
             let vm = this;
         }
@@ -27,12 +26,12 @@ module OrangeFeSARQ.Services {
 
             return vm.httpCacheGett(vm.genericConstant.getHeader, _search)
                 .then(
-                    (successData)=> {
-						let str:string = JSON.stringify(successData);
-                        successData= JSON.parse(str.replace(/"\/sites/g, '"sites'));
+                    (successData) => {
+                        let str: string = JSON.stringify(successData);
+                        successData = JSON.parse(str.replace(/"\/sites/g, '"sites'));
                         return successData;
                     },
-                    (errorData)=> {
+                    (errorData) => {
                         return errorData;
                     }
                 );

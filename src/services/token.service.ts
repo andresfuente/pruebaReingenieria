@@ -12,7 +12,6 @@ module OrangeFeSARQ.Services {
             vm.setInjections($injector);
         }
 
-
         setInjections($injector) {
             let vm = this;
             vm.genericConstant = $injector.get('genericConstant');
@@ -34,12 +33,12 @@ module OrangeFeSARQ.Services {
 
             return vm.httpCacheGett(apiUrl, _search, compName)
                 .then(
-                (successData) => {
-                    return successData;
-                },
-                (errorData) => {
-                    return errorData;
-                }
+                    (successData) => {
+                        return successData;
+                    },
+                    (errorData) => {
+                        return errorData;
+                    }
                 );
         }
     }

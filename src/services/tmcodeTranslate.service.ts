@@ -17,8 +17,8 @@ module OrangeFeSARQ.Services {
 
         setInjections($injector) {
             let vm = this;
-            vm.genericConstant = $injector.get("genericConstant");
-            vm.productCatalogAPIUrl = "/mock/API/productCatalog.json";
+            vm.genericConstant = $injector.get('genericConstant');
+            vm.productCatalogAPIUrl = '/mock/API/productCatalog.json';
         }
 
         httpProductCatalog = function (tmcode, componentName: string = 'borrarComp'): any {
@@ -27,7 +27,6 @@ module OrangeFeSARQ.Services {
             let _search: Object = {
                 queryParams: {},
                 urlParams: []
-
             };
 
             return vm.httpCacheGett(vm.productCatalogAPIUrl, _search, componentName)
@@ -37,9 +36,6 @@ module OrangeFeSARQ.Services {
                 .catch(function (err) {
                     return err;
                 });
-
-        }
-
-
+        };
     }
 }

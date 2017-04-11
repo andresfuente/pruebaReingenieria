@@ -8,7 +8,7 @@ module OrangeFeSARQ.Services {
         public sufixProductSpecification: any;
         public sufixProductOffering: any;
 
-        //Injector vars
+        // Injector vars
         public genericConstant: any;
         public OSP: string = 'OSP';
 
@@ -22,21 +22,21 @@ module OrangeFeSARQ.Services {
 
         setInjections($injector) {
             let vm = this;
-            vm.genericConstant = $injector.get("genericConstant");
-            vm.productCatalogAPIUrl = "/mock/API/productCatalog.json";
+            vm.genericConstant = $injector.get('genericConstant');
+            vm.productCatalogAPIUrl = '/mock/API/productCatalog.json';
         }
 
         initComp() {
             let vm = this;
             vm.productCatalogAPIUrl = vm.genericConstant.productCatalog;
-            // vm.productCatalogAPIUrl = 'api/daf2/APIProductCatalogOSP/1';
+            // - vm.productCatalogAPIUrl = 'api/daf2/APIProductCatalogOSP/1';
 
             vm.sufixProductSpecification = [vm.genericConstant.brand, vm.genericConstant.site, 'productSpecification', vm.OSP];
             vm.sufixProductOffering = [vm.genericConstant.brand, vm.genericConstant.site, 'productOffering', vm.OSP];
         }
 
-        // daf2/APIProductCatalogOSP/1/productSpecification/OSP
-        // daf2/APIProductCatalogOSP/1/productOffering/OSP
+        // - daf2/APIProductCatalogOSP/1/productSpecification/OSP
+        // - daf2/APIProductCatalogOSP/1/productOffering/OSP
         getProductSpecification(): any {
             let vm = this;
             let _search: Object = {
@@ -80,5 +80,4 @@ module OrangeFeSARQ.Services {
                 });
         }
     }
-
 }

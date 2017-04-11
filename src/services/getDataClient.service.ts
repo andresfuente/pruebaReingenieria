@@ -14,11 +14,10 @@ module OrangeFeSARQ.Services {
             vm.setInjections($injector);
         }
 
-
         setInjections($injector) {
             let vm = this;
-            vm.genericConstant = $injector.get("genericConstant");
-            vm.CV = $injector.get("customerViewStore");
+            vm.genericConstant = $injector.get('genericConstant');
+            vm.CV = $injector.get('customerViewStore');
         }
 
         getData() {
@@ -32,7 +31,7 @@ module OrangeFeSARQ.Services {
             return vm.httpCacheGett(vm.genericConstant.getDataClient, _search)
                 .then(
                 (successData) => {
-                    //lleno el customerViewStore
+                    // Lleno el customerViewStore
                     if (successData.data) {
                         vm.CV.loginData = successData.data;
                     }

@@ -1,7 +1,6 @@
 module OrangeFeSARQ.Services {
     'use strict';
-    /**
-     */
+
     export class VapListSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
         private url: string;
@@ -18,18 +17,17 @@ module OrangeFeSARQ.Services {
 
         setInjections($injector) {
             let vm = this;
-            vm.genericConstant = $injector.get("genericConstant");
+            vm.genericConstant = $injector.get('genericConstant');
             vm.vapDataApiUrl = vm.genericConstant.vapDataUrl;
             vm.brand = vm.genericConstant.brand;
         }
-
 
         getVapData(msisdn: string, ID: string, componentName: string = 'pendingPaymentComp'): any {
             let vm = this;
             let _search: Object = {
                 queryParams: {},
-                //cuando metamos la brand, lo meteremos como primer parámetro dentro de éste array (vm.brand) y así ya funcionaría.
-                urlParams: [vm.genericConstant.brand,'vapData', 'OSP', ID, msisdn]
+                // Cuando metamos la brand, lo meteremos como primer parámetro dentro de éste array (vm.brand) y así ya funcionaría.
+                urlParams: [vm.genericConstant.brand, 'vapData', 'OSP', ID, msisdn]
             };
             return vm.httpCacheGett(vm.vapDataApiUrl, _search, componentName)
                 .then(function(response) {

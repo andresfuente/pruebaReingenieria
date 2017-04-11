@@ -1,5 +1,6 @@
 module OrangeFeSARQ.Services {
     'use strict';
+
     /**
      * @ngdoc service
      * @name detailRate.DetailRateSrv
@@ -7,21 +8,16 @@ module OrangeFeSARQ.Services {
      * Servicio que realiza la llamada al microwebservice para obtener la indetailRateacion
      * de los listados de llamada/sms/data de una linea
      */
-
-
     export class DetailRateSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
         public detailRateDataServiceUrl: string;
-
 
         constructor(public $injector) {
             super($injector);
             let vm = this;
 
             vm.detailRateDataServiceUrl = vm.genericConstant.hoot;
-
         }
-
 
         /**
          * @ngdoc method
@@ -36,19 +32,17 @@ module OrangeFeSARQ.Services {
         getPrincipalLineSrv(msisdn, site, marca, compomentName = 'detail-rate-comp'): any {
             let vm = this;
             let _search: Object = {
-                urlParams: [marca, 'principal'] ,
+                urlParams: [marca, 'principal'],
                 queryParams: {'publicKey': msisdn, 'site': site}
             };
 
             return vm.httpCacheGett(vm.detailRateDataServiceUrl, _search, compomentName)
-                .then(function(response) {
+                .then(function (response) {
                     return response.data;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     return error;
                 });
         }
-
     }
 }
-

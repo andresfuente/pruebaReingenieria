@@ -13,7 +13,6 @@ module OrangeFeSARQ.Services {
             vm.setInjections($injector);
         }
 
-
         setInjections($injector) {
             let vm = this;
             vm.genericConstant = $injector.get('genericConstant');
@@ -34,12 +33,12 @@ module OrangeFeSARQ.Services {
 
             if (param === 'Line') {
                 _search.queryParams.productBucket = 'line';
-                //vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceLineAPIUrl;
+                // - vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceLineAPIUrl;
             } else if (param === 'Bonus') {
-                //_search.queryParams.productBucket = 'bonus';
-                //vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceBonusAPIUrl;
-                //_search = {};
-                //TO-DO: para llamar a la api
+                /*_search.queryParams.productBucket = 'bonus';
+                vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceBonusAPIUrl;
+                _search = {};
+                TO-DO: para llamar a la api*/
                 _search.queryParams.productBucket = 'bonus';
             }
             return vm.httpCacheGett(vm.bucketBalanceAPIUrl, _search, componentName)
@@ -50,7 +49,6 @@ module OrangeFeSARQ.Services {
                     return error;
                 });
         }
-
 
         getBalanceByDoc(nif: string, param: string, componentName: string = 'more-megas-comp'): any {
             let vm = this;
@@ -61,17 +59,17 @@ module OrangeFeSARQ.Services {
                     individualPublicId: nif,
                     productBucket: ''
                 },
-                urlParams: [vm.genericConstant.brand , 'usageReport', 'OSP']
+                urlParams: [vm.genericConstant.brand, 'usageReport', 'OSP']
             };
 
             if (param === 'Line') {
                 _search.queryParams.productBucket = 'line';
-                //vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceLineAPIUrl;
+                // - vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceLineAPIUrl;
             } else if (param === 'Bonus') {
-                //_search.queryParams.productBucket = 'bonus';
-                //vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceBonusAPIUrl;
-                //_search = {};
-                //TO-DO: para llamar a la api
+                /*_search.queryParams.productBucket = 'bonus';
+                vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceBonusAPIUrl;
+                _search = {};
+                TO-DO: para llamar a la api*/
                 _search.queryParams.productBucket = 'bonus';
             }
             return vm.httpCacheGett(vm.bucketBalanceAPIUrl, _search, componentName)
@@ -83,22 +81,20 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-
-        getCreditBucketBalanceTransactions(msisdn: string, startDate: Date ,endDate: Date, componentName: string = 'balance-transfer-log-comp'): any {
+        getCreditBucketBalanceTransactions(msisdn: string, startDate: Date, endDate: Date, componentName: string = 'balance-transfer-log-comp'): any {
             let vm = this;
             let _search: any;
             vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalance;
-            let startDateStr:string = d3.time.format('%d/%m/%Y')(startDate);
-            let endDateStr:string = d3.time.format('%d/%m/%Y')(endDate);
+            let startDateStr: string = d3.time.format('%d/%m/%Y')(startDate);
+            let endDateStr: string = d3.time.format('%d/%m/%Y')(endDate);
             _search = {
                 queryParams: {
                     publicKey: msisdn,
                     startDate: startDateStr,
-                    endDate:endDateStr
+                    endDate: endDateStr
                 },
-                urlParams: [vm.genericConstant.brand , 'creditBucketBalanceTransactions']
+                urlParams: [vm.genericConstant.brand, 'creditBucketBalanceTransactions']
             };
-
 
             return vm.httpCacheGett(vm.bucketBalanceAPIUrl, _search, componentName)
                 .then(function (response) {
@@ -108,7 +104,5 @@ module OrangeFeSARQ.Services {
                     return error;
                 });
         }
-
-
     }
 }

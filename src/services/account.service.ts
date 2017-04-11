@@ -56,10 +56,9 @@ module OrangeFeSARQ.Services {
                 .catch(function (error) {
                     return error;
                 });
-
         }
-		
-		passChange(data: newAccount.Models.PassChangeEmailRequest, componentName = 'row_input_email'): ng.IPromise <newAccount.Models.PassChangeResponse> {
+
+        passChange(data: newAccount.Models.PassChangeEmailRequest, componentName = 'row_input_email'): ng.IPromise <newAccount.Models.PassChangeResponse> {
             let vm = this;
 
             let _search: Object = {
@@ -71,20 +70,20 @@ module OrangeFeSARQ.Services {
                 .then(function (response) {
                     return response;
                 })
-                .catch(function (error) {					
+                .catch(function (error) {
                     return error;
                 });
 
         }
-		
-		checkMail(data: newAccount.Models.NewMailRequest,componentName = 'row_input_email') : ng.IPromise <any>{ 
-			let vm = this;
+
+        checkMail(data: newAccount.Models.NewMailRequest, componentName = 'row_input_email'): ng.IPromise <any> {
+            let vm = this;
 
             let _search: Object = {
                 queryParams: {
-					login:data.accountLogin,
-					domain:data.accountDomain
-				},
+                    login: data.accountLogin,
+                    domain: data.accountDomain
+                },
                 urlParams: ['email', 'check']
             };
             // Llamada al post con la url +  datos + url para descachear
@@ -95,22 +94,22 @@ module OrangeFeSARQ.Services {
                 .catch(function (error) {
                     return error;
                 });
-		}
+        }
 
         redirectEmail(userLogin: string, userDomain: string, userEmail: string, userOperation: string, componentName = 'row_input_email'): any {
             let vm = this;
             let data = {
-                "login": userLogin.toLowerCase(),
-                "domain": userDomain.toLowerCase(),
-                "email": userEmail.toLowerCase(),
-                "operation": userOperation
+                'login': userLogin.toLowerCase(),
+                'domain': userDomain.toLowerCase(),
+                'email': userEmail.toLowerCase(),
+                'operation': userOperation
             };
             let _search: Object = {
                 queryParams: data,
                 urlParams: ['email', 'redirect']
             };
             // Llamada al post con la url +  datos + url para descachear
-			return vm.httpPost(vm.urlRedirectEmail, _search, componentName)
+            return vm.httpPost(vm.urlRedirectEmail, _search, componentName)
                 .then(function (response) {
                     return response;
                 })
@@ -130,11 +129,11 @@ module OrangeFeSARQ.Services {
             };
             return vm.httpCacheGett(vm.urlRedirectEmail, _search, componentName)
                 .then((successData) => {
-                        return successData;
-                    },
-                    (errorData) => {
-                        return errorData;
-                    })
+                    return successData;
+                },
+                (errorData) => {
+                    return errorData;
+                })
                 .catch(function (error) {
                     return error;
                 });

@@ -59,11 +59,11 @@ module OrangeFeSARQ.Services {
                 for (let i = 0; i < length; i++) {
                     let element: any = catalog[i];
                     if (element && tmcode === element.id) {
-                        return element
+                        return element;
                     }
                 }
             }
-            return null
+            return null;
         }
 
         getCatalogOfferingByTmcode(tmcode): Array<any> {
@@ -71,7 +71,7 @@ module OrangeFeSARQ.Services {
             let catalog = vm.offering;
             let offer: any;
             offer = {};
-            // let listOffer = [];
+            // - let listOffer = [];
             if (tmcode && catalog) {
                 let length = catalog.length || 0;
                 for (let i = 0; i < length; i++) {
@@ -79,9 +79,9 @@ module OrangeFeSARQ.Services {
                     let specification = element.productSpecification;
                     if (specification && tmcode === specification.id) {
                         return element;
-                        // offer.productSpecification = element.productSpecification;
-                        // offer.productOfferingPrice = element.productOfferingPrice;
-                        // listOffer.push(offer);
+                        /*offer.productSpecification = element.productSpecification;
+                        offer.productOfferingPrice = element.productOfferingPrice;
+                        listOffer.push(offer);*/
                     }
                 }
             }
@@ -140,9 +140,9 @@ module OrangeFeSARQ.Services {
             let contractables = vm.extractContratablesProducts(pOf, pSp);
             let result: Array<any> = new Array<any>();
             // Ahora vamos a filtar para saber si en x com se debe mostrar
-            for (let i: number = 0; i < contractables.length; i++) {
+            for (let i = 0; i < contractables.length; i++) {
                 let e = contractables[i];
-                for (let j: number = 0; j < e.productSpecification.bundledProductSpecification.length; j++) {
+                for (let j = 0; j < e.productSpecification.bundledProductSpecification.length; j++) {
                     let com = e.productSpecification.bundledProductSpecification[j];
                     if (com.id == compName) {
                         result.push(e);
@@ -152,14 +152,13 @@ module OrangeFeSARQ.Services {
             return result;
         }
 
-
         getShowablesAndContractablesProductsByComponentName(compName: string, pOf, pSp, pIn) {
             let vm = this;
             let result: Array<any> = new Array<any>();
             let showables: Array<any> = vm.getShowablesProductsByComponentName(compName, pOf, pSp);
 
             if (showables.length > 0) {
-                for (let i: number = 0; i < showables.length; i++) {
+                for (let i = 0; i < showables.length; i++) {
                     let p = showables[i];
                     if (!vm.isContractacted(p.productSpecification.ospExternalCode, pIn)) {
                         result.push(p);
@@ -169,14 +168,13 @@ module OrangeFeSARQ.Services {
             return result;
         }
 
-
         getShowablesAndContractedProductsByComponentName(compName: string, pOf, pSp, pIn) {
             let vm = this;
             let result: Array<any> = new Array<any>();
             let showables: Array<any> = vm.getShowablesProductsByComponentName(compName, pOf, pSp);
 
             if (showables.length > 0) {
-                for (let i: number = 0; i < showables.length; i++) {
+                for (let i = 0; i < showables.length; i++) {
                     let p = showables[i];
                     if (vm.isContractacted(p.productSpecification.ospExternalCode, pIn)) {
                         result.push(p);
@@ -185,6 +183,5 @@ module OrangeFeSARQ.Services {
             }
             return result;
         }
-
     }
 }

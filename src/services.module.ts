@@ -56,8 +56,7 @@ module OrangeFeSARQ.Constant {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
                 getImagesSrv.getData().then(
                     (response) => {
-                        console.log('data', response);
-                        //guardo datos en ParentController
+                        // Guardo datos en ParentController
                         if (OrangeFeSARQ.Controllers.ParentController.shared === undefined) {
                             OrangeFeSARQ.Controllers.ParentController.shared = {};
                         }
@@ -70,7 +69,7 @@ module OrangeFeSARQ.Constant {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
                 getDataClientSrv.getData().then(
                     (response) => {
-                        console.log('data en servicesmodule', response);
+                        // - console.log('data en servicesmodule', response);
                     }
                 );
             }
@@ -89,45 +88,41 @@ module OrangeFeSARQ.Constant {
                     }
                 );
             }
-        })
+        });
 
-
-
-    //     if (OrangeFeSARQ.Controllers.ParentController.shared
-    //         && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
-    //         menuStore.menu = {
-    //             pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
-    //             prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
-    //             fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
-    //
-    //         };
-    //         fillCurrent();
-    //     } else {
-    //         $rootScope.$watch(
-    //             () => OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore,
-    //             (newValue, oldValue) => {
-    //                 if (OrangeFeSARQ.Controllers.ParentController.shared
-    //                     && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
-    //                     menuStore.menu = {
-    //                         pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
-    //                         prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
-    //                         fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
-    //                     };
-    //                     fillCurrent();
-    //                 }
-    //             });
-    //     }
-    //
-    //     let prepaid: boolean;
-    //     let pospaid: boolean;
-    //     let fixed: boolean;
-    //
-    //     $rootScope.$watch(
-    //         () => msisdnStore.msisdn,
-    //         (newValue, oldValue) => {
-    //             fillCurrent();
-    //         });
-    //
-    //
-    // }
+        /*if (OrangeFeSARQ.Controllers.ParentController.shared
+            && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
+            menuStore.menu = {
+                pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
+                prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
+                fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
+    
+            };
+            fillCurrent();
+        } else {
+            $rootScope.$watch(
+                () => OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore,
+                (newValue, oldValue) => {
+                    if (OrangeFeSARQ.Controllers.ParentController.shared
+                        && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
+                        menuStore.menu = {
+                            pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
+                            prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
+                            fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
+                        };
+                        fillCurrent();
+                    }
+                });
+        }
+    
+        let prepaid: boolean;
+        let pospaid: boolean;
+        let fixed: boolean;
+    
+        $rootScope.$watch(
+            () => msisdnStore.msisdn,
+            (newValue, oldValue) => {
+                fillCurrent();
+            });
+    }*/
 }
