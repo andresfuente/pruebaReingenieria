@@ -28,20 +28,20 @@ declare module OrangeFeSARQ.Models {
         identifierColumnName: string;
     }
 
-    // todo revisar si contiene  algo
+    // Todo revisar si contiene  algo
     export interface BinaryStream {
     }
 
-    // todo revisar si contiene  algo
+    // Todo revisar si contiene  algo
     export interface WebReferences {
     }
 
     export interface ImageFile {
         filename: string;
         foldername: string;
-        webReferences: [WebReferences]; // todo revisar si contiene  algo
+        webReferences: [WebReferences]; // Todo revisar si contiene  algo
         blobAddress: BlobAddress;
-        binaryStream: BinaryStream; // todo revisar si contiene  algo
+        binaryStream: BinaryStream; // Todo revisar si contiene  algo
     }
 
     export interface ListDeepLink {
@@ -202,8 +202,6 @@ declare module OrangeFeSARQ.Models {
         assetId: number;
         id: number;
 
-
-
         rating: number;
         colorChartAlternative: any;
         managementMode: boolean;
@@ -231,5 +229,4 @@ declare module OrangeFeSARQ.Models {
     export interface ComponentOwcsHtml {
         section: OwcsHtml
     }
-
 }

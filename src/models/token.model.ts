@@ -4,5 +4,4 @@ declare module OrangeFeSARQ.Models {
         inputString: string;
         key: string;
     }
-
 }

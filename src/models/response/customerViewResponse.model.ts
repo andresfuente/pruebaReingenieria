@@ -118,10 +118,8 @@ module OrangeFeSARQ.Models {
         public id: string;
         public ospIDsource: string;
 
-
         constructor() {
         }
-
     }
 
     export class Organization {
@@ -222,8 +220,4 @@ module OrangeFeSARQ.Models {
         }
 
     }
-
-
 }
-
-

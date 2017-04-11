@@ -1,7 +1,7 @@
 /**
  * Created by jcardonv on 03/01/2017.
- *
-module OrangeFeSARQ.Models {
+ */
+/*module OrangeFeSARQ.Models {
     'use strict';
 
     export class AppliedProductUsageCharge {
@@ -209,6 +209,4 @@ module OrangeFeSARQ.Models {
     }
 
 }
-
-
 */
