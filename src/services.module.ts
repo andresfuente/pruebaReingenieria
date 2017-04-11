@@ -6,6 +6,7 @@ module OrangeFeSARQ.Constant {
         .service('utils', OrangeFeSARQ.Services.Utils)
         .service('vapListSrv', OrangeFeSARQ.Services.VapListSrv)
         .service('amortizationSrv', OrangeFeSARQ.Services.AmortizationSrv)
+        .service('contactFormSrv', OrangeFeSARQ.Services.ContactFormSrv)
         .service('contractsSrv', OrangeFeSARQ.Services.ContractsSrv)
         .service('tmcodeTranslateSrv', OrangeFeSARQ.Services.TmCodeTranslateSrv)
         .service('productCatalogSrv', OrangeFeSARQ.Services.ProductCatalogService)
@@ -23,7 +24,7 @@ module OrangeFeSARQ.Constant {
         .service('getMenuItemsModule', OrangeFeSARQ.Services.GetMenuItemsService)
         .service('getDataClientSrv', OrangeFeSARQ.Services.GetdataClientSrv)
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
-        .service('productContractedTranslateSrv',OrangeFeSARQ.Service.ProductContractedTranslateSrv)
+        .service('productContractedTranslateSrv', OrangeFeSARQ.Service.ProductContractedTranslateSrv)
 
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
