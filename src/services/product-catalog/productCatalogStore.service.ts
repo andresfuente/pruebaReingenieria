@@ -36,29 +36,40 @@ module OrangeFeSARQ.Services {
          * @ngdoc method
          * @name OrangeFeSARQ.Services:ProductCatalogStore#getProduct
          * @methodOf OrangeFeSARQ.Services:ProductCatalogStore
+         * @param {string} value: valor del campo a buscar
+         * @param {string} key: clave donde se buscará el valor
          * @description
-         * Obtiene los datos de product Offering y del product Specification en base a tmcode
+         * Obtiene los datos de product Offering y del product Specification en base a tmvalue
          */
-        getProduct(tmcode): any {
+        getProduct(value: string, key: string = 'id'): any {
             let vm = this;
             let product: any;
-            if (tmcode) {
+            if (value) {
                 product = {};
-                product.specification = vm.getCatalogSpecificationByTmcode(tmcode);
-                product.offering = vm.getCatalogOfferingByTmcode(tmcode);
+                product.specification = vm.getCatalogSpecificationByTmcode(value, key);
+                product.offering = vm.getCatalogOfferingByTmcode(value, key);
             }
             return product;
         }
 
-        getCatalogSpecificationByTmcode(tmcode): any {
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ProductCatalogStore#getCatalogSpecificationByTmcode
+         * @methodOf OrangeFeSARQ.Services:ProductCatalogStore
+         * @param {string} value: valor del campo a buscar
+         * @param {string} key: clave donde se buscará el valor
+         * @description
+         * Recoge los datos del product catalog buscado por el campo seleccioando
+         */
+        getCatalogSpecificationByTmcode(value: string, key: string = 'id'): any {
             let vm = this;
             let catalog: any = vm.specification;
             let productID: number;
-            if (tmcode && catalog) {
+            if (value && catalog) {
                 let length: number = catalog.length || 0;
                 for (let i = 0; i < length; i++) {
                     let element: any = catalog[i];
-                    if (element && tmcode === element.id) {
+                    if (element && value === element[key]) {
                         return element;
                     }
                 }
@@ -66,18 +77,27 @@ module OrangeFeSARQ.Services {
             return null;
         }
 
-        getCatalogOfferingByTmcode(tmcode): Array<any> {
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ProductCatalogStore#getCatalogOfferingByTmcode
+         * @methodOf OrangeFeSARQ.Services:ProductCatalogStore
+         * @param {string} value: valor del campo a buscar
+         * @param {string} key: clave donde se buscará el valor
+         * @description
+         * Recoge los datos del product Offering buscado por el campo seleccioando
+         */
+        getCatalogOfferingByTmcode(value: string, key: string = 'id'): Array<any> {
             let vm = this;
             let catalog = vm.offering;
             let offer: any;
             offer = {};
             // - let listOffer = [];
-            if (tmcode && catalog) {
+            if (value && catalog) {
                 let length = catalog.length || 0;
                 for (let i = 0; i < length; i++) {
                     let element = catalog[i];
                     let specification = element.productSpecification;
-                    if (specification && tmcode === specification.id) {
+                    if (specification && value === specification[key]) {
                         return element;
                         /*offer.productSpecification = element.productSpecification;
                         offer.productOfferingPrice = element.productOfferingPrice;
