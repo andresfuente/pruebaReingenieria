@@ -117,16 +117,18 @@ module OrangeFeSARQ.Services {
          */
         extractContratablesProducts(pOf, pSp) {
             let contractingProducts = [];
-            for (let i = 0; i < pOf.length; i++) {
-                let _pO = pOf[i];
-                for (let j = 0; j < pSp.length; j++) {
-                    let _pS = pSp[j];
-                    if (_pS.id && _pO.productSpecification.id === _pS.id) {
-                        _pO.productSpecification = _pS;
-                        contractingProducts.push(_pO);
-                    }
-                }
-            }
+			if(pOf){				
+				for (let i = 0; i < pOf.length; i++) {
+					let _pO = pOf[i];
+					for (let j = 0; j < pSp.length; j++) {
+						let _pS = pSp[j];
+						if (_pS.id && _pO.productSpecification.id === _pS.id) {
+							_pO.productSpecification = _pS;
+							contractingProducts.push(_pO);
+						}
+					}
+				}
+			}
             return contractingProducts;
         }
 
@@ -139,11 +141,13 @@ module OrangeFeSARQ.Services {
          */
         isContractacted(ospExternalCode, pIn) {
             let isContractacted = false;
-            for (let i = 0; i < pIn.product.length; i++) {
-                let _pI = pIn.product[i];
-                if (_pI.ospIdCRM === ospExternalCode) {
-                    isContractacted = true;
-                }
+			if(pIn &&  pIn.product){				
+				for (let i = 0; i < pIn.product.length; i++) {
+					let _pI = pIn.product[i];
+					if (_pI.ospIdCRM === ospExternalCode) {
+						isContractacted = true;
+					}
+				}
             }
             return isContractacted;
         }
