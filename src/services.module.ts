@@ -25,7 +25,7 @@ module OrangeFeSARQ.Constant {
         .service('getDataClientSrv', OrangeFeSARQ.Services.GetdataClientSrv)
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
         .service('productContractedTranslateSrv', OrangeFeSARQ.Service.ProductContractedTranslateSrv)
-        .service('customerManagementSrv', OrangeFeSARQ.Service.CustomerManagementSrv)
+        .service('customerManagementSrv', OrangeFeSARQ.Services.CustomerManagementSrv)
 
 
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
