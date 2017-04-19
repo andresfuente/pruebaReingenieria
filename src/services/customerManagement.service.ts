@@ -17,16 +17,17 @@ module OrangeFeSARQ.Services {
 
 /**
  * @ngdoc method
- * @name #postMobileInformation(body:string, id:string, brand:string, comp:string)
+ * @name #postMobileInformation(body:string, id:string, brand:string, comp:string, showMessage?: boolean)
  * @methodOf locator.UserSrv
  * @param {object} body cuerpo de la informacion del post.
  * @param {string} id Identificador.
  * @param {string} brand Orange o Amena.
  * @param {string} comp Nombre del componente que llama al servicio.
+ * @param {boolean} showMessage (opcional) Mostrar o no los mensajes de información.
  * @returns {object} Devuelve una promesa con el response
  */
 
-         postMobileInformation(body, id, brand, comp) {
+         postMobileInformation(body, id, brand, comp, showMessage = true) {
             let vm = this;
 
             let _search: Object = {
@@ -36,11 +37,13 @@ module OrangeFeSARQ.Services {
 
             return vm.httpPut(vm.url, _search, comp)
                 .then(function(response) {
-                    vm.informationCenter.addInformationMessage(1, 'Datos actualizados', '');
+                    if (showMessage)
+                        vm.informationCenter.addInformationMessage(1, 'Datos actualizados', '');
                     return response.data;
                 })
                 .catch(function(error) {
-                    vm.informationCenter.addInformationMessage(2, error.data.error.title, error.data.error.desc);
+                    if (showMessage)
+                        vm.informationCenter.addInformationMessage(2, error.data.error.title, error.data.error.desc);
                     return error;
                 });
         };
