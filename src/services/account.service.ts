@@ -81,8 +81,8 @@ module OrangeFeSARQ.Services {
 
             let _search: Object = {
                 queryParams: {
-                    login: data.accountLogin,
-                    domain: data.accountDomain
+                    'login': data.accountLogin,
+                    'domain': data.accountDomain
                 },
                 urlParams: ['email', 'check']
             };
