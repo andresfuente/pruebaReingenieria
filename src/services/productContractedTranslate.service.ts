@@ -24,7 +24,8 @@ module OrangeFeSARQ.Service {
             let _search: Object = {
                 queryParams: {
                     lineCategory: type,
-                    source: 'mdw'
+                    source: 'mdw',
+                    'onlyActive':vm.genericConstant.onlyActive
                 },
                 urlParams: [brand, detail, msisdn]
             };
