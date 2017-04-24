@@ -8,9 +8,9 @@ module OrangeFeSARQ.Constant {
         .service('amortizationSrv', OrangeFeSARQ.Services.AmortizationSrv)
         .service('contactFormSrv', OrangeFeSARQ.Services.ContactFormSrv)
         .service('contractsSrv', OrangeFeSARQ.Services.ContractsSrv)
-        .service('tmcodeTranslateSrv', OrangeFeSARQ.Services.TmCodeTranslateSrv)
         .service('productCatalogSrv', OrangeFeSARQ.Services.ProductCatalogService)
         .service('productCatalogStore', OrangeFeSARQ.Services.ProductCatalogStore)
+        .service('productOrderSrv', OrangeFeSARQ.Services.ProductOrderSrv)
         .service('bucketBalanceSrv', OrangeFeSARQ.Services.BucketBalanceSrv)
         .service('getImagesSrv', OrangeFeSARQ.Services.getImagesSrv)
         .service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter)
@@ -18,7 +18,6 @@ module OrangeFeSARQ.Constant {
         .service('detailRateSrv', OrangeFeSARQ.Services.DetailRateSrv)
         .service('voiceMailPopUpSrv', OrangeFeSARQ.Services.VoiceMailPopUpSrv)
         .service('activationAndConfigurationSrv', OrangeFeSARQ.Services.ActivationAndConfigurationSrv)
-        .service('productOrderSrv', OrangeFeSARQ.Services.ProductOrderSrv)
         .service('adslStatusSrv', OrangeFeSARQ.Services.AdslStatusService)
         .service('adslStatusStore', OrangeFeSARQ.Services.AdslStatusStore)
         .service('getMenuItemsModule', OrangeFeSARQ.Services.GetMenuItemsService)
@@ -26,7 +25,11 @@ module OrangeFeSARQ.Constant {
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
         .service('productContractedTranslateSrv', OrangeFeSARQ.Service.ProductContractedTranslateSrv)
         .service('customerManagementSrv', OrangeFeSARQ.Services.CustomerManagementSrv)
+        .service('hootSrv', OrangeFeSARQ.Services.HootSrv)
         .service('userManagementSrv', OrangeFeSARQ.Services.UserManagementSrv)
+		
+
+
 
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {

@@ -79,5 +79,38 @@ module OrangeFeSARQ.Services {
                     return error;
                 });
         }
+
+
+
+
+        getRates(msisdn: string, contractType: string, tmCodeOrigen : string, componentName: string): any {
+            let vm = this;
+            let _search: any;
+            let brand = vm.genericConstant.brand;
+            let method = 'changeRateList';
+
+            let request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
+                contractType: contractType,
+                tmCodeOrigen: tmCodeOrigen
+            }
+
+            _search = {
+                queryParams: request,
+                urlParams: [brand, method, msisdn]
+            };
+
+            return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, componentName)
+                .then(function(response) {
+                    if (response && response.data && response.data.error) {
+                        throw response.data.error;
+                    } else if (response && response.data && response.data.productSpecification) {
+                        return response.data.productSpecification
+                    }
+                    return response.data;
+                })
+                .catch(function(error) {
+                    return error.data;
+                });
+        }
     }
 }

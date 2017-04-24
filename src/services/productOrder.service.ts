@@ -19,7 +19,7 @@ module OrangeFeSARQ.Services {
             vm.genericConstant = $injector.get('genericConstant');
         }
 
-        getData(msisdn: string, action: string, code: string, services: string = '', segment: string = '', componentName: string = 'orange_tv_contract'): ng.IPromise <any> {
+        getData(msisdn: string, action: string, code: string, services: string = '', segment: string = '', componentName: string = 'orange_tv_contract'): ng.IPromise<any> {
             let vm = this;
             let _search: Object = {
                 queryParams: {
@@ -34,18 +34,18 @@ module OrangeFeSARQ.Services {
 
             return vm.httpCacheGett(vm.urlProductOrder, _search, componentName)
                 .then(
-                    (successData) => {
+                (successData) => {
                     return successData;
-                    },
-                    (errorData) => {
-                        return errorData;
-                    })
-                .catch(function (error) {
+                },
+                (errorData) => {
+                    return errorData;
+                })
+                .catch(function(error) {
                     return error;
                 });
         }
 
-        activateDesactivateProduct(msisdn: string, action: string, code: string, volumen: number = 0, price: number = 0, imei: string = '', componentName: string = 'generic_bonus'): ng.IPromise <any> {
+        activateDesactivateProduct(msisdn: string, action: string, code: string, volumen: number = 0, price: number = 0, imei: string = '', componentName: string = 'generic_bonus'): ng.IPromise<any> {
             let vm = this;
             let queryParams = {};
             if (volumen !== 0 && price !== 0) {
@@ -70,7 +70,7 @@ module OrangeFeSARQ.Services {
                     idPromo: code
                 };
             }
-            // TODO añadir la marca
+            // No necesita brand porque esta llamada es solo parte de Orange
             let _search: Object = {
                 queryParams: queryParams,
                 urlParams: ['productOrder', 'gestionOrange']
@@ -78,14 +78,45 @@ module OrangeFeSARQ.Services {
 
             return vm.httpPost(vm.urlProductOrder, _search, componentName)
                 .then(
-                    (successData) => {
+                (successData) => {
                     return successData;
-                    },
-                    (errorData) => {
-                        return errorData;
-                    })
-                .catch(function (error) {
+                },
+                (errorData) => {
+                    return errorData;
+                })
+                .catch(function(error) {
                     return error;
+                });
+        }
+
+
+        getSummary(msisdn: string, customerId: string, tmCodeDestino: string, tmCodeOrigen: string, tipoLinea: string, componentName: string): ng.IPromise<any> {
+            let vm = this;
+            let BRAND = vm.genericConstant.brand;
+            let METHOD = 'getSummary';
+
+            let request = {
+                msisdn: msisdn,
+                customerId: customerId,
+                tmCodeDestino: tmCodeDestino,
+                tmCodeOrigen: tmCodeOrigen,
+                tipoLinea: tipoLinea
+            }
+            let _search: Object = {
+                queryParams: request,
+                urlParams: [BRAND, METHOD]
+            };
+
+            return vm.httpCacheGett(vm.urlProductOrder, _search, componentName)
+                .then((response) => {
+                    let _resp = response.data;
+                    if (_resp.error) {
+                        throw _resp.error;
+                    }
+                    return _resp.productOrder;
+                })
+                .catch(function(error) {
+                    return error.data;
                 });
         }
     }
