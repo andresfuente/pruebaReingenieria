@@ -491,12 +491,15 @@ module OrangeFeSARQ.Services {
         getListValues(arr: Array<any>, value: string = 'value'): any {
             let vm = this;
             let result = {};
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i].name) {
-                    let code = _.camelCase(arr[i].name);
-                    result[code] = arr[i][value];
-                }
-            }
+			if(arr){
+				for (let i = 0; i < arr.length; i++) {
+					if (arr[i].name) {
+						let code = _.camelCase(arr[i].name);
+						result[code] = arr[i][value];
+					}
+				}
+			}
+            
             return result;
         }
 
