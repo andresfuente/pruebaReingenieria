@@ -25,7 +25,8 @@ module OrangeFeSARQ.Services {
             _search = {
                 queryParams: {
                     publicKey: msisdn,
-                    productBucket: ''
+                    productBucket: '',
+                    'onlyActive':vm.genericConstant.onlyActive
                 },
                 urlParams: [vm.genericConstant.brand, 'usageReport', 'OSP']
 
@@ -57,7 +58,8 @@ module OrangeFeSARQ.Services {
             _search = {
                 queryParams: {
                     individualPublicId: nif,
-                    productBucket: ''
+                    productBucket: '',
+                    'onlyActive':vm.genericConstant.onlyActive
                 },
                 urlParams: [vm.genericConstant.brand, 'usageReport', 'OSP']
             };

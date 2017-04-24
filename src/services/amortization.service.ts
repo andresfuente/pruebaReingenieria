@@ -31,7 +31,9 @@ module OrangeFeSARQ.Services {
         getVap(msisdn: string, id: string, componentName: string = 'payPendingPaymentComp'): any {
             let vm = this;
             let _search: Object = {
-                queryParams: {},
+                queryParams: {
+                    'onlyActive':vm.genericConstant.onlyActive
+                },
                 urlParams: ['vapData', 'OSP', id, msisdn]
 
             };
