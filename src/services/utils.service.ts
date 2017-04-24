@@ -504,7 +504,7 @@ module OrangeFeSARQ.Services {
          * @ngdoc service
          * @name OrangeFeSARQ.Services:Utils
          * @param {customerViewStore}
-         * @param {menuItems} 
+         * @param {menuItems}
          * @methodOf OrangeFeSARQ.Services.Utils
          * @description
          * Parsea las urls del item menun que se le pasa como parámetro,
@@ -520,6 +520,135 @@ module OrangeFeSARQ.Services {
             }
             return menu;
         }
+
+        /*COMIENZO DE VALIDACIÓN DEL CAMBIO DE CONTRASEÑA (VER fixedPasswordChange O changePassword)*/
+
+        testPassCharacters(val: string) {
+            let vm = this;
+            let char = /[\sà-ùÀ-Ù\>\<\=\'\*\[\]\{\}]/
+            if (val && val.match(char)) {
+                return false;
+            }
+            return true;
+        }
+        /**
+             * @ngdoc service
+             * @name services.Controllers:Services#testPassLength
+             * @param {string} val:valor a testear
+             * @param {string} passwordMin:valor mínimo que deberá contener la contraseña
+             * @param {string} passwordMax:valor máximo que deberá contener la contraseña
+             * @return {boolean} Devuelve si la contraseña tiene del mínimo al maximo de caracteres
+             * @methodOf OrangeFeSARQ.Services.Utils
+             * @description
+             * Devuelve si la contraseña tiene del mínimo al maximo de caracteres
+        **/
+
+        testPassLength(val: string, passwordMin: number, passwordMax: number): boolean {
+            let vm = this;
+            if (val && passwordMin && passwordMax && val.length >= passwordMin && val.length <= passwordMax) {
+                return true;
+            }
+            return false;
+        }
+        /**
+             * @ngdoc service
+             * @name services.Controllers:Services#testPassContainMsisdn
+             * @param {string} val:valor a testear
+             * @param {string} msisdn: teléfono móvil
+             * @param {string} minLength:valor mínimo que deberá contener la contraseña
+             * @param {string} maxLength:valor máximo que deberá contener la contraseña
+             * @return {boolean} Devuelve si en el contenido de la contraseña tiene trozos del msisdn
+             * @methodOf OrangeFeSARQ.Services.Utils
+             * @description
+             * Testea si en el contenido de la contraseña que se ha introducido tiene trozos del msisdn
+        **/
+
+        testPassContainMsisdn(val: string, msisdn: number, minLength: number, maxLength: number) {
+            let num: string = msisdn.toString();
+            let pass: string = val;
+            let minLen = minLength;
+            let maxLen = maxLength;
+            let SOMETEXT = '(\d)*';
+
+            if (minLen && maxLen && pass) {
+                for (let i = minLen; i < maxLen; i++) {
+                    let substr: string = num.substring(0, i);
+                    let pattern = new RegExp(SOMETEXT + substr + SOMETEXT);
+                    if (pattern.test(pass)) {
+                        return true;
+                    }
+                }
+
+                for (let i = num.length - minLen; i > 0; i--) {
+                    let substr: string = num.substring(i, num.length);
+                    let pattern = new RegExp(SOMETEXT + substr + SOMETEXT);
+                    if (pattern.test(pass)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+        }
+
+        /**
+             * @ngdoc service
+             * @name services.Controllers:Services#testPassRepeatNumber
+             * @param {string} val:valor a testear
+             * @return {boolean} Devuelve si en la contraseña se repiten números
+             * @methodOf OrangeFeSARQ.Services.Utils
+             * @description
+             * Devuelve si en la contraseña se repiten números
+        **/
+
+        testPassRepeatNumber(val: string): boolean {
+            let pattern = /([0-9a-zA-Z]*)(\w{1})(\2){5,}([0-9a-zA-Z]*)/;
+            if (val) {
+                if (pattern.test(val)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+             * @ngdoc service
+             * @name services.Controllers:Services#testPassSequentialNumbers
+             * @param {string} val:valor a testear
+             * @param {string} minLength:valor mínimo que deberá contener la contraseña
+             * @param {string} maxLength:valor máximo que deberá contener la contraseña
+             * @return {boolean} Devuelve si en la contraseña hay tramos de msisdn y secuencias de numeros de mayor a menor y de menor a mayor
+             * @methodOf OrangeFeSARQ.Services.Utils
+             * @description
+             * Devuelve si en la contraseña hay tramos de msisdn y secuencias de numeros de mayor a menor y de menor a mayor
+        **/
+
+        testPassSequentialNumbers(val: string, minLength: number, maxLength: number) {
+            const pass: string = val;
+            const NORMAL = '123456789';
+            const REVERSE = '987654321';
+            const ZERO = '0';
+            let minLen = minLength;
+            let maxLen = maxLength;
+            if (minLen && maxLen && pass) {
+                for (let i = minLen; i < maxLen; i++) {
+                    let substr = NORMAL.substring(0, i);
+                    if (pass.indexOf(substr) > -1 || pass.indexOf(ZERO + substr) > -1) {
+                        return true;
+                    }
+                }
+
+                for (let i = minLen; i < maxLen; i++) {
+                    let substr = REVERSE.substring(0, i);
+                    if (pass.indexOf(substr) > -1 || pass.indexOf(substr + ZERO) > -1) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+        /*FIN DE VALIDACIÓN DEL CAMBIO DE CONTRASEÑA (VER fixedPasswordChange O changePassword)*/
+        
     }
 
     angular.module('utils', [])

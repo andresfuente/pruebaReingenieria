@@ -26,7 +26,7 @@ module OrangeFeSARQ.Constant {
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
         .service('productContractedTranslateSrv', OrangeFeSARQ.Service.ProductContractedTranslateSrv)
         .service('customerManagementSrv', OrangeFeSARQ.Services.CustomerManagementSrv)
-
+        .service('userManagementSrv', OrangeFeSARQ.Services.UserManagementSrv)
 
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
@@ -98,7 +98,7 @@ module OrangeFeSARQ.Constant {
                 pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
                 prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
                 fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
-    
+
             };
             fillCurrent();
         } else {
@@ -116,11 +116,11 @@ module OrangeFeSARQ.Constant {
                     }
                 });
         }
-    
+
         let prepaid: boolean;
         let pospaid: boolean;
         let fixed: boolean;
-    
+
         $rootScope.$watch(
             () => msisdnStore.msisdn,
             (newValue, oldValue) => {
