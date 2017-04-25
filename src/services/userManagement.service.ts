@@ -11,7 +11,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
         public genericConstant;
 
-        public informationCenter: any;
+
         public url: string;
 
         constructor(public $injector) {
@@ -19,7 +19,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.setInjections($injector);
             vm.url = vm.genericConstant.userManagement;
-            vm.informationCenter = $injector.get('InformationCenterSrv');
+
         }
 
         setInjections($injector) {
@@ -28,7 +28,7 @@ module OrangeFeSARQ.Services {
         }
 
 
-        setData(data, comp: string, messageCatalog) {
+        setData(data, comp: string) {
             let vm = this;
             let _search = {
                 queryParams: data,
@@ -37,14 +37,10 @@ module OrangeFeSARQ.Services {
             return vm.httpPost(vm.url, _search, comp)
                 .then(
                 (successData) => {
-                  let messageData = messageCatalog.getMessage('userManagement-userManagement-manage_password_post');
-                  vm.informationCenter.addInformationMessage(1, messageData.title, messageData.desc);
-                return false;
+                  return successData;
                 },
                 (errorData) => {
-                  let messageData = messageCatalog.getMessage('userManagement-userManagement-102');
-                  //vm.informationCenter.addInformationMessage(2, messageData.title, messageData.desc);
-                    return messageData;
+                  
                 }
               );
         }
