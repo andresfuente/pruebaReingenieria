@@ -651,7 +651,141 @@ module OrangeFeSARQ.Services {
             }
         }
         /*FIN DE VALIDACIÓN DEL CAMBIO DE CONTRASEÑA (VER fixedPasswordChange O changePassword)*/
-        
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:UtilsPae
+         * @methodOf OrangeFeSARQ.Services
+         * @description
+         * funcion de validacion para formularios
+         */
+        validateForm(type: string, value: string) {
+            let pattern, pattern1, pattern2;
+            let status: boolean = false;
+
+            if (type) {
+                switch (type) {
+                    case 'mobile':
+                        pattern = /^[67]{8}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
+                    case 'fixed':
+                        pattern = /^[89]{8}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
+                    case 'telephone':
+                        pattern = /^[6-9]\d{8}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
+                    case 'cp':
+                        pattern = /^[0-9]{4}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
+                    case 'mail':
+                        pattern = /^[a-zA-Z0-9]+@[a-zA-Z0-9\.]+/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
+                    case 'ccc':
+                        pattern = /^[0-9]\d{3}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
+                    case 'iban':
+                        pattern1 = /^\d{4}\s\d{4}\s\d{2}\s\d{10}$/;
+                        pattern2 = /^[0-9]{20}$/;
+                        if (pattern1.test(value) || pattern2.test(value)) {
+                            status = true;
+                        }
+                        break;
+
+                    case 'text40':
+                        pattern = /^[a-zñA-ZÑ0-9\s]{5,40}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
+                    case 'text20':
+                        pattern = /^[a-zA-Z\s]{5,20}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
+                    case 'num2':
+                        pattern = /^[0-9]{0,2}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
+                    case 'alfNum':
+                        pattern = /^[a-zA-Z0-9]{0,5}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+                    case 'nif':
+                        pattern = /^[0-9]{8}[a-zA-Z]$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+                    case 'cif':
+                        pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+                    case 'TNC':
+                        pattern = /^[6-9]\d{8}$/;
+                        pattern1 = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
+                        pattern2 = /^[0-9]{8}[a-zA-Z]$/;
+                        if (pattern.test(value) || pattern1.test(value) || pattern2.test(value)) {
+                            status = true;
+                        }
+                        break;
+                    case 'pass':
+                        pattern = /^[0-9a-zA-Z]{6,8}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+                    case 'num4':
+                        pattern = /^[0-9]\d{2,4}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            } else {
+                status = false;
+            }
+
+            return status;
+
+        }
+
     }
 
     angular.module('utils', [])
