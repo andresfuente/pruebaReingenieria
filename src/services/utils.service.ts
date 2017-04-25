@@ -784,7 +784,7 @@ module OrangeFeSARQ.Services {
 
             return status;
 
-        }
+        };
 
     }
 
