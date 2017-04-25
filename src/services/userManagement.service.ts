@@ -10,6 +10,8 @@ module OrangeFeSARQ.Services {
     export class UserManagementSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
         public genericConstant;
+        public _httpCacheOrange;
+
 
 
         public url: string;
@@ -25,25 +27,27 @@ module OrangeFeSARQ.Services {
         setInjections($injector) {
             let vm = this;
             vm.genericConstant = $injector.get('genericConstant');
+            vm._httpCacheOrange = $injector.get('httpCacheOrange');
         }
 
 
         setData(data, comp: string) {
             let vm = this;
-            let _search = {
+              let _search: Object = {
                 queryParams: data,
                 urlParams: ['orange', 'managePassword']
             };
-            return vm.httpPost(vm.url, _search, comp)
-                .then(
-                (successData) => {
-                  return successData;
-                },
-                (errorData) => {
-                  
-                }
-              );
-        }
+
+        return vm._httpCacheOrange.post(vm.url, _search, comp)
+            .then(function(response) {
+                return response.data;
+            })
+            .catch(function(error) {
+                return error.data;
+            });
+    }
+
+
 
     }
 }
