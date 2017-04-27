@@ -31,8 +31,14 @@ module OrangeFeSARQ.Services {
             vm.productCatalogAPIUrl = vm.genericConstant.productCatalog;
             // - vm.productCatalogAPIUrl = 'api/daf2/APIProductCatalogOSP/1';
 
-            vm.sufixProductSpecification = [vm.genericConstant.brand, vm.genericConstant.site, 'productSpecification', vm.OSP];
-            vm.sufixProductOffering = [vm.genericConstant.brand, vm.genericConstant.site, 'productOffering', vm.OSP];
+            // AÑADIDO HASTA SOLUCIONAR POR QUÉ EN AMENA NO SE NECESITA EL SITE
+            if (vm.genericConstant.brand === 'amena') {
+                vm.sufixProductSpecification = [vm.genericConstant.brand, 'productSpecification', vm.OSP];
+                vm.sufixProductOffering = [vm.genericConstant.brand, 'productOffering', vm.OSP];
+            } else {
+                vm.sufixProductSpecification = [vm.genericConstant.brand, vm.genericConstant.site, 'productSpecification', vm.OSP];
+                vm.sufixProductOffering = [vm.genericConstant.brand, vm.genericConstant.site, 'productOffering', vm.OSP];
+            }
         }
 
         // - daf2/APIProductCatalogOSP/1/productSpecification/OSP
