@@ -119,5 +119,41 @@ module OrangeFeSARQ.Services {
                     return error.data;
                 });
         }
+
+        changeRate(requestBody: OrangeFeSARQ.Models.changeRate_postRequest, componentName: string): ng.IPromise<any> {
+            let vm = this;
+            let BRAND = vm.genericConstant.brand;
+            let METHOD = 'changeRate';
+
+            // let request = {
+            //     "msisdn": "635004700",
+            //     "customerId": "19409257",
+            //     "flagBlackBerry": true,
+            //     "contractId": "23990166",
+            //     "segment": null,
+            //     "spCodesAsociated": ["968", "969"],
+            //     "productsIdQuery": [{
+            //         "idProduct": "2083",
+            //         "action": "A"
+            //     }]
+            // }
+
+            let _search: Object = {
+                body: requestBody,
+                urlParams: [BRAND, METHOD]
+            };
+
+            return vm.httpPost(vm.urlProductOrder, _search, componentName)
+                .then((response) => {
+                    let _resp = response.data;
+                    if (_resp.error) {
+                        throw _resp.error;
+                    }
+                    return _resp.productOrder;
+                })
+                .catch(function(error) {
+                    return error.data;
+                });
+        }
     }
 }
