@@ -749,8 +749,11 @@ module OrangeFeSARQ.Services {
                         }
                         break;
                     case 'cif':
-                        pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
-                        if (pattern.test(value)) {
+                        // pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
+                        pattern = /^[ABEH][0-9]{8}$/;
+                        pattern1 = /^[KPQS][0-9]{7}[A-J]$/;
+                        pattern2 = /^[CDFGJLMNRUVW][0-9]{7}[0-9A-J]$/;
+                        if (pattern.test(value) || pattern1.test(value) || pattern2.test(value)) {
                             status = true;
                         }
                         break;
