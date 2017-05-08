@@ -32,7 +32,7 @@ module OrangeFeSARQ.Services {
             // - vm.productCatalogAPIUrl = 'api/daf2/APIProductCatalogOSP/1';
 
             // AÑADIDO HASTA SOLUCIONAR POR QUÉ EN AMENA NO SE NECESITA EL SITE
-            if (vm.genericConstant.brand === 'amena') {
+            if (vm.genericConstant.brand === 'amena' || vm.genericConstant.site === 'FichaCliente') {
                 vm.sufixProductSpecification = [vm.genericConstant.brand, 'productSpecification', vm.OSP];
                 vm.sufixProductOffering = [vm.genericConstant.brand, 'productOffering', vm.OSP];
             } else {
