@@ -701,7 +701,7 @@ module OrangeFeSARQ.Services {
                         break;
 
                     case 'ccc':
-                        pattern = /^[0-9]\d{4}$/;
+                        pattern = /^[0-9]\d{3}$/;
                         if (pattern.test(value)) {
                             status = true;
                         }
