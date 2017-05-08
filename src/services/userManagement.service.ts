@@ -38,14 +38,31 @@ module OrangeFeSARQ.Services {
                 urlParams: ['orange', 'managePassword']
             };
 
-        return vm._httpCacheOrange.post(vm.url, _search, comp)
-            .then(function(response) {
-                return response.data;
-            })
-            .catch(function(error) {
-                return error.data;
-            });
-    }
+            return vm._httpCacheOrange.post(vm.url, _search, comp)
+                .then(function(response) {
+                    return response.data;
+                })
+                .catch(function(error) {
+                    return error.data;
+                });
+        }
+
+
+        createUser(data, comp: string) {
+            let vm = this;
+              let _search: Object = {
+                queryParams: data,
+                urlParams: ['orange', 'createUser']
+            };
+
+            return vm._httpCacheOrange.post(vm.url, _search, comp)
+                .then(function(response) {
+                    return response.data;
+                })
+                .catch(function(error) {
+                    return error.data;
+                });
+        }
 
 
 
