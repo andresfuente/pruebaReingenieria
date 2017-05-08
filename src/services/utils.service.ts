@@ -762,6 +762,13 @@ module OrangeFeSARQ.Services {
                             status = true;
                         }
                         break;
+                    case 'NC':
+                        pattern1 = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
+                        pattern2 = /^[0-9]{8}[a-zA-Z]$/;
+                        if (pattern1.test(value) || pattern2.test(value)) {
+                            status = true;
+                        }
+                        break;
                     case 'pass':
                         pattern = /^[0-9a-zA-Z]{6,8}$/;
                         if (pattern.test(value)) {
