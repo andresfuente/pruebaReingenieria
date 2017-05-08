@@ -29,10 +29,8 @@ module OrangeFeSARQ.Services {
         initComp() {
             let vm = this;
             vm.productCatalogAPIUrl = vm.genericConstant.productCatalog;
-            // - vm.productCatalogAPIUrl = 'api/daf2/APIProductCatalogOSP/1';
 
-            // AÑADIDO HASTA SOLUCIONAR POR QUÉ EN AMENA NO SE NECESITA EL SITE
-            if (vm.genericConstant.brand === 'amena' || vm.genericConstant.site === 'FichaCliente') {
+            if (vm.genericConstant.site === 'FichaCliente') {
                 vm.sufixProductSpecification = [vm.genericConstant.brand, 'productSpecification', vm.OSP];
                 vm.sufixProductOffering = [vm.genericConstant.brand, 'productOffering', vm.OSP];
             } else {
@@ -42,7 +40,6 @@ module OrangeFeSARQ.Services {
         }
 
         // - daf2/APIProductCatalogOSP/1/productSpecification/OSP
-        // - daf2/APIProductCatalogOSP/1/productOffering/OSP
         getProductSpecification(): any {
             let vm = this;
             let _search: Object = {
@@ -58,6 +55,7 @@ module OrangeFeSARQ.Services {
                 });
         }
 
+        // - daf2/APIProductCatalogOSP/1/productOffering/OSP
         getProductOffering(): any {
             let vm = this;
             let _search: Object = {
@@ -86,9 +84,6 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-
-
-
         getRates(msisdn: string, contractType: string, tmCodeOrigen : string, componentName: string): any {
             let vm = this;
             let _search: any;
@@ -98,7 +93,7 @@ module OrangeFeSARQ.Services {
             let request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
                 contractType: contractType,
                 tmCodeOrigen: tmCodeOrigen
-            }
+            };
 
             _search = {
                 queryParams: request,
@@ -110,7 +105,7 @@ module OrangeFeSARQ.Services {
                     if (response && response.data && response.data.error) {
                         throw response.data.error;
                     } else if (response && response.data && response.data.productSpecification) {
-                        return response.data.productSpecification
+                        return response.data.productSpecification;
                     }
                     return response.data;
                 })
