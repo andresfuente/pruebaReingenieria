@@ -526,6 +526,30 @@ module OrangeFeSARQ.Services {
 
         /*COMIENZO DE VALIDACIÓN DEL CAMBIO DE CONTRASEÑA (VER fixedPasswordChange O changePassword)*/
 
+        checkSecurityLevel(passwordMin: number, passwordMax: number, password: string, id) {
+            let vm = this;
+            let passLvl = 0;
+
+            if (password && vm.testPassLength(password, passwordMin, passwordMax) 
+                         && vm.testPassCharacters(password)) {
+                if (password && password.length === passwordMin) {
+                    passLvl = 1;
+                } else if (password && vm.testPassLength(password, passwordMin, passwordMax) 
+                                    && password.length > passwordMin) {
+                    passLvl = 2;
+                }
+
+                if (vm.testPassContainMsisdn(password, id, passwordMin, passwordMax)
+                    || vm.testPassRepeatNumber(password)
+                    || vm.testPassSequentialNumbers(password, passwordMin, passwordMax)) {
+                    passLvl = 0;
+                }
+            }
+
+            return passLvl;
+        };
+
+
         testPassCharacters(val: string) {
             let vm = this;
             let char = /[\sà-ùÀ-Ù\>\<\=\'\*\[\]\{\}]/
@@ -793,7 +817,6 @@ module OrangeFeSARQ.Services {
             }
 
             return status;
-
         };
 
     }
