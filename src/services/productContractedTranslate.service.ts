@@ -15,25 +15,24 @@ module OrangeFeSARQ.Service {
 
         }
 
-        setInjections($injector) {
+        setInjections($injector){
             let vm = this;
         }
 
-        getServicesContracted(msisdn: string, type: string, brand: string, detail: string, componentName: string = 'contractedServicesComp'): any {
+        getServicesContracted(msisdn: string, type: string, brand: string, detail: string, componentName: string = 'contractedServicesComp' ): any {
             let vm = this;
             let _search: Object = {
                 queryParams: {
-                    lineCategory: type,
-                    source: 'mdw',
-                    'onlyActive':vm.genericConstant.onlyActive
+                    publicKey: msisdn,
+                    lineCategory: type
                 },
-                urlParams: [brand, detail, msisdn]
+                urlParams: [brand, detail]
             };
             return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName)
-                .then(function (response) {
+                .then(function(response) {
                     return response.data;
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     return error;
                 });
         }
