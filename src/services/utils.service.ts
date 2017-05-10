@@ -808,6 +808,12 @@ module OrangeFeSARQ.Services {
                             status = true;
                         }
                         break;
+                    case 'num68':
+                        pattern = /^[0-9]{6,8}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
 
                     default:
                         break;
