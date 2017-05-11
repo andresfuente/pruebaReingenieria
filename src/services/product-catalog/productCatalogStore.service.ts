@@ -211,16 +211,16 @@ module OrangeFeSARQ.Services {
 
 
 		/**
-         * @ngdoc method
-         * @name OrangeFeSARQ.Services:ProductCatalogStore#getProductPrice
-         * @methodOf OrangeFeSARQ.Services:ProductCatalogStore
-         * @param {any} element: Elemento specification u offering para buscar
-         * @param {string} currency: Moneda buscada
-         * @param {string} priceType: Tipo de pago
-         * @return {any} Devuelve el objeto de precio el producto
-         * @description
-         * Obtiene los datos de product Offering y del product Specification en base a tmvalue
-         */
+    * @ngdoc method
+    * @name OrangeFeSARQ.Services:ProductCatalogStore#getProductPrice
+    * @methodOf OrangeFeSARQ.Services:ProductCatalogStore
+    * @param {any} element: Elemento specification u offering para buscar
+    * @param {string} currency: Moneda buscada
+    * @param {string} priceType: Tipo de pago
+    * @return {any} Devuelve el objeto de precio el producto
+    * @description
+    * Recoge
+    */
     getProductPrice(element: any, currency: string = "eur", priceType: string = 'pago único'): any {
       let vm = this;
       let product: any;

@@ -26,6 +26,7 @@ declare module graphs.controller {
         private optionsController;
         constructor();
         actualizarOpciones: () => void;
+        private formatoEjes();
     }
 }
 declare module renderContent {
@@ -933,6 +934,53 @@ declare module OrangeFeSARQ.Services {
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
         httpDelete(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+        private configURL(url, data, compName, config?);
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentService#httpPutFull
+         * @methodOf OrangeFeSARQ.Services:ParentService
+         * @param {string} url de la api sin parametros.
+         * @param {any} data JSON con el body de la petición, PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición PUT HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         * let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get'],
+         *        body: { }
+         *    };
+         *  vm.httpPut('URL', data, 'loginComp');
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpPutFull(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentService#httpPutFull
+         * @methodOf OrangeFeSARQ.Services:ParentService
+         * @param {string} url de la api sin parametros.
+         * @param {any} data JSON con el body de la petición, PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición PUT HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         * let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get'],
+         *        body: { }
+         *    };
+         *  vm.httpPut('URL', data, 'loginComp');
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpPostFull(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -1627,9 +1675,8 @@ declare module OrangeFeSARQ.Services {
         setDataInStore(section: any): void;
         changeComp(element: any): any;
         getLayoutMetada(key: string, exp?: number): any;
+        private getLayout(key, exp?);
         getLayoutMetadaConcat(key: string, exp?: number): any;
-        getLayoutMetadaPosition(key: string, exp?: number): any;
-        getComponentMetadata(type: any, key: string, exp?: number): any;
         changeLayaoutMetada(layoutMetaData: any): any;
         changeSection(section: any): any;
         addAsset(comp: any): any;
