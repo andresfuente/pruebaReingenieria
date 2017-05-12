@@ -29,6 +29,8 @@ module OrangeFeSARQ.Services {
                     (successData) => {
                         let str: string = JSON.stringify(successData);
                         successData = JSON.parse(str.replace(/"\/sites/g, '"sites'));
+                        OrangeFeSARQ.Controllers.ParentController.shared.properties =
+                            successData.data.properties;
                         return successData;
                     },
                     (errorData) => {
