@@ -491,15 +491,15 @@ module OrangeFeSARQ.Services {
         getListValues(arr: Array<any>, value: string = 'value'): any {
             let vm = this;
             let result = {};
-			if(arr){
-				for (let i = 0; i < arr.length; i++) {
-					if (arr[i].name) {
-						let code = _.camelCase(arr[i].name);
-						result[code] = arr[i][value];
-					}
-				}
-			}
-            
+            if (arr) {
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i].name) {
+                        let code = _.camelCase(arr[i].name);
+                        result[code] = arr[i][value];
+                    }
+                }
+            }
+
             return result;
         }
 
@@ -515,7 +515,7 @@ module OrangeFeSARQ.Services {
          */
         parseUrlMenu(customerViewStore, menu): any {
             if (customerViewStore && customerViewStore.loginData && customerViewStore.loginData.document
-            && customerViewStore.loginData.document !== null) {
+                && customerViewStore.loginData.document !== null) {
                 let document = customerViewStore.loginData.document;
                 let menuString = JSON.stringify(menu);
                 menuString = menuString.replace(/##nif##/g, document)
@@ -530,12 +530,12 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let passLvl = 0;
 
-            if (password && vm.testPassLength(password, passwordMin, passwordMax) 
-                         && vm.testPassCharacters(password)) {
+            if (password && vm.testPassLength(password, passwordMin, passwordMax)
+                && vm.testPassCharacters(password)) {
                 if (password && password.length === passwordMin) {
                     passLvl = 1;
-                } else if (password && vm.testPassLength(password, passwordMin, passwordMax) 
-                                    && password.length > passwordMin) {
+                } else if (password && vm.testPassLength(password, passwordMin, passwordMax)
+                    && password.length > passwordMin) {
                     passLvl = 2;
                 }
 
@@ -824,6 +824,21 @@ module OrangeFeSARQ.Services {
 
             return status;
         };
+
+       /**
+        * @ngdoc service
+        * @name services.Controllers:Services#owcsParamFormat
+        * @param {string} value :Cadena OWCS
+        * @param {string} paramOwcs :Valor parametrizable recibido por OWCS
+        * @param {string} param : Valor parametrizable a remplazar por el de OWCS
+        * @return {string} Devuelve si en la contraseña hay tramos de msisdn y secuencias de numeros de mayor a menor y de menor a mayor
+        * @methodOf OrangeFeSARQ.Services.Utils
+        * @description
+        * Remplaza un valor parametrizable de un texto.
+        **/
+        owcsParamFormat(value: string, paramOwcs: string, param: string): string {
+            return value.replace(paramOwcs, param);
+        }
 
     }
 
