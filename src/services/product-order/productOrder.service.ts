@@ -159,11 +159,12 @@ module OrangeFeSARQ.Services {
     setOrangetv(requestBody: OrangeFeSARQ.Models.setOrangetv_postRequest, componentName: string): ng.IPromise<any> {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
-      let METHOD = 'OrangeTV';
+      let METHOD = 'productOrder';
+      let SERVICE = 'OrangeTV';
       let ONLYACTIVE = vm.genericConstant.onlyActive;
       // let request = {
       //   "publicKey": "656004150",
-      //   "action": "A",
+      //   "action": "ALTA /BAJA",
       //   "idPromo": "3535",
       //   "services": "",
       //   "segment": ""
@@ -172,7 +173,7 @@ module OrangeFeSARQ.Services {
         onlyActive: ONLYACTIVE
       }
       let _search: Object = {
-        urlParams: [BRAND, METHOD],
+        urlParams: [BRAND, METHOD, SERVICE],
         queryParams: qParams,
         body: requestBody
       }
