@@ -77,7 +77,7 @@ declare module OrangeFeSARQ.Models {
     }
 
     export interface ActivationAndConfigurationModel {
-        services: Service[];
+        service: Service;
         error: Error;
     }
 

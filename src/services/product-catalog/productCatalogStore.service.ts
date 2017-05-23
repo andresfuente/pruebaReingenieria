@@ -132,19 +132,39 @@ module OrangeFeSARQ.Services {
       return contractingProducts;
     }
 
-    /**
+    // /**
+     // * @ngdoc method
+     // * @name OrangeFeSARQ.Services:ProductCatalogStore#getProduct
+     // * @methodOf OrangeFeSARQ.Services:ProductCatalogStore
+     // * @description
+     // * Busca un producto de en el productInventory code es
+     // */
+    // isContractacted(ospExternalCode, pIn) {
+      // let isContractacted = false;
+      // if (pIn && pIn.product) {
+        // for (let i = 0; i < pIn.product.length; i++) {
+          // let _pI = pIn.product[i];
+          // if (_pI.ospIdCRM === ospExternalCode) {
+            // isContractacted = true;
+          // }
+        // }
+      // }
+      // return isContractacted;
+    // }
+	
+	/**
      * @ngdoc method
      * @name OrangeFeSARQ.Services:ProductCatalogStore#getProduct
      * @methodOf OrangeFeSARQ.Services:ProductCatalogStore
      * @description
      * Busca un producto de en el productInventory code es
      */
-    isContractacted(ospExternalCode, pIn) {
+    isContractacted(productNumber, pIn) {
       let isContractacted = false;
       if (pIn && pIn.product) {
         for (let i = 0; i < pIn.product.length; i++) {
           let _pI = pIn.product[i];
-          if (_pI.ospIdCRM === ospExternalCode) {
+          if (_pI.id === productNumber) {
             isContractacted = true;
           }
         }
@@ -184,7 +204,7 @@ module OrangeFeSARQ.Services {
       if (showables.length > 0) {
         for (let i = 0; i < showables.length; i++) {
           let p = showables[i];
-          if (!vm.isContractacted(p.productSpecification.ospExternalCode, pIn)) {
+          if (!vm.isContractacted(p.productSpecification.productNumber, pIn)) {
             result.push(p);
           }
         }
@@ -200,7 +220,7 @@ module OrangeFeSARQ.Services {
       if (showables.length > 0) {
         for (let i = 0; i < showables.length; i++) {
           let p = showables[i];
-          if (vm.isContractacted(p.productSpecification.ospExternalCode, pIn)) {
+          if (vm.isContractacted(p.productSpecification.productNumber, pIn)) {
             result.push(p);
           }
         }
