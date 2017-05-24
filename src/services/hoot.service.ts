@@ -45,6 +45,7 @@ module OrangeFeSARQ.Services {
                     }
                 );
         }
+
     }
     angular.module('hootModule', [])
         .service('hootSrv', OrangeFeSARQ.Services.HootSrv);

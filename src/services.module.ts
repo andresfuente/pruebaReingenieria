@@ -1,5 +1,6 @@
 module OrangeFeSARQ.Constant {
     'use strict';
+	
 
     angular.module('servicesCommons', [])
         .service('accountSrv', OrangeFeSARQ.Services.AccountSrv)
