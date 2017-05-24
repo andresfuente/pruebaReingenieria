@@ -59,6 +59,7 @@ module OrangeFeSARQ.Services {
 
             return vm.httpPost(vm.url, _search, comp)
                 .then(function(response) {
+                    vm.informationCenter.addInformationMessage(1, 'Usuario creado', '');
                     return response.data;
                 })
                 .catch(function(error) {
