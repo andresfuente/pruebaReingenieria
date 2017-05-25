@@ -34,8 +34,9 @@ module OrangeFeSARQ.Constant {
 
 
 
-        .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore) => {
-            if (navigator.userAgent.indexOf('PhantomJS') < 1) {
+        .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore, $injector) => {
+            let genericConstant = $injector.get("genericConstant");
+        if (navigator.userAgent.indexOf('PhantomJS') < 1 && !genericConstant.public ) {
 
                 productCatalogSrv.getProductSpecification()
                     .then((response) => {
