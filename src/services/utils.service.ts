@@ -791,17 +791,35 @@ module OrangeFeSARQ.Services {
                             status = true;
                         }
                         break;
+                    case 'nie':
+                        pattern = /^[xyzXYZ][0-9]{7}[a-zA-Z]$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+                    case 'passport':
+                        pattern = /^[0-9]{9,10}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
                     case 'cif':
                         // pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
-                        pattern = /^[ABEH][0-9]{8}$/;
-                        pattern1 = /^[KPQS][0-9]{7}[A-J]$/;
-                        pattern2 = /^[CDFGJLMNRUVW][0-9]{7}[0-9A-J]$/;
+                        pattern = /^[abehABEH][0-9]{8}$/;
+                        pattern1 = /^[kpqsKPQS][0-9]{7}[a-jA-J]$/;
+                        pattern2 = /^[cdfgjlmnruvwCDFGJLMNRUVW][0-9]{7}[0-9a-jA-J]$/;
                         if (pattern.test(value) || pattern1.test(value) || pattern2.test(value)) {
                             status = true;
                         }
                         break;
                     case 'TNC':
                         if (vm.validateForm('telephone', value) || vm.validateForm('nif', value) || vm.validateForm('cif', value)) {
+                            status = true;
+                        }
+                        break;
+                    case 'TNNCP':
+                        if (vm.validateForm('telephone', value) || vm.validateForm('nif', value) || vm.validateForm('cif', value)
+                                || vm.validateForm('nie', value)|| vm.validateForm('passport', value)) {
                             status = true;
                         }
                         break;
