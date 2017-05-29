@@ -824,7 +824,24 @@ module OrangeFeSARQ.Services {
 
             return status;
         };
+		
+		
+		
+		/**
+         * @ngdoc method
+         * @name services.Controllers:Services#trusHtml
+         * @param {string} html texto enriquecido que se quiere interpretar como html
+         * @methodOf services.Controllers:Services
+         * @description
+         * Mete los estilos que vengan del rich text
+         */
+        trusHtml(html: string): string {
+            let vm = this;
+            let $sce = vm.$injector.get('$sce');
+            return $sce.trustAsHtml(html);
+        }
 
+		
        /**
         * @ngdoc service
         * @name services.Controllers:Services#owcsParamFormat
