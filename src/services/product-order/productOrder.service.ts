@@ -88,6 +88,42 @@ module OrangeFeSARQ.Services {
           return error;
         });
     }
+	
+	changeStatetProduct(msisdn: string, productId: string, action: string, imei: string = '', componentName: string = 'generic_bonus'): ng.IPromise<any> {
+      let vm = this;
+      let queryParams = {};
+      if (imei !== '') {
+        queryParams = {
+          imei: imei,
+          msisdn: msisdn,
+          action: action,
+          productId: productId,
+        };
+      } else {
+        queryParams = {
+          msisdn: msisdn,
+          action: action,
+          productId: productId
+        };
+      }
+      // No necesita brand porque esta llamada es solo parte de Orange
+      let _search: Object = {
+        queryParams: queryParams,
+        urlParams: [vm.genericConstant.brand, 'setPromotions']
+      };
+
+      return vm.httpPost(vm.urlProductOrder, _search, componentName)
+        .then(
+        (successData) => {
+          return successData;
+        },
+        (errorData) => {
+          return errorData;
+        })
+        .catch(function(error) {
+          return error;
+        });
+    }
 
 
     getSummary(msisdn: string, customerId: string, tmCodeDestino: string, tmCodeOrigen: string, tipoLinea: string, componentName: string): ng.IPromise<any> {
@@ -159,11 +195,12 @@ module OrangeFeSARQ.Services {
     setOrangetv(requestBody: OrangeFeSARQ.Models.setOrangetv_postRequest, componentName: string): ng.IPromise<any> {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
-      let METHOD = 'OrangeTV';
+      let METHOD = 'productOrder';
+      let SERVICE = 'OrangeTV';
       let ONLYACTIVE = vm.genericConstant.onlyActive;
       // let request = {
       //   "publicKey": "656004150",
-      //   "action": "A",
+      //   "action": "ALTA /BAJA",
       //   "idPromo": "3535",
       //   "services": "",
       //   "segment": ""
@@ -172,7 +209,7 @@ module OrangeFeSARQ.Services {
         onlyActive: ONLYACTIVE
       }
       let _search: Object = {
-        urlParams: [BRAND, METHOD],
+        urlParams: [BRAND, METHOD, SERVICE],
         queryParams: qParams,
         body: requestBody
       }

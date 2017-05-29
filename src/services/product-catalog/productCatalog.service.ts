@@ -84,6 +84,24 @@ module OrangeFeSARQ.Services {
                 });
         }
 
+
+        getProductBonusSpecification(tarifa:string): any {
+            let vm = this;
+            let _search: Object = {
+                queryParams: {
+                    tarifa:tarifa
+                },
+                urlParams: [vm.genericConstant.brand, vm.genericConstant.site, 'productBonusSpecification', vm.OSP]
+            };
+            return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
+                .then(function(response) {
+                    return response.data.productSpecification;
+                })
+                .catch(function(error) {
+                    throw error;
+                });
+        }
+
         getRates(msisdn: string, contractType: string, tmCodeOrigen : string, componentName: string): any {
             let vm = this;
             let _search: any;
