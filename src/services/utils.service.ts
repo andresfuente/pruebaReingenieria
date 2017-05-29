@@ -620,6 +620,24 @@ module OrangeFeSARQ.Services {
 
         /**
              * @ngdoc service
+             * @name services.Controllers:Services#getOWCSProperty
+             * @param {string} val: clave para buscar en properties
+             * @return {string} valor de la clave solicitada
+             * @methodOf OrangeFeSARQ.Services.Utils
+             * @description
+             * Devuelve la propiedad de OWCS de la clave recibida
+        **/
+        getOWCSProperty(val: string): string {
+			let vm = this;
+			let result:string;
+		    if(OrangeFeSARQ.Controllers.ParentController.shared.properties){
+				result = OrangeFeSARQ.Controllers.ParentController.shared.properties[val];
+			}
+            return result;
+        }		
+		
+        /**
+             * @ngdoc service
              * @name services.Controllers:Services#testPassRepeatNumber
              * @param {string} val:valor a testear
              * @return {boolean} Devuelve si en la contraseña se repiten números
