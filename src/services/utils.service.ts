@@ -704,6 +704,7 @@ module OrangeFeSARQ.Services {
         validateForm(type: string, value: string) {
             let pattern, pattern1, pattern2;
             let status: boolean = false;
+            let vm = this;
 
             if (type) {
                 switch (type) {
@@ -800,17 +801,12 @@ module OrangeFeSARQ.Services {
                         }
                         break;
                     case 'TNC':
-                        pattern = /^[6-9]\d{8}$/;
-                        pattern1 = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
-                        pattern2 = /^[0-9]{8}[a-zA-Z]$/;
-                        if (pattern.test(value) || pattern1.test(value) || pattern2.test(value)) {
+                        if (vm.validateForm('telephone', value) || vm.validateForm('nif', value) || vm.validateForm('cif', value)) {
                             status = true;
                         }
                         break;
                     case 'NC':
-                        pattern1 = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
-                        pattern2 = /^[0-9]{8}[a-zA-Z]$/;
-                        if (pattern1.test(value) || pattern2.test(value)) {
+                        if (vm.validateForm('nif', value) || vm.validateForm('cif', value)) {
                             status = true;
                         }
                         break;
