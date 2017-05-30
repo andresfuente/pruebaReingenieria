@@ -684,9 +684,11 @@ module OrangeFeSARQ.Services {
                 }
 
                 for (let i = minLen; i < maxLen; i++) {
-                    let substr = REVERSE.substring(0, i);
-                    if (pass.indexOf(substr) > -1 || pass.indexOf(substr + ZERO) > -1) {
-                        return true;
+                    for(let j = 1; j <= 3; j++){
+                        let substr = REVERSE.substring(j, i);
+                        if (pass.indexOf(substr) > -1 || pass.indexOf(substr + ZERO) > -1) {
+                            return true;
+                        }
                     }
                 }
                 return false;
