@@ -27,7 +27,7 @@ module OrangeFeSARQ.Services {
         = <changeOffer.Models.changeOffer_request>{
           'telefono': msisdn,
           'tipoDoc': ospIDtype,
-          'doc': ospID,
+          'doc': ospId,
           'codOfertaOrigen': origin,
           'codPromoOrigen': '0',
           'codOfertaDestino': dest,

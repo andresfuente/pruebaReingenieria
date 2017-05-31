@@ -1,5 +1,5 @@
-declare module popupRender.Models {
-  export interface RootObject {
+declare module changeOffer.Models {
+  export interface changeOffer_request {
     telefono: string;
     tipoDoc: string;
     doc: string;
