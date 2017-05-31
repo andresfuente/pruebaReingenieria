@@ -670,25 +670,14 @@ module OrangeFeSARQ.Services {
 
         testPassSequentialNumbers(val: string, minLength: number, maxLength: number) {
             const pass: string = val;
-            const NORMAL = '123456789';
-            const REVERSE = '987654321';
-            const ZERO = '0';
-            let minLen = minLength;
-            let maxLen = maxLength;
-            if (minLen && maxLen && pass) {
-                for (let i = minLen; i < maxLen; i++) {
-                    let substr = NORMAL.substring(0, i);
-                    if (pass.indexOf(substr) > -1 || pass.indexOf(ZERO + substr) > -1) {
-                        return true;
-                    }
-                }
-
-                for (let i = minLen; i < maxLen; i++) {
-                    for(let j = 1; j <= 3; j++){
-                        let substr = REVERSE.substring(j, i);
-                        if (pass.indexOf(substr) > -1 || pass.indexOf(substr + ZERO) > -1) {
-                            return true;
-                        }
+            let notValidPass: any = ["123456","87654321","1234567","7654321","000000","111111","222222","333333","444444","555555","666666","777777",
+            "888888","999999","0000000","2222222","3333333","4444444","5555555","6666666","7777777","8888888","9999999","12345678","654321",
+            "00000000","22222222","33333333","44444444","55555555","66666666","77777777","88888888","99999999","8765432","23456789","3456789",
+            "98765432","9876543","987654","000000","222222","333333","444444","555555","666666","777777","888888","999999", "876543"];
+            if (pass) {
+                for(let i = 0; i <= notValidPass.length; i++){
+                    if(pass === notValidPass[i]){
+                         return true;
                     }
                 }
                 return false;
