@@ -36,11 +36,12 @@ module OrangeFeSARQ.Services {
       // request.contractType = contractType;
 
       let _search: Object = {
-        queryParams: request,
+				body: request,
+        queryParams: {},
         urlParams: [brand, method, msisdn]
       };
 
-      return vm.httpPost(apiUrl, _search, compName)
+      return vm.httpPostFull(apiUrl, _search, compName)
         .then((successData) => {
           if (successData.data && successData.data) {
           }
