@@ -29,6 +29,7 @@ module OrangeFeSARQ.Constant {
         .service('utils', OrangeFeSARQ.Services.Utils)
         .service('vapListSrv', OrangeFeSARQ.Services.VapListSrv)
         .service('voiceMailPopUpSrv', OrangeFeSARQ.Services.VoiceMailPopUpSrv)
+        .service('owcsServices', OrangeFeSARQ.Services.OwcsServices)
 
 		
 

@@ -31,7 +31,7 @@ module OrangeFeSARQ.Services {
       };
       return vm.httpCacheGett(API, _search)
         .then(function(response) {
-          return response.data.productSpecification;
+          return response.data;
         })
         .catch(function(error) {
           return error;
