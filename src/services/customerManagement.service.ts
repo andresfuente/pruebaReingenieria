@@ -38,7 +38,7 @@ module OrangeFeSARQ.Services {
             return vm.httpPut(vm.url, _search, comp)
                 .then(function(response) {
                     if (showMessage)
-                        vm.informationCenter.addInformationMessage(1, 'Datos actualizados', '');
+                        vm.informationCenter.addInformationMessage(1, 'Datos actualizados','La actualización de los datos no es inmediata. Sus datos se verán reflejados en su siguiente inicio de sesión.');
                     return response.data;
                 })
                 .catch(function(error) {
