@@ -36,7 +36,7 @@ module OrangeFeSARQ.Services {
       // request.contractType = contractType;
 
       let _search: Object = {
-				body: request,
+		body: request,
         queryParams: {},
         urlParams: [brand, method, msisdn]
       };
@@ -44,11 +44,12 @@ module OrangeFeSARQ.Services {
       return vm.httpPostFull(apiUrl, _search, compName)
         .then((successData) => {
           if (successData.data && successData.data) {
+			  return successData.data;
           }
           throw successData.data.error;
         })
         .catch((errorData) => {
-          return errorData.data;
+          throw errorData.data;
         });
     }
   }
