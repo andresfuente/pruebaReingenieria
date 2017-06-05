@@ -516,7 +516,7 @@ module OrangeFeSARQ.Services {
         parseUrlMenu(customerViewStore, menu): any {
             if (customerViewStore && customerViewStore.loginData && customerViewStore.loginData.document
                 && customerViewStore.loginData.document !== null) {
-                let document = customerViewStore.loginData.document;
+                let document = _.toUpper(customerViewStore.loginData.document);
                 let menuString = JSON.stringify(menu);
                 menuString = menuString.replace(/##nif##/g, document)
                 return JSON.parse(menuString);
