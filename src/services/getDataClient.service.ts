@@ -33,6 +33,9 @@ module OrangeFeSARQ.Services {
                 (successData) => {
                     // Lleno el customerViewStore
                     if (successData.data) {
+						if(successData.data.user){ // Eliminar el 34 del principio
+							successData.data.user = successData.data.user.replace(/^34/, '');
+						}
                         vm.CV.loginData = successData.data;
                     }
                 },
