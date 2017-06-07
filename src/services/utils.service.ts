@@ -814,6 +814,12 @@ module OrangeFeSARQ.Services {
                             status = true;
                         }
                         break;
+                    case 'NNCP':
+                        if (vm.validateForm('nif', value) || vm.validateForm('cif', value)
+                                || vm.validateForm('nie', value)|| vm.validateForm('passport', value)) {
+                            status = true;
+                        }
+                        break;
                     case 'NC':
                         if (vm.validateForm('nif', value) || vm.validateForm('cif', value)) {
                             status = true;
