@@ -728,7 +728,7 @@ module OrangeFeSARQ.Services {
                         break;
 
                     case 'mail':
-                        pattern = /^[a-zA-Z0-9]+@[a-zA-Z0-9\.]+/;
+                        pattern = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]+/;
                         if (pattern.test(value)) {
                             status = true;
                         }
