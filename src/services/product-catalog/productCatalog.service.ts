@@ -102,16 +102,25 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-        getRates(msisdn: string, contractType: string, tmCodeOrigen : string, componentName: string): any {
+        getRates(msisdn: string, contractType: string, tmCodeOrigen : string, componentName: string, segment?: string): any {
             let vm = this;
             let _search: any;
             let brand = vm.genericConstant.brand;
             let method = 'changeRateList';
 
-            let request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
-                contractType: contractType,
-                tmCodeOrigen: tmCodeOrigen
-            };
+			if(segment) {
+				let request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
+					contractType: contractType,
+					tmCodeOrigen: tmCodeOrigen
+					segment: segment
+				};
+			} else {
+				let request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
+					contractType: contractType,
+					tmCodeOrigen: tmCodeOrigen
+				};
+			}
+           
 
             _search = {
                 queryParams: request,
