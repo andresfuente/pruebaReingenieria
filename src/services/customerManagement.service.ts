@@ -27,18 +27,17 @@ module OrangeFeSARQ.Services {
  * @returns {object} Devuelve una promesa con el response
  */
 
-         postMobileInformation(body, id, brand, comp, showMessage = true) {
+         postMobileInformation(body, id, brand, comp, showMessage = true, messageOk? = 'La actualización de los datos no es inmediata. Sus datos se verán reflejados en su siguiente inicio de sesión.') {
             let vm = this;
 
             let _search: Object = {
                 queryParams: body,
                 urlParams: [brand, 'customer', '?id=' + id]
             };
-
             return vm.httpPut(vm.url, _search, comp)
                 .then(function(response) {
                     if (showMessage)
-                        vm.informationCenter.addInformationMessage(1, 'Datos actualizados','La actualización de los datos no es inmediata. Sus datos se verán reflejados en su siguiente inicio de sesión.');
+                        vm.informationCenter.addInformationMessage(1, messageOk);
                     return response.data;
                 })
                 .catch(function(error) {
