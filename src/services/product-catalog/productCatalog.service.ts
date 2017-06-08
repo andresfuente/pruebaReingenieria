@@ -47,10 +47,10 @@ module OrangeFeSARQ.Services {
                 urlParams: vm.sufixProductSpecification
             };
             return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
-                .then(function(response) {
+                .then(function (response) {
                     return response.data.productSpecification;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     return error;
                 });
         }
@@ -63,10 +63,10 @@ module OrangeFeSARQ.Services {
                 urlParams: vm.sufixProductOffering
             };
             return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
-                .then(function(response) {
+                .then(function (response) {
                     return response.data.productOffering;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     return error;
                 });
         }
@@ -76,51 +76,51 @@ module OrangeFeSARQ.Services {
             let _search: Object = {};
             let url = vm.genericConstant.getRatesOwcs;
             return vm.httpCacheGett(url, _search)
-                .then(function(response) {
+                .then(function (response) {
                     return response.data;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     return error;
                 });
         }
 
 
-        getProductBonusSpecification(tarifa:string): any {
+        getProductBonusSpecification(tarifa: string): any {
             let vm = this;
             let _search: Object = {
                 queryParams: {
-                    tarifa:tarifa
+                    tarifa: tarifa
                 },
                 urlParams: [vm.genericConstant.brand, vm.genericConstant.site, 'productBonusSpecification', vm.OSP]
             };
             return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
-                .then(function(response) {
+                .then(function (response) {
                     return response.data.productSpecification;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     throw error;
                 });
         }
 
-        getRates(msisdn: string, contractType: string, tmCodeOrigen : string, componentName: string, segment?: string): any {
+        getRates(msisdn: string, contractType: string, tmCodeOrigen: string, componentName: string, segment?: string): any {
             let vm = this;
             let _search: any;
             let brand = vm.genericConstant.brand;
             let method = 'changeRateList';
-			let request
-			if(segment) {
-				request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
-					contractType: contractType,
-					tmCodeOrigen: tmCodeOrigen,
-					segment: segment
-				};
-			} else {
-				request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
-					contractType: contractType,
-					tmCodeOrigen: tmCodeOrigen
-				};
-			}
-           
+            let request: OrangeFeSARQ.Models.productCatalog_getRates_request;
+            if (segment) {
+                request = {
+                    contractType: contractType,
+                    tmCodeOrigen: tmCodeOrigen,
+                    segment: segment
+                };
+            } else {
+                request = {
+                    contractType: contractType,
+                    tmCodeOrigen: tmCodeOrigen
+                };
+            }
+
 
             _search = {
                 queryParams: request,
@@ -128,7 +128,7 @@ module OrangeFeSARQ.Services {
             };
 
             return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, componentName)
-                .then(function(response) {
+                .then(function (response) {
                     if (response && response.data && response.data.error) {
                         throw response.data.error;
                     } else if (response && response.data && response.data.productSpecification) {
@@ -136,7 +136,7 @@ module OrangeFeSARQ.Services {
                     }
                     return response.data;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     return error.data;
                 });
         }
