@@ -126,18 +126,30 @@ module OrangeFeSARQ.Services {
     }
 
 
-    getSummary(msisdn: string, customerId: string, tmCodeDestino: string, tmCodeOrigen: string, tipoLinea: string, componentName: string): ng.IPromise<any> {
+    getSummary(msisdn: string, customerId: string, tmCodeDestino: string, tmCodeOrigen: string, tipoLinea: string, componentName: string, segment?: string): ng.IPromise<any> {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'getSummary';
 
-      let request = {
-        msisdn: msisdn,
-        customerId: customerId,
-        tmCodeDestino: tmCodeDestino,
-        tmCodeOrigen: tmCodeOrigen,
-        tipoLinea: tipoLinea
-      }
+	  if(segment) {
+		let request = {
+			msisdn: msisdn,
+			customerId: customerId,
+			tmCodeDestino: tmCodeDestino,
+			tmCodeOrigen: tmCodeOrigen,
+			tipoLinea: tipoLinea,
+			segment: segment
+		  }
+	  } else {
+		  let request = {
+			msisdn: msisdn,
+			customerId: customerId,
+			tmCodeDestino: tmCodeDestino,
+			tmCodeOrigen: tmCodeOrigen,
+			tipoLinea: tipoLinea
+		  }
+	  }
+     
       let _search: Object = {
         queryParams: request,
         urlParams: [BRAND, METHOD]
