@@ -27,7 +27,7 @@ module OrangeFeSARQ.Services {
  * @returns {object} Devuelve una promesa con el response
  */
 
-         postMobileInformation(body, id, brand, comp, showMessage = true, messageOk? = 'La actualización de los datos no es inmediata. Sus datos se verán reflejados en su siguiente inicio de sesión.') {
+         postMobileInformation(body, id, brand, comp, showMessage = true, messageOk = 'La actualización de los datos no es inmediata. Sus datos se verán reflejados en su siguiente inicio de sesión.') {
             let vm = this;
 
             let _search: Object = {
