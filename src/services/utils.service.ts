@@ -728,7 +728,7 @@ module OrangeFeSARQ.Services {
                         break;
 
                     case 'mail':
-                        pattern = /^[a-zA-Z0-9]+@[a-zA-Z0-9\.]+/;
+                        pattern = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]+/;
                         if (pattern.test(value)) {
                             status = true;
                         }
@@ -810,6 +810,12 @@ module OrangeFeSARQ.Services {
                         break;
                     case 'TNNCP':
                         if (vm.validateForm('telephone', value) || vm.validateForm('nif', value) || vm.validateForm('cif', value)
+                                || vm.validateForm('nie', value)|| vm.validateForm('passport', value)) {
+                            status = true;
+                        }
+                        break;
+                    case 'NNCP':
+                        if (vm.validateForm('nif', value) || vm.validateForm('cif', value)
                                 || vm.validateForm('nie', value)|| vm.validateForm('passport', value)) {
                             status = true;
                         }

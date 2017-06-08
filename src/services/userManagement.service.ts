@@ -77,9 +77,11 @@ module OrangeFeSARQ.Services {
 
             return vm._httpCacheOrange.post(vm.url, _search, comp)
                 .then(function(response) {
+                    vm.informationCenter.addInformationMessage(1, 'Contraseña cambiada', '');
                     return response.data;
                 })
                 .catch(function(error) {
+                    vm.informationCenter.addInformationMessage(2, error.data.error.title, error.data.error.desc);
                     return error.data;
                 });
         }
