@@ -111,7 +111,7 @@ module OrangeFeSARQ.Services {
 			if(segment) {
 				let request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
 					contractType: contractType,
-					tmCodeOrigen: tmCodeOrigen
+					tmCodeOrigen: tmCodeOrigen,
 					segment: segment
 				};
 			} else {
