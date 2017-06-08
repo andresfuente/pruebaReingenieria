@@ -130,9 +130,9 @@ module OrangeFeSARQ.Services {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'getSummary';
-
+	  let request;
 	  if(segment) {
-		let request = {
+		request = {
 			msisdn: msisdn,
 			customerId: customerId,
 			tmCodeDestino: tmCodeDestino,
@@ -141,7 +141,7 @@ module OrangeFeSARQ.Services {
 			segment: segment
 		  }
 	  } else {
-		  let request = {
+		 request = {
 			msisdn: msisdn,
 			customerId: customerId,
 			tmCodeDestino: tmCodeDestino,

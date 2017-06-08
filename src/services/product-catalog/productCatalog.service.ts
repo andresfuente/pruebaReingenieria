@@ -107,15 +107,15 @@ module OrangeFeSARQ.Services {
             let _search: any;
             let brand = vm.genericConstant.brand;
             let method = 'changeRateList';
-
+			let request
 			if(segment) {
-				let request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
+				request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
 					contractType: contractType,
 					tmCodeOrigen: tmCodeOrigen,
 					segment: segment
 				};
 			} else {
-				let request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
+				request: OrangeFeSARQ.Models.productCatalog_getRates_request = <OrangeFeSARQ.Models.productCatalog_getRates_request> {
 					contractType: contractType,
 					tmCodeOrigen: tmCodeOrigen
 				};
