@@ -247,5 +247,40 @@ module OrangeFeSARQ.Services {
       }
       return undefined;
     }
+
+    /**
+    * @ngdoc method
+    * @name OrangeFeSARQ.Services:ProductCatalogStore#getProductSpecCharacteristic
+    * @methodOf OrangeFeSARQ.Services:ProductCatalogStore
+    * @param {any} element: Elemento specification u offering para buscar
+    * @param {string} ospId: Traducción a buscar. Ejemplo: 'DATOS' o 'VOZ'
+    * @return {any} Devuelve el objeto que contiene el umbral a buscar.
+    * @description
+    * Recoge el umbral de 'DATOS' o 'VOZ' a buscar. 
+    */
+    getProductSpecCharacteristic(element: any, ospId: string): any {
+      let vm = this;
+      let product: any;
+      if (element && element.productNumber) {
+        product = vm.getCatalogSpecificationByTmcode(element.productNumber, 'ospProductNumber')
+      } else if (element && element.productSpecification.productNumber) {
+        product = element;
+      }
+
+      if (product && product.productSpecCharacteristic) {
+        let productSpecCharacteristicList = product.productSpecCharacteristic;
+        for (let i = 0; i < productSpecCharacteristicList.length; i++) {
+          let productCharacteristic = productSpecCharacteristicList[i];
+          if (productCharacteristic && productCharacteristic.ospId && productCharacteristic.ospId.toLowerCase() === ospId.toLowerCase()) {
+            let productCharacteristicValueList = productCharacteristic.productSpecCharacteristicValue;
+            for (let j = 0; j < productCharacteristicValueList.length; j++) {
+              let characteristic = productCharacteristic[j];
+              return characteristic;
+            }
+          }
+        }
+      }
+      return undefined;
+    }
   }
 }
