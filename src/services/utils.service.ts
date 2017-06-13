@@ -789,10 +789,8 @@ module OrangeFeSARQ.Services {
                         }
                         break;
                     case 'passport':
-                        pattern = /^[0-9]{9,10}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
+                        status = true;
+                        
                         break;
                     case 'cif':
                         // pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
