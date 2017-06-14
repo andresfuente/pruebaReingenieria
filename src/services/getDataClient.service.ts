@@ -28,7 +28,7 @@ module OrangeFeSARQ.Services {
 
             };
 
-            return vm.httpCacheGett(vm.genericConstant.getDataClient, _search)
+            return vm.httpCacheGett(vm.genericConstant.getDataClient, _search, 'GENERIC', true)
                 .then(
                 (successData) => {
                     // Lleno el customerViewStore
