@@ -221,7 +221,7 @@ module OrangeFeSARQ.Services {
     * @description
     * Recoge
     */
-    getProductPrice(element: any, currency: string = "eur", priceType: string = 'pago único'): any {
+    getProductPrice(element: any, currency: string = 'eur', priceType: string = 'pago único'): any {
       let vm = this;
       let product: any;
       if (element && element.productNumber) {
@@ -239,7 +239,10 @@ module OrangeFeSARQ.Services {
             for (let j = 0; j < pricesList.length; j++) {
               let price = pricesList[j];
               if (price.currencyCode && price.currencyCode.toLowerCase() === currency.toLowerCase()) {
-                return price;
+                /* taxIncludedAmount 	-- Precio con Iva
+								 * dutyFreeAmount 		-- Precio sin iva (quitando iva al anterior)
+                 * taxAmount 					-- Valor de impuestos que aplican*/
+                return price.taxIncludedAmount;
               }
             }
           }
@@ -256,7 +259,7 @@ module OrangeFeSARQ.Services {
     * @param {string} ospCategory: Traducción a buscar. Ejemplo: 'DATOS' o 'VOZ'
     * @return {any} Devuelve el objeto que contiene el umbral a buscar.
     * @description
-    * Recoge el umbral de 'DATOS' o 'VOZ' a buscar. 
+    * Recoge el umbral de 'DATOS' o 'VOZ' a buscar.
     */
     getProductSpecCharacteristic(tmcode: any, ospCategory: string): any {
       let vm = this;
