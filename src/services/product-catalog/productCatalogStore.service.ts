@@ -226,7 +226,7 @@ module OrangeFeSARQ.Services {
       let product: any;
       if (element && element.productNumber) {
         product = vm.getCatalogOfferingByTmcode(element.productNumber, 'ospProductNumber')
-      } else if (element && element.productSpecification.productNumber) {
+      } else if (element && element.productSpecification && element.productSpecification.productNumber) {
         product = element;
       }
 
