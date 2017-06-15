@@ -6,6 +6,7 @@ module OrangeFeSARQ.Services {
         private url: string;
         public genericConstant;
         public CV;
+        public http: ng.IHttpService | any;
 
         constructor(public $injector) {
             super($injector);
@@ -18,6 +19,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.genericConstant = $injector.get('genericConstant');
             vm.CV = $injector.get('customerViewStore');
+            vm.http = $injector.get('$http');
         }
 
         getData() {
@@ -28,14 +30,14 @@ module OrangeFeSARQ.Services {
 
             };
 
-            return vm.httpCacheGett(vm.genericConstant.getDataClient, _search, 'GENERIC', true)
+            return vm.http.get(vm.genericConstant.getDataClient, _search)
                 .then(
                 (successData) => {
                     // Lleno el customerViewStore
                     if (successData.data) {
-						if(successData.data.user){ // Eliminar el 34 del principio
-							successData.data.user = successData.data.user.replace(/^34/, '');
-						}
+                        if (successData.data.user) { // Eliminar el 34 del principio
+                            successData.data.user = successData.data.user.replace(/^34/, '');
+                        }
                         vm.CV.loginData = successData.data;
                     }
                 },
