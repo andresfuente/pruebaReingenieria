@@ -32,7 +32,7 @@ module OrangeFeSARQ.Services {
                 urlParams: [brand, method, msisdn]
             };
 
-            return vm.httpCacheGett(apiUrl, _search, compName)
+            return vm.httpCacheGett(apiUrl, _search, compName, true)
                 .then(
                     (successData) => {
 						if(successData.data && successData.data.ratePlan){
