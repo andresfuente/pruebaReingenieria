@@ -30,7 +30,7 @@ module OrangeFeSARQ.Services {
 
             };
 
-            return vm.http.get(vm.genericConstant.getDataClient, _search)
+            return vm.http.get(vm.genericConstant.getDataClient + '/' + vm.genericConstant.site + '/' + 'getUser')
                 .then(
                 (successData) => {
                     // Lleno el customerViewStore
