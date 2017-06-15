@@ -106,7 +106,7 @@ module OrangeFeSARQ.Services {
             inputDocument = inputDocument.trim().toUpperCase();
             if (inputDocument === 'MSISDN') {
                 searchUrl = 'publicKey';
-            } else if (inputDocument === 'NIF' && vm.isNifNie(value)) {
+            } else if ( (inputDocument === 'NIF' || inputDocument === 'NIE') && vm.isNifNie(value)) {
                 searchUrl = 'individualPublicId';
             } else if (inputDocument === 'CIF' && vm.isCif(value)) {
                 searchUrl = 'individualPublicId';
