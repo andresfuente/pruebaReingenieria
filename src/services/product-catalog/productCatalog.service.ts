@@ -30,13 +30,9 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.productCatalogAPIUrl = vm.genericConstant.productCatalog;
 
-            if (vm.genericConstant.site === 'FichaCliente') {
-                vm.sufixProductSpecification = [vm.genericConstant.brand, 'productSpecification', vm.OSP];
-                vm.sufixProductOffering = [vm.genericConstant.brand, 'productOffering', vm.OSP];
-            } else {
-                vm.sufixProductSpecification = [vm.genericConstant.brand, vm.genericConstant.site, 'productSpecification', vm.OSP];
-                vm.sufixProductOffering = [vm.genericConstant.brand, vm.genericConstant.site, 'productOffering', vm.OSP];
-            }
+            vm.sufixProductSpecification = [vm.genericConstant.brand, vm.genericConstant.site, 'productSpecification', vm.OSP];
+            vm.sufixProductOffering = [vm.genericConstant.brand, vm.genericConstant.site, 'productOffering', vm.OSP];
+
         }
 
         // - daf2/APIProductCatalogOSP/1/productSpecification/OSP
