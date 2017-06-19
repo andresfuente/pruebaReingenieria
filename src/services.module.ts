@@ -1,6 +1,5 @@
 module OrangeFeSARQ.Constant {
     'use strict';
-	
 
     angular.module('servicesCommons', [])
         .service('accountSrv', OrangeFeSARQ.Services.AccountSrv)
@@ -32,8 +31,9 @@ module OrangeFeSARQ.Constant {
         .service('owcsServices', OrangeFeSARQ.Services.OwcsServices)
         .service('changeOfferSrv', OrangeFeSARQ.Services.ChangeOfferSrv)
         .service('linesUsageSrv', OrangeFeSARQ.Services.LinesUsageSrv)
+        .service('alertsStore', OrangeFeSARQ.Services.AlertsStore)
 
-		
+
 
 
 
