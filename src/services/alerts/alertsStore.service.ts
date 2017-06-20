@@ -7,6 +7,10 @@ module OrangeFeSARQ.Services {
         constructor() {
         }
 
+        getUserId(): string {
+            let vm = this;
+            return vm._alertsData.userId;
+        }
         getCloseEnabled(): boolean {
             let vm = this;
             return (vm._alertsData && vm._alertsData.closeEnabled);
@@ -14,12 +18,17 @@ module OrangeFeSARQ.Services {
 
         getNoMassive(): any {
             let vm = this;
-            return (vm._alertsData && vm._alertsData.noMassive) ? vm._alertsData.noMassive : {} ;
+            return (vm._alertsData && vm._alertsData.noMassive) ? vm._alertsData.noMassive : [] ;
         }
 
         getMassive(): any {
             let vm = this;
-            return (vm._alertsData && vm._alertsData.massive) ? vm._alertsData.massive : {} ;
+            return (vm._alertsData && vm._alertsData.massive) ? vm._alertsData.massive : [] ;
+        }
+
+        setUserId(userId: string) {
+            let vm = this;
+            vm._alertsData.userId = userId;
         }
 
         setCloseEnabled(closeEnabled: boolean) {
