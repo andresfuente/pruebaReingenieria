@@ -110,7 +110,9 @@ module OrangeFeSARQ.Services {
                 searchUrl = 'individualPublicId';
             } else if (inputDocument === 'CIF' && vm.isCif(value)) {
                 searchUrl = 'individualPublicId';
-            } else if (inputDocument === 'PASSPORT' || inputDocument === 'RESIDENCE') {
+            } else if ( (inputDocument === 'DOCID') && (vm.isNifNie(value) || vm.isCif(value))) {
+                searchUrl = 'individualPublicId';
+            } else if (inputDocument === 'PASSPORT' || inputDocument === 'RESIDENCE' || inputDocument === 'DOCID') {
                 searchUrl = 'residential';
             }
 
