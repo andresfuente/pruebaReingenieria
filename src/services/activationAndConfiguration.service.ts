@@ -20,7 +20,7 @@ module OrangeFeSARQ.Services {
             vm.genericConstant = $injector.get('genericConstant');
         }
 
-        getData(msisdn: string, queryType: string, lineCategory: string, segment: string = '', componentName: string = 'row_switch_services'): ng.IPromise <any> {
+        getData(msisdn: string, queryType: string, lineCategory: string, segment: string = '', componentName: string = 'row_switch_services', refresh: boolean = false): ng.IPromise <any> {
             let vm = this;
             let _search: Object = {
                 queryParams: {
@@ -31,7 +31,7 @@ module OrangeFeSARQ.Services {
                 urlParams: [vm.brand, 'service', msisdn]
             };
 
-            return vm.httpCacheGett(vm.urlActivationAndConfiguration, _search, componentName)
+            return vm.httpCacheGett(vm.urlActivationAndConfiguration, _search, componentName, refresh)
                 .then((successData) => {
                     return successData;
                 },
@@ -51,7 +51,7 @@ module OrangeFeSARQ.Services {
                 urlParams: [vm.brand, 'service']
             };
             // Llamada al post con la url +  datos + url para descachear
-            return vm.httpPost(vm.urlActivationAndConfiguration, _search, componentName)
+            return vm.httpCacheOrange.post(vm.urlActivationAndConfiguration, _search, componentName)
                 .then(function (response) {
                     return response;
                 })
