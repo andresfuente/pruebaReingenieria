@@ -826,7 +826,7 @@ module OrangeFeSARQ.Services {
                         }
                         break;
                     case 'pass':
-                        pattern = /^[0-9a-zA-Z]{6,8}$/;
+                        pattern = /^.{6,8}$/;
                         if (pattern.test(value)) {
                             status = true;
                         }
