@@ -106,11 +106,11 @@ module OrangeFeSARQ.Services {
             inputDocument = inputDocument.trim().toUpperCase();
             if (inputDocument === 'MSISDN') {
                 searchUrl = 'publicKey';
-            } else if ( (inputDocument === 'NIF' || inputDocument === 'NIE') && vm.isNifNie(value)) {
+            } else if (inputDocument === 'NIF' || inputDocument === 'NIE') {
                 searchUrl = 'individualPublicId';
-            } else if (inputDocument === 'CIF' && vm.isCif(value)) {
+            } else if (inputDocument === 'CIF') {
                 searchUrl = 'individualPublicId';
-            } else if ( (inputDocument === 'DOCID') && (vm.isNifNie(value) || vm.isCif(value))) {
+            } else if (inputDocument === 'DOCID') {
                 searchUrl = 'individualPublicId';
             } else if (inputDocument === 'PASSPORT' || inputDocument === 'RESIDENCE' || inputDocument === 'DOCID') {
                 searchUrl = 'residential';
