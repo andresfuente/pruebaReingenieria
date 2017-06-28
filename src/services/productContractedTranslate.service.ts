@@ -20,19 +20,15 @@ module OrangeFeSARQ.Service {
         }
 
         getServicesContracted(msisdn: string, type: string, brand: string, detail: string,
-        componentName: string = 'contractedServicesComp', hasSource = true): any {
+        componentName: string = 'contractedServicesComp'): any {
             let vm = this;
             let _search = {
                 queryParams: {
                     lineCategory: type,
-                    source: 'mdw',
-                    'onlyActive':vm.genericConstant.onlyActive
+                    'onlyActive': vm.genericConstant.onlyActive
                 },
                 urlParams: [brand, detail, msisdn]
             };
-            if (!hasSource) {
-                delete _search.queryParams.source;
-            }
             return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName)
                 .then(function (response) {
                     return response.data;
