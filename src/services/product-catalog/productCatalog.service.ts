@@ -97,6 +97,27 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
+		
+		getCodeSapProduct(codeSap : string ,productType : string , componentName : string = "vapList" ) : any {
+			let vm = this;
+			let terminalSap = "terminalSap/";
+			let _search: Object = {
+			queryParams: {
+			codeSap : codeSap,
+			productType : productType
+			},
+			urlParams: [vm.genericConstant.brand, terminalSap ]
+			};
+			
+			return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
+			.then(function (response) {
+				return response.data;
+			
+			})
+			.catch(function (error) {
+				throw error;
+			});
+		}
 
         getRates(msisdn: string, contractType: string, tmCodeOrigen: string, componentName: string, segment?: string): any {
             let vm = this;
@@ -116,7 +137,6 @@ module OrangeFeSARQ.Services {
                     tmCodeOrigen: tmCodeOrigen
                 };
             }
-
 
             _search = {
                 queryParams: request,
