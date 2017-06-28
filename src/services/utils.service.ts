@@ -106,11 +106,11 @@ module OrangeFeSARQ.Services {
             inputDocument = inputDocument.trim().toUpperCase();
             if (inputDocument === 'MSISDN') {
                 searchUrl = 'publicKey';
-            } else if ( (inputDocument === 'NIF' || inputDocument === 'NIE') && vm.isNifNie(value)) {
+            } else if (inputDocument === 'NIF' || inputDocument === 'NIE') {
                 searchUrl = 'individualPublicId';
-            } else if (inputDocument === 'CIF' && vm.isCif(value)) {
+            } else if (inputDocument === 'CIF') {
                 searchUrl = 'individualPublicId';
-            } else if ( (inputDocument === 'DOCID') && (vm.isNifNie(value) || vm.isCif(value))) {
+            } else if (inputDocument === 'DOCID') {
                 searchUrl = 'individualPublicId';
             } else if (inputDocument === 'PASSPORT' || inputDocument === 'RESIDENCE' || inputDocument === 'DOCID') {
                 searchUrl = 'residential';
@@ -826,7 +826,7 @@ module OrangeFeSARQ.Services {
                         }
                         break;
                     case 'pass':
-                        pattern = /^[0-9a-zA-Z]{6,8}$/;
+                        pattern = /^.{6,8}$/;
                         if (pattern.test(value)) {
                             status = true;
                         }
