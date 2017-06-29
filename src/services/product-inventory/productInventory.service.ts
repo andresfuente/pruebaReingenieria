@@ -29,9 +29,6 @@ module OrangeFeSARQ.Services {
       request = {};
       request.lineCategory = type;
       request.onlyActive = vm.genericConstant.onlyActive;
-      if (!vm.utils.isFixedLine(msisdn)) {
-        request.source = 'mdw';
-      }
       let _search: Object = {
         queryParams: request,
         urlParams: [BRAND, METHOD, msisdn]
