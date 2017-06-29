@@ -59,32 +59,33 @@ module OrangeFeSARQ.Services {
             };
 
             //TODO PRUEBA FASTDATA
-
-            switch (clientId){
-                case '24130682W':
-                    vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                    break;
-                case '18000712S':
-                    vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                    break;
-                case '26496966T':
-                    vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                    break;
-                case '44138785Z':
-                    vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                    break;
-                case '71558378L':
-                    vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                    break;
-                case '05422521H':
-                    vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                    break;
-                case '50185084G':
-                    vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                    break;
-                default:
-                    vm.clientAPIUrl = 'api/customerView/v1';
-                    break;
+            if(vm.genericConstant.site === 'FichaCliente' && window.location.hostname === 'fichadecliente-uat.int.si.orange.es'){
+                switch (clientId){
+                    case '24130682W':
+                        vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        break;
+                    case '18000712S':
+                        vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        break;
+                    case '26496966T':
+                        vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        break;
+                    case '44138785Z':
+                        vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        break;
+                    case '71558378L':
+                        vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        break;
+                    case '05422521H':
+                        vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        break;
+                    case '50185084G':
+                        vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        break;
+                    default:
+                        vm.clientAPIUrl = 'api/customerView/v1';
+                        break;
+                }
             }
 
             vm.httpCacheGett(vm.clientAPIUrl, _search, componentName)
