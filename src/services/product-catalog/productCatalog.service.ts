@@ -111,12 +111,15 @@ module OrangeFeSARQ.Services {
 			
 			return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
 			.then(function (response) {
-				return response.data;
-			
+			if(response !== null) {
+			return response.data;
+			} else {
+			throw response.error;
+			}
 			})
 			.catch(function (error) {
-				throw error;
-			});
+			throw error.data;
+			}); 
 		}
 
         getRates(msisdn: string, contractType: string, tmCodeOrigen: string, componentName: string, segment?: string): any {
