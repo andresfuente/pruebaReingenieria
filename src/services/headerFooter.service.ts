@@ -16,10 +16,11 @@ module OrangeFeSARQ.Services {
             let vm = this;
         }
 
-        getData() {
+        getData(msisdn:string = null) {
             let vm = this;
+			
             let _search: Object = {
-                queryParams: {},
+                queryParams: msisdn ? {realSalto: msisdn} : {},
                 urlParams: [vm.genericConstant.site, 'getHeaderFooter']
 
             };
