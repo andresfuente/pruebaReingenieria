@@ -8,6 +8,7 @@ module OrangeFeSARQ.Constant {
         .service('adslStatusStore', OrangeFeSARQ.Services.AdslStatusStore)
         .service('amortizationSrv', OrangeFeSARQ.Services.AmortizationSrv)
         .service('bucketBalanceSrv', OrangeFeSARQ.Services.BucketBalanceSrv)
+        .service('changeRateFixedSrv', OrangeFeSARQ.Services.ChangeRateFixedOWCSSrv)
         .service('contactFormSrv', OrangeFeSARQ.Services.ContactFormSrv)
         .service('contractsSrv', OrangeFeSARQ.Services.ContractsSrv)
         .service('customerManagementSrv', OrangeFeSARQ.Services.CustomerManagementSrv)
