@@ -1,0 +1,5 @@
+projectKey=FUN_ANG_SERVICES
+serverUrl=https://torredecontrol.si.orange.es/sonarqube
+dashboardUrl=https://torredecontrol.si.orange.es/sonarqube/dashboard/index/FUN_ANG_SERVICES
+ceTaskId=AV0UAANVOhTRbgYMPEU4
+ceTaskUrl=https://torredecontrol.si.orange.es/sonarqube/api/ce/task?id=AV0UAANVOhTRbgYMPEU4
