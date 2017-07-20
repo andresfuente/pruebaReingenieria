@@ -289,7 +289,7 @@ module OrangeFeSARQ.Services {
                 cookieKey = vm.COOKIEMOBILE;
             }
             //vm.$cookies.put(cookieKey, vm.mainCookie);
-            document.cookie = `${cookieKey}=${vm.mainCookie}`;
+            document.cookie = `${cookieKey}=${vm.mainCookie};domain=.orange.es`;
         }
 
     }
