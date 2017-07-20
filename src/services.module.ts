@@ -88,7 +88,7 @@ module OrangeFeSARQ.Constant {
                 );
             }
         })
-        .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter) => {
+        .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter, $injector) => {
 			let genericConstant = $injector.get("genericConstant");
             if (navigator.userAgent.indexOf('PhantomJS') < 1  && genericConstant.site !== 'eCareResidencial') {
                 getHeaderFooterSrv.getData().then(
