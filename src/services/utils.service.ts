@@ -386,20 +386,24 @@ module OrangeFeSARQ.Services {
                 let i = 0;
                 while (i < sizeProducts && !found) {
                     // Si estoy buscando el id
-                    let sizePC = products[i].productCharacteristic.length;
-                    if (products[i].productCharacteristic && sizePC > 0) {
-                        let productCh = products[i].productCharacteristic;
-                        let sizeCh = productCh.length;
-                        // Recorro el product caracteristic de este producto
-                        let it = 0;
-                        while (it < sizeCh && !found) {
-                            if (productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
-                                found = true;
-                                return products[i].ospProductType;
-                            }
-                            ++it;
-                        }
-                    }
+					//verifico si el producto es relativo a una línea prepago, pospago o fijo
+					if(product.ospProductType.match(/^(POSPAGO|PREPAGO|Número teléfono fijo VoIP)$/)) {
+						let sizePC = products[i].productCharacteristic.length;
+						if (products[i].productCharacteristic && sizePC > 0) {                        
+							
+								let productCh = products[i].productCharacteristic;
+								let sizeCh = productCh.length;
+								// Recorro el product caracteristic de este producto
+								let it = 0;
+								while (it < sizeCh && !found) {
+									if (productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
+										found = true;
+										return products[i].ospProductType;
+									}
+									++it;
+								}
+						}
+					}
                     ++i;
                 }
             }
