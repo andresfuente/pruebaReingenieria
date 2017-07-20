@@ -114,8 +114,8 @@ module OrangeFeSARQ.Services {
                     let service = servicesList[i];
                     let serviceName = service.name;
                     // Si uno de los servicios recibidos es 'orange tv' es que lo tiene contratado
-                    cookieObj.tv = ORANGETV === serviceName.toLowerCase() ? true : false;
-                    cookieObj.oc = TRANQUILIDAD === serviceName.toLowerCase() ? true : false;
+                    cookieObj.tv = ORANGETV === serviceName.toLowerCase() ? 1 : 0;
+                    cookieObj.oc = TRANQUILIDAD === serviceName.toLowerCase() ? 1 : 0;
                 }
             } else if (!type && response && response.message) {
 
@@ -137,13 +137,18 @@ module OrangeFeSARQ.Services {
             let cv = vm.customerViewStore.info;
             for (var i = 0, find; i < cv.product.length && !find; i++) {
                 var product = cv.product[i];
-                let type = vm.utils.isFixedLine(vm.msisdn) ? 'Número teléfono fijo VoIP' : 'MSISDN';
-                let charasteristic = vm.utils.findByName(type, product.productCharacteristic);
-                if (charasteristic && vm.msisdn === charasteristic) {
-                    cookieObj.c = vm.setParamC();
-                    cookieObj.p = vm.setParamP(product.ospProductType);
-                    cookieObj.t = vm.setParamT(product);
-                    find = true;
+                if (product.ospProductType.match(/^(POSPAGO|PREPAGO|Número teléfono fijo VoIP)$/)) {
+                    let type = vm.utils.isFixedLine(vm.msisdn) ? 'Número teléfono fijo VoIP' : 'MSISDN';
+                    let charasteristic = vm.utils.findByName(type, product.productCharacteristic);
+                    if (charasteristic && vm.msisdn === charasteristic) {
+                        cookieObj.c = vm.setParamC();
+                        cookieObj.p = vm.setParamP(product.ospProductType);
+                        cookieObj.t = vm.setParamT(product  );
+                        if (_.isArray(product.agreement) && !_.isEmpty(product.agreement)) {
+                            cookieObj.cp = vm.setParamCP(product.agreement);
+                        }
+                        find = true;
+                    }
                 }
             }
             cookieObj.a = vm.setParamA();
@@ -164,8 +169,11 @@ module OrangeFeSARQ.Services {
             // { 1: residencial, 2: empresas, 3: autonomos }
             let properties = { residencial: 1, empresas: 2, autonomos: 3 }
             let search = cv.ospMobileCustomerSegment || '';
-            search = search.toLowerCase();
-            return properties[search];
+            let result;
+            if (search === 'EMPRESA') {
+                return cv.ospMobileCustomerSubSegment.match(/^AUTONOMO/g) ? 3 : 2;
+            }
+            return 1;
 
         }
 
@@ -195,13 +203,14 @@ module OrangeFeSARQ.Services {
          * @description
          * Setea edl parametro del nombre de tarifa
          */
-        setParamT(value: string): string {
+        setParamT(value): string {
             let vm = this;
-            let spec = vm.productCatalogStore.getCatalogSpecificationByTmcode(value, 'productNumber');
+            let code = vm.utils.findByName('Código Tarifa', value.productCharacteristic);
+            let spec = vm.productCatalogStore.getCatalogSpecificationByTmcode(code, 'id');
             if (spec) {
-                return spec.ospTitulo
+                return  `${code}, ${spec.ospTitulo}`;
             }
-            return 'noName';
+            return code ? code : 'noName';
         }
 
         /**
@@ -213,19 +222,20 @@ module OrangeFeSARQ.Services {
          */
         setParamCP(list: any[]): number {
             let vm = this;
-            for (var i = 0; i < list.length; i++) {
-                var agreement = list[i];
-                if (agreement.agreementPeriod && agreement.agreementPeriod.endDateTime) {
-                    let date = new Date(new Date().setMonth(new Date().getMonth() + 3));
-                    let cp = new Date(agreement.agreementPeriod.endDateTime);
-                    if (cp > date) {
-                        // Compromiso de permanencia mayor de 3 meses
-                        return 0;
-                    } else {
-                        // Compromiso de permanencia menor de 3 meses 
-                        return 1;
+            if (list && list.length) {
+
+                let lowerCP = new Date('12-31-2100');
+                let date = new Date(new Date().setMonth(new Date().getMonth() + 3)); // Fecha de hoy + 3 meses
+                for (var i = 0; i < list.length; i++) {
+                    var agreement = list[i];
+                    if (agreement.agreementPeriod && agreement.agreementPeriod.endDateTime) {
+                        let cp = new Date(agreement.agreementPeriod.endDateTime);
+                        if (cp < lowerCP) {
+                            lowerCP = cp;
+                        }
                     }
                 }
+                return lowerCP >= date ? 0 : 1;
             }
             return 0;
         }
@@ -234,7 +244,7 @@ module OrangeFeSARQ.Services {
 
 
         // TODO Autorizado PAE
-        setParamA(): any {
+        setParamA(): number {
             let vm = this;
             // SI solo vale para PAE, invertir la condicion
             if (vm.genericConstant.site === 'eCareEmpresas') {
@@ -244,20 +254,18 @@ module OrangeFeSARQ.Services {
                 }
                 return 1;
             }
-            return 'na';
+            return 0;
         }
 
         // TODO Puntos
         setParamPT(): any {
             let vm = this;
-            // SI solo vale para PAE, invertir la condicion
             if (vm.genericConstant.site === 'eCareEmpresas') {
                 // TODO recoger puntos
             }
-            return 'na'; // No Aplica 
+            return 0; // No Aplica 
 
         }
-
 
         cookieToString(cookie) {
             let vm = this;
@@ -281,7 +289,7 @@ module OrangeFeSARQ.Services {
                 cookieKey = vm.COOKIEMOBILE;
             }
             //vm.$cookies.put(cookieKey, vm.mainCookie);
-            document.cookie = cookieKey + "=" + vm.mainCookie;
+            document.cookie = `${cookieKey}=${vm.mainCookie};domain=.orange.es`;
         }
 
     }
