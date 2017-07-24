@@ -52,7 +52,7 @@
     "typescript": "^1.8.9",
     "typings": "^0.8.1",
     "grunt-ngdocs": "^0.2.10",
-    "dts-generator": "^1.7.0",
+    "dts-generator": "^1.7.0", 
     "orange-angular-router": "0.1.0",
     "orange-arq-common": "1.18.1",
     "orange-variables-sass": "1.19.0",
