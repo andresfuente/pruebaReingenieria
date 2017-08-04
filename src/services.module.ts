@@ -34,10 +34,7 @@ module OrangeFeSARQ.Constant {
         .service('changeOfferSrv', OrangeFeSARQ.Services.ChangeOfferSrv)
         .service('linesUsageSrv', OrangeFeSARQ.Services.LinesUsageSrv)
         .service('alertsStore', OrangeFeSARQ.Services.AlertsStore)
-
-
-
-
+		.service('getConfigurationSrv', OrangeFeSARQ.Services.GetConfigurationSrv)
 
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService, productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore, $injector) => {
             let genericConstant = $injector.get("genericConstant");
@@ -88,9 +85,10 @@ module OrangeFeSARQ.Constant {
                 );
             }
         })
-        .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter, $injector) => {
+        .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter, $injector, getConfigurationSrv: OrangeFeSARQ.Services.GetConfigurationSrv) => {
 			let genericConstant = $injector.get("genericConstant");
-            if (navigator.userAgent.indexOf('PhantomJS') < 1  && genericConstant.site !== 'eCareResidencial') {
+			//si no es mobile first || es spa pública
+            if (navigator.userAgent.indexOf('PhantomJS') < 1  && (genericConstant.site !== 'eCareResidencial' || genericConstant.public === true)) {
                 getHeaderFooterSrv.getData().then(
                     (response) => {
                         // Guardo datos en ParentController
@@ -102,7 +100,20 @@ module OrangeFeSARQ.Constant {
 
                     }
                 );
-            }
+				//si es mobile first y no es spa publica
+            }else if(navigator.userAgent.indexOf('PhantomJS') < 1  && (genericConstant.site === 'eCareResidencial' && genericConstant.public === false)){
+				getConfigurationSrv.getData().then(
+                    (response) => {
+                        // Guardo datos en ParentController
+                        if (OrangeFeSARQ.Controllers.ParentController.shared === undefined) {
+                            OrangeFeSARQ.Controllers.ParentController.shared = {};
+                        }
+                        OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore = response.data.data;
+                        //OrangeFeSARQ.Controllers.ParentController.shared.breadCrumbsStore = response.data.breadCrumbs;
+
+                    }
+                );
+			}
         });
 
         /*if (OrangeFeSARQ.Controllers.ParentController.shared
