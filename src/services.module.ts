@@ -85,7 +85,7 @@ module OrangeFeSARQ.Constant {
                 );
             }
         })
-        .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter, $injector, getConfigurationSrv: OrangeFeSARQ.Services.GetConfigurationSrv) => {
+        .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter, $injector, getConfigurationSrv: OrangeFeSARQ.Services.GetConfigurationSrv, menuStore: OrangeFeSARQ.Services.MenuStore) => {
 			let genericConstant = $injector.get("genericConstant");
 			//si no es mobile first || es spa pública
             if (navigator.userAgent.indexOf('PhantomJS') < 1  && (genericConstant.site !== 'eCareResidencial' || genericConstant.public === true)) {
@@ -109,6 +109,11 @@ module OrangeFeSARQ.Constant {
                             OrangeFeSARQ.Controllers.ParentController.shared = {};
                         }
                         OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore = response.data.data;
+						menuStore.menu = {
+							pospaid: {},
+							prepaid: {},
+							fixed: {}
+						};
                         //OrangeFeSARQ.Controllers.ParentController.shared.breadCrumbsStore = response.data.breadCrumbs;
 
                     }
