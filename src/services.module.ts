@@ -109,6 +109,7 @@ module OrangeFeSARQ.Constant {
                             OrangeFeSARQ.Controllers.ParentController.shared = {};
                         }
                         OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore = response.data.data;
+						
                         //OrangeFeSARQ.Controllers.ParentController.shared.breadCrumbsStore = response.data.breadCrumbs;
 
                     }

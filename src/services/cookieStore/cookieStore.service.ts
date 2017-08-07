@@ -106,6 +106,14 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let cookieObj;
             cookieObj = {};
+            cookieObj.tv = 0;
+            cookieObj.oc = 0;
+            cookieObj.pt = 0;
+            cookieObj.cp = 0;
+            cookieObj.c = 0; 
+            cookieObj.p = 0;
+            cookieObj.t = 0;
+            cookieObj.a = 0;
             if (type && response && response.length) {
                 let servicesList = response;
                 let ORANGETV = 'orange tv'; // Servicio de orange tv
@@ -174,7 +182,6 @@ module OrangeFeSARQ.Services {
                 return cv.ospMobileCustomerSubSegment.match(/^AUTONOMO/g) ? 3 : 2;
             }
             return 1;
-
         }
 
         /**
@@ -191,7 +198,7 @@ module OrangeFeSARQ.Services {
                 return 3;
             } else if (type === 'POSPAGO') {
                 return 1
-            } else if (type === 'PREPAGO') {
+            } else {
                 return 2
             }
         }
@@ -246,12 +253,16 @@ module OrangeFeSARQ.Services {
         // TODO Autorizado PAE
         setParamA(): number {
             let vm = this;
+            let cv = vm.customerViewStore.info;
             // SI solo vale para PAE, invertir la condicion
             if (vm.genericConstant.site === 'eCareEmpresas') {
                 // si se ha logado con TELEFONO, no es autorizado, con documento si
                 if (vm.customerViewStore.loginData && vm.customerViewStore.loginData.userType === 'MSISDN') {
                     return 0;
                 }
+                return 1;
+            }
+            if(cv && cv.ospMobileCustomerSegment === 'EMPRESA'){
                 return 1;
             }
             return 0;
