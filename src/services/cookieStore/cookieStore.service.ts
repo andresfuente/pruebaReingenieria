@@ -110,7 +110,7 @@ module OrangeFeSARQ.Services {
             cookieObj.oc = 0;
             cookieObj.pt = 0;
             cookieObj.cp = 0;
-            cookieObj.c = 0; 
+            cookieObj.c = 0;
             cookieObj.p = 0;
             cookieObj.t = 0;
             cookieObj.a = 0;
@@ -118,15 +118,28 @@ module OrangeFeSARQ.Services {
                 let servicesList = response;
                 let ORANGETV = 'orange tv'; // Servicio de orange tv
                 let TRANQUILIDAD = "oc1b"; // Activado servicio de tranquilidad
-                for (let i = 0, tranqui: boolean, tele: boolean; i < servicesList.length; i++) {
+                for (let i = 0; i < servicesList.length; i++) {
                     let service = servicesList[i];
-                    let serviceName = service.name;
-                    // Si uno de los servicios recibidos es 'orange tv' es que lo tiene contratado
-                    cookieObj.tv = ORANGETV === serviceName.toLowerCase() ? 1 : 0;
-                    cookieObj.oc = TRANQUILIDAD === serviceName.toLowerCase() ? 1 : 0;
-                }
-            } else if (!type && response && response.message) {
+                    let serviceName: string;
+                    // La respuesta varia para fijo y movil 
+                    if (vm.utils.isFixedLine(vm.msisdn)) {
+                        let name = service.name;
+                    } else {
+                        for (var k = 0; k < service.productSpecification.length && !serviceName; k++) {
+                            var productSpec = service.productSpecification[k];
+                            if (productSpec.id) {
+                                serviceName = productSpec.id;
+                            }
+                        }
+                    }
 
+                    // TV
+                    let regex = new RegExp(ORANGETV, 'gi'); // g para que sea global, i - para que sea insensitivo a mayusculas/minusculas
+                    if (!cookieObj.tv) { cookieObj.tv = regex.test(serviceName) ? 1 : 0; }
+                    // Tranquilidad 
+                    regex = new RegExp(TRANQUILIDAD, 'gi'); // g para que sea global, i - para que sea insensitivo a mayusculas/minusculas
+                    if (!cookieObj.oc) { cookieObj.oc = regex.test(serviceName) ? 1 : 0; }
+                }
             }
             vm.setParams(cookieObj);
         }
@@ -145,13 +158,13 @@ module OrangeFeSARQ.Services {
             let cv = vm.customerViewStore.info;
             for (var i = 0, find; i < cv.product.length && !find; i++) {
                 var product = cv.product[i];
-                if (product.ospProductType.match(/^(POSPAGO|PREPAGO|Número teléfono fijo VoIP)$/)) {
-                    let type = vm.utils.isFixedLine(vm.msisdn) ? 'Número teléfono fijo VoIP' : 'MSISDN';
+                if (product.ospProductType.match(/^(POSPAGO|PREPAGO|Acceso fijo & Internet)$/gi)) {
+                    let type = vm.utils.isFixedLine(vm.msisdn) ? 'Número fijo Asociado' : 'MSISDN';
                     let charasteristic = vm.utils.findByName(type, product.productCharacteristic);
                     if (charasteristic && vm.msisdn === charasteristic) {
                         cookieObj.c = vm.setParamC();
                         cookieObj.p = vm.setParamP(product.ospProductType);
-                        cookieObj.t = vm.setParamT(product  );
+                        cookieObj.t = vm.setParamT(product);
                         if (_.isArray(product.agreement) && !_.isEmpty(product.agreement)) {
                             cookieObj.cp = vm.setParamCP(product.agreement);
                         }
@@ -212,10 +225,14 @@ module OrangeFeSARQ.Services {
          */
         setParamT(value): string {
             let vm = this;
-            let code = vm.utils.findByName('Código Tarifa', value.productCharacteristic);
-            let spec = vm.productCatalogStore.getCatalogSpecificationByTmcode(code, 'id');
+            let fixed = vm.utils.isFixedLine(vm.msisdn);
+            let search = fixed ? 'Código Morgane' : 'Código Tarifa';
+            let code = vm.utils.findByName(search, value.productCharacteristic);
+
+            let specSearch = fixed ? 'ospMorganeCode' : 'id';
+            let spec = vm.productCatalogStore.getCatalogSpecificationByTmcode(code, specSearch);
             if (spec) {
-                return  `${code}, ${spec.ospTitulo}`;
+                return `${code}, ${spec.ospTitulo}`;
             }
             return code ? code : 'noName';
         }
@@ -262,7 +279,7 @@ module OrangeFeSARQ.Services {
                 }
                 return 1;
             }
-            if(cv && cv.ospMobileCustomerSegment === 'EMPRESA'){
+            if (cv && cv.ospMobileCustomerSegment === 'EMPRESA') {
                 return 1;
             }
             return 0;
