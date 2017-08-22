@@ -123,7 +123,7 @@ module OrangeFeSARQ.Services {
                     let serviceName: string;
                     // La respuesta varia para fijo y movil 
                     if (vm.utils.isFixedLine(vm.msisdn)) {
-                        let name = service.description;
+                        serviceName = service.description;
                     } else {
                         for (var k = 0; k < service.productSpecification.length && !serviceName; k++) {
                             var productSpec = service.productSpecification[k];
