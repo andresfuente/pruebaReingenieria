@@ -123,7 +123,7 @@ module OrangeFeSARQ.Services {
                     let serviceName: string;
                     // La respuesta varia para fijo y movil 
                     if (vm.utils.isFixedLine(vm.msisdn)) {
-                        let name = service.name;
+                        let name = service.description;
                     } else {
                         for (var k = 0; k < service.productSpecification.length && !serviceName; k++) {
                             var productSpec = service.productSpecification[k];
@@ -134,10 +134,10 @@ module OrangeFeSARQ.Services {
                     }
 
                     // TV
-                    let regex = new RegExp(ORANGETV, 'gi'); // g para que sea global, i - para que sea insensitivo a mayusculas/minusculas
+                    let regex = new RegExp(ORANGETV, 'gi'); // g para que sea global, i - para que no sea sensible a mayusculas/minusculas
                     if (!cookieObj.tv) { cookieObj.tv = regex.test(serviceName) ? 1 : 0; }
                     // Tranquilidad 
-                    regex = new RegExp(TRANQUILIDAD, 'gi'); // g para que sea global, i - para que sea insensitivo a mayusculas/minusculas
+                    regex = new RegExp(TRANQUILIDAD, 'gi'); // g para que sea global, i - para que no sea sensible a mayusculas/minusculas
                     if (!cookieObj.oc) { cookieObj.oc = regex.test(serviceName) ? 1 : 0; }
                 }
             }
