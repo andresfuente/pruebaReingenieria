@@ -20,7 +20,7 @@ module OrangeFeSARQ.Services {
             vm.genericConstant = $injector.get('genericConstant');
         }
 
-        getData(msisdn: string, queryType: string, lineCategory: string, segment: string = '', componentName: string = 'row_switch_services', refresh: boolean = false): ng.IPromise <any> {
+        getData(msisdn: string, queryType: string, lineCategory: string, segment: string = '', componentName: string = 'row_switch_services', refresh: boolean = false): ng.IPromise<any> {
             let vm = this;
             let _search: Object = {
                 queryParams: {
@@ -43,7 +43,33 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-        changeStateService(data: OrangeFeSARQ.Models.Service, componentName = 'row_switch_services'): ng.IPromise <any> {
+        //  Se cambia el método 'service' por el método 'multipleServices' para la llamada al activationAndConfiguration 
+        // en el componente activationFreeFriends para Amigos gratis
+
+        getData2(msisdn: string, queryType: string, lineCategory: string, segment: string = '', componentName: string = 'row_switch_services', refresh: boolean = false): ng.IPromise<any> {
+            let vm = this;
+            let _search: Object = {
+                queryParams: {
+                    queryType: queryType,
+                    lineCategory: lineCategory,
+                    segment: segment
+                },
+                urlParams: [vm.brand, 'multipleServices', msisdn]
+            };
+
+            return vm.httpCacheGett(vm.urlActivationAndConfiguration, _search, componentName, refresh)
+                .then((successData) => {
+                    return successData;
+                },
+                (errorData) => {
+                    return errorData;
+                })
+                .catch(function (error) {
+                    return error;
+                });
+        }
+
+        changeStateService(data: OrangeFeSARQ.Models.Service, componentName = 'row_switch_services'): ng.IPromise<any> {
             let vm = this;
 
             let _search: Object = {
