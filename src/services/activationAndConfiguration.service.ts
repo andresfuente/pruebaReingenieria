@@ -85,5 +85,24 @@ module OrangeFeSARQ.Services {
                     return error;
                 });
         }
+
+        //  Se cambia el método 'service' por el método 'multipleServices' para la llamada al activationAndConfiguration 
+        // en el componente addFreeFriends para Amigos gratis
+        changeStateService2(data: OrangeFeSARQ.Models.Service, componentName = 'row_switch_services'): ng.IPromise<any> {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams: data,
+                urlParams: [vm.brand, 'multipleServices']
+            };
+            // Llamada al post con la url +  datos + url para descachear
+            return vm.httpCacheOrange.post(vm.urlActivationAndConfiguration, _search, componentName)
+                .then(function (response) {
+                    return response;
+                })
+                .catch(function (error) {
+                    return error;
+                });
+        }
     }
 }
