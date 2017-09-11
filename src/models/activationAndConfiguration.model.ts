@@ -16,6 +16,11 @@ declare module OrangeFeSARQ.Models {
         value: string;
     }
 
+    export interface IServicesCharacteristic {
+        name: string;
+        value: string;
+    }
+
     export interface ServiceRef {
         id: string;
         href: string;
@@ -79,6 +84,24 @@ declare module OrangeFeSARQ.Models {
     export interface ActivationAndConfigurationModel {
         services: Service[];
         error: Error;
+    }
+
+    export interface IMultipleServices {
+        id: string;
+        href: string;
+        name: string;
+        description: string;
+        type: string;
+        version: string;
+        state: string;
+        startDate: string;
+        relatedPublicKey: RelatedPublicKey;
+        serviceSpecification: ServiceSpecification;
+        servicesCharacteristic: IServicesCharacteristic[];
+        serviceRelationship: ServiceRelationship[];
+        relatedParty: RelatedParty[];
+        supportingService: SupportingService[];
+        supportingResource: SupportingResource[];
     }
 
 }
