@@ -16,7 +16,7 @@ declare module OrangeFeSARQ.Models {
         value: string;
     }
 
-    export interface IServicesCharacteristic {
+    export interface IServicesCharacteristics {
         name: string;
         value: string;
     }
@@ -97,7 +97,7 @@ declare module OrangeFeSARQ.Models {
         startDate: string;
         relatedPublicKey: RelatedPublicKey;
         serviceSpecification: ServiceSpecification;
-        servicesCharacteristic: IServicesCharacteristic[];
+        servicesCharacteristics: IServicesCharacteristics[][];
         serviceRelationship: ServiceRelationship[];
         relatedParty: RelatedParty[];
         supportingService: SupportingService[];
