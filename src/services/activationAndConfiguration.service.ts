@@ -88,7 +88,7 @@ module OrangeFeSARQ.Services {
 
         //  Se cambia el método 'service' por el método 'multipleServices' para la llamada al activationAndConfiguration 
         // en el componente addFreeFriends para Amigos gratis
-        changeStateService2(data: OrangeFeSARQ.Models.Service, componentName = 'row_switch_services'): ng.IPromise<any> {
+        changeStateService2(data: OrangeFeSARQ.Models.IMultipleServices, componentName = 'row_switch_services'): ng.IPromise<any> {
             let vm = this;
 
             let _search: Object = {
