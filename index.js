@@ -1,2 +1,2 @@
-require('./dist/orange-example'); 
-module.exports = 'orange-example';
+require('./dist/orange-services'); 
+module.exports = 'orange-services';
