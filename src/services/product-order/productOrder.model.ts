@@ -21,4 +21,17 @@ declare module OrangeFeSARQ.Models {
     services: string;
     segment: string;
   }
+
+  export interface setDonateMegas_postRequest {
+    action: string;
+    id: string;
+
+  }
+  export interface showDonateMegas_postRequest {
+    id: string;
+  }
+  export interface getProductBonusIncompatibility {
+    msisdn : string,
+    productsIdQuery : string[];
+  }
 }

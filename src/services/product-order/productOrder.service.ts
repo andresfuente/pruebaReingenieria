@@ -237,5 +237,30 @@ module OrangeFeSARQ.Services {
           return error.data;
         });
     }
+
+    getProductBonusIncompatibility(msisdn: string, productsIdQuery: string[], componentName: string): ng.IPromise<any> {
+      let vm = this;
+      let BRAND = vm.genericConstant.brand;
+      let METHOD = 'productBonusIncompatibility';
+      let qParams = {
+        msisdn,
+        productsIdQuery
+      }
+      let _search: Object = {
+        urlParams: [BRAND, METHOD],
+        queryParams: qParams
+      }
+      return vm.httpPost(vm.urlProductOrder, _search, componentName)
+        .then((response) => {
+          let _resp = response.data;
+          if (_resp.error) {
+            throw _resp.error;
+          }
+          return _resp.productOrder;
+        })
+        .catch(function(error) {
+          return error.data;
+        });
+    }
   }
 }
