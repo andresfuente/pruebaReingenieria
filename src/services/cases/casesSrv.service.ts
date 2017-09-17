@@ -61,7 +61,7 @@ module OrangeFeSARQ.Services {
                 urlParams: ['interaction', category, individualPublicId]
             };
 
-            return vm.httpCacheGett(vm.genericConstant.interactionAPIUrl, _search, componentName, true)
+            return vm.httpCacheGett(vm.genericConstant.interaction, _search, componentName, true)
                 .then(
                     function(response) {
                     return response.data;
