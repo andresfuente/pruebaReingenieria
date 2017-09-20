@@ -13,7 +13,7 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            dev: ['./.tscache', './build', './dist']
+            dev: ['./.sonar', './.tscache', './build', './dist']
         },
 
         concat: {
