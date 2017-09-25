@@ -30,9 +30,17 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.productCatalogAPIUrl = vm.genericConstant.productCatalog;
 
-            vm.sufixProductSpecification = [vm.genericConstant.brand, vm.genericConstant.site, 'productSpecification', vm.OSP];
-            vm.sufixProductOffering = [vm.genericConstant.brand, vm.genericConstant.site, 'productOffering', vm.OSP];
-
+            // PdV utiliza el catálogo de FdC hasta unificar los catálogos
+            vm.sufixProductSpecification = [
+                vm.genericConstant.brand, vm.genericConstant.site === 'FCUPdV' ? 'fichaCliente' : vm.genericConstant.site,
+                'productSpecification',
+                vm.OSP
+            ];
+            vm.sufixProductOffering = [
+                vm.genericConstant.brand, vm.genericConstant.site === 'FCUPdV' ? 'fichaCliente' : vm.genericConstant.site,
+                'productOffering',
+                vm.OSP
+            ];
         }
 
         // - daf2/APIProductCatalogOSP/1/productSpecification/OSP
