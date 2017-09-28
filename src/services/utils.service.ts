@@ -316,7 +316,7 @@ module OrangeFeSARQ.Services {
         isFixedLine(phone: number) {
             if (phone) {
                 let phoneStr: string = phone.toString();
-                let regFixed = /^((\+?34)?(8|9))\d+$/;
+                let regFixed = /^((\+?34)?(8|9)){8,10}$/;
                 // - let regMobile = /^((6|7)|\+?34(6|7))/;
                 if (phoneStr.match(regFixed)) {
                     return true;
@@ -332,7 +332,7 @@ module OrangeFeSARQ.Services {
             if (phone) {
                 let phoneStr: string = phone.toString();
                 // - let regFixed = /^((\+?34)?(8|9))\d+$/;
-                let regMobile = /^((6|7)|\+?34(6|7))/;
+                let regMobile = /^((\+?34)?(6|7)){8,10}$/;
                 if (phoneStr.match(regMobile)) {
                     return true;
                 }
