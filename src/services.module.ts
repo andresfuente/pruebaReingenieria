@@ -32,7 +32,6 @@ module OrangeFeSARQ.Constant {
         .service('productContractedTranslateSrv', OrangeFeSARQ.Service.ProductContractedTranslateSrv)
         .service('productInventorySrv', OrangeFeSARQ.Services.ProductInventoryService)
         .service('productOrderSrv', OrangeFeSARQ.Services.ProductOrderSrv)
-        .service('prescoringSrv', OrangeFeSARQ.Services.PrescoringSrv)
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
         .service('userManagementSrv', OrangeFeSARQ.Services.UserManagementSrv)
         .service('userSrv', OrangeFeSARQ.Services.UserSrv)
