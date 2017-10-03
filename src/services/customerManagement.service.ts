@@ -123,9 +123,9 @@ module OrangeFeSARQ.Services {
 
             let _search: Object = {
                 queryParams: {
-                    'typeRequest': 1,
-                    'numberRequiredLines': 1,
-                    'blackList': true
+                    typeRequest: 1,
+                    numberRequiredLines: 1,
+                    blackList: true
                 },
                 urlParams: ['customer'],
                 body: {
@@ -136,7 +136,7 @@ module OrangeFeSARQ.Services {
                 }
             };
 
-            return vm.httpCacheGett(vm.genericConstant.customerManagement, _search, comp)
+            return vm.httpPostFull(vm.genericConstant.customerManagement, _search, comp)
                 .then(
                     (response) => {
                         return response.data;
@@ -156,15 +156,20 @@ module OrangeFeSARQ.Services {
          * @description
          * Realiza la llamada a la API customerManagement para saber el riesgo de prescoring del cliente
          */
-        postPrescoring(body, comp: string) {
+        postPrescoring(typeRequest, numberRequiredLines, body, comp: string) {
             let vm = this;
 
             let _search: Object = {
-                queryParams: body,
-                urlParams: ['customer']
+                queryParams: {
+                    typeRequest: typeRequest,
+                    numberRequiredLines: numberRequiredLines,
+                    blackList: false
+                },
+                urlParams: ['customer'],
+                body: body
             };
 
-            return vm.httpPost(vm.genericConstant.customerManagement, _search, comp)
+            return vm.httpPostFull(vm.genericConstant.customerManagement, _search, comp)
                 .then(
                     (response) => {
                         return response.data;
