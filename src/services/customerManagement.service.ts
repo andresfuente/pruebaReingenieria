@@ -110,7 +110,6 @@ module OrangeFeSARQ.Services {
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:CustomerManagementSrv#checkBlacklist
-         * @param {string} cusType individual / organization
          * @param {string} numdDoc documento del cliente
          * @param {string} type tipo de comprobación. BA -> BlacklistAsnef
          * @param {string} comp nombre del componente
@@ -118,7 +117,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Realiza la llamada a la API customerManagement para saber si el cliente es blacklist o asnef
          */
-        checkBlacklist(cusType, numDoc, type, comp: string) {
+        checkBlacklist(body, comp: string) {
             let vm = this;
 
             let _search: Object = {
@@ -128,23 +127,19 @@ module OrangeFeSARQ.Services {
                     blackList: true
                 },
                 urlParams: ['customer'],
-                body: {
-                    cusType: {
-                        'id': numDoc,
-                        'ospIDtype': type
-                    }
-                }
+                body: body
             };
 
             return vm.httpPostFull(vm.genericConstant.customerManagement, _search, comp)
-                .then(
-                    (response) => {
-                        return response.data;
-                    },
-                    (err) => {
-                        throw err;
+                .then(function (response) {
+                    if (response.data.error && response.data.error !== null) {
+                        throw response.data.error;
                     }
-                );
+                    return response.data;
+                })
+                .catch(function (error) {
+                    return error.data;
+                });
         }
 
         /**
@@ -170,14 +165,15 @@ module OrangeFeSARQ.Services {
             };
 
             return vm.httpPostFull(vm.genericConstant.customerManagement, _search, comp)
-                .then(
-                    (response) => {
-                        return response.data;
-                    },
-                    (err) => {
-                        return err;
+                .then(function (response) {
+                    if (response.data.error && response.data.error !== null) {
+                        throw response.data.error;
                     }
-                );
+                    return response.data;
+                })
+                .catch(function (error) {
+                    return error.data;
+                });
         }
     }
 }
