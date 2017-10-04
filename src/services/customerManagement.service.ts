@@ -110,12 +110,12 @@ module OrangeFeSARQ.Services {
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:CustomerManagementSrv#checkBlacklist
-         * @param {string} numdDoc documento del cliente
-         * @param {string} type tipo de comprobación. BA -> BlacklistAsnef
+         * @param {Object} body documento del cliente y tipo de comprobación. BA -> BlacklistAsnef
          * @param {string} comp nombre del componente
          * @methodOf OrangeFeSARQ.Services:CustomerManagementSrv
          * @description
-         * Realiza la llamada a la API customerManagement para saber si el cliente es blacklist o asnef
+         * Devuelve si el cliente es blacklist o asnef
+         * @returns {Object} Devuelve una promesa con el response
          */
         checkBlacklist(body, comp: string) {
             let vm = this;
@@ -145,11 +145,14 @@ module OrangeFeSARQ.Services {
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:CustomerManagementSrv#postPrescoring
+         * @param {number} typeRequest tipo de Acto comercial
+         * @param {string} numberRequiredLines numero de lineas solicitadas
          * @param {Object} body datos a consultar
          * @param {string} comp nombre del componente
          * @methodOf OrangeFeSARQ.Services:CustomerManagementSrv
          * @description
-         * Realiza la llamada a la API customerManagement para saber el riesgo de prescoring del cliente
+         * Devuelve el riesgo de prescoring del cliente
+         * @returns {Object} Devuelve una promesa con el response
          */
         postPrescoring(typeRequest, numberRequiredLines, body, comp: string) {
             let vm = this;
