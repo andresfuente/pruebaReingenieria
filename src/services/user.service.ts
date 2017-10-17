@@ -110,6 +110,58 @@ module OrangeFeSARQ.Services {
             return promise.promise;
         }
 
+        /**
+         * @ngdoc method
+         * @name #getAmenaUser(param:string, clientId:string, componentName:string)
+         * @methodOf locator.UserSrv
+         * @param {param} individualPublicId
+         * @param {clientId} Documento de identificacion de cliente
+         * @param {componentName} Nombre del componente
+         * @returns {object} Devuelve una promesa con la respuesta del CustomerView para clientes Amena
+         */
+
+        getAmenaUser(param: string, clientId: string, componentName: string): any {
+            let vm = this;
+            let promise = vm.$q.defer();
+            if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
+                param = 'residential';
+            } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
+                param = 'business';
+            } else if (param === 'publicKey') {
+                param = 'telephoneNumber';
+            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))) {
+                param = 'residential';
+            }
+
+            let _search: Object = {
+                queryParams: {
+                    'onlyActive':vm.genericConstant.onlyActive
+                },
+                urlParams: ['amena', 'customerView', param, clientId]
+
+            };
+
+            vm.httpCacheGett(vm.clientAPIUrl, _search, componentName)
+                .then(
+                    (response) => {
+                        if (response.data && response.data.customer) {
+                            if (response.data.customer.individual && response.data.customer.individual.id) {
+                                localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
+                            } else {
+                                localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
+                            }
+                        }
+
+                        vm.getMdgUser(param, clientId);
+                        // - response.data.mdg = vm.mdgData;
+                        promise.resolve(response.data);
+                    },
+                    (error) => {
+                        promise.reject(error.data);
+                    });
+            return promise.promise;
+        }
+    
         getMdgUser(param: string, clientId: string, componentName: string = 'locatorComp') {
             let vm = this;
 
