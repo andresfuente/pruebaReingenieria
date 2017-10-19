@@ -83,7 +83,7 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-        getCreditBucketBalanceTransactions(msisdn: string, startDate: Date, endDate: Date, componentName: string = 'balance-transfer-log-comp'): any {
+        getCreditBucketBalanceTransactions(msisdn: string, startDate: Date, endDate: Date, transaction: string, componentName: string = 'balance-transfer-log-comp'): any {
             let vm = this;
             let _search: any;
             vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalance;
@@ -93,7 +93,8 @@ module OrangeFeSARQ.Services {
                 queryParams: {
                     publicKey: msisdn,
                     startDate: startDateStr,
-                    endDate: endDateStr
+                    endDate: endDateStr,
+                    transactions: transaction
                 },
                 urlParams: [vm.genericConstant.brand, 'creditBucketBalanceTransactions']
             };
