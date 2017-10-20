@@ -24,6 +24,7 @@ module OrangeFeSARQ.Constant {
         .service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter)
         .service('getImagesSrv', OrangeFeSARQ.Services.getImagesSrv)
         .service('getMenuItemsModule', OrangeFeSARQ.Services.GetMenuItemsService)
+        .service('getOperatorsSrv', OrangeFeSARQ.Services.GetOperatorsSrv)
         .service('hootSrv', OrangeFeSARQ.Services.HootSrv)
         .service('linesUsageSrv', OrangeFeSARQ.Services.LinesUsageSrv)
         .service('nationalitiesSrv', OrangeFeSARQ.Services.NationalitiesService)
