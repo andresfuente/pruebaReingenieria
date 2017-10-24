@@ -40,7 +40,7 @@ module OrangeFeSARQ.Services {
         (errorData) => {
           return errorData;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error;
         });
     }
@@ -84,12 +84,12 @@ module OrangeFeSARQ.Services {
         (errorData) => {
           return errorData;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error;
         });
     }
-
-    changeStatetProduct(msisdn: string, productId: string, action: string, imei: string = '', componentName: string = 'generic_bonus'): ng.IPromise<any> {
+	
+	changeStatetProduct(msisdn: string, productId: string, action: string, imei: string = '', componentName: string = 'generic_bonus'): ng.IPromise<any> {
       let vm = this;
       let queryParams = {};
       if (imei !== '') {
@@ -120,36 +120,57 @@ module OrangeFeSARQ.Services {
         (errorData) => {
           return errorData;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error;
         });
     }
 
+    moreMegasAmena(msisdnMegas: string, componentName: string) {
+      let vm = this;
+      let _search: Object = {
+        queryParams: {
+          msisdn: msisdnMegas
+        },
+        urlParams: [vm.genericConstant.brand, 'setBonus']
+      };
+
+      return vm.httpPost(vm.urlProductOrder, _search, componentName)
+        .then(
+        (successData) => {
+          return successData;
+        },
+        (errorData) => {
+          return errorData;
+        })
+        .catch(function(error) {
+          return error;
+        });
+    }
 
     getSummary(msisdn: string, customerId: string, tmCodeDestino: string, tmCodeOrigen: string, tipoLinea: string, componentName: string, segment?: string): ng.IPromise<any> {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'getSummary';
-      let request;
-      if (segment) {
-        request = {
-          msisdn: msisdn,
-          customerId: customerId,
-          tmCodeDestino: tmCodeDestino,
-          tmCodeOrigen: tmCodeOrigen,
-          tipoLinea: tipoLinea,
-          segment: segment
-        }
-      } else {
-        request = {
-          msisdn: msisdn,
-          customerId: customerId,
-          tmCodeDestino: tmCodeDestino,
-          tmCodeOrigen: tmCodeOrigen,
-          tipoLinea: tipoLinea
-        }
-      }
-
+	  let request;
+	  if(segment) {
+		request = {
+			msisdn: msisdn,
+			customerId: customerId,
+			tmCodeDestino: tmCodeDestino,
+			tmCodeOrigen: tmCodeOrigen,
+			tipoLinea: tipoLinea,
+			segment: segment
+		  }
+	  } else {
+		 request = {
+			msisdn: msisdn,
+			customerId: customerId,
+			tmCodeDestino: tmCodeDestino,
+			tmCodeOrigen: tmCodeOrigen,
+			tipoLinea: tipoLinea
+		  }
+	  }
+     
       let _search: Object = {
         queryParams: request,
         urlParams: [BRAND, METHOD]
@@ -163,7 +184,7 @@ module OrangeFeSARQ.Services {
           }
           return _resp.productOrder;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error.data;
         });
     }
@@ -199,7 +220,7 @@ module OrangeFeSARQ.Services {
           }
           return _resp.productOrder;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error.data;
         });
     }
@@ -233,7 +254,7 @@ module OrangeFeSARQ.Services {
           }
           return _resp.productOrder;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error.data;
         });
     }
@@ -258,60 +279,7 @@ module OrangeFeSARQ.Services {
           }
           return _resp.productOrder;
         })
-        .catch(function (error) {
-          return error.data;
-        });
-    }
-
-
-    /**
-      * @ngdoc method
-      * @name #postLeaveAmena(param:string, clientId:string)
-      * @methodOf locator.UserSrv
-      * @returns {object} Devuelve una promesa con el response
-      */
-
-    /**
-     * @ngdoc method
-     * @name OrangeFeSARQ.Services:ProductOrderSrv#postLeaveAmena
-     * @methodOf OrangeFeSARQ.Services.ProductOrderSrv
-     * @param {string} msisdn - Número del telefono del cliente
-     * @param {string} document - documento de identidad del cliente
-     * @param {string} action - Baja de Amena o cambio a Orange
-     * @param {string} idProduct - id de producto 
-     * @param {string} componentN
-     * @description
-     * Si la notificación es pegasus, modifica 
-     */
-    postLeaveAmena(msisdn: string, document: string, action: string, idProduct: string, componentName: string): ng.IPromise<any> {
-      let vm = this;
-      let BRAND = vm.genericConstant.brand;
-      let METHOD = 'leaveAmena';
-
-      let aux = {
-        'leave': 'bajaAmena',
-        'change': 'pasarseOrange'
-      }
-
-      let _search: Object = {
-        urlParams: [BRAND, METHOD],
-        queryParams: {},
-        body: {
-          "idProduct": idProduct,
-          "action": aux[action],
-          "msisdn": msisdn,
-          "numDoc": document
-        }
-      }
-      return vm.httpPostFull(vm.urlProductOrder, _search, componentName)
-        .then((response) => {
-          let _resp = response.data;
-          if (_resp.error) {
-            throw _resp.error;
-          }
-          return _resp.productOrder;
-        })
-        .catch(function (error) {
+        .catch(function(error) {
           return error.data;
         });
     }
