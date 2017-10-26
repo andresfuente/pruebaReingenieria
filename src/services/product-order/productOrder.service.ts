@@ -283,5 +283,57 @@ module OrangeFeSARQ.Services {
           return error.data;
         });
     }
+
+    /**
+      * @ngdoc method
+      * @name #postLeaveAmena(param:string, clientId:string)
+      * @methodOf locator.UserSrv
+      * @returns {object} Devuelve una promesa con el response
+      */
+
+    /**
+     * @ngdoc method
+     * @name OrangeFeSARQ.Services:ProductOrderSrv#postLeaveAmena
+     * @methodOf OrangeFeSARQ.Services.ProductOrderSrv
+     * @param {string} msisdn - Número del telefono del cliente
+     * @param {string} document - documento de identidad del cliente
+     * @param {string} action - Baja de Amena o cambio a Orange
+     * @param {string} idProduct - id de producto 
+     * @param {string} componentN
+     * @description
+     * Si la notificación es pegasus, modifica 
+     */
+    postLeaveAmena(msisdn: string, document: string, action: string, idProduct: string, componentName: string): ng.IPromise<any> {
+      let vm = this;
+      let BRAND = vm.genericConstant.brand;
+      let METHOD = 'leaveAmena';
+
+      let aux = {
+        'leave': 'bajaAmena',
+        'change': 'pasarseOrange'
+      }
+
+      let _search: Object = {
+        urlParams: [BRAND, METHOD],
+        queryParams: {},
+        body: {
+          "idProduct": idProduct,
+          "action": aux[action],
+          "msisdn": msisdn,
+          "numDoc": document
+        }
+      }
+      return vm.httpPostFull(vm.urlProductOrder, _search, componentName)
+        .then((response) => {
+          let _resp = response.data;
+          if (_resp.error) {
+            throw _resp.error;
+          }
+          return _resp.productOrder;
+        })
+        .catch(function (error) {
+          return error.data;
+        });
+    }
   }
 }
