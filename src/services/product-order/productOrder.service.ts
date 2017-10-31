@@ -285,13 +285,6 @@ module OrangeFeSARQ.Services {
     }
 
     /**
-      * @ngdoc method
-      * @name #postLeaveAmena(param:string, clientId:string)
-      * @methodOf locator.UserSrv
-      * @returns {object} Devuelve una promesa con el response
-      */
-
-    /**
      * @ngdoc method
      * @name OrangeFeSARQ.Services:ProductOrderSrv#postLeaveAmena
      * @methodOf OrangeFeSARQ.Services.ProductOrderSrv
@@ -311,18 +304,18 @@ module OrangeFeSARQ.Services {
       let aux = {
         'leave': 'bajaAmena',
         'change': 'pasarseOrange'
-      }
+      };
 
       let _search: Object = {
         urlParams: [BRAND, METHOD],
-        queryParams: {},
+        queryParams: null,
         body: {
-          "idProduct": idProduct,
-          "action": aux[action],
-          "msisdn": msisdn,
-          "numDoc": document
+          'idProduct': idProduct,
+          'action': aux[action],
+          'msisdn': msisdn,
+          'numDoc': document
         }
-      }
+      };
       return vm.httpPostFull(vm.urlProductOrder, _search, componentName)
         .then((response) => {
           let _resp = response.data;
