@@ -872,7 +872,12 @@ module OrangeFeSARQ.Services {
             return $sce.trustAsHtml(html);
         }
 
-		
+        //El link que necesite llamar al chat ha de tener la inbenta-trigger.
+        inbenta(){
+            let chatAmena: HTMLElement = document.getElementsByClassName("inbenta-trigger")[0] as HTMLElement;
+            chatAmena.click();
+        }
+
        /**
         * @ngdoc service
         * @name services.Controllers:Services#owcsParamFormat
