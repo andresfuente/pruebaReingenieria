@@ -37,11 +37,17 @@ module OrangeFeSARQ.Services {
                 (successData) => {
                     // Lleno el customerViewStore
                     if (successData.data) {
+                        // Eliminamos los 34 en los telefonos
+                        if ((/^34/).test(successData.data.user) &&
+                         !(/[a-z A-Z]/).test(successData.data.user) && 
+                        successData.data.user.length === 11) {
+                                successData.data.user = successData.data.user.replace(/^34/, '');
+                        }
                         vm.customerViewStore.loginData = successData.data;
-						if(vm.customerViewStore.info){
+						if (vm.customerViewStore.info) {
 							vm.customerViewStore.loginData.allLines = vm.getAllLines();
-						}else{
-							//watch
+						} else {
+							// watch
 							vm.$scope.$watch(
 								() => vm.customerViewStore.info,
 								(newValue, oldValue) => {
