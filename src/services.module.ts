@@ -41,7 +41,7 @@ module OrangeFeSARQ.Constant {
         .service('vapListSrv', OrangeFeSARQ.Services.VapListSrv)
         .service('voiceMailPopUpSrv', OrangeFeSARQ.Services.VoiceMailPopUpSrv)
         .service('owcsServices', OrangeFeSARQ.Services.OwcsServices)
-        .service('backOffice', OrangeFeSARQ.Services.BackOfficeSrv)
+        .service('backOffice', OrangeFeSARQ.Services.BackOfficeSrv)  
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,

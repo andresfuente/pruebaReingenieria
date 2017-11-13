@@ -1,7 +1,7 @@
 {
   "name": "orange-services",
   "title": "Orange-services",
-  "version": "1.25.0-SNAPSHOT.4",
+  "version": "1.25.0-SNAPSHOT.5",
   "description": "Contiene los servicios comunes no core.",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
   },
-  "devDependencies": {
+  "devDependencies": { 
     "angular": "~1.5.5",
     "angular-mocks": "1.6.2",
     "angular-nvd3": "^1.0.8",

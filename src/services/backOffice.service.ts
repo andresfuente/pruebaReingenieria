@@ -5,11 +5,11 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
         private url: string;
         public genericConstant;
-
+ 
         constructor(public $injector) {
             super($injector);
             let vm = this;
-            vm.setInjections($injector);
+            vm.setInjections($injector); 
         }
 
         setInjections($injector) {
