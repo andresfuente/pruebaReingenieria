@@ -41,7 +41,6 @@ module OrangeFeSARQ.Services {
          */
         setInjections($injector) {
             let vm = this;
-
             vm.url = vm.genericConstant.customerManagement;
             vm.informationCenterSrv = $injector.get('InformationCenterSrv');
         }
