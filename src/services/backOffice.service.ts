@@ -54,7 +54,7 @@ module OrangeFeSARQ.Services {
             let _search: Object = {
                 body: request,
                 queryParams: {},
-                urlParams: []
+                urlParams: [] 
             };
 
             return vm.httpPostFull(apiUrl, _search, compName)

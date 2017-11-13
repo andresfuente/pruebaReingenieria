@@ -49,7 +49,7 @@ module OrangeFeSARQ.Constant {
             let genericConstant = $injector.get('genericConstant');
             if (navigator.userAgent.indexOf('PhantomJS') < 1 && !genericConstant.public) {
 
-                productCatalogSrv.getProductSpecification()
+                productCatalogSrv.getProductSpecification() 
                     .then((response) => {
                         productCatalogStore.specification = response;
                     })
