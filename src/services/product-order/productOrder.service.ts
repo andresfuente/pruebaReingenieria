@@ -332,7 +332,7 @@ module OrangeFeSARQ.Services {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'getChangeFee';
-      let _search: object = {
+      let _search: Object = {
         urlParams: [BRAND, METHOD],
         queryParams: {'msisdn': msisdn}
       };
