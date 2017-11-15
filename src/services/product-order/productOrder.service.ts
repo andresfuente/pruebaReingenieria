@@ -328,5 +328,21 @@ module OrangeFeSARQ.Services {
           return error.data;
         });
     }
+    getChangeFee(msisdn: string, componentName: string) {
+      let vm = this;
+      let BRAND = vm.genericConstant.brand;
+      let METHOD = 'getChangeFee';
+      let _search: Object = {
+        urlParams: [BRAND, METHOD],
+        queryParams: {'msisdn': msisdn}
+      };
+      return vm.httpCacheGett(vm.urlProductOrder, _search, componentName)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error;
+      });
+    }
   }
 }
