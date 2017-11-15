@@ -138,7 +138,7 @@ module OrangeFeSARQ.Services {
                     return response.data;
                 })
                 .catch(function (error) {
-                    return error.data;
+                    throw error.data;
                 });
         }
 
@@ -175,7 +175,7 @@ module OrangeFeSARQ.Services {
                     return response.data;
                 })
                 .catch(function (error) {
-                    return error.data;
+                    throw error.data;
                 });
         }
     }
