@@ -39,6 +39,7 @@ module OrangeFeSARQ.Services {
          */
         setInjections($injector) {
             let vm = this;
+            vm.$scope = $injector.get('$rootScope');
         }
 
         //DEVICE
@@ -53,6 +54,45 @@ module OrangeFeSARQ.Services {
         deviceContainerVolume(): number {
             let vm = this;
             return vm.deviceContainer.length;
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#selectDevice
+         * @param device terminal
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Determina si el terminal se debe añadir o eliminar del multiselección
+         * @return {boolean} Retorna verdadero si se ha insertado el terminal en multiselección,
+         * retorna falso en caso que el terminal se haya eliminado 
+         */
+        selectDevice(device): boolean {
+            let vm = this;
+
+            // Se crean las caracteristicas necesarias del terminal, para el session storage
+            device.terminalId = device.id;
+            device.brand = device.litTitle;
+            device.description = device.litSubTitle;            
+
+             // Se seleccionan las propiedades para session
+             let deviceForSession = _.pick(device, ['terminalId', 'siebelId',
+             'description', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage', 
+             'insuranceSelected', 'stock']);
+
+            // Si el terminal seleccinado ya esta en multiselección, se remueve.            
+            if(vm.isInDeviceContainer(deviceForSession)) {
+                vm.deleteTerminal(deviceForSession);
+                return false;
+            }else { // Si el terminal no existe en multiselección 
+                // Si ya existen 3 terminales seleccinados
+                if(vm.deviceContainerVolume() === 3) {
+                    vm.$scope.$broadcast('cantSelectTerminal');
+                } else if(vm.deviceContainerVolume() <= 2) {
+                    // Si existen menos de 2 terminales seleccinados
+                    vm.insertInDeviceContainer(deviceForSession);
+                    return true;
+                }
+            }
         }
 
         /**
