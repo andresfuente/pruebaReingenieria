@@ -63,7 +63,7 @@ module OrangeFeSARQ.Services {
 
             let _search: Object = {
                 queryParams: body,
-                urlParams: [brand, 'customer', '?id=' + id]
+                urlParams: [brand, 'customer?id=' + id]
             };
             return vm.httpPut(vm.url, _search, comp)
                 .then(function (response) {

@@ -54,6 +54,31 @@ module OrangeFeSARQ.Services {
         });
     }
 
+    getLineUsageAmena(typeParam: string, dataUser: string, componentName: string = "lines-list"): any {
+      let vm = this;
+      let METHOD = 'linesUsage';
+      let _search = {
+        queryParams: {
+          'onlyActive': vm.genericConstant.onlyActive
+        },
+        urlParams: ['amena', METHOD, 'get']
+      };
+      _search.queryParams[typeParam] = dataUser;
+
+
+      return vm.httpCacheGett(vm.linesUsageAPIUrl, _search, componentName)
+        .then(function(response) {
+          let _resp = response.data;
+          if (_resp.error) {
+            throw _resp.error;
+          }
+          return _resp.LinesUsage;
+        })
+        .catch(function(error) {
+          throw error;
+        });
+    }
+
     getGroupedLinesUsage(typeParam: string, dataUser: string, componentName: string = "lines-list"): any {
       let vm = this;
       let METHOD = 'groupedLinesUsage';

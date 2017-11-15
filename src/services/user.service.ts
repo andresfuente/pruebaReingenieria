@@ -52,8 +52,8 @@ module OrangeFeSARQ.Services {
 
             let _search: Object = {
                 queryParams: {
-                    'onlyActive':vm.genericConstant.onlyActive,
-					'timestamp': new Date().getTime()
+                    'onlyActive': vm.genericConstant.onlyActive,
+                    'timestamp': new Date().getTime()
                 },
                 urlParams: [vm.genericConstant.brand, 'customerView', param, clientId]
 
@@ -117,6 +117,50 @@ module OrangeFeSARQ.Services {
          * @param {param} individualPublicId
          * @param {clientId} Documento de identificacion de cliente
          * @param {componentName} Nombre del componente
+         * @returns {object} Busca el recurso en el customerView de empresas
+         */
+
+        getBusinessUser(param: string, clientId: string, componentName: string = 'locatorComp') {
+            let vm = this;
+
+            let promise = vm.$q.defer();
+            let _search: Object = {
+                queryParams: {
+                    'onlyActive': vm.genericConstant.onlyActive,
+                    'timestamp': new Date().getTime()
+                },
+                urlParams: [vm.genericConstant.brand, 'customerView', param, clientId]
+            };
+
+            vm.httpCacheGett(vm.genericConstant.customerViewB2B, _search, componentName)
+                .then(
+                (response) => {
+                    if (response.data && response.data.customer) {
+                        if (response.data.customer.individual && response.data.customer.individual.id) {
+                            localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
+                        } else {
+                            localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
+                        }
+                    }
+
+                    vm.getMdgUser(param, clientId);
+                    // - response.data.mdg = vm.mdgData;
+                    promise.resolve(response.data);
+                },
+                (error) => {
+                    promise.reject(error.data);
+                });
+            return promise.promise;
+        }
+
+
+        /**
+         * @ngdoc method
+         * @name #getAmenaUser(param:string, clientId:string, componentName:string)
+         * @methodOf locator.UserSrv
+         * @param {param} individualPublicId
+         * @param {clientId} Documento de identificacion de cliente
+         * @param {componentName} Nombre del componente
          * @returns {object} Devuelve una promesa con la respuesta del CustomerView para clientes Amena
          */
 
@@ -135,7 +179,7 @@ module OrangeFeSARQ.Services {
 
             let _search: Object = {
                 queryParams: {
-                    'onlyActive':vm.genericConstant.onlyActive
+                    'onlyActive': vm.genericConstant.onlyActive
                 },
                 urlParams: ['amena', 'customerView', param, clientId]
 

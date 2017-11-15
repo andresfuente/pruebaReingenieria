@@ -40,7 +40,7 @@ module OrangeFeSARQ.Services {
         (errorData) => {
           return errorData;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error;
         });
     }
@@ -84,12 +84,12 @@ module OrangeFeSARQ.Services {
         (errorData) => {
           return errorData;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error;
         });
     }
-
-    changeStatetProduct(msisdn: string, productId: string, action: string, imei: string = '', componentName: string = 'generic_bonus'): ng.IPromise<any> {
+	
+	changeStatetProduct(msisdn: string, productId: string, action: string, imei: string = '', componentName: string = 'generic_bonus'): ng.IPromise<any> {
       let vm = this;
       let queryParams = {};
       if (imei !== '') {
@@ -120,36 +120,57 @@ module OrangeFeSARQ.Services {
         (errorData) => {
           return errorData;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error;
         });
     }
 
+    moreMegasAmena(msisdnMegas: string, componentName: string) {
+      let vm = this;
+      let _search: Object = {
+        queryParams: {
+          msisdn: msisdnMegas
+        },
+        urlParams: [vm.genericConstant.brand, 'setBonus']
+      };
+
+      return vm.httpPost(vm.urlProductOrder, _search, componentName)
+        .then(
+        (successData) => {
+          return successData;
+        },
+        (errorData) => {
+          return errorData;
+        })
+        .catch(function(error) {
+          return error;
+        });
+    }
 
     getSummary(msisdn: string, customerId: string, tmCodeDestino: string, tmCodeOrigen: string, tipoLinea: string, componentName: string, segment?: string): ng.IPromise<any> {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'getSummary';
-      let request;
-      if (segment) {
-        request = {
-          msisdn: msisdn,
-          customerId: customerId,
-          tmCodeDestino: tmCodeDestino,
-          tmCodeOrigen: tmCodeOrigen,
-          tipoLinea: tipoLinea,
-          segment: segment
-        }
-      } else {
-        request = {
-          msisdn: msisdn,
-          customerId: customerId,
-          tmCodeDestino: tmCodeDestino,
-          tmCodeOrigen: tmCodeOrigen,
-          tipoLinea: tipoLinea
-        }
-      }
-
+	  let request;
+	  if(segment) {
+		request = {
+			msisdn: msisdn,
+			customerId: customerId,
+			tmCodeDestino: tmCodeDestino,
+			tmCodeOrigen: tmCodeOrigen,
+			tipoLinea: tipoLinea,
+			segment: segment
+		  }
+	  } else {
+		 request = {
+			msisdn: msisdn,
+			customerId: customerId,
+			tmCodeDestino: tmCodeDestino,
+			tmCodeOrigen: tmCodeOrigen,
+			tipoLinea: tipoLinea
+		  }
+	  }
+     
       let _search: Object = {
         queryParams: request,
         urlParams: [BRAND, METHOD]
@@ -163,7 +184,7 @@ module OrangeFeSARQ.Services {
           }
           return _resp.productOrder;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error.data;
         });
     }
@@ -199,7 +220,7 @@ module OrangeFeSARQ.Services {
           }
           return _resp.productOrder;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error.data;
         });
     }
@@ -233,7 +254,7 @@ module OrangeFeSARQ.Services {
           }
           return _resp.productOrder;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error.data;
         });
     }
@@ -258,18 +279,10 @@ module OrangeFeSARQ.Services {
           }
           return _resp.productOrder;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           return error.data;
         });
     }
-
-
-    /**
-      * @ngdoc method
-      * @name #postLeaveAmena(param:string, clientId:string)
-      * @methodOf locator.UserSrv
-      * @returns {object} Devuelve una promesa con el response
-      */
 
     /**
      * @ngdoc method
@@ -291,18 +304,18 @@ module OrangeFeSARQ.Services {
       let aux = {
         'leave': 'bajaAmena',
         'change': 'pasarseOrange'
-      }
+      };
 
       let _search: Object = {
         urlParams: [BRAND, METHOD],
-        queryParams: {},
+        queryParams: null,
         body: {
-          "idProduct": idProduct,
-          "action": aux[action],
-          "msisdn": msisdn,
-          "numDoc": document
+          'idProduct': idProduct,
+          'action': aux[action],
+          'msisdn': msisdn,
+          'numDoc': document
         }
-      }
+      };
       return vm.httpPostFull(vm.urlProductOrder, _search, componentName)
         .then((response) => {
           let _resp = response.data;
@@ -314,6 +327,22 @@ module OrangeFeSARQ.Services {
         .catch(function (error) {
           return error.data;
         });
+    }
+    getChangeFee(msisdn: string, componentName: string) {
+      let vm = this;
+      let BRAND = vm.genericConstant.brand;
+      let METHOD = 'getChangeFee';
+      let _search: Object = {
+        urlParams: [BRAND, METHOD],
+        queryParams: {'msisdn': msisdn}
+      };
+      return vm.httpCacheGett(vm.urlProductOrder, _search, componentName)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error;
+      });
     }
   }
 }

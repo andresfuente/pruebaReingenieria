@@ -366,13 +366,11 @@ module OrangeFeSARQ.Services {
          */
         checkFormatEmail(email: string): boolean {
             let vm = this;
-            // - let format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
-            let format = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+            let format = /^[A-Za-z0-9._]+@[A-Za-z0-9]+\.[A-Za-z]{2,}/;
             if (email.match(format)) {
                 return true;
             }
             return false;
-
         }
 
         /**
@@ -874,7 +872,12 @@ module OrangeFeSARQ.Services {
             return $sce.trustAsHtml(html);
         }
 
-		
+        //El link que necesite llamar al chat ha de tener la inbenta-trigger.
+        inbenta(){
+            let chatAmena: HTMLElement = document.getElementsByClassName("inbenta-trigger")[0] as HTMLElement;
+            chatAmena.click();
+        }
+
        /**
         * @ngdoc service
         * @name services.Controllers:Services#owcsParamFormat

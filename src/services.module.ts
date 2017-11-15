@@ -33,6 +33,7 @@ module OrangeFeSARQ.Constant {
         .service('productContractedTranslateSrv', OrangeFeSARQ.Service.ProductContractedTranslateSrv)
         .service('productInventorySrv', OrangeFeSARQ.Services.ProductInventoryService)
         .service('productOrderSrv', OrangeFeSARQ.Services.ProductOrderSrv)
+        .service('srvTerminalCompare',OrangeFeSARQ.Services.SrvTerminalCompare)
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
         .service('userManagementSrv', OrangeFeSARQ.Services.UserManagementSrv)
         .service('userSrv', OrangeFeSARQ.Services.UserSrv)
@@ -40,6 +41,7 @@ module OrangeFeSARQ.Constant {
         .service('vapListSrv', OrangeFeSARQ.Services.VapListSrv)
         .service('voiceMailPopUpSrv', OrangeFeSARQ.Services.VoiceMailPopUpSrv)
         .service('owcsServices', OrangeFeSARQ.Services.OwcsServices)
+        .service('backOffice', OrangeFeSARQ.Services.BackOfficeSrv)
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
