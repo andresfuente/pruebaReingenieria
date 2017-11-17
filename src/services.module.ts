@@ -6,6 +6,7 @@ module OrangeFeSARQ.Constant {
         .service('activationAndConfigurationSrv', OrangeFeSARQ.Services.ActivationAndConfigurationSrv)
         .service('adslStatusSrv', OrangeFeSARQ.Services.AdslStatusService)
         .service('adslStatusStore', OrangeFeSARQ.Services.AdslStatusStore)
+        .service('addToShoppingCartSrv', OrangeFeSARQ.Services.AddToShoppingCartSrv)
         .service('alertsStore', OrangeFeSARQ.Services.AlertsStore)
         .service('amortizationSrv', OrangeFeSARQ.Services.AmortizationSrv)
         .service('billReviewSrv', OrangeFeSARQ.Services.BillReviewSrv)
