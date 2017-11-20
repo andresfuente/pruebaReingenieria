@@ -68,16 +68,7 @@ module OrangeFeSARQ.Services {
          */
         selectDevice(device): boolean {
             let vm = this;
-
-            // Se crean las caracteristicas necesarias del terminal, para el session storage
-            device.terminalId = device.id;
-            device.brand = device.litTitle;
-            device.description = device.litSubTitle;            
-
-             // Se seleccionan las propiedades para session
-             let deviceForSession = _.pick(device, ['terminalId', 'siebelId',
-             'description', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage', 
-             'insuranceSelected', 'stock']);
+            let deviceForSession = vm.selectDeviceProperties(device);
 
             // Si el terminal seleccinado ya esta en multiselección, se remueve.            
             if(vm.isInDeviceContainer(deviceForSession)) {
@@ -97,6 +88,28 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#selectDeviceProperties
+         * @param objTerminal terminal
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Selecciona las propiedades del terminal para el session storage
+         */
+        selectDeviceProperties(device): any {
+            let vm = this;
+            // Se crean las caracteristicas necesarias del terminal, para el session storage
+            device.terminalId = device.id;
+            device.brand = device.litTitle;
+            device.description = device.litSubTitle;
+            // Se seleccionan las propiedades para session
+            let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
+            'description', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
+            'insuranceSelected', 'stock']);
+
+            return deviceForSession;
+        }
+
+        /**
+         * @ngdoc method
          * @name OFC.Services:SrvTerminalCompare#insertInDeviceContainer
          * @param objTerminal terminal
          * @methodOf OFC.Services:SrvTerminalCompare
@@ -104,7 +117,9 @@ module OrangeFeSARQ.Services {
          * Inserta un terminal en el contenedor de terminales
          */
         insertInDeviceContainer(device) {
+            let vm = this;
             this.deviceContainer.push(device);
+            vm.putDevicesInSessionStorage();
         }
 
         /**
@@ -120,6 +135,7 @@ module OrangeFeSARQ.Services {
             _.remove(vm.deviceContainer, function (currentDevice) {
                 return currentDevice.siebelId === device.siebelId;
               });
+            vm.putDevicesInSessionStorage();
         }
 
         /**
@@ -148,6 +164,39 @@ module OrangeFeSARQ.Services {
             return _.some(vm.deviceContainer, function (currentDevice) {
                 return currentDevice.siebelId === device.siebelId;
             });
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#emptyDeviceContainer
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Vacía contenedor de terminales
+         */
+        emptyDeviceContainer() {
+            let vm = this;
+            this.deviceContainer = [];
+            vm.putDevicesInSessionStorage();
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#changeVariant
+         * @param {Object} variant variante del terminal
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Establece la variante de terminal seleccionada
+         */
+        changeVariant(variant) {
+            let vm = this;
+            let deviceForSession = vm.selectDeviceProperties(variant);
+            vm.deviceContainer.forEach((currentDevice, index) => {
+                if(currentDevice.name === deviceForSession.name &&
+                    currentDevice.siebelId !== deviceForSession.siebelId) {
+                        vm.deviceContainer[index] = deviceForSession;
+                }
+            });
+            vm.putDevicesInSessionStorage();
         }
 
         /**
