@@ -70,13 +70,10 @@ module OrangeFeSARQ.Services {
 
             return vm.httpCacheGett(vm.interactionAPIurl, _search, componentName, refresh)
                 .then( (response) => {
-                    if (response.data) {
-                        return response.data;
-                    }
-                    throw response.data.error;
+                    return response.data;
                 })
                 .catch( (error) => {
-                    return error.error;
+                    return error.data;
                 });
         }
     }
