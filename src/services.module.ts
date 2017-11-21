@@ -28,6 +28,7 @@ module OrangeFeSARQ.Constant {
         .service('getMenuItemsModule', OrangeFeSARQ.Services.GetMenuItemsService)
         .service('getOperatorsSrv', OrangeFeSARQ.Services.GetOperatorsSrv)
         .service('hootSrv', OrangeFeSARQ.Services.HootSrv)
+        .service('interactionSrv', OrangeFeSARQ.Services.InteractionSrv)
         .service('linesUsageSrv', OrangeFeSARQ.Services.LinesUsageSrv)
         .service('nationalitiesSrv', OrangeFeSARQ.Services.NationalitiesService)
         .service('productCatalogSrv', OrangeFeSARQ.Services.ProductCatalogService)

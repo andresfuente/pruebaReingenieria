@@ -215,6 +215,7 @@ module OrangeFeSARQ.Services {
                     vm.deviceContainer[index].insuranceSelected = isChecked;
                 }
             });
+            vm.putDevicesInSessionStorage();
         }
 
         /**
