@@ -22,6 +22,7 @@ module OrangeFeSARQ.Constant {
         .service('detailRateSrv', OrangeFeSARQ.Services.DetailRateSrv)
         .service('getConfigurationSrv', OrangeFeSARQ.Services.GetConfigurationSrv)
         .service('getDataClientSrv', OrangeFeSARQ.Services.GetdataClientSrv)
+        .service('getDataPermanencySrv', OrangeFeSARQ.Services.GetDataPermanencySrv)        
         .service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter)
         .service('getImagesSrv', OrangeFeSARQ.Services.getImagesSrv)
         .service('getMenuItemsModule', OrangeFeSARQ.Services.GetMenuItemsService)
