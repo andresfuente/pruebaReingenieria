@@ -53,27 +53,29 @@ module OrangeFeSARQ.Services {
          * @param {string} numDocument documento sobre el que realizar la busqueda
          * @param {string} componentName nombre del componente que hace la llamada
          * @param {boolean} refresh bandera para obligar la solicitud http
+         * @returns {Object} devuelve tanto las incidencias como los errores
          * @description
          * Realiza una consulta para recuperar los datos de las incidencias, con campos
          * designados para la APP y Ecare
          */
         getInteractionEcare(category: string, numDocument: string,
-            componentName: string = 'interactionSrv',  refresh: boolean = false): any {
+            componentName: string = 'interactionSrv',  refresh: boolean = false): ng.IPromise<any> {
             let vm = this;
 
+            const METHOD = 'interactionEcare';
             let _search: Object = {
                 queryParams: null,
-                urlParams: [category, numDocument]
+                urlParams: [METHOD, category, numDocument]
             };
 
-            vm.httpCacheGett(vm.interactionAPIurl, _search, componentName, refresh)
+            return vm.httpCacheGett(vm.interactionAPIurl, _search, componentName, refresh)
                 .then( (response) => {
-                    if(response && response.data) {
+                    if (response.data) {
                         return response.data;
                     }
-                    throw response.error;
+                    throw response.data.error;
                 })
-                .catch ( (error) => {
+                .catch( (error) => {
                     return error.error;
                 });
         }
