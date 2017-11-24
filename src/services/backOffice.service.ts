@@ -50,9 +50,31 @@ module OrangeFeSARQ.Services {
                 ]
             }
 
-
             let _search: Object = {
                 body: request,
+                queryParams: {},
+                urlParams: []
+            };
+
+            return vm.httpPostFull(apiUrl, _search, compName)
+                .then((successData) => {
+                    if (successData.data && successData.data) {
+                        return successData.data;
+                    }
+                    throw successData.data.error;
+                })
+                .catch((errorData) => {
+                    throw errorData.data;
+                });
+        }
+
+        contractOrangeTV(bodyRequest: any, compName: string = 'backOfficeSrv') {
+            let vm = this;
+            let apiUrl: string = vm.genericConstant.backOffice;
+            let brand: string = vm.genericConstant.brand;
+
+            let _search: Object = {
+                body: bodyRequest,
                 queryParams: {},
                 urlParams: []
             };
