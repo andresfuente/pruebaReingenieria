@@ -26,6 +26,11 @@ module OrangeFeSARQ.Services {
             return (vm._alertsData && vm._alertsData.massive) ? vm._alertsData.massive : [] ;
         }
 
+        getChecks(): Array<boolean> {
+            let vm = this;
+            return (vm._alertsData && vm._alertsData.checks) ? vm._alertsData.checks : [] ;
+        }
+
         setUserId(userId: string) {
             let vm = this;
             vm._alertsData.userId = userId;
@@ -38,12 +43,18 @@ module OrangeFeSARQ.Services {
 
         setNoMassive(noMassive: any) {
             let vm = this;
+            vm.setChecks(new Array<boolean>(noMassive.length));
             vm._alertsData.noMassive = noMassive;
         }
 
         setMassive(massive: any) {
             let vm = this;
             vm._alertsData.massive = massive;
+        }
+
+        setChecks(checks: Array<boolean>) {
+            let vm = this;
+            vm._alertsData.checks = checks;
         }
     }
 }
