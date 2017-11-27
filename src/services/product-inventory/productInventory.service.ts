@@ -20,7 +20,7 @@ module OrangeFeSARQ.Services {
       vm.utils = $injector.get('utils');
     }
 
-    getServicesContracted(msisdn: string, componentName: string = 'productInventorySrv'): any {
+    getServicesContracted(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'services';
@@ -36,7 +36,7 @@ module OrangeFeSARQ.Services {
         queryParams: request,
         urlParams: [BRAND, METHOD, msisdn]
       };
-      return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName)
+      return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
         .then(function(response) {
           if (response.data && response.data.product) {
             return response.data.product;
