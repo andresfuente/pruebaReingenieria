@@ -83,8 +83,8 @@ module OrangeFeSARQ.Services {
             }
 
             if (vm.msisdn) {
-                vm.searchCvProduct();
-                vm.setCode();
+                let cvProduct = vm.searchCvProduct(vm.msisdn);
+                vm.setCode(cvProduct, vm.msisdn);
             } else {
                 vm.getMainMSISDN();
             }
@@ -110,24 +110,18 @@ module OrangeFeSARQ.Services {
                         if (response && response.line) {
 
                             if (response.line.msisdn) {
-                                vm.msisdn = response.line.msisdn;
-                                vm.searchCvProduct();
-                                vm.setCode();
+                                let cvProduct = vm.searchCvProduct(response.line.msisdn);
+                                vm.setCode(cvProduct, response.line.msisdn);
                             } else {
                                 if (response.line.lineaPrincipalMovil) {
-                                    vm.msisdn = response.line.lineaPrincipalMovil;
-                                    vm.searchCvProduct();
-                                    vm.setCode();
+                                    let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
+                                    vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
                                 }
                                 if (response.line.lineaPrincipalFijo) {
-                                    vm.msisdn = response.line.lineaPrincipalFijo;
-                                    vm.searchCvProduct();
-                                    vm.setCode();
+                                    let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
+                                    vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
                                 }
                             }
-
-                            vm.searchCvProduct();
-                            vm.setCode();
                         }
                     });
 
@@ -150,7 +144,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Busca en customerView el product con el que se accede
          */
-        searchCvProduct() {
+        searchCvProduct(msisdn) {
             let vm = this;
 
             let cv = vm.customerViewStore.info;
@@ -158,12 +152,10 @@ module OrangeFeSARQ.Services {
                 for (let i = 0, find; i < cv.product.length && !find; i++) {
                     let product = cv.product[i];
                     if (product.ospProductType.match(/^(POSPAGO|PREPAGO|Acceso fijo & Internet)$/gi)) {
-                        let type = vm.utils.isFixedLine(vm.msisdn) ? 'Número fijo Asociado' : 'MSISDN';
+                        let type = vm.utils.isFixedLine(msisdn) ? 'Número fijo Asociado' : 'MSISDN';
                         let charasteristic = vm.utils.findByName(type, product.productCharacteristic);
-                        if (charasteristic && vm.msisdn === charasteristic) {
-                            vm.cvProduct = product;
-                            vm.type = product.ospProductType;
-                            find = true;
+                        if (charasteristic && msisdn === charasteristic) {
+                            return product;
                         }
                     }
                 }
@@ -178,25 +170,28 @@ module OrangeFeSARQ.Services {
          * Si es móvil consulta a hoot por el tmcode, en caso contrario utiliza
          * los datos de customerView para estableces el morganeCode
          */
-        setCode() {
+        setCode(cvProduct, msisdn) {
             let vm = this;
 
-            if (!vm.utils.isFixedLine(vm.msisdn)) {
-                vm.hootSrv.getActualRate(vm.msisdn, vm.type, vm.compName)
-                    .then((response) => {
-                        if (response) {
-                            if (response.error !== null) {
-                                vm.code = response.tmCode;
+            if (cvProduct) {
+                if (!vm.utils.isFixedLine(msisdn)) {
+                    vm.hootSrv.getActualRate(msisdn, cvProduct.ospProductType, vm.compName)
+                        .then((response) => {
+                            let code = '';
+                            if (response) {
+                                if (response.error !== null) {
+                                    code = response.tmCode;
+                                }
                             }
-                        }
-                        vm.setParamsInventory();
-                    })
-                    .catch((error) => {
-                        vm.setParamsInventory();
-                    });
-            } else {
-                vm.code = vm.utils.findByName('Código Morgane', vm.cvProduct.productCharacteristic);
-                vm.setParamsInventory();
+                            vm.setParamsInventory(cvProduct, msisdn, code);
+                        })
+                        .catch((error) => {
+                            vm.setParamsInventory(cvProduct, msisdn, '');
+                        });
+                } else {
+                    let code = vm.utils.findByName('Código Morgane', cvProduct.productCharacteristic);
+                    vm.setParamsInventory(cvProduct, msisdn, code);
+                }
             }
         }
 
@@ -207,14 +202,14 @@ module OrangeFeSARQ.Services {
          * @description
          * setea los parametros que se recogen de productInventory
          */
-        setParamsInventory() {
+        setParamsInventory(cvProduct, msisdn, code) {
             let vm = this;
-            vm.productInventorySrv.getServicesContracted(vm.msisdn, vm.compName, true)
+            vm.productInventorySrv.getServicesContracted(msisdn, vm.compName, true)
                 .then((response) => {
-                    vm.isServiceActivatedResponse(true, response);
+                    vm.isServiceActivatedResponse(true, response, cvProduct, msisdn, code);
                 })
                 .catch((error) => {
-                    vm.isServiceActivatedResponse(false, error);
+                    vm.isServiceActivatedResponse(false, error, cvProduct, msisdn, code);
                 });
         }
 
@@ -225,7 +220,7 @@ module OrangeFeSARQ.Services {
          * @description
          * setea los parametros que se recogen de productInventory
          */
-        isServiceActivatedResponse(type: boolean, response: any) {
+        isServiceActivatedResponse(type: boolean, response: any, cvProduct: any, msisdn: string, code: string) {
             let vm = this;
             let cookieObj;
             cookieObj = {};
@@ -245,7 +240,7 @@ module OrangeFeSARQ.Services {
                     let service = servicesList[i];
                     let serviceName: string;
                     // La respuesta varia para fijo y movil 
-                    if (vm.utils.isFixedLine(vm.msisdn)) {
+                    if (vm.utils.isFixedLine(msisdn)) {
                         serviceName = service.description;
                     } else {
                         for (let k = 0; k < service.productSpecification.length && !serviceName; k++) {
@@ -264,7 +259,7 @@ module OrangeFeSARQ.Services {
                     if (!cookieObj.oc) { cookieObj.oc = regex.test(serviceName) ? 1 : 0; }
                 }
             }
-            vm.setParams(cookieObj);
+            vm.setParams(cookieObj, cvProduct, msisdn, code);
         }
 
         /**
@@ -275,17 +270,17 @@ module OrangeFeSARQ.Services {
          * @description
          * Setea el resto de parametros
          */
-        setParams(cookieObj) {
+        setParams(cookieObj: any, cvProduct: any, msisdn: string, code: string) {
             let vm = this;
             cookieObj.c = vm.setParamC();
-            cookieObj.p = vm.setParamP();
-            cookieObj.t = vm.setParamT();
-            if (_.isArray(vm.cvProduct.agreement) && !_.isEmpty(vm.cvProduct.agreement)) {
-                cookieObj.cp = vm.setParamCP(vm.cvProduct.agreement);
+            cookieObj.p = vm.setParamP(msisdn, code);
+            cookieObj.t = vm.setParamT(msisdn, code);
+            if (_.isArray(cvProduct.agreement) && !_.isEmpty(cvProduct.agreement)) {
+                cookieObj.cp = vm.setParamCP(cvProduct.agreement);
             }
             cookieObj.a = vm.setParamA();
             cookieObj.pt = vm.setParamPT();
-            vm.cookieToString(cookieObj);
+            vm.cookieToString(cookieObj, msisdn);
         }
 
         /**
@@ -315,12 +310,12 @@ module OrangeFeSARQ.Services {
          * @description
          * Setea edl parametro del tipo de PAGO
          */
-        setParamP(): number {
+        setParamP(msisdn: string, code: string): number {
             let vm = this;
 
-            if (vm.isOnlyData()) {
+            if (vm.isOnlyData(msisdn, code)) {
                 return 4;
-            } else if (vm.utils.isFixedLine(vm.msisdn)) {
+            } else if (vm.utils.isFixedLine(msisdn)) {
                 return 3;
             } else if (vm.type === 'POSPAGO') {
                 return 1;
@@ -336,15 +331,15 @@ module OrangeFeSARQ.Services {
          * @description
          * Setea edl parametro del nombre de tarifa
          */
-        setParamT(): string {
+        setParamT(msisdn, code): string {
             let vm = this;
 
             let specSearch = vm.utils.isFixedLine(vm.msisdn) ? 'ospMorganeCode' : 'ospExternalCode';
-            let spec = vm.productCatalogStore.getCatalogSpecificationByTmcode(vm.code, specSearch);
+            let spec = vm.productCatalogStore.getCatalogSpecificationByTmcode(code, specSearch);
             if (spec) {
-                return `${vm.code}, ${spec.ospTitulo}`;
+                return `${code}, ${spec.ospTitulo}`;
             }
-            return vm.code ? vm.code : 'noName';
+            return code ? code : 'noName';
         }
 
         /**
@@ -402,7 +397,7 @@ module OrangeFeSARQ.Services {
 
         }
 
-        cookieToString(cookie) {
+        cookieToString(cookie, msisdn) {
             let vm = this;
             let mainCookie: string = '';
             for (let key in cookie) {
@@ -412,13 +407,13 @@ module OrangeFeSARQ.Services {
                 }
             }
             vm.mainCookie = decodeURIComponent(mainCookie);
-            vm.saveCookie();
+            vm.saveCookie(msisdn);
         }
 
-        saveCookie() {
+        saveCookie(msisdn) {
             let vm = this;
             let cookieKey: string;
-            if (vm.utils.isFixedLine(vm.msisdn)) {
+            if (vm.utils.isFixedLine(msisdn)) {
                 cookieKey = vm.COOKIEFIXED;
             } else {
                 cookieKey = vm.COOKIEMOBILE;
@@ -435,16 +430,16 @@ module OrangeFeSARQ.Services {
          * @description
          * Establece si la tarifa contratada es solo de datos.
          */
-        isOnlyData(): boolean {
+        isOnlyData(msisdn: string, code: string): boolean {
             let vm = this;
             let SOLODATOS = 'ONLYDATA';
             let ACTIVO = 'SI';
 
-            if (vm.cvProduct && vm.productCatalogStore.specification) {
-                let fixed = vm.utils.isFixedLine(vm.msisdn);
+            if (vm.productCatalogStore.specification) {
+                let fixed = vm.utils.isFixedLine(msisdn);
                 let specSearch = fixed ? 'ospMorganeCode' : 'ospExternalCode';
 
-                let spec = vm.productCatalogStore.getCatalogSpecificationByTmcode(vm.code, specSearch);
+                let spec = vm.productCatalogStore.getCatalogSpecificationByTmcode(code, specSearch);
                 if (spec) {
                     for (let i = 0; i < spec.productSpecCharacteristic.length; i++) {
                         if (spec.productSpecCharacteristic[i].name === SOLODATOS) {
