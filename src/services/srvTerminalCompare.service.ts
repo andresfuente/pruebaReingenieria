@@ -100,12 +100,49 @@ module OrangeFeSARQ.Services {
             device.terminalId = device.id;
             device.brand = device.litTitle;
             device.description = device.litSubTitle;
+            device.isModified = false;
             // Se seleccionan las propiedades para session
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
-            'description', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-            'insuranceSelected', 'stock']);
+            'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
+            'insuranceSelected', 'stock', 'isModified', 'itemPrice']);
 
             return deviceForSession;
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#isReplaceAction
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Comprueba si algun terminal necesita ser modificado
+         * @return {boolean} Retorna verdadero si existe algún terminal a modificar,
+         * en caso contrario retorna falso. 
+         */
+        isReplaceAction() {
+            let vm = this;
+            return _.some(vm.deviceContainer, function (currentDevice) {
+                return currentDevice.isModified === true;
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#isReplaceAction
+         * @param device terminal
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Comprueba si algun terminal necesita ser modificado
+         */
+        replaceDevice(device) {
+            let vm = this;
+            let deviceForSession = vm.selectDeviceProperties(device);
+            // Indice del array del terminal a modificar
+            let index: number = _.findIndex(vm.deviceContainer, function (currentDevice) {
+                return currentDevice.isModified === true;
+            });
+            // Se reemplaza el terminal en el multiselección
+            vm.deviceContainer[index] = deviceForSession;
+            vm.putDevicesInSessionStorage();
         }
 
         /**
@@ -353,13 +390,14 @@ module OrangeFeSARQ.Services {
             // Se obtiene el commercialData del session storage
             commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             // Se insertan en el comparador los terminales acto comercial
-            commercialData[0].terminals.forEach(device => {
-                vm.insertInDeviceContainer(device);
-            });
-            // Se insertan en el comparador las tarifas acto comercial
-            commercialData[0].rates.forEach(rate => {
-                vm.insertInRateContainer(rate);
-            });
+            if(commercialData !== null) {
+                if(commercialData[0].terminals !== null) {
+                    vm.deviceContainer = commercialData[0].terminals;
+                }
+                if(commercialData[0].rates) {
+                    vm.rateContainer = commercialData[0].rates;
+                }
+            }
         }
 
     }
