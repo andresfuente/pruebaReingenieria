@@ -102,20 +102,14 @@ module OrangeFeSARQ.Services {
                 vm.hootSrv.getMainLine(vm.genericConstant.brand, document, vm.genericConstant.site, vm.compName)
                     .then((response) => {
                         if (response && response.line) {
-
-                            if (response.line.msisdn) {
-                                let cvProduct = vm.searchCvProduct(response.line.msisdn);
-                                vm.setCode(cvProduct, response.line.msisdn);
-                            } else {
-                                if (response.line.lineaPrincipalMovil) {
-                                    let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
-                                    vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
-                                }
-                                if (response.line.lineaPrincipalFijo) {
-                                    let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
-                                    vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
-                                }
-                            }
+							if (response.line.lineaPrincipalMovil) {
+								let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
+								vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
+							}
+							if (response.line.lineaPrincipalFijo) {
+								let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
+								vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
+							}
                         }
                     });
 
