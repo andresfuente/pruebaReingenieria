@@ -81,13 +81,7 @@ module OrangeFeSARQ.Services {
                     vm.msisdn = vm.customerViewStore.loginData.user;
                 }
             }
-
-            if (vm.msisdn) {
-                let cvProduct = vm.searchCvProduct(vm.msisdn);
-                vm.setCode(cvProduct, vm.msisdn);
-            } else {
-                vm.getMainMSISDN();
-            }
+            vm.getMainMSISDN();
         }
 
         /**
