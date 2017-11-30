@@ -68,6 +68,7 @@ module OrangeFeSARQ.Services {
                 commercialData[commercialActIndex].ospIsModified === true) {
                     // Se eliminan los TSS del acto comercial existentes en el shopping cart
                     shoppingCart = vm.deleteTSSInCartItem(shoppingCart, commercialActId);
+                    commercialData[commercialActIndex].ospIsModified = false;
             }
             // Se obtiene el id del ultimo elmento del cart item del shopping cart
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
@@ -127,7 +128,7 @@ module OrangeFeSARQ.Services {
             };
 
             if(commercialData !== null) {
-                commercialData[commercialActIndex].isCompleteAC = true;
+                commercialData[commercialActIndex].isCompletedAC = true;
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
 
