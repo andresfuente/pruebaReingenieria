@@ -434,10 +434,10 @@ module OrangeFeSARQ.Services {
             if(commercialData !== null) {
                 for(let i in commercialData) {
                     if(commercialData.length > 0 && commercialData[i].ospIsSelected) {
-                        if(commercialData[0].terminals !== null) {
+                        if(commercialData[i].terminals !== null) {
                             vm.deviceContainer = commercialData[i].terminals;
                         }
-                        if(commercialData[0].rates) {
+                        if(commercialData[i].rates) {
                             vm.rateContainer = commercialData[i].rates;
                         }
                     }
