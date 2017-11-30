@@ -8,9 +8,6 @@ module OrangeFeSARQ.Services {
         private $cookies;
 
         public msisdn: string;
-        public code: string;
-        public type: string;
-        public cvProduct: any;
 
         private productInventorySrv: OrangeFeSARQ.Services.ProductInventoryService;
         private productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore;
@@ -58,7 +55,7 @@ module OrangeFeSARQ.Services {
             vm.$scope.$watch(
                 () => vm.msisdnStore.msisdn,
                 (newValue, oldValue) => {
-                    if (newValue !== oldValue) {
+                    if (newValue !== oldValue && newValue !== null) {
                         vm.initComp();
                     }
                 }
@@ -81,7 +78,12 @@ module OrangeFeSARQ.Services {
                     vm.msisdn = vm.customerViewStore.loginData.user;
                 }
             }
-            vm.getMainMSISDN();
+            if (vm.msisdn) {
+                let cvProduct = vm.searchCvProduct(vm.msisdn);
+                vm.setCode(cvProduct, vm.msisdn);
+            } else {
+                vm.getMainMSISDN();
+            }
         }
 
         /**
@@ -102,17 +104,16 @@ module OrangeFeSARQ.Services {
                 vm.hootSrv.getMainLine(vm.genericConstant.brand, document, vm.genericConstant.site, vm.compName)
                     .then((response) => {
                         if (response && response.line) {
-							if (response.line.lineaPrincipalMovil) {
-								let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
-								vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
-							}
-							if (response.line.lineaPrincipalFijo) {
-								let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
-								vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
-							}
+                            if (response.line.lineaPrincipalMovil) {
+                                let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
+                                vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
+                            }
+                            if (response.line.lineaPrincipalFijo) {
+                                let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
+                                vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
+                            }
                         }
                     });
-
             } else {
                 vm.$scope.$watch(
                     () => vm.customerViewStore,
@@ -132,7 +133,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Busca en customerView el product con el que se accede
          */
-        searchCvProduct(msisdn) {
+        searchCvProduct(msisdn: string) {
             let vm = this;
 
             let cv = vm.customerViewStore.info;
@@ -158,7 +159,7 @@ module OrangeFeSARQ.Services {
          * Si es móvil consulta a hoot por el tmcode, en caso contrario utiliza
          * los datos de customerView para estableces el morganeCode
          */
-        setCode(cvProduct, msisdn) {
+        setCode(cvProduct: any, msisdn: string) {
             let vm = this;
 
             if (cvProduct) {
@@ -192,7 +193,7 @@ module OrangeFeSARQ.Services {
          */
         setParamsInventory(cvProduct, msisdn, code) {
             let vm = this;
-            vm.productInventorySrv.getServicesContracted(msisdn, vm.compName, true)
+            vm.productInventorySrv.getServicesContracted(msisdn, vm.compName)
                 .then((response) => {
                     vm.isServiceActivatedResponse(true, response, cvProduct, msisdn, code);
                 })
@@ -220,6 +221,7 @@ module OrangeFeSARQ.Services {
             cookieObj.p = 0;
             cookieObj.t = 0;
             cookieObj.a = 0;
+
             if (type && response && response.length) {
                 let servicesList = response;
                 let ORANGETV = 'orange tv'; // Servicio de orange tv
@@ -261,14 +263,14 @@ module OrangeFeSARQ.Services {
         setParams(cookieObj: any, cvProduct: any, msisdn: string, code: string) {
             let vm = this;
             cookieObj.c = vm.setParamC();
-            cookieObj.p = vm.setParamP(msisdn, code);
+            cookieObj.p = vm.setParamP(cvProduct, msisdn, code);
             cookieObj.t = vm.setParamT(msisdn, code);
             if (_.isArray(cvProduct.agreement) && !_.isEmpty(cvProduct.agreement)) {
                 cookieObj.cp = vm.setParamCP(cvProduct.agreement);
             }
             cookieObj.a = vm.setParamA();
             cookieObj.pt = vm.setParamPT();
-            vm.cookieToString(cookieObj, msisdn);
+            vm.cookieToString(cookieObj, msisdn, code);
         }
 
         /**
@@ -298,14 +300,14 @@ module OrangeFeSARQ.Services {
          * @description
          * Setea edl parametro del tipo de PAGO
          */
-        setParamP(msisdn: string, code: string): number {
+        setParamP(cvProduct: any, msisdn: string, code: string): number {
             let vm = this;
 
             if (vm.isOnlyData(msisdn, code)) {
                 return 4;
             } else if (vm.utils.isFixedLine(msisdn)) {
                 return 3;
-            } else if (vm.type === 'POSPAGO') {
+            } else if (cvProduct.ospProductType === 'POSPAGO') {
                 return 1;
             } else {
                 return 2;
@@ -319,10 +321,10 @@ module OrangeFeSARQ.Services {
          * @description
          * Setea edl parametro del nombre de tarifa
          */
-        setParamT(msisdn, code): string {
+        setParamT(msisdn: string, code: string): string {
             let vm = this;
 
-            let specSearch = vm.utils.isFixedLine(vm.msisdn) ? 'ospMorganeCode' : 'ospExternalCode';
+            let specSearch = vm.utils.isFixedLine(msisdn) ? 'ospMorganeCode' : 'ospExternalCode';
             let spec = vm.productCatalogStore.getCatalogSpecificationByTmcode(code, specSearch);
             if (spec) {
                 return `${code}, ${spec.ospTitulo}`;
@@ -385,20 +387,20 @@ module OrangeFeSARQ.Services {
 
         }
 
-        cookieToString(cookie, msisdn) {
+        cookieToString(cookie, msisdn: string, code: string) {
             let vm = this;
             let mainCookie: string = '';
             for (let key in cookie) {
                 if (cookie.hasOwnProperty(key)) {
                     mainCookie = mainCookie ? mainCookie.concat('|') : mainCookie;
-                    mainCookie = mainCookie.concat(`${key}=${cookie[key]}`)
+                    mainCookie = mainCookie.concat(`${key}=${cookie[key]}`);
                 }
             }
             vm.mainCookie = decodeURIComponent(mainCookie);
             vm.saveCookie(msisdn);
         }
 
-        saveCookie(msisdn) {
+        saveCookie(msisdn: string) {
             let vm = this;
             let cookieKey: string;
             if (vm.utils.isFixedLine(msisdn)) {
@@ -406,8 +408,10 @@ module OrangeFeSARQ.Services {
             } else {
                 cookieKey = vm.COOKIEMOBILE;
             }
+            let date = new Date();
+            date.setFullYear(date.getFullYear() + 20);
             // vm.$cookies.put(cookieKey, vm.mainCookie);
-            document.cookie = `${cookieKey}=${vm.mainCookie};domain=.orange.es`;
+            window.document.cookie = `${cookieKey}=${vm.mainCookie}; domain=.orange.es; expires=${date.toUTCString()}`;
 
         }
 

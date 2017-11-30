@@ -17,7 +17,7 @@ module OrangeFeSARQ.Services {
             vm.genericConstant = $injector.get('genericConstant');
         }
 
-        getActualRate(msisdn: string, contractType: string, compName: string) {
+        getActualRate(msisdn: string, contractType: string, compName: string, refresh: boolean = false) {
             let vm = this;
             let apiUrl: string = vm.genericConstant.hoot;
             let brand: string = vm.genericConstant.brand;
@@ -34,11 +34,11 @@ module OrangeFeSARQ.Services {
                 urlParams: [brand, method, msisdn]
             };
 
-            return vm.httpCacheGett(apiUrl, _search, compName, true)
+            return vm.httpCacheGett(apiUrl, _search, compName, refresh)
                 .then(
                 (successData) => {
                     if (successData.data && successData.data.ratePlan) {
-                        return successData.data.ratePlan
+                        return successData.data.ratePlan;
                     }
                     throw successData.data.error;
                 },

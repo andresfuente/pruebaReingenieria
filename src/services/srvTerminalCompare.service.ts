@@ -384,8 +384,14 @@ module OrangeFeSARQ.Services {
         putDevicesInSessionStorage() {
             let vm = this;
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            commercialData[0].terminals = vm.deviceContainer;
-            sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+            if(commercialData !== null) {
+                for(let i in commercialData) {
+                    if(commercialData.length > 0 && commercialData[i].ospIsSelected) {
+                        commercialData[i].terminals = vm.deviceContainer;
+                        sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+                    }
+                }
+            }
         }
 
         /**
@@ -399,8 +405,14 @@ module OrangeFeSARQ.Services {
         putRatesInSessionStorage() {
             let vm = this;
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            commercialData[0].rates = vm.rateContainer;
-            sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+            if(commercialData !== null) {
+                for(let i in commercialData) {
+                    if(commercialData.length > 0 && commercialData[i].ospIsSelected) {
+                        commercialData[i].rates = vm.rateContainer;
+                        sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+                    }
+                }
+            }
         }
 
         /**
@@ -420,11 +432,15 @@ module OrangeFeSARQ.Services {
             commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             // Se insertan en el comparador los terminales acto comercial
             if(commercialData !== null) {
-                if(commercialData[0].terminals !== null) {
-                    vm.deviceContainer = commercialData[0].terminals;
-                }
-                if(commercialData[0].rates) {
-                    vm.rateContainer = commercialData[0].rates;
+                for(let i in commercialData) {
+                    if(commercialData.length > 0 && commercialData[i].ospIsSelected) {
+                        if(commercialData[0].terminals !== null) {
+                            vm.deviceContainer = commercialData[i].terminals;
+                        }
+                        if(commercialData[0].rates) {
+                            vm.rateContainer = commercialData[i].rates;
+                        }
+                    }
                 }
                 vm.resetDevicesId();
             }
