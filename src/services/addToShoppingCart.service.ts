@@ -63,6 +63,12 @@ module OrangeFeSARQ.Services {
             if(commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
             }
+            // Se comprueba si existe algun dispositivo TSS en el shopping cart que se este modificando
+            if(shoppingCart !== null && commercialData !== null &&
+                commercialData[commercialActIndex].ospIsModified === true) {
+                    // Se eliminan los TSS del acto comercial existentes en el shopping cart
+                    shoppingCart = vm.deleteTSSInCartItem(shoppingCart, commercialActId);
+            }
             // Se obtiene el id del ultimo elmento del cart item del shopping cart
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
@@ -155,15 +161,6 @@ module OrangeFeSARQ.Services {
                 };
             }
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
-
-            // Se inserta la tarifa peach en el multiselección
-            peachRate = {
-                'siebelId': '1-CWOOG9',
-                'name': 'Peach',
-                'taxeFreePrice': 0
-            };
-            vm.srvTerminalCompare.insertInRateContainer(peachRate);
-            vm.srvTerminalCompare.putRatesInSessionStorage();
         }
 
         /**
@@ -179,22 +176,7 @@ module OrangeFeSARQ.Services {
             commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
             return _.findIndex(commercialData, function(currentCommercialAct){
-                return currentCommercialAct.isSelected === true;
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#getModifiedCarItem
-         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
-         * @param cartItem Array de cart item
-         * @description
-         * @return {boolean} Retorna el indice del cartItem que se esta modificando,
-         * en caso contrario retorna -1
-         */
-        getModifiedCarItem(cartItem): number {
-            return _.findIndex(cartItem, function(currentCartItem: any){
-                return currentCartItem.action === 'Modify';
+                return currentCommercialAct.ospIsSelected  === true;
             });
         }
 
@@ -209,17 +191,40 @@ module OrangeFeSARQ.Services {
          */
         getLastCartItemId(shoppingCart, commercialActId): number {
             let vm;
-            let lastCartItemId;
-            let lastCartItemIndex;
+            let lastCartItemId = commercialActId;
             // Se establece el ID del ultimo elemento del shopping cart
             if(shoppingCart !== null && shoppingCart.cartItem.length > 0) {
-                lastCartItemIndex = shoppingCart.cartItem.length - 1;
-                lastCartItemId = shoppingCart.cartItem[lastCartItemIndex].id;
-            } else {
-                // Si el shopping cart no existe se devuelve el id del acto comercial
-                lastCartItemId = commercialActId;
+                shoppingCart.cartItem.forEach( cartItem  => {
+                    if(Math.floor(cartItem.id) === commercialActId) {
+                        lastCartItemId = cartItem.id;
+                    }
+                });
             }
             return lastCartItemId;
+        }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#deleteTSSInCartItem
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @param shoppingCart session del carrito
+         * @param commercialActId id del acto comercial que se esta modificando
+         * @description
+         * Elimina del shopping cart los terminales libres del acto comercial 
+         * que se esta modificando
+         * @return {any} shoppingCart con los terminales eliminados
+         */
+        deleteTSSInCartItem(shoppingCart, commercialActId): any {
+            let vm = this;
+            let cartItemArray = [];
+            if(shoppingCart !== null && shoppingCart.cartItem.length > 0) {
+                cartItemArray = shoppingCart.cartItem;
+                _.remove(cartItemArray, function (cartItem) {
+                    return (Math.floor(cartItem.id) === commercialActId);
+                });
+                shoppingCart.cartItem = cartItemArray;
+            }
+            return shoppingCart;
         }
     }
 }

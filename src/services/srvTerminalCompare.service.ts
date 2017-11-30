@@ -97,10 +97,11 @@ module OrangeFeSARQ.Services {
         selectDeviceProperties(device): any {
             let vm = this;
             // Se crean las caracteristicas necesarias del terminal, para el session storage
-            device.terminalId = device.id;
+            device.terminalId = (vm.deviceContainer.length + 1);
             device.brand = device.litTitle;
             device.description = device.litSubTitle;
             device.isModified = false;
+            device.action = 'New';
             // Se seleccionan las propiedades para session
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
             'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
@@ -130,7 +131,7 @@ module OrangeFeSARQ.Services {
          * @name OFC.Services:SrvTerminalCompare#isReplaceAction
          * @param device terminal
          * @methodOf OFC.Services:SrvTerminalCompare
-         * @description
+         * @description 
          * Comprueba si algun terminal necesita ser modificado
          */
         replaceDevice(device) {
@@ -172,7 +173,7 @@ module OrangeFeSARQ.Services {
             _.remove(vm.deviceContainer, function (currentDevice) {
                 return currentDevice.siebelId === device.siebelId;
               });
-            vm.putDevicesInSessionStorage();
+            vm.resetDevicesId();
         }
 
         /**
@@ -213,6 +214,21 @@ module OrangeFeSARQ.Services {
         emptyDeviceContainer() {
             let vm = this;
             this.deviceContainer = [];
+            vm.putDevicesInSessionStorage();
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#resetDevicesId
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Resetea los terminalId del contenedor de terminales
+         */
+        resetDevicesId() {
+            let vm = this;
+            vm.deviceContainer.forEach( (device, index)  => {
+                vm.deviceContainer[index].terminalId = index + 1;
+            });
             vm.putDevicesInSessionStorage();
         }
 
@@ -346,6 +362,19 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#emptyRateContainer
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Vacía contenedor de tarifas
+         */
+        emptyRateContainer() {
+            let vm = this;
+            this.rateContainer = [];
+            vm.putRatesInSessionStorage();
+        }
+
+        /**
+         * @ngdoc method
          * @name OFC.Services:SrvTerminalCompare#isInRateContainer
          * @param {ratesParent.Models.Rate} rate tarifa
          * @methodOf OFC.Services:SrvTerminalCompare
@@ -397,6 +426,7 @@ module OrangeFeSARQ.Services {
                 if(commercialData[0].rates) {
                     vm.rateContainer = commercialData[0].rates;
                 }
+                vm.resetDevicesId();
             }
         }
 
