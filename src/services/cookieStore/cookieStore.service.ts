@@ -18,10 +18,13 @@ module OrangeFeSARQ.Services {
         private COOKIEFIXED: string = '_nfc_';
         private COOKIEMOBILE: string = '_nmc_';
 
+        private firstLoad: boolean;
+
         constructor(public $injector) {
             super($injector);
             let vm = this;
-			vm.mainCookie = '';
+            vm.mainCookie = '';
+            vm.firstLoad = true;
             vm.setInjections($injector);
             vm.initComp();
             vm.setListener();
@@ -79,11 +82,28 @@ module OrangeFeSARQ.Services {
                     vm.msisdn = vm.customerViewStore.loginData.user;
                 }
             }
-            if (vm.msisdn) {
-                let cvProduct = vm.searchCvProduct(vm.msisdn);
-                vm.setCode(cvProduct, vm.msisdn);
+
+            if(vm.productCatalogStore.specification) {
+                if(window.location.href.lastIndexOf('/dashboardClient') !== -1 && vm.firstLoad) {
+                    vm.getMainMSISDN();
+                    vm.firstLoad = false;
+                } else {
+                    if (vm.msisdn) {
+                        let cvProduct = vm.searchCvProduct(vm.msisdn);
+                        vm.setCode(cvProduct, vm.msisdn);
+                    } else {
+                        vm.getMainMSISDN();
+                    }
+                }
             } else {
-                vm.getMainMSISDN();
+                vm.$scope.$watch(
+                    () => vm.productCatalogStore.specification,
+                    (newValue, oldValue) => {
+                        if (newValue !== oldValue && vm.mainCookie === '') {
+                            vm.initComp();
+                        }
+                    }
+                );
             }
         }
 
@@ -413,7 +433,7 @@ module OrangeFeSARQ.Services {
             date.setFullYear(date.getFullYear() + 20);
             // vm.$cookies.put(cookieKey, vm.mainCookie);
             window.document.cookie = `${cookieKey}=${vm.mainCookie}; domain=.orange.es; expires=${date.toUTCString()}`;
-
+            // window.document.cookie = `${cookieKey}=${vm.mainCookie}; domain=${location.host}; expires=${date.toUTCString()}`; // Pruebas en local
         }
 
         /**
