@@ -105,7 +105,7 @@ module OrangeFeSARQ.Services {
             // Se seleccionan las propiedades para session
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
             'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-            'insuranceSelected', 'stock', 'isModified', 'itemPrice']);
+            'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id']);
 
             return deviceForSession;
         }
