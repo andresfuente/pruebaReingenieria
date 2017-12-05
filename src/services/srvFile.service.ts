@@ -46,7 +46,7 @@ module OrangeFeSARQ.Services {
         }
 
         /* Datos del terminal */
-        getData(str_id, fileTerminalCompOWCSStore) {
+        getData(str_id, relatedRateId, fileTerminalCompOWCSStore) {
 
             let srv = this;
 
@@ -58,10 +58,10 @@ module OrangeFeSARQ.Services {
                 srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
                     str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
                     dataOT.ospCartItemSubType, srv.riskLevel[dataOT.creditRiskRating],
-                    dataOT.channel, '', dataOT.relatedRateResidential,
+                    dataOT.channel, '', relatedRateId,
                     fileTerminalCompOWCSStore, dataOT.profile, '',
                     dataOT.ospCustomerSegment,
-                    dataOT.stateOrProvince ? dataOT.stateOrProvince : 'Madrid'
+                    dataOT.stateOrProvince
                 ).then((terminal) => {
                     srv.viewState.selectedVariant = terminal.variants[0];
                     return terminal;
