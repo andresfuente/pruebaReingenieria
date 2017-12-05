@@ -21,6 +21,7 @@ module OrangeFeSARQ.Services {
         constructor(public $injector) {
             super($injector);
             let vm = this;
+			vm.mainCookie = '';
             vm.setInjections($injector);
             vm.initComp();
             vm.setListener();
@@ -116,7 +117,7 @@ module OrangeFeSARQ.Services {
                     });
             } else {
                 vm.$scope.$watch(
-                    () => vm.customerViewStore,
+                    () => vm.customerViewStore.loginData,
                     (newValue, oldValue) => {
                         if (newValue !== oldValue && vm.mainCookie === '') {
                             vm.getMainMSISDN();
