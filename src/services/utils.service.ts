@@ -112,7 +112,7 @@ module OrangeFeSARQ.Services {
                 searchUrl = 'individualPublicId';
             } else if (inputDocument === 'DOCID') {
                 searchUrl = 'individualPublicId';
-            } else if (inputDocument === 'PASSPORT' || inputDocument === 'RESIDENCE' || inputDocument === 'DOCID') {
+            } else if (inputDocument === 'PASSPORT' || inputDocument === 'PPT' || inputDocument === 'RESIDENCE' || inputDocument === 'DOCID') {
                 searchUrl = 'residential';
             }
 
