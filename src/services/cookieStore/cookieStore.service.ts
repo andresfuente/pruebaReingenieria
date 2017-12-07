@@ -18,13 +18,10 @@ module OrangeFeSARQ.Services {
         private COOKIEFIXED: string = '_nfc_';
         private COOKIEMOBILE: string = '_nmc_';
 
-        private firstLoad: boolean;
-
         constructor(public $injector) {
             super($injector);
             let vm = this;
             vm.mainCookie = '';
-            vm.firstLoad = true;
             vm.setInjections($injector);
             vm.initComp();
             vm.setListener();
@@ -83,17 +80,12 @@ module OrangeFeSARQ.Services {
                 }
             }
 
-            if(vm.productCatalogStore.specification) {
-                if(window.location.href.lastIndexOf('/dashboardClient') !== -1 && vm.firstLoad) {
-                    vm.getMainMSISDN();
-                    vm.firstLoad = false;
+            if (vm.productCatalogStore.specification) {
+                if (vm.msisdn) {
+                    let cvProduct = vm.searchCvProduct(vm.msisdn);
+                    vm.setCode(cvProduct, vm.msisdn);
                 } else {
-                    if (vm.msisdn) {
-                        let cvProduct = vm.searchCvProduct(vm.msisdn);
-                        vm.setCode(cvProduct, vm.msisdn);
-                    } else {
-                        vm.getMainMSISDN();
-                    }
+                    vm.getMainMSISDN();
                 }
             } else {
                 vm.$scope.$watch(

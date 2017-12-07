@@ -67,7 +67,7 @@ module OrangeFeSARQ.Services {
             if(shoppingCart !== null && commercialData !== null &&
                 commercialData[commercialActIndex].ospIsModified === true) {
                     // Se eliminan los TSS del acto comercial existentes en el shopping cart
-                    shoppingCart = vm.deleteTSSInCartItem(shoppingCart, commercialActId);
+                    shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
                     commercialData[commercialActIndex].ospIsModified = false;
             }
             // Se obtiene el id del ultimo elmento del cart item del shopping cart
@@ -164,6 +164,132 @@ module OrangeFeSARQ.Services {
             }
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Añade una tarifa al session storage del carrito
+         */
+        putRateInShoppingCart(rate) {
+            let vm = this;
+            let productItem;
+            let rateCartItemElement;
+            let cartItemElement;
+            let cartItemElementId: number;
+            let cartItemIndex: number;
+            let lastCartItemId: number;
+            let commercialActId: number;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let commercialActIndex = vm.getSelectedCommercialAct();
+
+            // Se obtiene el ID del acto comercial que se esta modificando
+            if(commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
+                commercialActId = Number(commercialData[commercialActIndex].id);
+            }
+            // Se comprueba si existe algun dispositivo TSS en el shopping cart que se este modificando
+            if(shoppingCart !== null && commercialData !== null &&
+                commercialData[commercialActIndex].ospIsModified === true) {
+                    // Se eliminan los TSS del acto comercial existentes en el shopping cart
+                    shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
+                    commercialData[commercialActIndex].ospIsModified = false;
+            }
+            // Se obtiene el id del ultimo elmento del cart item del shopping cart
+            lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
+
+            productItem = {
+                'href': '',
+                'name': rate.name ? rate.name : '',
+                'description': rate.rateDescription ? rate.rateDescription : '',
+                'productRelationship': [{
+                    'type': 'tarifa'
+                }],
+                'place': [],
+                'characteristic': [{
+                        'name': 'CIMATerminalType',
+                        'value': 'Primary'
+                }]
+            };
+
+            rateCartItemElement = {
+                'id' : rate.siebelId ? rate.siebelId : '',
+                'action': 'New',
+                'product': productItem,
+                'itemPrice': [
+                    {
+                        'priceType': 'cuota',
+                        'price': {
+                            'dutyFreeAmount': {
+                                'unit': 'EUR',
+                                'value': rate.ratePrice ? rate.ratePrice : ''
+                            },
+                            'taxIncludedAmount': {
+                                'unit': 'EUR',
+                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : ''
+                            }
+                        },
+                        'priceAlteration': [{}]
+                    }
+                ],
+                'productOffering': {
+                    'id': rate.siebelId ? rate.siebelId : '',
+                    'name': rate.name ? rate.name : '',
+                    'category': [],
+                    'isBundle': true
+                }
+            };
+
+
+            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
+
+            cartItemElement = {
+                'id' : cartItemElementId,
+                'cartItem': [rateCartItemElement],
+                'action': 'New',
+                'cartItemRelationship' : [{
+                    id: commercialActId
+                }],
+                'ospCartItemType': 'alta',
+                'ospSelected' : true
+            };
+
+            if(commercialData !== null) {
+                commercialData[commercialActIndex].isCompletedAC = true;
+                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+            }
+
+            if(shoppingCart !== null) {
+                shoppingCart.cartItem.push(cartItemElement);
+            } else {
+                shoppingCart = {
+                    'id': '',
+                    'cartItem': [cartItemElement],
+                    'customer': {
+                        'relatedPartyRef': {
+                            'individual': {
+                                'id': '45888495C',
+                                'ospIdType': 'NIF'
+                            },
+                            'organization': {
+                                'id': '45888495C',
+                                'ospIdType': 'CIF'
+                            }
+                        },
+                        'id': '45888495C',
+                        'name': 'Juan Ostos',
+                        'status': 0,
+                        'customerCharacteristic': [
+                            {
+                                'name': 'segment',
+                                'value': 1
+                            }
+                        ]
+                    }
+                };
+            }
+            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        }
 
         /**
          * @ngdoc method
@@ -207,16 +333,16 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
-         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#deleteTSSInCartItem
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#deleteElementInCartItem
          * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
          * @param shoppingCart session del carrito
          * @param commercialActId id del acto comercial que se esta modificando
          * @description
-         * Elimina del shopping cart los terminales libres del acto comercial 
+         * Elimina del shopping cart los elementos del acto comercial 
          * que se esta modificando
-         * @return {any} shoppingCart con los terminales eliminados
+         * @return {any} shoppingCart con los elementos eliminados
          */
-        deleteTSSInCartItem(shoppingCart, commercialActId): any {
+        deleteElementInCartItem(shoppingCart, commercialActId): any {
             let vm = this;
             let cartItemArray = [];
             if(shoppingCart !== null && shoppingCart.cartItem.length > 0) {
