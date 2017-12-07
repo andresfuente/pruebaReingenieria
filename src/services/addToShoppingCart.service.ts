@@ -99,6 +99,7 @@ module OrangeFeSARQ.Services {
 
             rateCartItemElement = {
                 'id': '1-CWOOG9',
+                'action': 'New',
                 'product': {
                     'name': 'peach',
                     'productRelationship': [{
