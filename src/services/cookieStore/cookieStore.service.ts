@@ -61,6 +61,10 @@ module OrangeFeSARQ.Services {
                     }
                 }
             );
+            vm.$scope.$on('setCookie', () => {
+                vm.msisdnStore.msisdn = null;
+                vm.initComp();
+            });
         }
 
         /**
@@ -81,11 +85,13 @@ module OrangeFeSARQ.Services {
             }
 
             if (vm.productCatalogStore.specification) {
-                if (vm.msisdn) {
-                    let cvProduct = vm.searchCvProduct(vm.msisdn);
-                    vm.setCode(cvProduct, vm.msisdn);
-                } else {
+                if (!vm.msisdnStore.msisdn) {
                     vm.getMainMSISDN();
+                } else {
+                    if (vm.msisdn) {
+                        let cvProduct = vm.searchCvProduct(vm.msisdn);
+                        vm.setCode(cvProduct, vm.msisdn);
+                    }
                 }
             } else {
                 vm.$scope.$watch(
@@ -117,13 +123,29 @@ module OrangeFeSARQ.Services {
                 vm.hootSrv.getMainLine(vm.genericConstant.brand, document, vm.genericConstant.site, vm.compName)
                     .then((response) => {
                         if (response && response.line) {
-                            if (response.line.lineaPrincipalMovil) {
-                                let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
-                                vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
-                            }
-                            if (response.line.lineaPrincipalFijo) {
-                                let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
-                                vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
+                            if (vm.msisdn) {
+                                let cvProduct = vm.searchCvProduct(vm.msisdn);
+                                vm.setCode(cvProduct, vm.msisdn);
+                                if (vm.utils.isFixedLine(vm.msisdn)) {
+                                    if (response.line.lineaPrincipalMovil) {
+                                        let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
+                                        vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
+                                    }
+                                } else {
+                                    if (response.line.lineaPrincipalFijo) {
+                                        let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
+                                        vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
+                                    }
+                                }
+                            } else {
+                                if (response.line.lineaPrincipalMovil) {
+                                    let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
+                                    vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
+                                }
+                                if (response.line.lineaPrincipalFijo) {
+                                    let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
+                                    vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
+                                }
                             }
                         }
                     });
@@ -424,8 +446,8 @@ module OrangeFeSARQ.Services {
             let date = new Date();
             date.setFullYear(date.getFullYear() + 20);
             // vm.$cookies.put(cookieKey, vm.mainCookie);
-            window.document.cookie = `${cookieKey}=${vm.mainCookie}; domain=.orange.es; expires=${date.toUTCString()}`;
-            // window.document.cookie = `${cookieKey}=${vm.mainCookie}; domain=${location.host}; expires=${date.toUTCString()}`; // Pruebas en local
+            window.document.cookie = `${cookieKey}=${vm.mainCookie}; domain=.orange.es; expires=${date.toUTCString()}; path=/`;
+            // window.document.cookie = `${cookieKey}=${vm.mainCookie}; domain=${location.host}; expires=${date.toUTCString()}; path=/`; // Pruebas en local
         }
 
         /**
