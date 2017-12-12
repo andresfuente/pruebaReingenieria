@@ -125,6 +125,7 @@ module OrangeFeSARQ.Services {
                     id: commercialActId
                 }],
                 'ospCartItemType': 'alta',
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected' : true
             };
 
@@ -239,8 +240,6 @@ module OrangeFeSARQ.Services {
                     'isBundle': true
                 }
             };
-
-
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
 
             cartItemElement = {
@@ -251,6 +250,7 @@ module OrangeFeSARQ.Services {
                     id: commercialActId
                 }],
                 'ospCartItemType': 'alta',
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected' : true
             };
 
