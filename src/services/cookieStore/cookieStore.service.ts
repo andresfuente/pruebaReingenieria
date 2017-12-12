@@ -76,6 +76,7 @@ module OrangeFeSARQ.Services {
          */
         initComp() {
             let vm = this;
+            vm.msisdn = null;
             if (vm.msisdnStore.msisdn) {
                 vm.msisdn = vm.msisdnStore.msisdn;
             } else {
