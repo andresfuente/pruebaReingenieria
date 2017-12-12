@@ -89,7 +89,8 @@ module OrangeFeSARQ.Services {
         });
     }
 
-    changeStatetProduct(msisdn: string, productId: string, action: string, imei: string = '', componentName: string = 'generic_bonus'): ng.IPromise<any> {
+    // Se añade el parametro segment, necesario para activar los servicos en PAE
+    changeStatetProduct(msisdn: string, productId: string, action: string, imei: string = '', componentName: string = 'generic_bonus', segment: string): ng.IPromise<any> {
       let vm = this;
       let queryParams = {};
       if (imei !== '') {
@@ -98,12 +99,14 @@ module OrangeFeSARQ.Services {
           msisdn: msisdn,
           action: action,
           productId: productId,
+          segment: segment,
         };
       } else {
         queryParams = {
           msisdn: msisdn,
           action: action,
-          productId: productId
+          productId: productId,
+          segment: segment,
         };
       }
       // No necesita brand porque esta llamada es solo parte de Orange
