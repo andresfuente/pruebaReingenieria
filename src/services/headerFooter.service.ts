@@ -14,6 +14,7 @@ module OrangeFeSARQ.Services {
 
         setInjections($injector) {
             let vm = this;
+			vm.genericConstant = $injector.get('genericConstant');
         }
 
         getData(msisdn:string = null) {
@@ -30,8 +31,10 @@ module OrangeFeSARQ.Services {
                     (successData) => {
                         let str: string = JSON.stringify(successData);
                         successData = JSON.parse(str.replace(/"\/sites/g, '"sites'));
-                        OrangeFeSARQ.Controllers.ParentController.shared.properties =
+						if(vm.genericConstant.site !== 'eCareResidencial'){
+							OrangeFeSARQ.Controllers.ParentController.shared.properties =
                             successData.data.properties;
+						}                        
                         return successData;
                     },
                     (errorData) => {

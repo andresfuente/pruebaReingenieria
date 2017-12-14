@@ -149,8 +149,8 @@ module OrangeFeSARQ.Services {
                     id: commercialActId
                 }],
                 'ospSelected' : true,
-                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType,
-                'ospCartItemSubtype': ''
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
             };
 
             if(shoppingCart !== null) {
@@ -241,8 +241,8 @@ module OrangeFeSARQ.Services {
                 },
                 cartItemRelationship: [],
                  'ospSelected' : true,
-                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType,
-                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype
+                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
             };
 
             // Se inserta el terminal en el array de terminales secundarios
@@ -355,6 +355,7 @@ module OrangeFeSARQ.Services {
                     id: commercialActId
                 }],
                 'ospCartItemType': 'alta',
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected' : true
             };
 
@@ -440,7 +441,7 @@ module OrangeFeSARQ.Services {
          * que se esta modificando
          * @return {any} shoppingCart con los elementos eliminados
          */
-        deleteElementInCartItem(shoppingCart, commercialActId): any {
+        deleteElementInCartItem(shoppingCart, commercialActId) {
             let vm = this;
             let cartItemArray = [];
             if(shoppingCart !== null && shoppingCart.cartItem.length > 0) {
