@@ -46,7 +46,7 @@ module OrangeFeSARQ.Services {
         }
 
         /* Datos del terminal */
-        getData(str_id, relatedRateId, sfid, fileTerminalCompOWCSStore) {
+        getData(str_id, sfid, fileTerminalCompOWCSStore) {
 
             let srv = this;
 
@@ -58,8 +58,8 @@ module OrangeFeSARQ.Services {
                 srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
                     str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
                     dataOT.ospCartItemSubType, srv.riskLevel[dataOT.creditRiskRating],
-                    dataOT.channel, sfid , relatedRateId,
-                    fileTerminalCompOWCSStore, dataOT.profile, '',
+                    dataOT.channel, sfid , dataOT.relatedRateResidential,
+                    fileTerminalCompOWCSStore, dataOT.profile, dataOT.priceName,
                     dataOT.ospCustomerSegment,
                     dataOT.stateOrProvince
                 ).then((terminal) => {
