@@ -203,6 +203,30 @@ module OrangeFeSARQ.Services {
             let sTerminalsLength = commercialData[commercialActIndex].sTerminals.length;
             let sTerminalLastId = sTerminalsLength === 0 ? 0 : commercialData[commercialActIndex].sTerminals[sTerminalsLength - 1].id;
             let selectedCartItemId;
+            let isDeferredPrice = false; // ¿Es pago a plazos?
+            let vapCartItems = [];
+            let vapCartItem;
+
+            device.itemPrice.forEach( item => {
+                if(item.priceType === 'inicial' || item.priceType === 'cuota') {
+                    isDeferredPrice = true;
+                    vapCartItem = {
+                        'id': item.id,
+                        'action': 'New',
+                        'product': {
+                            'productRelationship': [{'type': 'VAP'}],
+                            'characteristic': [{'name': 'CIMATerminalType', 'value': 'Secundary'}]
+                        },
+                        'itemPrice': [item],
+                        'productOffering': {'id': item.id},
+                        'cartItemRelationship': [{'id': device.siebelId}],
+                        'ospSelected' : true,
+                        'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                        'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                    };
+                    vapCartItems.push(vapCartItem);
+                }
+            });
 
             secundaryTerminal = {
                 'sTerminalId': (sTerminalLastId + 1),
@@ -235,7 +259,7 @@ module OrangeFeSARQ.Services {
                 'id' : device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': device.itemPrice,
+                'itemPrice': isDeferredPrice ? {'priceType': 'aplazado'} : device.itemPrice,
                 'productOffering': {
                     id: device.siebelId,
                 },
@@ -264,6 +288,9 @@ module OrangeFeSARQ.Services {
                 shoppingCart.cartItem.forEach( currentCartItem  => {
                     if(currentCartItem.id === selectedCartItemId) {
                         currentCartItem.cartItem.push(secundaryDeviceCartItem);
+                        if(isDeferredPrice) {
+                            currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
+                        }
                     }
                 });
             }
