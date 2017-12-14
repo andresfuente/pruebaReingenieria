@@ -251,8 +251,11 @@ module OrangeFeSARQ.Services {
             commercialData[commercialActIndex].shoppingCartElementsSelected
                 .forEach((currentItem, index) => {
                     if(currentItem.ospIsAddSecundary) {
-                        commercialData[commercialActIndex]
-                        .shoppingCartElementsSelected[index].sTerminalSiebel = device.siebelId;
+                        // Si sTerminals no esta definido
+                        if(!currentItem.sTerminals) {
+                            currentItem.sTerminals = [];
+                        }
+                        currentItem.sTerminals.push({'siebelId': device.siebelId});
                         selectedCartItemId = currentItem.id;
                     }
                 });
