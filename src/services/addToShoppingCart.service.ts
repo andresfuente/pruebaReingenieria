@@ -259,7 +259,7 @@ module OrangeFeSARQ.Services {
                 'id' : device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': isDeferredPrice ? {'priceType': 'aplazado'} : device.itemPrice,
+                'itemPrice': isDeferredPrice ? [{'priceType': 'aplazado'}] : device.itemPrice,
                 'productOffering': {
                     id: device.siebelId,
                 },
