@@ -200,7 +200,11 @@ module OrangeFeSARQ.Services {
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
-            let sTerminalsLength = commercialData[commercialActIndex].sTerminals.length;
+            let sTerminalsLength = commercialData[commercialActIndex].sTerminals ? commercialData[commercialActIndex].sTerminals.length : 0;
+            if (!commercialData[commercialActIndex].sTerminals) {
+                            commercialData[commercialActIndex].sTerminals =[];
+            }
+
             let sTerminalLastId = sTerminalsLength === 0 ? 0 : commercialData[commercialActIndex].sTerminals[sTerminalsLength - 1].id;
             let selectedCartItemId;
             let isDeferredPrice = false; // ¿Es pago a plazos?
