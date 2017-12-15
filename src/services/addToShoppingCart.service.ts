@@ -201,10 +201,6 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
             let sTerminalsLength = commercialData[commercialActIndex].sTerminals ? commercialData[commercialActIndex].sTerminals.length : 0;
-            if (!commercialData[commercialActIndex].sTerminals) {
-                            commercialData[commercialActIndex].sTerminals =[];
-            }
-
             let sTerminalLastId = sTerminalsLength === 0 ? 0 : commercialData[commercialActIndex].sTerminals[sTerminalsLength - 1].id;
             let selectedCartItemId;
             let isDeferredPrice = false; // ¿Es pago a plazos?
@@ -274,6 +270,9 @@ module OrangeFeSARQ.Services {
             };
 
             // Se inserta el terminal en el array de terminales secundarios
+            if (!commercialData[commercialActIndex].sTerminals) {
+                commercialData[commercialActIndex].sTerminals = [];
+            }
             commercialData[commercialActIndex].sTerminals.push(secundaryTerminal);
             // Se inserta el terminal en el array de opciones seleccionadas 
             commercialData[commercialActIndex].shoppingCartElementsSelected
