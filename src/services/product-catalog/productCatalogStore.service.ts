@@ -238,7 +238,7 @@ module OrangeFeSARQ.Services {
             let pricesList = productPrice.price;
             for (let j = 0; j < pricesList.length; j++) {
               let price = pricesList[j];
-              if (price.currencyCode && price.currencyCode.toLowerCase() === currency.toLowerCase()) {
+              if (price.currencyCode && price.priceType !== 'changeRate' && price.currencyCode.toLowerCase() === currency.toLowerCase()) {
                 /* taxIncludedAmount 	-- Precio con Iva
 								 * dutyFreeAmount 		-- Precio sin iva (quitando iva al anterior)
                  * taxAmount 					-- Valor de impuestos que aplican*/
