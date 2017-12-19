@@ -302,11 +302,11 @@ module OrangeFeSARQ.Services {
         typeHref(oData: any) {
             let vm = this;
             if (!oData) {
-                return '#/';
+                return '/#/';
             } else if (oData && oData.includes('http')) {
                 return oData;
             } else {
-                return '#/' + oData;
+                return '/#/' + oData;
             }
         }
 
