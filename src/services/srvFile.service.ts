@@ -47,18 +47,24 @@ module OrangeFeSARQ.Services {
 
         /* Datos del terminal */
         getData(str_id, sfid, fileTerminalCompOWCSStore) {
-
             let srv = this;
+            let relatedProductOffering;
 
             if(srv.cachedTerminalName && srv.cachedTerminalName === str_id) {
                 return srv.cachedTerminalPromise;
             } else {
                 let dataOT = srv.MosaicFileSrv.getDataOT();
+                // Se define el tipo de tarifa dependiendo del segmento del cliente
+                if(dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
+                    relatedProductOffering = dataOT.relatedRateResidential;
+                } else {
+                    relatedProductOffering = dataOT.relatedRateBusiness;
+                }
 
                 srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
                     str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
                     dataOT.ospCartItemSubType, srv.riskLevel[dataOT.creditRiskRating],
-                    dataOT.channel, sfid , dataOT.relatedRateResidential,
+                    dataOT.channel, sfid , relatedProductOffering,
                     fileTerminalCompOWCSStore, dataOT.profile, dataOT.priceName,
                     dataOT.ospCustomerSegment,
                     dataOT.stateOrProvince

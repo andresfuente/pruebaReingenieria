@@ -42,7 +42,7 @@ module OrangeFeSARQ.Services {
             vm.$scope = $injector.get('$rootScope');
         }
 
-        //DEVICE
+        // DEVICE
 
         /**
          * @ngdoc method
@@ -112,27 +112,11 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
-         * @name OFC.Services:SrvTerminalCompare#isReplaceAction
-         * @methodOf OFC.Services:SrvTerminalCompare
-         * @description
-         * Comprueba si algun terminal necesita ser modificado
-         * @return {boolean} Retorna verdadero si existe algún terminal a modificar,
-         * en caso contrario retorna falso. 
-         */
-        isReplaceAction() {
-            let vm = this;
-            return _.some(vm.deviceContainer, function (currentDevice) {
-                return currentDevice.isModified === true;
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @name OFC.Services:SrvTerminalCompare#isReplaceAction
+         * @name OFC.Services:SrvTerminalCompare#replaceDevice
          * @param device terminal
          * @methodOf OFC.Services:SrvTerminalCompare
          * @description 
-         * Comprueba si algun terminal necesita ser modificado
+         * Reemplaza un terminal por otro
          */
         replaceDevice(device) {
             let vm = this;

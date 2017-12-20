@@ -238,7 +238,8 @@ module OrangeFeSARQ.Services {
                 'insuranceSiebelId': device.insuranceSiebelId,
                 'srcImage': device.srcImage,
                 'insuranceSelected': device.insuranceSelected,
-                'stock': device.stock
+                'stock': device.stock,
+                'itemPrice': device.itemPrice
             };
 
             productItem = {
