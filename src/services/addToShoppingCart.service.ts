@@ -349,10 +349,7 @@ module OrangeFeSARQ.Services {
                     'type': 'tarifa'
                 }],
                 'place': [],
-                'characteristic': [{
-                        'name': 'CIMATerminalType',
-                        'value': 'Primary'
-                }]
+                'characteristic': []
             };
 
             rateCartItemElement = {
@@ -396,7 +393,6 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected' : true
             };
-
             if(shoppingCart !== null) {
                 shoppingCart.cartItem.push(cartItemElement);
             } else {
