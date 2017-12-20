@@ -206,6 +206,7 @@ module OrangeFeSARQ.Services {
             let isDeferredPrice = false; // ¿Es pago a plazos?
             let vapCartItems = [];
             let vapCartItem;
+            let sTerminalsSC = [];
 
             device.itemPrice.forEach( item => {
                 if(item.priceType === 'inicial' || item.priceType === 'cuota') {
@@ -228,20 +229,6 @@ module OrangeFeSARQ.Services {
                 }
             });
 
-            secundaryTerminal = {
-                'sTerminalId': (sTerminalLastId + 1),
-                'action': 'New',
-                'siebelId': device.siebelId,
-                'name': device.name,
-                'description': device.litSubTitle,
-                'brand': device.litTitle,
-                'insuranceSiebelId': device.insuranceSiebelId,
-                'srcImage': device.srcImage,
-                'insuranceSelected': device.insuranceSelected,
-                'stock': device.stock,
-                'itemPrice': device.itemPrice
-            };
-
             productItem = {
                 'href': device.srcImage,
                 'name': device.name,
@@ -256,6 +243,7 @@ module OrangeFeSARQ.Services {
                 }]
             };
 
+            // Objeto para shopping cart
             secundaryDeviceCartItem = {
                 'id' : device.siebelId,
                 'action': 'New',
@@ -268,6 +256,22 @@ module OrangeFeSARQ.Services {
                  'ospSelected' : true,
                  'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                  'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+            };
+
+            // Objeto para sTerminals
+            secundaryTerminal = {
+                'sTerminalId': (sTerminalLastId + 1),
+                'action': 'New',
+                'siebelId': device.siebelId,
+                'name': device.name,
+                'description': device.litSubTitle,
+                'brand': device.litTitle,
+                'insuranceSiebelId': device.insuranceSiebelId,
+                'srcImage': device.srcImage,
+                'insuranceSelected': device.insuranceSelected,
+                'stock': device.stock,
+                'itemPrice': device.itemPrice,
+                'shoppingCart': [secundaryDeviceCartItem].concat(vapCartItems)
             };
 
             // Se inserta el terminal en el array de terminales secundarios
