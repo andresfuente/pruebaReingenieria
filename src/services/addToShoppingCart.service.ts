@@ -96,9 +96,7 @@ module OrangeFeSARQ.Services {
                 'productOffering': {
                     id: device.siebelId,
                 },
-                cartItemRelationship: [{
-                      id: '1-CWOOG9'
-                 }],
+                cartItemRelationship: [],
                  'ospSelected' : true,
                  'ospCartItemType': 'alta',
                  'ospCartItemSubtype': ''
