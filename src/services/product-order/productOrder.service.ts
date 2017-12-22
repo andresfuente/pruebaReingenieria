@@ -126,6 +126,24 @@ module OrangeFeSARQ.Services {
         });
     }
 
+    setPromotions(body: Models.ProductOrder, componentName: string) {
+      let vm = this;
+
+      let _search: Object = {
+        queryParams: body,
+        urlParams: [vm.genericConstant.brand, 'setPromotions']
+      };
+
+      return vm.httpPost(vm.genericConstant.urlProductOrder, _search, componentName)
+        .then(function(success) {
+          return success.data;
+        })
+        .catch(function(error) {
+          return error.data;
+        })
+      ;
+    }
+
     moreMegasAmena(msisdnMegas: string, componentName: string) {
       let vm = this;
       let _search: Object = {
