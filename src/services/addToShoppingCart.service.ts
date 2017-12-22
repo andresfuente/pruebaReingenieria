@@ -428,7 +428,7 @@ module OrangeFeSARQ.Services {
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#getSelectedCommercialAct
          * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
          * @description
-         * @return {boolean} Retorna el indice del commercialData que se esta modificando,
+         * @return {number} Retorna el indice del commercialData que se esta modificando,
          * en caso contrario retorna -1
          */
         getSelectedCommercialAct(): number {

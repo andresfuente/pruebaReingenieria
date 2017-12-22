@@ -346,6 +346,21 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#isConvergentRateContainer
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Comprueba si existe una tarifa convergente dentro del contenedor de 
+         * tarifas 
+         */
+        isConvergentRateContainer() {
+            let vm = this;
+            return _.some(vm.rateContainer, function (currentRate) {
+                return currentRate.family === 'love';
+            });
+        }
+
+        /**
+         * @ngdoc method
          * @name OFC.Services:SrvTerminalCompare#emptyRateContainer
          * @methodOf OFC.Services:SrvTerminalCompare
          * @description

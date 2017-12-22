@@ -18,6 +18,7 @@ module OrangeFeSARQ.Constant {
         .service('changeRateFixedSrv', OrangeFeSARQ.Services.ChangeRateFixedOWCSSrv)
         .service('contactFormSrv', OrangeFeSARQ.Services.ContactFormSrv)
         .service('contractsSrv', OrangeFeSARQ.Services.ContractsSrv)
+        .service('commercialDataSrv', OrangeFeSARQ.Services.CommercialDataSrv)
         .service('customerManagementSrv', OrangeFeSARQ.Services.CustomerManagementSrv)
         .service('detailRateSrv', OrangeFeSARQ.Services.DetailRateSrv)
         .service('getConfigurationSrv', OrangeFeSARQ.Services.GetConfigurationSrv)
