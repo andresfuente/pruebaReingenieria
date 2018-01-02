@@ -106,6 +106,11 @@ module OrangeFeSARQ.Services {
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
             'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
             'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id']);
+            if(device.renewRates) {
+                deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
+                'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
+                'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'renewRates']);
+            }
 
             return deviceForSession;
         }
