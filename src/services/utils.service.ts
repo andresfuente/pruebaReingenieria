@@ -893,6 +893,36 @@ module OrangeFeSARQ.Services {
             return value.replace(paramOwcs, param);
         }
 
+        /**
+         * @ngdoc service
+         * @name services.Controllers:Services#owcsParamFormat
+         * @param {string} msisdn Msisdn al que se le solicita el código morgane
+         * @param {any} products Los productos del cliente al que pertenece el msisdn que son recogidos del customerView
+         * @return {string} Devuelve el código Morgane
+         * @methodOf OrangeFeSARQ.Services.Utils
+         * @description
+         * Devuelve el código morgane del msisdn solicitado
+         */
+        getMorganeCode(msisdn: string, products: any) {
+            let vm = this;
+
+            if (vm.isFixedLine(+msisdn)) { // Solo los fijos tienen codigo Morgane
+                for (let i = 0, length = products.length; i < length; i++) {
+                    let productMorganeCodeArray: any = _.filter(products[i].productCharacteristic, {name: 'Código Morgane'});
+                    // Comprobamos que el producto tiene codigo morgane
+                    if (!_.isEmpty(productMorganeCodeArray)) {
+                        let productMsisdnArray: any = _.filter(products[i].productCharacteristic, {name: 'Número fijo Asociado'});
+                        // Comprobamos que el msisdn del producto coincida con el msisdn que se pide
+                        if (!_.isEmpty(productMsisdnArray) && productMsisdnArray[0].value === msisdn) {
+                            return productMorganeCodeArray[0].value;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
     }
 
     angular.module('utils', [])
