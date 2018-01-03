@@ -922,7 +922,6 @@ module OrangeFeSARQ.Services {
 
             return null;
         }
-
     }
 
     angular.module('utils', [])
