@@ -963,8 +963,7 @@ module OrangeFeSARQ.Services {
                         return spec.name === 'VALORNEGOCIO';
                     });
 
-                    let info: OrangeFeSARQ.Models.LineInformation = new OrangeFeSARQ.Models.LineInformation;
-                     info = {
+                    let info = {
                         id2: (i+1),
                         msisdn: MSISDN.value,
                         id: 0,                        
@@ -990,8 +989,7 @@ module OrangeFeSARQ.Services {
 
             for(let i = 0; i < lines.length; i++){
                 
-                let info: OrangeFeSARQ.Models.OrderInformation = new OrangeFeSARQ.Models.OrderInformation;
-                info = {
+                let info = {
                     id: (i+1),
                     msisdn: lines[i].msisdn,                                            
                     rateName: lines[i].rateName,
