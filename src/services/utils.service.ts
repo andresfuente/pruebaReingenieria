@@ -922,6 +922,91 @@ module OrangeFeSARQ.Services {
 
             return null;
         }
+
+        getPrincipalLine(productCatalogStore: any, customerViewStore: OrangeFeSARQ.Models.Customer) {
+            
+            let vm = this;
+            let lines = [];
+            let PC = productCatalogStore._specification;
+
+            // Sacamos las líneas móviles
+            let mobileLines = _.filter(customerViewStore.product, (product: any) => {
+               return (product.ospProductType === 'PREPAGO' || product.ospProductType === 'POSPAGO')
+            });
+
+            for(let i in mobileLines){
+                if(mobileLines.length){
+
+                    //Sacamos datos necesarios del customerView: rango, numero línea y fecha de activación
+
+                    let rate = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                        return characteristic.name === 'Código Tarifa';
+                    });
+                    let MSISDN = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                        return characteristic.name === 'MSISDN';
+                    });
+                    let startDate = mobileLines[i].startDate;
+                    
+                    //Buscamos en el productCatalog el resto de datos alineando las APIs con el "tmcode" (código de las tarifas)
+
+                    let isPack = false;
+
+                    let ratePC = _.find(PC, (characteristic: any) =>{ 
+                        return (characteristic.id === rate.value);
+                    });
+
+                    if(ratePC.ospTypeService === "CONVERGENTE"){
+                        isPack = true;
+                    };
+                    
+                    let ranges = _.find(ratePC.productSpecCharacteristic, (spec: any) => {
+                        return spec.name === 'VALORNEGOCIO';
+                    });
+
+                    let info: OrangeFeSARQ.Models.LineInformation = new OrangeFeSARQ.Models.LineInformation;
+                     info = {
+                        id2: (i+1),
+                        msisdn: MSISDN.value,
+                        id: 0,                        
+                        rateName: ratePC.name,
+                        rateGroupName: ratePC.ospGroupName,
+                        range: ranges.productSpecCharacteristicValue[0].value,
+                        startDate: startDate,
+                        tmCode: rate.value,                        
+                        isPack: isPack
+                        
+                    };
+                    lines.push(info);
+                }
+            }
+            
+            //Por ultimo órdenamos nuestro array con éste órden de prioridad: rango > antigüedad > orden en el CV(id)
+            
+            let orderLines = _(lines).chain().sortBy('id2').reverse().sortBy('startDate').reverse().sortBy('range').sortBy('isPack').reverse().value();
+
+            //Eliminamos id2, isPack. Iniciar id segun orden de principal.
+            let orderLines2 = [];
+
+            for(let i = 0; i < lines.length; i++){
+                
+                let info: OrangeFeSARQ.Models.OrderInformation = new OrangeFeSARQ.Models.OrderInformation;
+                info = {
+                    id: (i+1),
+                    msisdn: lines[i].msisdn,                                            
+                    rateName: lines[i].rateName,
+                    rateGroupName: lines[i].rateGroupName,
+                    range: lines[i].range,
+                    startDate: lines[i].startDate,
+                    tmCode: lines[i].tmCode,
+                    isPack: lines[i].isPack
+                    
+                };
+                orderLines2.push(info);
+                
+                
+            }; 
+            return orderLines2;
+        }
     }
 
     angular.module('utils', [])
