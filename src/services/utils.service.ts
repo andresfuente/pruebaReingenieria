@@ -976,6 +976,7 @@ module OrangeFeSARQ.Services {
                         isPack: isPack
                         
                     };
+                    
                     lines.push(info);
                 }
             }
