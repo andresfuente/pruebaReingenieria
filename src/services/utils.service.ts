@@ -923,7 +923,7 @@ module OrangeFeSARQ.Services {
             return null;
         }
 
-        getPrincipalLine(productCatalogStore: any, customerViewStore: OrangeFeSARQ.Models.Customer) {
+        getPrincipalLine(productCatalogStore: any, customerViewStore: any) {
             
             let vm = this;
             let lines = [];
@@ -976,7 +976,7 @@ module OrangeFeSARQ.Services {
                         isPack: isPack
                         
                     };
-                    
+
                     lines.push(info);
                 }
             }
