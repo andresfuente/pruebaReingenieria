@@ -134,7 +134,7 @@ module OrangeFeSARQ.Services {
         urlParams: [vm.genericConstant.brand, 'setPromotions']
       };
 
-      return vm.httpPost(vm.genericConstant.urlProductOrder, _search, componentName)
+      return vm.httpPost(vm.urlProductOrder, _search, componentName)
         .then(function(success) {
           return success.data;
         })
