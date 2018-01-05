@@ -360,7 +360,7 @@ module OrangeFeSARQ.Services {
         isConvergentRateContainer() {
             let vm = this;
             return _.some(vm.rateContainer, function (currentRate) {
-                return currentRate.family === 'love';
+                return (currentRate.groupName === 'Convergente' && currentRate.typeService === 'movil_fijo' );
             });
         }
 
