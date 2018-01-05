@@ -92,7 +92,7 @@ module OrangeFeSARQ.Services {
                 'id' : device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': device.itemPrice,
+                'itemPrice': device.itemPrice[0],
                 'productOffering': {
                     id: device.siebelId,
                 },
@@ -206,7 +206,7 @@ module OrangeFeSARQ.Services {
             let vapCartItem;
             let sTerminalsSC = [];
 
-            device.itemPrice.forEach( item => {
+            /* device.itemPrice.forEach( item => {
                 if(item.priceType === 'inicial' || item.priceType === 'cuota') {
                     isDeferredPrice = true;
                     vapCartItem = {
@@ -225,7 +225,25 @@ module OrangeFeSARQ.Services {
                     };
                     vapCartItems.push(vapCartItem);
                 }
-            });
+            }); */
+            if(device.itemPrice[0].priceType === 'inicial' || device.itemPrice[0].priceType === 'cuota') {
+                isDeferredPrice = true;
+                vapCartItem = {
+                    'id': device.itemPrice[0].id,
+                    'action': 'New',
+                    'product': {
+                        'productRelationship': [{'type': 'VAP'}],
+                        'characteristic': [{'name': 'CIMATerminalType', 'value': 'Secundary'}]
+                    },
+                    'itemPrice': [device.itemPrice[0]],
+                    'productOffering': {'id': device.itemPrice[0].id},
+                    'cartItemRelationship': [{'id': device.siebelId}],
+                    'ospSelected' : true,
+                    'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                    'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                };
+                vapCartItems.push(vapCartItem);
+            }
 
             productItem = {
                 'href': device.srcImage,
@@ -246,7 +264,7 @@ module OrangeFeSARQ.Services {
                 'id' : device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': isDeferredPrice ? [{'priceType': 'aplazado'}] : device.itemPrice,
+                'itemPrice': isDeferredPrice ? [{'priceType': 'aplazado'}] : device.itemPrice[0],
                 'productOffering': {
                     id: device.siebelId,
                 },
@@ -268,7 +286,7 @@ module OrangeFeSARQ.Services {
                 'srcImage': device.srcImage,
                 'insuranceSelected': device.insuranceSelected,
                 'stock': device.stock,
-                'itemPrice': device.itemPrice,
+                'itemPrice': device.itemPrice[0],
                 'shoppingCart': [secundaryDeviceCartItem].concat(vapCartItems)
             };
 
@@ -422,6 +440,164 @@ module OrangeFeSARQ.Services {
             }
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateAndDeviceInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @param {Object} rate tarifa.
+         * @param {Object} device terminal.
+         * @description
+         * Añade un terminal primario y su tarifa al session storage del carrito
+         */
+        putRateAndDeviceInShoppingCart(rate, device) {
+            let vm = this;
+            let rateCartItemElement;
+            let deviceCartItemElement;
+            let cartItemElement;
+            let cartItemElementId: number;
+            let cartItemIndex: number;
+            let lastCartItemId = 1;
+            let commercialActId: number;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let commercialActIndex = commercialData.length - 1;
+
+            // Se obtiene el ID del acto comercial que se esta creando
+            if(commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
+                commercialActId = Number(commercialData[commercialActIndex].id);
+            }
+            // Se obtiene el id del ultimo elemento del cart item del shopping cart
+            lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
+
+            // TARIFA
+            rateCartItemElement = {
+                'id' : rate.siebelId ? rate.siebelId : '',
+                'action': 'New',
+                'product': {
+                    'href': '',
+                    'name': rate.name ? rate.name : '',
+                    'description': rate.rateDescription ? rate.rateDescription : '',
+                    'productRelationship': [{
+                        'type': 'tarifa'
+                    }],
+                    'place': []
+                },
+                'itemPrice': [
+                    {
+                        'priceType': 'cuota',
+                        'price': {
+                            'dutyFreeAmount': {
+                                'unit': 'EUR',
+                                'value': rate.ratePrice ? rate.ratePrice : ''
+                            },
+                            'taxIncludedAmount': {
+                                'unit': 'EUR',
+                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : ''
+                            }
+                        },
+                        'priceAlteration': [{}]
+                    }
+                ],
+                'productOffering': {
+                    'id': rate.siebelId ? rate.siebelId : '',
+                    'name': rate.name ? rate.name : '',
+                    'category': [],
+                    'isBundle': true
+                }
+            };
+
+            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
+            lastCartItemId = cartItemElementId;
+
+            cartItemElement = {
+                'id' : cartItemElementId,
+                'cartItem': [rateCartItemElement],
+                'action': 'New',
+                'cartItemRelationship' : [{
+                    id: commercialActId
+                }],
+               'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
+                'ospSelected' : true
+            };
+
+            if(shoppingCart !== null) {
+                shoppingCart.cartItem.push(cartItemElement);
+            } else {
+                shoppingCart = {
+                    'id': '',
+                    'cartItem': [cartItemElement],
+                    'customer': {}
+                };
+            }
+
+            // TERMINAL PRIMARIO
+            // Tipo del terminal
+            if (commercialData.ospTerminalWorkflow !== 'standard') {
+                device.characteristic = [
+                    {
+                        name: 'CIMATerminalType',
+                        value: 'Secundary'
+                    }
+                ];
+            } else {
+                device.characteristic = [
+                    {
+                        name: 'CIMATerminalType',
+                        value: 'Primary'
+                    }
+                ];
+            }
+            deviceCartItemElement = {
+                'id' : device.siebelId ? device.siebelId : '',
+                'action': 'New',
+                'product': {
+                    'href': '',
+                    'name': device.name ? device.name : '',
+                    'description': device.description ? device.description : '',
+                    'productRelationship': [{
+                        'type': 'terminal'
+                    }],
+                    'place': [],
+                    'characteristic': device.characteristic
+                },
+                'itemPrice': [],
+                'productOffering': {
+                    'id': device.siebelId ? device.siebelId : '',
+                    'name': device.name ? device.name : '',
+                    'category': []
+                }
+            };
+
+            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
+
+            cartItemElement = {
+                'id' : cartItemElementId,
+                'cartItem': [deviceCartItemElement],
+                'action': 'New',
+                'cartItemRelationship' : [{
+                    id: commercialActId
+                }],
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
+                'ospSelected' : true
+            };
+
+            if(shoppingCart !== null) {
+                shoppingCart.cartItem.push(cartItemElement);
+            } else {
+                shoppingCart = {
+                    'id': '',
+                    'cartItem': [cartItemElement],
+                    'customer': {}
+                };
+            }
+
+            // Set session
+            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        }
+
 
         /**
          * @ngdoc method
