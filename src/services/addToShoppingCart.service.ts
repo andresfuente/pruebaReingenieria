@@ -378,11 +378,11 @@ module OrangeFeSARQ.Services {
                         'price': {
                             'dutyFreeAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePrice ? rate.ratePrice : ''
+                                'value': rate.ratePrice ? rate.ratePrice : rate.taxFreePrice
                             },
                             'taxIncludedAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : ''
+                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
                             }
                         },
                         'priceAlteration': [{}]
