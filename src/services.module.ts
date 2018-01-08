@@ -2,6 +2,7 @@ module OrangeFeSARQ.Constant {
     'use strict';
 
     angular.module('servicesCommons', [])
+        .service('agreementSrv', OrangeFeSARQ.Services.AgreementSrv)
         .service('accountSrv', OrangeFeSARQ.Services.AccountSrv)
         .service('activationAndConfigurationSrv', OrangeFeSARQ.Services.ActivationAndConfigurationSrv)
         .service('adslStatusSrv', OrangeFeSARQ.Services.AdslStatusService)
