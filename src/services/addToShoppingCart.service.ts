@@ -92,7 +92,7 @@ module OrangeFeSARQ.Services {
                 'id' : device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': device.itemPrice[0],
+                'itemPrice': [device.itemPrice[0]],
                 'productOffering': {
                     id: device.siebelId,
                 },
