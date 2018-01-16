@@ -127,10 +127,10 @@ module OrangeFeSARQ.Services {
                             'taxIncludedAmount': {
                                 'unit': '',
                                 value: 0
-                            }
+                            },
+                            taxRate: 0,
+                            ospTaxRateName: ''
                         },
-                        taxRate: 0,
-                        ospTaxRateName: ''
                  }],
                 'ospSelected' : true,
                 'ospCartItemType': 'alta',
@@ -383,7 +383,9 @@ module OrangeFeSARQ.Services {
                             'taxIncludedAmount': {
                                 'unit': 'EUR',
                                 'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
-                            }
+                            },
+                            taxRate: rate.taxRate,
+                            ospTaxRateName: rate.taxRateName
                         },
                         'priceAlteration': [{}]
                     }
@@ -494,7 +496,9 @@ module OrangeFeSARQ.Services {
                             'taxIncludedAmount': {
                                 'unit': 'EUR',
                                 'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : ''
-                            }
+                            },
+                            'taxRate': rate.taxRate,
+                            'ospTaxRateName': rate.taxRateName
                         },
                         'priceAlteration': [{}]
                     }
