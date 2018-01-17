@@ -51,7 +51,7 @@ module OrangeFeSARQ.Constant {
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
-              productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore, $injector) => {
+            productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore, $injector) => {
             let genericConstant = $injector.get('genericConstant');
             if (navigator.userAgent.indexOf('PhantomJS') < 1 && !genericConstant.public) {
 
@@ -103,9 +103,9 @@ module OrangeFeSARQ.Constant {
             }
         })
         .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter, $injector,
-              getConfigurationSrv: OrangeFeSARQ.Services.GetConfigurationSrv) => {
+            getConfigurationSrv: OrangeFeSARQ.Services.GetConfigurationSrv) => {
             let genericConstant = $injector.get('genericConstant');
-            // Si no es mobile first || Es spa pública
+            // Si no es mobile first || Es spa pública || O es Amena
             if (navigator.userAgent.indexOf('PhantomJS') < 1
                 && (genericConstant.site !== 'eCareResidencial' || genericConstant.public === true)) {
                 getHeaderFooterSrv.getData().then(
@@ -119,56 +119,60 @@ module OrangeFeSARQ.Constant {
 
                     }
                 );
-            // Si es mobile first y no es spa publica
-            } else if (navigator.userAgent.indexOf('PhantomJS') < 1
-                       && (genericConstant.site === 'eCareResidencial' && genericConstant.public === false)) {
+            }
+            // Si es mobile first y no es spa publica || O es Amena
+            if (navigator.userAgent.indexOf('PhantomJS') < 1
+                && (genericConstant.site === 'eCareResidencial' && genericConstant.public === false)
+                || (genericConstant.site === 'eCareResidencialAmena')) {
                 getConfigurationSrv.getData().then(
                     (response) => {
                         // Guardo datos en ParentController
                         if (OrangeFeSARQ.Controllers.ParentController.shared === undefined) {
                             OrangeFeSARQ.Controllers.ParentController.shared = {};
                         }
-                        OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore = response.data.data;
-
+                        //Este if evita que se entre cuando es eCareResidencialAmena
+                        if (genericConstant.site === 'eCareResidencial') {
+                            OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore = response.data.data;
+                        }
                         // OrangeFeSARQ.Controllers.ParentController.shared.breadCrumbsStore = response.data.breadCrumbs;
                     }
                 );
             }
-        });
+        })
 
-        /*if (OrangeFeSARQ.Controllers.ParentController.shared
-            && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
-            menuStore.menu = {
-                pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
-                prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
-                fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
-
-            };
-            fillCurrent();
-        } else {
-            $rootScope.$watch(
-                () => OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore,
-                (newValue, oldValue) => {
-                    if (OrangeFeSARQ.Controllers.ParentController.shared
-                        && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
-                        menuStore.menu = {
-                            pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
-                            prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
-                            fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
-                        };
-                        fillCurrent();
-                    }
-                });
-        }
-
-        let prepaid: boolean;
-        let pospaid: boolean;
-        let fixed: boolean;
-
+    /*if (OrangeFeSARQ.Controllers.ParentController.shared
+        && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
+        menuStore.menu = {
+            pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
+            prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
+            fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
+ 
+        };
+        fillCurrent();
+    } else {
         $rootScope.$watch(
-            () => msisdnStore.msisdn,
+            () => OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore,
             (newValue, oldValue) => {
-                fillCurrent();
+                if (OrangeFeSARQ.Controllers.ParentController.shared
+                    && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
+                    menuStore.menu = {
+                        pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
+                        prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
+                        fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
+                    };
+                    fillCurrent();
+                }
             });
-    }*/
+    }
+ 
+    let prepaid: boolean;
+    let pospaid: boolean;
+    let fixed: boolean;
+ 
+    $rootScope.$watch(
+        () => msisdnStore.msisdn,
+        (newValue, oldValue) => {
+            fillCurrent();
+        });
+}*/
 }
