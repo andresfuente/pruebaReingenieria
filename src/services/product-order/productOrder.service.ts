@@ -278,13 +278,13 @@ module OrangeFeSARQ.Services {
         });
     }
 
-    getProductBonusIncompatibility(msisdn: string, productsIdQuery: string[], componentName: string): ng.IPromise<any> {
+    getProductBonusIncompatibility(msisdn: string, products:any, componentName: string): ng.IPromise<any> {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'productBonusIncompatibility';
       let qParams = {
         msisdn,
-        productsIdQuery
+        products
       }
       let _search: Object = {
         urlParams: [BRAND, METHOD],
