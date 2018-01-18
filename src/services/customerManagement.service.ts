@@ -178,5 +178,39 @@ module OrangeFeSARQ.Services {
                     throw error.data;
                 });
         }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services.CustomerManagementSrv#getOspCustomer
+         * @methodOf OrangeFeSARQ.Services.CustomerManagementSrv
+         * @param {string} id documento del cliente
+         * @param {boolean} isExtended datos extendidos/reducidos
+         * @param {string} componentName nombre del componente
+         * @description
+         * Devuelve la información personal guardada de un cliente
+         * @returns {object} Devuelve una promesa con el response.
+         */
+        getOspCustomer(id: string, isExtended: boolean, componentName: string) {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams: {
+                    isExtended: isExtended
+                },
+                urlParams: ['ospCustomer', id]
+            }
+
+            return vm.httpCacheGett(vm.genericConstant.customerManagement, _search, componentName)
+            .then(
+                function (response) {
+                    return response.data;
+                }
+            )
+            .catch(
+                function (error) {
+                    throw error;
+                }
+            );
+        }
     }
 }
