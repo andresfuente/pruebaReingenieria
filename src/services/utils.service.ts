@@ -385,7 +385,7 @@ module OrangeFeSARQ.Services {
                 while (i < sizeProducts && !found) {
                     // Si estoy buscando el id
 					//verifico si el producto es relativo a una línea prepago, pospago o fijo
-					if(products[i].ospProductType.match(/^(POSPAGO|PREPAGO|Número teléfono fijo VoIP)$/)) {
+					if(products[i].ospProductType.match(/^(POSPAGO|PREPAGO|Número teléfono fijo VoIP|AMENA)$/)) {
 						let sizePC = products[i].productCharacteristic.length;
 						if (products[i].productCharacteristic && sizePC > 0) {                        
 							
