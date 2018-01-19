@@ -105,7 +105,7 @@ module OrangeFeSARQ.Services {
             // Se seleccionan las propiedades para session
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
             'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-            'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id']);
+            'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'taxRate', 'taxRateName']);
             if(device.renewRates) {
                 deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                 'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
@@ -284,6 +284,60 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#selectRate
+         * @param rate tarifa
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Determina si la tarifa se debe añadir o eliminar del multiselección
+         * @return {boolean} Retorna verdadero si se ha insertado la tarifa en multiselección,
+         * retorna falso en caso que la tarifa se haya eliminado 
+         */
+        selectRate(rate): boolean {
+            let vm = this;
+            let rateForSession = vm.selectRateProperties(rate);
+
+            // Si la tarifa seleccinado ya esta en multiselección, se remueve.            
+            if(vm.isInRateContainer(rateForSession)) {
+                vm.deleteRate(rateForSession);
+                return false;
+            }else { // Si la tarifa no existe en multiselección 
+                // Si ya existen 3 tarifas seleccinadas
+                if(vm.rateContainerVolume() === 3) {
+                    vm.$scope.$broadcast('cantSelectRate');
+                } else if(vm.rateContainerVolume() <= 2) {
+                    // Si existen menos de 2 tarifas seleccinadas
+                    vm.insertInRateContainer(rateForSession);
+                    return true;
+                }
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#selectRateProperties
+         * @param rate tarifa
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Selecciona las propiedades de la tarifa para el session storage
+         */
+        selectRateProperties(rate) {
+            let vm = this;
+            // Se crean las caracteristicas necesarias de la tarifa, para el session storage
+            rate.rateId = (vm.rateContainer.length + 1);
+            rate.name = rate.rateSubName;
+            rate.siebelId = rate.siebelId;
+            rate.taxFreePrice = rate.ratePrice;
+            rate.taxIncludedPrice = rate.ratePriceTaxIncluded;
+            rate.description = rate.rateDescription;
+            // Se seleccionan las propiedades para session
+            let rateForSession = _.pick(rate, ['rateId', 'otherSvaInfoList', 'siebelId', 'name', 'description',
+            'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName', 'typeService', 'svaInfoList']);
+
+            return rateForSession;
+        }
+
+        /**
+         * @ngdoc method
          * @name OFC.Services:SrvTerminalCompare#getRateContainer
          * @methodOf OFC.Services:SrvTerminalCompare
          * @description
@@ -292,6 +346,18 @@ module OrangeFeSARQ.Services {
         getRateContainer() {
             let vm = this;
             return vm.rateContainer;
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#setRateContainer
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Establece el contenedor de tarifas
+         */
+        setRateContainer(rates) {
+            let vm = this;
+            vm.rateContainer = rates;
         }
 
         /**
@@ -331,6 +397,7 @@ module OrangeFeSARQ.Services {
             _.remove(vm.rateContainer, function (currentRate) {
                 return currentRate.siebelId === rate.siebelId;
               });
+            vm.resetRatesId();
         }
 
         /**
@@ -375,6 +442,20 @@ module OrangeFeSARQ.Services {
             let vm = this;
             this.rateContainer = [];
             vm.putRatesInSessionStorage();
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#resetRatesId
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Resetea los rateId del contenedor de tarifas
+         */
+        resetRatesId() {
+            let vm = this;
+            vm.rateContainer.forEach( (rate, index)  => {
+                vm.rateContainer[index].rateId = index + 1;
+            });
         }
 
         /**
