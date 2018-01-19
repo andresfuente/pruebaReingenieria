@@ -264,7 +264,7 @@ module OrangeFeSARQ.Services {
                 'id' : device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': isDeferredPrice ? [{'priceType': 'aplazado'}] : device.itemPrice[0],
+                'itemPrice': [isDeferredPrice ? [{'priceType': 'aplazado'}] : device.itemPrice[0]], //cambiar
                 'productOffering': {
                     id: device.siebelId,
                 },
@@ -286,7 +286,7 @@ module OrangeFeSARQ.Services {
                 'srcImage': device.srcImage,
                 'insuranceSelected': device.insuranceSelected,
                 'stock': device.stock,
-                'itemPrice': device.itemPrice[0],
+                'itemPrice': [device.itemPrice[0]],
                 'shoppingCart': [secundaryDeviceCartItem].concat(vapCartItems)
             };
 
