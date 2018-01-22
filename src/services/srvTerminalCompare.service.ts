@@ -331,9 +331,39 @@ module OrangeFeSARQ.Services {
             rate.description = rate.rateDescription;
             // Se seleccionan las propiedades para session
             let rateForSession = _.pick(rate, ['rateId', 'siebelId', 'name', 'description',
-            'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName', 'typeService', 'svaInfoList']);
+            'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName', 'typeService', 'svaInfoList', 'otherSvaInfoList']);
 
             return rateForSession;
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#generateSelectedSVAList
+         * @param rate tarifa
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Genera las listas de SVA's seleccionados para cada tarifa en multiselección
+         */
+        generateSelectedSVAList() {
+            let vm = this;
+            let svaList = [];
+            let otherSVAList = [];
+            vm.rateContainer.forEach( currentRate  => {
+                // Completa tu oferta
+                if(currentRate.svaInfoList) {
+                    svaList = currentRate.svaInfoList;
+                    _.remove( svaList, function (currentSVA) {
+                        return !currentSVA.isSelected;
+                    });
+                }
+                // Otros
+                if(currentRate.otherSvaInfoList) {
+                    otherSVAList = currentRate.otherSvaInfoList;
+                    _.remove( otherSVAList, function (currentSVA) {
+                        return !currentSVA.isSelected;
+                    });
+                }
+            });
         }
 
         /**
@@ -455,6 +485,23 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.rateContainer.forEach( (rate, index)  => {
                 vm.rateContainer[index].rateId = index + 1;
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#selectSVA
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @param {ratesParent.Models.Rate} rate tarifa
+         * @description
+         * Reemplaza la lista de SVA's
+         */
+        selectSVA(rate) {
+            let vm = this;
+            vm.rateContainer.forEach( currentRate => {
+                if(currentRate.siebelId === rate.siebelId) {
+                    currentRate.svaInfoList = rate.svaInfoList;
+                }
             });
         }
 

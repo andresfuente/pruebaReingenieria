@@ -683,5 +683,87 @@ module OrangeFeSARQ.Services {
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
         }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putDeviceInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @param sva sva
+         * @description
+         * Añade un sva al session storage del carrito
+         */
+        putSVAInShoppingCart(sva) {
+            let vm = this;
+            let productItem;
+            let svaCartItemElement, cartItemElement;
+            let cartItemElementId, cartItemIndex, lastCartItemId, commercialActId: number;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let commercialActIndex = vm.getSelectedCommercialAct();
+
+            // Se obtiene el ID del acto comercial que se esta modificando
+            if(commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
+                commercialActId = Number(commercialData[commercialActIndex].id);
+            }
+            // Se comprueba si existe algun dispositivo TSS en el shopping cart que se este modificando
+            if(shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
+                commercialData[commercialActIndex].ospIsSelected) {
+                    // Se eliminan los TSS del acto comercial existentes en el shopping cart
+                    shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
+                    commercialData[commercialActIndex].isCompletedAC = false;
+                    sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+            }
+            // Se obtiene el id del ultimo elmento del cart item del shopping cart
+            lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
+
+            productItem = {
+                'name': sva.title,
+                'description': sva.description,
+                'productRelationship': [{
+                    'type': 'sva'
+                }],
+                'place': [],
+                'characteristic': []
+            };
+
+            svaCartItemElement = {
+                'id' : sva.id,
+                'action': 'New',
+                'product': productItem,
+                'itemPrice': sva.itemPrice,
+                'productOffering': {
+                    id: sva.id,
+                },
+                cartItemRelationship: [],
+                 'ospSelected' : true,
+                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+            };
+
+            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
+
+            cartItemElement = {
+                'id' : cartItemElementId,
+                'cartItem': [svaCartItemElement],
+                'action': 'New',
+                'cartItemRelationship' : [{
+                    id: commercialActId
+                }],
+                'ospSelected' : true,
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
+            };
+
+            if(shoppingCart !== null) {
+                shoppingCart.cartItem.push(cartItemElement);
+            } else {
+                shoppingCart = {
+                    'id': '',
+                    'cartItem': [cartItemElement],
+                    'customer': {}
+                };
+            }
+            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        }
     }
 }
