@@ -58,7 +58,13 @@ module OrangeFeSARQ.Services {
          * @description 
          * @returns {object} Devuelve una promesa con el response
          */
-        postMobileInformation(body, id, brand, comp, showMessage = true, messageOk = 'La actualización de los datos no es inmediata. Sus datos se verán reflejados en su siguiente inicio de sesión.') {
+        postMobileInformation(
+            body,
+            id,
+            brand,
+            comp,
+            showMessage = true,
+            messageOk = 'La actualización de los datos no es inmediata. Sus datos se verán reflejados en su siguiente inicio de sesión.') {
             let vm = this;
 
             let _search: Object = {
@@ -198,9 +204,41 @@ module OrangeFeSARQ.Services {
                     isExtended: isExtended
                 },
                 urlParams: ['ospCustomer', id]
-            }
+            };
 
             return vm.httpCacheGett(vm.genericConstant.customerManagement, _search, componentName)
+            .then(
+                function (response) {
+                    return response.data;
+                }
+            )
+            .catch(
+                function (error) {
+                    throw error;
+                }
+            );
+        }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services.CustomerManagementSrv#postOspCustomer
+         * @methodOf OrangeFeSARQ.Services.CustomerManagementSrv
+         * @param {string} body datos del cliente
+         * @param {string} componentName nombre del componente
+         * @description
+         * Almacena la información personal guardada de un cliente
+         * @returns {object} Devuelve una promesa con el response.
+         */
+        postOspCustomer(body, componentName) {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams: {},
+                urlParams: ['ospCustomer'],
+                body: body
+            };
+
+            return vm.httpPostFull(vm.genericConstant.customerManagement, _search, componentName)
             .then(
                 function (response) {
                     return response.data;
