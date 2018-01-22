@@ -330,8 +330,8 @@ module OrangeFeSARQ.Services {
             rate.taxIncludedPrice = rate.ratePriceTaxIncluded;
             rate.description = rate.rateDescription;
             // Se seleccionan las propiedades para session
-            let rateForSession = _.pick(rate, ['rateId', 'siebelId', 'name', 'description',
-            'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName', 'typeService', 'svaInfoList', 'otherSvaInfoList']);
+            let rateForSession = _.pick(rate, ['rateId', 'otherSvaInfoList', 'siebelId', 'name', 'description',
+            'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName', 'typeService', 'svaInfoList']);
 
             return rateForSession;
         }
