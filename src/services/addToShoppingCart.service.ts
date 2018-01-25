@@ -527,7 +527,7 @@ module OrangeFeSARQ.Services {
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
             lastCartItemId = cartItemElementId;
 
-            cartItemElement = {
+            /* cartItemElement = {
                 'id': cartItemElementId,
                 'cartItem': [rateCartItemElement],
                 'action': 'New',
@@ -548,10 +548,11 @@ module OrangeFeSARQ.Services {
                     'customer': {}
                 };
             }
-
+ */
             // TERMINAL PRIMARIO
             // Tipo del terminal
-            if (commercialData.ospTerminalWorkflow !== 'standard') {
+            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard'
+            && commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
                 device.characteristic = [
                     {
                         name: 'CIMATerminalType',
@@ -579,7 +580,7 @@ module OrangeFeSARQ.Services {
                     'place': [],
                     'characteristic': device.characteristic
                 },
-                'itemPrice': [],
+                'itemPrice': [device.itemPrice[0]],
                 'productOffering': {
                     'id': device.siebelId ? device.siebelId : '',
                     'name': device.name ? device.name : '',
@@ -591,7 +592,7 @@ module OrangeFeSARQ.Services {
 
             cartItemElement = {
                 'id': cartItemElementId,
-                'cartItem': [deviceCartItemElement],
+                'cartItem': [rateCartItemElement, deviceCartItemElement],
                 'action': 'New',
                 'cartItemRelationship': [{
                     id: commercialActId
