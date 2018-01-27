@@ -775,6 +775,13 @@ module OrangeFeSARQ.Services {
                         }
                         break;
 
+                        case 'num3':
+                        pattern = /^[0-9]{0,3}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
                     case 'alfNum':
                         pattern = /^[a-zA-Z0-9]{0,5}$/;
                         if (pattern.test(value)) {
