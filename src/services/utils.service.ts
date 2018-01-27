@@ -806,9 +806,9 @@ module OrangeFeSARQ.Services {
                         break;
                     case 'cif':
                         // pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
-                        pattern = /^[abehABEH][0-9]{8}$/;
-                        pattern1 = /^[kpqsKPQS][0-9]{7}[a-jA-J]$/;
-                        pattern2 = /^[cdfgjlmnruvwCDFGJLMNRUVW][0-9]{7}[0-9a-jA-J]$/;
+                        pattern = /^[abehABEH]{1}[0-9]{8}$/;
+                        pattern1 = /^[kpqsKPQS]{1}[0-9]{7}[a-jA-J]$/;
+                        pattern2 = /^[cdfgjlmnruvwCDFGJLMNRUVW]{1}[0-9]{7}[0-9a-jA-J]$/;
                         if (pattern.test(value) || pattern1.test(value) || pattern2.test(value)) {
                             status = true;
                         }
