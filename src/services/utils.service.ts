@@ -725,7 +725,7 @@ module OrangeFeSARQ.Services {
                         break;
 
                     case 'cp':
-                        pattern = /^[0-9]{4}$/;
+                        pattern = /^[0-9]{5}$/;
                         if (pattern.test(value)) {
                             status = true;
                         }
