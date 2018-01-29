@@ -369,7 +369,7 @@ module OrangeFeSARQ.Services {
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
             // Si la tarifa posee SVA's seleccionados
-            if(rate.selectedSvaList.length > 0 ) {
+            if(rate.selectedSvaList && rate.selectedSvaList.length > 0 ) {
                 // Se crean los cartItem de los SVA's seleccionados
                 rate.selectedSvaList.forEach( sva => {
                     svaCartItemList.push(vm.createSVACartItem(sva));
