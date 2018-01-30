@@ -347,10 +347,8 @@ module OrangeFeSARQ.Services {
             let productItem;
             let rateCartItemElement;
             let cartItemElement;
-            let cartItemElementId: number;
-            let cartItemIndex: number;
-            let lastCartItemId: number;
-            let commercialActId: number;
+            let cartItemElementId, cartItemIndex, lastCartItemId, commercialActId: number;
+            let svaCartItemList = [];
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
@@ -369,6 +367,14 @@ module OrangeFeSARQ.Services {
             }
             // Se obtiene el id del ultimo elmento del cart item del shopping cart
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
+
+            // Si la tarifa posee SVA's seleccionados
+            if(rate.selectedSvaList && rate.selectedSvaList.length > 0 ) {
+                // Se crean los cartItem de los SVA's seleccionados
+                rate.selectedSvaList.forEach( sva => {
+                    svaCartItemList.push(vm.createSVACartItem(sva));
+                });
+            }
 
             productItem = {
                 'href': '',
@@ -415,7 +421,7 @@ module OrangeFeSARQ.Services {
 
             cartItemElement = {
                 'id': cartItemElementId,
-                'cartItem': [rateCartItemElement],
+                'cartItem': [rateCartItemElement].concat(svaCartItemList),
                 'action': 'New',
                 'cartItemRelationship': [{
                     id: commercialActId
@@ -527,7 +533,7 @@ module OrangeFeSARQ.Services {
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
             lastCartItemId = cartItemElementId;
 
-            cartItemElement = {
+            /* cartItemElement = {
                 'id': cartItemElementId,
                 'cartItem': [rateCartItemElement],
                 'action': 'New',
@@ -548,10 +554,11 @@ module OrangeFeSARQ.Services {
                     'customer': {}
                 };
             }
-
+ */
             // TERMINAL PRIMARIO
             // Tipo del terminal
-            if (commercialData.ospTerminalWorkflow !== 'standard') {
+            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard'
+            && commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
                 device.characteristic = [
                     {
                         name: 'CIMATerminalType',
@@ -579,7 +586,7 @@ module OrangeFeSARQ.Services {
                     'place': [],
                     'characteristic': device.characteristic
                 },
-                'itemPrice': [],
+                'itemPrice': [device.itemPrice[0]],
                 'productOffering': {
                     'id': device.siebelId ? device.siebelId : '',
                     'name': device.name ? device.name : '',
@@ -591,7 +598,7 @@ module OrangeFeSARQ.Services {
 
             cartItemElement = {
                 'id': cartItemElementId,
-                'cartItem': [deviceCartItemElement],
+                'cartItem': [rateCartItemElement, deviceCartItemElement],
                 'action': 'New',
                 'cartItemRelationship': [{
                     id: commercialActId
@@ -853,13 +860,13 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
-         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putDeviceInShoppingCart
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#createSVACartItem
          * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
          * @param sva sva
          * @description
-         * Añade un sva al session storage del carrito
+         * Crea el Cart Item de un SVA
          */
-        putSVAInShoppingCart(sva) {
+        createSVACartItem(sva) {
             let vm = this;
             let productItem;
             let svaCartItemElement, cartItemElement;
@@ -868,26 +875,11 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
 
-            // Se obtiene el ID del acto comercial que se esta modificando
-            if(commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
-                commercialActId = Number(commercialData[commercialActIndex].id);
-            }
-            // Se comprueba si existe algun dispositivo TSS en el shopping cart que se este modificando
-            if(shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
-                commercialData[commercialActIndex].ospIsSelected) {
-                    // Se eliminan los TSS del acto comercial existentes en el shopping cart
-                    shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
-                    commercialData[commercialActIndex].isCompletedAC = false;
-                    sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
-            }
-            // Se obtiene el id del ultimo elmento del cart item del shopping cart
-            lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
-
             productItem = {
                 'name': sva.title,
                 'description': sva.description,
                 'productRelationship': [{
-                    'type': 'sva'
+                    'type': 'SVA'
                 }],
                 'place': [],
                 'characteristic': []
@@ -900,37 +892,19 @@ module OrangeFeSARQ.Services {
                 'itemPrice': sva.itemPrice,
                 'productOffering': {
                     id: sva.id,
+                    name: sva.title,
+                    category: []
                 },
                 cartItemRelationship: [],
-                 'ospSelected' : true,
+                 'ospSelected' : false,
+                 'ospSelectable': true,
+                 'ospMandatory': true,
+                 'ospObjectType': '',
                  'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                  'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
             };
 
-            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
-
-            cartItemElement = {
-                'id' : cartItemElementId,
-                'cartItem': [svaCartItemElement],
-                'action': 'New',
-                'cartItemRelationship' : [{
-                    id: commercialActId
-                }],
-                'ospSelected' : true,
-                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
-                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
-            };
-
-            if(shoppingCart !== null) {
-                shoppingCart.cartItem.push(cartItemElement);
-            } else {
-                shoppingCart = {
-                    'id': '',
-                    'cartItem': [cartItemElement],
-                    'customer': {}
-                };
-            }
-            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+            return svaCartItemElement;
         }
     }
 }

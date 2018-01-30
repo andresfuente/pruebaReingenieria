@@ -106,7 +106,7 @@ module OrangeFeSARQ.Services {
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
             'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
             'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName']);
-            if(device.renewRates) {
+            if(device.renewRates.length) {
                 deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                 'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
                 'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates']);
@@ -331,7 +331,7 @@ module OrangeFeSARQ.Services {
             rate.description = rate.rateDescription;
             // Se seleccionan las propiedades para session
             let rateForSession = _.pick(rate, ['rateId', 'otherSvaInfoList', 'siebelId', 'name', 'description',
-            'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName', 'typeService', 'svaInfoList']);
+            'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName', 'typeService', 'svaInfoList', 'allSVAChildrenList']);
 
             return rateForSession;
         }
@@ -342,27 +342,20 @@ module OrangeFeSARQ.Services {
          * @param rate tarifa
          * @methodOf OFC.Services:SrvTerminalCompare
          * @description
-         * Genera las listas de SVA's seleccionados para cada tarifa en multiselección
+         * Genera las lista de SVA's seleccionado para cada tarifa en multiselección
          */
         generateSelectedSVAList() {
             let vm = this;
             let svaList = [];
-            let otherSVAList = [];
             vm.rateContainer.forEach( currentRate  => {
-                // Completa tu oferta
-                if(currentRate.svaInfoList) {
-                    svaList = currentRate.svaInfoList;
-                    _.remove( svaList, function (currentSVA) {
-                        return !currentSVA.isSelected;
-                    });
-                }
-                // Otros
-                if(currentRate.otherSvaInfoList) {
-                    otherSVAList = currentRate.otherSvaInfoList;
-                    _.remove( otherSVAList, function (currentSVA) {
-                        return !currentSVA.isSelected;
-                    });
-                }
+                // Se todos los arrays de SVA's 
+                svaList = currentRate.svaInfoList.concat(currentRate.otherSvaInfoList).concat(currentRate.allSVAChildrenList);
+                // Se remueven los sva que no estan chequeados
+                _.remove( svaList, function (currentSVA) {
+                    return !currentSVA.isSelected;
+                });
+                // Se asigna el array de SVA's seleccionados a la tarifa
+                currentRate.selectedSvaList = svaList;
             });
         }
 
