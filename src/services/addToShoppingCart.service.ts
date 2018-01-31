@@ -196,7 +196,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Añade un terminal secundario al session storage del carrito
          */
-        putSecundaryDeviceInShoppingCart(device) {
+        putSecundaryDeviceInShoppingCart(device, payType) {
             let vm = this;
             let secundaryTerminal;
             let productItem;
@@ -207,15 +207,14 @@ module OrangeFeSARQ.Services {
             let sTerminalsLength = commercialData[commercialActIndex].sTerminals ? commercialData[commercialActIndex].sTerminals.length : 0;
             let sTerminalLastId = sTerminalsLength === 0 ? 0 : commercialData[commercialActIndex].sTerminals[sTerminalsLength - 1].id;
             let selectedCartItemId;
-            let isDeferredPrice = false; // ¿Es pago a plazos?
             let vapCartItems = [];
             let vapCartItem;
+            let unPriceItem;
             let sTerminalsSC = [];
             let seguro;
 
-            /* device.itemPrice.forEach( item => {
-                if(item.priceType === 'inicial' || item.priceType === 'cuota') {
-                    isDeferredPrice = true;
+            device.itemPrice.forEach( item => {
+                if(payType === "deferred" && item.priceType === 'inicial' || item.priceType === 'cuota') {
                     vapCartItem = {
                         'id': item.id,
                         'action': 'New',
@@ -232,25 +231,10 @@ module OrangeFeSARQ.Services {
                     };
                     vapCartItems.push(vapCartItem);
                 }
-            }); */
-            if (device.itemPrice[0].priceType === 'inicial' || device.itemPrice[0].priceType === 'cuota') {
-                isDeferredPrice = true;
-                vapCartItem = {
-                    'id': device.itemPrice[0].id,
-                    'action': 'New',
-                    'product': {
-                        'productRelationship': [{ 'type': 'VAP' }],
-                        'characteristic': [{ 'name': 'CIMATerminalType', 'value': 'Secundary' }]
-                    },
-                    'itemPrice': [device.itemPrice[0]],
-                    'productOffering': { 'id': device.itemPrice[0].id },
-                    'cartItemRelationship': [{ 'id': device.siebelId }],
-                    'ospSelected': true,
-                    'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
-                    'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
-                };
-                vapCartItems.push(vapCartItem);
-            }
+                if (payType === "unique" && item.priceType === "unico"){
+                    unPriceItem = item;
+                }
+            });
 
             productItem = {
                 'href': device.srcImage,
@@ -271,7 +255,7 @@ module OrangeFeSARQ.Services {
                 'id': device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': [isDeferredPrice ? [{ 'priceType': 'aplazado' }] : device.itemPrice[0]],
+                'itemPrice': [payType === "deferred" ? [{ 'priceType': 'aplazado' }] : unPriceItem],
                 'productOffering': {
                     id: device.siebelId,
                 },
@@ -322,7 +306,7 @@ module OrangeFeSARQ.Services {
                 shoppingCart.cartItem.forEach(currentCartItem => {
                     if (currentCartItem.id === selectedCartItemId) {
                         currentCartItem.cartItem.push(secundaryDeviceCartItem);
-                        if (isDeferredPrice) {
+                        if (payType === "deferred") {
                             currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
                         }
                         if (device.insuranceSiebelId) {
