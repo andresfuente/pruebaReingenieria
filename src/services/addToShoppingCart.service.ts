@@ -86,12 +86,17 @@ module OrangeFeSARQ.Services {
                     'name': 'CIMATerminalType',
                     'value': 'Primary'
                 },
-                {
-                    'name': 'IMEI',
-                    'value': device.IMEI ? device.IMEI : null
-                }
                 ]
             };
+
+            // Se guarda el IMEI del terminal si se dispone de el
+            if (device && device.IMEI  && device.IMEI !== undefined) {
+                let imei = {
+                    'name': 'IMEI',
+                    'value': device.IMEI
+                };
+                productItem.characteristic.push(imei);
+            }
 
             deviceCartItemElement = {
                 'id': device.siebelId,
@@ -196,7 +201,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Añade un terminal secundario al session storage del carrito
          */
-        putSecundaryDeviceInShoppingCart(device, payType) {
+        putSecundaryDeviceInShoppingCart(device) {
             let vm = this;
             let secundaryTerminal;
             let productItem;
@@ -207,14 +212,15 @@ module OrangeFeSARQ.Services {
             let sTerminalsLength = commercialData[commercialActIndex].sTerminals ? commercialData[commercialActIndex].sTerminals.length : 0;
             let sTerminalLastId = sTerminalsLength === 0 ? 0 : commercialData[commercialActIndex].sTerminals[sTerminalsLength - 1].id;
             let selectedCartItemId;
+            let isDeferredPrice = false; // ¿Es pago a plazos?
             let vapCartItems = [];
             let vapCartItem;
-            let unPriceItem;
             let sTerminalsSC = [];
             let seguro;
 
-            device.itemPrice.forEach( item => {
-                if(payType === "deferred" && item.priceType === 'inicial' || item.priceType === 'cuota') {
+            /* device.itemPrice.forEach( item => {
+                if(item.priceType === 'inicial' || item.priceType === 'cuota') {
+                    isDeferredPrice = true;
                     vapCartItem = {
                         'id': item.id,
                         'action': 'New',
@@ -231,10 +237,25 @@ module OrangeFeSARQ.Services {
                     };
                     vapCartItems.push(vapCartItem);
                 }
-                if (payType === "unique" && item.priceType === "unico"){
-                    unPriceItem = item;
-                }
-            });
+            }); */
+            if (device.itemPrice[0].priceType === 'inicial' || device.itemPrice[0].priceType === 'cuota') {
+                isDeferredPrice = true;
+                vapCartItem = {
+                    'id': device.itemPrice[0].id,
+                    'action': 'New',
+                    'product': {
+                        'productRelationship': [{ 'type': 'VAP' }],
+                        'characteristic': [{ 'name': 'CIMATerminalType', 'value': 'Secundary' }]
+                    },
+                    'itemPrice': [device.itemPrice[0]],
+                    'productOffering': { 'id': device.itemPrice[0].id },
+                    'cartItemRelationship': [{ 'id': device.siebelId }],
+                    'ospSelected': true,
+                    'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                    'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                };
+                vapCartItems.push(vapCartItem);
+            }
 
             productItem = {
                 'href': device.srcImage,
@@ -249,13 +270,21 @@ module OrangeFeSARQ.Services {
                     'value': 'Secundary'
                 }]
             };
+            // Si viene IMEI se añade
+            if (device && device.IMEI  && device.IMEI !== undefined) {
+                let imei = {
+                    'name': 'IMEI',
+                    'value': device.IMEI
+                };
+                productItem.characteristic.push(imei);
+            }
 
             // Objeto para shopping cart
             secundaryDeviceCartItem = {
                 'id': device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': [payType === "deferred" ? [{ 'priceType': 'aplazado' }] : unPriceItem],
+                'itemPrice': [isDeferredPrice ? [{ 'priceType': 'aplazado' }] : device.itemPrice[0]],
                 'productOffering': {
                     id: device.siebelId,
                 },
@@ -306,7 +335,7 @@ module OrangeFeSARQ.Services {
                 shoppingCart.cartItem.forEach(currentCartItem => {
                     if (currentCartItem.id === selectedCartItemId) {
                         currentCartItem.cartItem.push(secundaryDeviceCartItem);
-                        if (payType === "deferred") {
+                        if (isDeferredPrice) {
                             currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
                         }
                         if (device.insuranceSiebelId) {
