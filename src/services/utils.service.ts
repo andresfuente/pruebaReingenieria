@@ -384,24 +384,24 @@ module OrangeFeSARQ.Services {
                 let i = 0;
                 while (i < sizeProducts && !found) {
                     // Si estoy buscando el id
-					//verifico si el producto es relativo a una línea prepago, pospago o fijo
-					if(products[i].ospProductType.match(/^(POSPAGO|PREPAGO|Número teléfono fijo VoIP|AMENA)$/)) {
-						let sizePC = products[i].productCharacteristic.length;
-						if (products[i].productCharacteristic && sizePC > 0) {                        
-							
-								let productCh = products[i].productCharacteristic;
-								let sizeCh = productCh.length;
-								// Recorro el product caracteristic de este producto
-								let it = 0;
-								while (it < sizeCh && !found) {
-									if (productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
-										found = true;
-										return products[i].ospProductType;
-									}
-									++it;
-								}
-						}
-					}
+                    //verifico si el producto es relativo a una línea prepago, pospago o fijo
+                    if (products[i].ospProductType.match(/^(POSPAGO|PREPAGO|Número teléfono fijo VoIP|AMENA)$/)) {
+                        let sizePC = products[i].productCharacteristic.length;
+                        if (products[i].productCharacteristic && sizePC > 0) {
+
+                            let productCh = products[i].productCharacteristic;
+                            let sizeCh = productCh.length;
+                            // Recorro el product caracteristic de este producto
+                            let it = 0;
+                            while (it < sizeCh && !found) {
+                                if (productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
+                                    found = true;
+                                    return products[i].ospProductType;
+                                }
+                                ++it;
+                            }
+                        }
+                    }
                     ++i;
                 }
             }
@@ -632,14 +632,14 @@ module OrangeFeSARQ.Services {
              * Devuelve la propiedad de OWCS de la clave recibida
         **/
         getOWCSProperty(val: string): string {
-			let vm = this;
-			let result:string;
-		    if(OrangeFeSARQ.Controllers.ParentController.shared.properties){
-				result = OrangeFeSARQ.Controllers.ParentController.shared.properties[val];
-			}
+            let vm = this;
+            let result: string;
+            if (OrangeFeSARQ.Controllers.ParentController.shared.properties) {
+                result = OrangeFeSARQ.Controllers.ParentController.shared.properties[val];
+            }
             return result;
-        }		
-		
+        }
+
         /**
              * @ngdoc service
              * @name services.Controllers:Services#testPassRepeatNumber
@@ -674,14 +674,14 @@ module OrangeFeSARQ.Services {
 
         testPassSequentialNumbers(val: string, minLength: number, maxLength: number) {
             const pass: string = val;
-            let notValidPass: any = ["123456","87654321","1234567","7654321","000000","111111","222222","333333","444444","555555","666666","777777",
-            "888888","999999","0000000","2222222","3333333","4444444","5555555","6666666","7777777","8888888","9999999","12345678","654321",
-            "00000000","22222222","33333333","44444444","55555555","66666666","77777777","88888888","99999999","8765432","23456789","3456789",
-            "98765432","9876543","987654","000000","222222","333333","444444","555555","666666","777777","888888","999999", "876543"];
+            let notValidPass: any = ["123456", "87654321", "1234567", "7654321", "000000", "111111", "222222", "333333", "444444", "555555", "666666", "777777",
+                "888888", "999999", "0000000", "2222222", "3333333", "4444444", "5555555", "6666666", "7777777", "8888888", "9999999", "12345678", "654321",
+                "00000000", "22222222", "33333333", "44444444", "55555555", "66666666", "77777777", "88888888", "99999999", "8765432", "23456789", "3456789",
+                "98765432", "9876543", "987654", "000000", "222222", "333333", "444444", "555555", "666666", "777777", "888888", "999999", "876543"];
             if (pass) {
-                for(let i = 0; i <= notValidPass.length; i++){
-                    if(pass === notValidPass[i]){
-                         return true;
+                for (let i = 0; i <= notValidPass.length; i++) {
+                    if (pass === notValidPass[i]) {
+                        return true;
                     }
                 }
                 return false;
@@ -794,7 +794,7 @@ module OrangeFeSARQ.Services {
                         break;
                     case 'passport':
                         status = true;
-                        
+
                         break;
                     case 'cif':
                         // pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
@@ -812,13 +812,13 @@ module OrangeFeSARQ.Services {
                         break;
                     case 'TNNCP':
                         if (vm.validateForm('telephone', value) || vm.validateForm('nif', value) || vm.validateForm('cif', value)
-                                || vm.validateForm('nie', value)|| vm.validateForm('passport', value)) {
+                            || vm.validateForm('nie', value) || vm.validateForm('passport', value)) {
                             status = true;
                         }
                         break;
                     case 'NNCP':
                         if (vm.validateForm('nif', value) || vm.validateForm('cif', value)
-                                || vm.validateForm('nie', value)|| vm.validateForm('passport', value)) {
+                            || vm.validateForm('nie', value) || vm.validateForm('passport', value)) {
                             status = true;
                         }
                         break;
@@ -855,9 +855,9 @@ module OrangeFeSARQ.Services {
 
             return status;
         };
-		
-		
-		
+
+
+
 		/**
          * @ngdoc method
          * @name services.Controllers:Services#trusHtml
@@ -873,22 +873,22 @@ module OrangeFeSARQ.Services {
         }
 
         //El link que necesite llamar al chat ha de tener la inbenta-trigger.
-        inbenta(){
+        inbenta() {
             let chatAmena: HTMLElement = document.getElementsByClassName("inbenta-trigger")[0] as HTMLElement;
             chatAmena.click();
         }
 
-       /**
-        * @ngdoc service
-        * @name services.Controllers:Services#owcsParamFormat
-        * @param {string} value :Cadena OWCS
-        * @param {string} paramOwcs :Valor parametrizable recibido por OWCS
-        * @param {string} param : Valor parametrizable a remplazar por el de OWCS
-        * @return {string} Devuelve si en la contraseña hay tramos de msisdn y secuencias de numeros de mayor a menor y de menor a mayor
-        * @methodOf OrangeFeSARQ.Services.Utils
-        * @description
-        * Remplaza un valor parametrizable de un texto.
-        **/
+        /**
+         * @ngdoc service
+         * @name services.Controllers:Services#owcsParamFormat
+         * @param {string} value :Cadena OWCS
+         * @param {string} paramOwcs :Valor parametrizable recibido por OWCS
+         * @param {string} param : Valor parametrizable a remplazar por el de OWCS
+         * @return {string} Devuelve si en la contraseña hay tramos de msisdn y secuencias de numeros de mayor a menor y de menor a mayor
+         * @methodOf OrangeFeSARQ.Services.Utils
+         * @description
+         * Remplaza un valor parametrizable de un texto.
+         **/
         owcsParamFormat(value: string, paramOwcs: string, param: string): string {
             return value.replace(paramOwcs, param);
         }
@@ -908,10 +908,10 @@ module OrangeFeSARQ.Services {
 
             if (vm.isFixedLine(+msisdn)) { // Solo los fijos tienen codigo Morgane
                 for (let i = 0, length = products.length; i < length; i++) {
-                    let productMorganeCodeArray: any = _.filter(products[i].productCharacteristic, {name: 'Código Morgane'});
+                    let productMorganeCodeArray: any = _.filter(products[i].productCharacteristic, { name: 'Código Morgane' });
                     // Comprobamos que el producto tiene codigo morgane
                     if (!_.isEmpty(productMorganeCodeArray)) {
-                        let productMsisdnArray: any = _.filter(products[i].productCharacteristic, {name: 'Número fijo Asociado'});
+                        let productMsisdnArray: any = _.filter(products[i].productCharacteristic, { name: 'Número fijo Asociado' });
                         // Comprobamos que el msisdn del producto coincida con el msisdn que se pide
                         if (!_.isEmpty(productMsisdnArray) && productMsisdnArray[0].value === msisdn) {
                             return productMorganeCodeArray[0].value;
@@ -940,11 +940,11 @@ module OrangeFeSARQ.Services {
 
             // Sacamos las líneas móviles
             let mobileLines = _.filter(customerViewStore.product, (product: any) => {
-               return (product.ospProductType === 'PREPAGO' || product.ospProductType === 'POSPAGO');
+                return (product.ospProductType === 'PREPAGO' || product.ospProductType === 'POSPAGO');
             });
 
-            for(let i in mobileLines) {
-                if(mobileLines.length) {
+            for (let i in mobileLines) {
+                if (mobileLines.length) {
 
                     // Sacamos datos necesarios del customerView: rango, numero línea y fecha de activación
                     let rate = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
@@ -962,7 +962,7 @@ module OrangeFeSARQ.Services {
                         return (characteristic.id === rate.value);
                     });
 
-                    if(ratePC && ratePC.ospTypeService === 'CONVERGENTE') {
+                    if (ratePC && ratePC.ospTypeService === 'CONVERGENTE') {
                         isPack = true;
                     };
 
@@ -980,14 +980,14 @@ module OrangeFeSARQ.Services {
                     }
 
                     let info = {
-                        id2: (i+1),
-                        msisdn: MSISDN ? MSISDN.value: '',
+                        id2: (i + 1),
+                        msisdn: MSISDN ? MSISDN.value : '',
                         id: 0,
                         rateName: ratePC ? ratePC.name : '',
                         rateGroupName: ratePC ? ratePC.ospGroupName : '',
                         range: ranges.productSpecCharacteristicValue[0].value,
                         startDate: startDate,
-                        tmCode: rate ? rate.value: '',
+                        tmCode: rate ? rate.value : '',
                         isPack: isPack
                     };
 
@@ -1005,9 +1005,9 @@ module OrangeFeSARQ.Services {
             // Eliminamos id2, isPack. Iniciar id segun orden de principal.
             let orderLines2 = [];
 
-            for(let i = 0; i < lines.length; i++) {
+            for (let i = 0; i < lines.length; i++) {
                 let info = {
-                    id: (i+1),
+                    id: (i + 1),
                     msisdn: lines[i].msisdn,
                     rateName: lines[i].rateName,
                     rateGroupName: lines[i].rateGroupName,
@@ -1020,6 +1020,20 @@ module OrangeFeSARQ.Services {
             };
             return orderLines2;
         }
+
+        /**
+         * devuelve la imagen contribuido por OWCS. storeComp: store de webcenter del componente, name: imagen que buscamos
+         */
+        getImageOwcs(storeComp: any, name: string) {
+            let vm = this;
+            let image;
+            if (!_.isEmpty(storeComp.section.listImage)) {
+                image = _.find(storeComp.section.listImage, { 'name': name });
+            }
+            image.imageFile_bloblink_ = image ? image.imageFile_bloblink_ : null;
+            return image.imageFile_bloblink_;
+        }
+
     }
 
     angular.module('utils', [])
