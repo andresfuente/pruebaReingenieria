@@ -235,7 +235,7 @@ module OrangeFeSARQ.Services {
                         'productRelationship': [{'type': 'VAP'}],
                         'characteristic': [{'name': 'CIMATerminalType', 'value': 'Secundary'}]
                     },
-                    'itemPrice': [device.itemPrice[0]],
+                    'itemPrice': device.itemPrice[0],
                     'productOffering': {'id': device.itemPrice[0].id},
                     'cartItemRelationship': [{'id': device.siebelId}],
                     'ospSelected' : true,
