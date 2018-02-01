@@ -302,11 +302,11 @@ module OrangeFeSARQ.Services {
         typeHref(oData: any) {
             let vm = this;
             if (!oData) {
-                return '/';
+                return '#/';
             } else if (oData && oData.includes('http')) {
                 return oData;
             } else {
-                return '/' + oData;
+                return '#/' + oData;
             }
         }
 
@@ -385,7 +385,7 @@ module OrangeFeSARQ.Services {
                 while (i < sizeProducts && !found) {
                     // Si estoy buscando el id
 					//verifico si el producto es relativo a una línea prepago, pospago o fijo
-					if(products[i].ospProductType.match(/^(POSPAGO|PREPAGO|Número teléfono fijo VoIP)$/)) {
+					if(products[i].ospProductType.match(/^(POSPAGO|PREPAGO|Número teléfono fijo VoIP|AMENA)$/)) {
 						let sizePC = products[i].productCharacteristic.length;
 						if (products[i].productCharacteristic && sizePC > 0) {                        
 							
@@ -732,7 +732,7 @@ module OrangeFeSARQ.Services {
                         break;
 
                     case 'mail':
-                        pattern = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]+/;
+                        pattern = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]{5,30}$/;
                         if (pattern.test(value)) {
                             status = true;
                         }
