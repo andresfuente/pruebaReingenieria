@@ -470,7 +470,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Añade un terminal primario y su tarifa al session storage del carrito
          */
-        putRateAndDeviceInShoppingCart(rate, device) {
+        putRateAndDeviceInShoppingCart(rate, device, uniquePaid: boolean) {
             let vm = this;
             let rateCartItemElement;
             let deviceCartItemElement;
@@ -532,31 +532,9 @@ module OrangeFeSARQ.Services {
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
             lastCartItemId = cartItemElementId;
 
-            /* cartItemElement = {
-                'id': cartItemElementId,
-                'cartItem': [rateCartItemElement],
-                'action': 'New',
-                'cartItemRelationship': [{
-                    id: commercialActId
-                }],
-                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
-                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
-                'ospSelected': true
-            };
-
-            if (shoppingCart !== null) {
-                shoppingCart.cartItem.push(cartItemElement);
-            } else {
-                shoppingCart = {
-                    'id': '',
-                    'cartItem': [cartItemElement],
-                    'customer': {}
-                };
-            }
- */
             // TERMINAL PRIMARIO
             // Tipo del terminal
-            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard'
+            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar'
             && commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
                 device.characteristic = [
                     {
@@ -572,11 +550,43 @@ module OrangeFeSARQ.Services {
                     }
                 ];
             }
+            // Se guarda el IMEI del terminal si se dispone de el
+            if (device && device.IMEI  && device.IMEI !== undefined) {
+                let imei = {
+                    'name': 'IMEI',
+                    'value': device.IMEI
+                };
+                device.characteristic.push(imei);
+            }
+            let uniqueItemPrice = [];
+            let vapCartItems = [];
+            for(let i in device.itemPrice) {
+                if(device.itemPrice[i].priceType === 'unico') {
+                    uniqueItemPrice.push(device.itemPrice[i]);
+                } else {
+                    let vapCartItem = {
+                        'id': device.itemPrice[i].id,
+                        'action': 'New',
+                        'product': {
+                            'productRelationship': [{'type': 'VAP'}],
+                            'characteristic': [{'name': 'CIMATerminalType', 'value': 'Primary'}]
+                        },
+                        'itemPrice': [device.itemPrice[i]],
+                        'productOffering': {'id': device.itemPrice[i].id},
+                        'cartItemRelationship': [{'id': device.siebelId}],
+                        'ospSelected' : true,
+                        'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                        'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                    };
+                    vapCartItems.push(vapCartItem);
+                }
+            }
+
             deviceCartItemElement = {
                 'id': device.siebelId ? device.siebelId : '',
                 'action': 'New',
                 'product': {
-                    'href': '',
+                    'href': device.srcImage ? device.srcImage : '',
                     'name': device.name ? device.name : '',
                     'description': device.description ? device.description : '',
                     'productRelationship': [{
@@ -585,19 +595,19 @@ module OrangeFeSARQ.Services {
                     'place': [],
                     'characteristic': device.characteristic
                 },
-                'itemPrice': [device.itemPrice[0]],
+                'itemPrice': uniquePaid ? uniqueItemPrice : [{ 'priceType': 'aplazado' }],
                 'productOffering': {
                     'id': device.siebelId ? device.siebelId : '',
                     'name': device.name ? device.name : '',
                     'category': []
                 }
             };
-
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
 
             cartItemElement = {
                 'id': cartItemElementId,
-                'cartItem': [rateCartItemElement, deviceCartItemElement],
+                'cartItem': uniquePaid ? [rateCartItemElement, deviceCartItemElement] :
+                                         [rateCartItemElement, deviceCartItemElement].concat(vapCartItems),
                 'action': 'New',
                 'cartItemRelationship': [{
                     id: commercialActId
@@ -611,7 +621,7 @@ module OrangeFeSARQ.Services {
                 shoppingCart.cartItem.push(cartItemElement);
             } else {
                 shoppingCart = {
-                    'id': '',
+                    'id': '1',
                     'cartItem': [cartItemElement],
                     'customer': {}
                 };
