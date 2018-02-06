@@ -725,7 +725,7 @@ module OrangeFeSARQ.Services {
                         break;
 
                     case 'cp':
-                        pattern = /^[0-9]{4}$/;
+                        pattern = /^[0-9]{5}$/;
                         if (pattern.test(value)) {
                             status = true;
                         }
@@ -733,7 +733,8 @@ module OrangeFeSARQ.Services {
 
                     case 'mail':
                         pattern = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]{5,30}$/;
-                        if (pattern.test(value)) {
+                        pattern2 = /^[\s\S]{0,40}$/;
+                        if (pattern.test(value) && pattern2.test(value)) {
                             status = true;
                         }
                         break;
@@ -774,6 +775,13 @@ module OrangeFeSARQ.Services {
                         }
                         break;
 
+                        case 'num3':
+                        pattern = /^[0-9]{0,3}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
                     case 'alfNum':
                         pattern = /^[a-zA-Z0-9]{0,5}$/;
                         if (pattern.test(value)) {
@@ -798,9 +806,9 @@ module OrangeFeSARQ.Services {
                         break;
                     case 'cif':
                         // pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
-                        pattern = /^[abehABEH][0-9]{8}$/;
-                        pattern1 = /^[kpqsKPQS][0-9]{7}[a-jA-J]$/;
-                        pattern2 = /^[cdfgjlmnruvwCDFGJLMNRUVW][0-9]{7}[0-9a-jA-J]$/;
+                        pattern = /^[abehABEH]{1}[0-9]{8}$/;
+                        pattern1 = /^[kpqsKPQS]{1}[0-9]{7}[a-jA-J]$/;
+                        pattern2 = /^[cdfgjlmnruvwCDFGJLMNRUVW]{1}[0-9]{7}[0-9a-jA-J]$/;
                         if (pattern.test(value) || pattern1.test(value) || pattern2.test(value)) {
                             status = true;
                         }
