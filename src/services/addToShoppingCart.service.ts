@@ -602,7 +602,6 @@ module OrangeFeSARQ.Services {
                     'category': []
                 }
             };
-            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
 
             cartItemElement = {
                 'id': cartItemElementId,
