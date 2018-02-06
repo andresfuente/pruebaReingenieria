@@ -1038,8 +1038,12 @@ module OrangeFeSARQ.Services {
             if (!_.isEmpty(storeComp.section.listImage)) {
                 image = _.find(storeComp.section.listImage, { 'name': name });
             }
-            image.imageFile_bloblink_ = image ? image.imageFile_bloblink_ : null;
+            if (image && image.imageFile_bloblink_) {
+            // - image.imageFile_bloblink_ = image ? image.imageFile_bloblink_ : null;
             return image.imageFile_bloblink_;
+            } else {
+                return null;
+            }
         }
 
     }
