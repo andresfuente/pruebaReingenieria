@@ -487,6 +487,7 @@ module OrangeFeSARQ.Services {
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
+            let insurance;
 
             // Se obtiene el ID del acto comercial que se esta creando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
@@ -563,6 +564,9 @@ module OrangeFeSARQ.Services {
                 };
                 device.characteristic.push(imei);
             }
+            if (device.insuranceSiebelId) {
+                insurance = vm.createInsuranceCartItem(device, 'primary');
+            }
             let uniqueItemPrice = [];
             let vapCartItems = [];
             for(let i in device.itemPrice) {
@@ -620,7 +624,9 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': true
             };
-
+            if(insurance) {
+                cartItemElement.cartItem.push(insurance);
+            }
             if (shoppingCart !== null) {
                 shoppingCart.cartItem.push(cartItemElement);
             } else {
