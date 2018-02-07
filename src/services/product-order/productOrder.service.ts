@@ -402,5 +402,46 @@ module OrangeFeSARQ.Services {
         return error;
       });
     }
+
+    /**
+     * @ngdoc method
+     * @name OrangeFeSARQ.Services:ProductOrderSrv#postLeaveAmena
+     * @methodOf OrangeFeSARQ.Services.ProductOrderSrv
+     * @param {string} msisdn - Número del telefono del cliente
+     * @param {string} document - documento de identidad del cliente
+     * @param {string} action - Baja de Amena o cambio a Orange
+     * @param {string} idProduct - id de producto 
+     * @param {string} componentN
+     * @description
+     * Si la notificación es pegasus, modifica 
+     */
+    postPaymentOrange(msisdn: string, document: string, action: string, idProduct: string, productName: string,
+      componentName: string): ng.IPromise<any> {
+      let vm = this;
+      let BRAND = vm.genericConstant.brand;
+      let METHOD = 'extraManagement';
+      let _search: Object = {
+        urlParams: [BRAND, METHOD],
+        queryParams: null,
+        body: {
+          'productId': idProduct,
+          'action': action,
+          'msisdn': msisdn,
+          'docNumber': document,
+          'productName': productName
+        }
+      };
+      return vm.httpPost(vm.urlProductOrder, _search, componentName)
+        .then((response) => {
+          let _resp = response.data;
+          if (_resp.error) {
+            throw _resp.error;
+          }
+          return _resp.productOrder;
+        })
+        .catch(function (error) {
+          return error.data;
+        });
+    }
   }
 }

@@ -105,7 +105,7 @@ module OrangeFeSARQ.Services {
             // Se seleccionan las propiedades para session
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
             'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-            'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName']);
+            'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName', 'tipoPago']);
             if(device.renewRates !== undefined && device.renewRates) {
                 deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                 'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
@@ -569,6 +569,16 @@ module OrangeFeSARQ.Services {
                 }
                 vm.resetDevicesId();
             }
+        }
+
+        setPayType(idSiebel, payType) {
+            let vm = this;
+            vm.deviceContainer.forEach(terminal => {
+                if(terminal.siebelId === idSiebel) {
+                    terminal.tipoPago = payType;
+                }
+            });
+            vm.putDevicesInSessionStorage();
         }
 
     }
