@@ -120,7 +120,7 @@ module OrangeFeSARQ.Services {
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:HootSrv#getMdgClient
-         * @param {string} idType Residencial | TelephoneNumber | business
+         * @param {string} idType residential | telephonenumber | business
          * @param {string} docNumber Dni, telefono o fijo del cliente
          * @param {string} compName Nombre del componente que usa el método
          * @methodOf OrangeFeSARQ.Services:HootSrv
