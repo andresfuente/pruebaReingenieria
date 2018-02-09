@@ -515,11 +515,11 @@ module OrangeFeSARQ.Services {
                         'price': {
                             'dutyFreeAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePrice ? rate.ratePrice : ''
+                                'value': !isNaN(rate.ratePrice) ? rate.ratePrice : rate.taxFreePrice
                             },
                             'taxIncludedAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : ''
+                                'value': !isNaN(rate.ratePriceTaxIncluded) ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
                             },
                             'taxRate': rate.taxRate,
                             'ospTaxRateName': rate.taxRateName
