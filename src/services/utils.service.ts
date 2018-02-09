@@ -1046,7 +1046,31 @@ module OrangeFeSARQ.Services {
             }
         }
 
-        getInfoCustomer(customerViewStore: any){
+  /**
+         * @ngdoc service
+         * @name services.Controllers:Services#getCustomerCharacteristic
+         * @param {string} characteristicArray características de un cliente en el customerView
+         * @param {name} products name de una característica específica
+         * @methodOf OrangeFeSARQ.Services.Utils
+         * @description
+         * Devuelve valor correspondiente al name cado del characteristic del customerView
+         */
+        getCustomerCharacteristic(characteristicArray: Array<{name: string, value: string}>, name: string) : string {
+            let vm = this;
+
+            let characteristic = '';
+            let i = 0;
+            while (_.isEmpty(characteristic) && !_.isEmpty(characteristicArray) && i < characteristicArray.length) {
+                if (name === characteristicArray[i].name) {
+                    characteristic = characteristicArray[i].value;
+                }
+                i++;
+            }
+            return characteristic;
+        }
+
+
+getInfoCustomer(customerViewStore: any){
             let _data = {
                 docType: "",
                 docNum: ""
@@ -1061,7 +1085,6 @@ module OrangeFeSARQ.Services {
             return _data;
             
         }
-
 
     }
 

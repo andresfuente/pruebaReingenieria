@@ -515,11 +515,11 @@ module OrangeFeSARQ.Services {
                         'price': {
                             'dutyFreeAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePrice ? rate.ratePrice : ''
+                                'value': !isNaN(rate.ratePrice) ? rate.ratePrice : rate.taxFreePrice
                             },
                             'taxIncludedAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : ''
+                                'value': !isNaN(rate.ratePriceTaxIncluded) ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
                             },
                             'taxRate': rate.taxRate,
                             'ospTaxRateName': rate.taxRateName
@@ -540,8 +540,9 @@ module OrangeFeSARQ.Services {
 
             // TERMINAL PRIMARIO
             // Tipo del terminal
-            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar'
-            && commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
+            if(commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar' &&
+            commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard' &&
+            commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
                 device.characteristic = [
                     {
                         name: 'CIMATerminalType',
