@@ -1046,6 +1046,23 @@ module OrangeFeSARQ.Services {
             }
         }
 
+        getInfoCustomer(customerViewStore: any){
+            let _data = {
+                docType: "",
+                docNum: ""
+            }
+            if (customerViewStore && customerViewStore.info && customerViewStore.info.individual){
+                _data.docType = customerViewStore.info.individual.ospIDtype;
+                _data.docNum = customerViewStore.info.individual.id
+            }else{
+                _data.docType = customerViewStore.info.organization.ospIDtype;
+                _data.docNum = customerViewStore.info.organization.id
+            }
+            return _data;
+            
+        }
+
+
     }
 
     angular.module('utils', [])
