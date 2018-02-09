@@ -1,7 +1,7 @@
 {
   "name": "orange-services",
   "title": "Orange-services",
-"version": "1.29.0-SNAPSHOT.16",  "description": "Contiene los servicios comunes no core.",
+"version": "1.29.6-RC",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
