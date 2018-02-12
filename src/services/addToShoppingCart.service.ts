@@ -168,27 +168,7 @@ module OrangeFeSARQ.Services {
                 shoppingCart = {
                     'id': '',
                     'cartItem': [cartItemElement],
-                    'customer': {
-                        'relatedPartyRef': {
-                            'individual': {
-                                'id': '45888495C',
-                                'ospIdType': 'NIF'
-                            },
-                            'organization': {
-                                'id': '45888495C',
-                                'ospIdType': 'CIF'
-                            }
-                        },
-                        'id': '45888495C',
-                        'name': 'Juan Ostos',
-                        'status': 0,
-                        'customerCharacteristic': [
-                            {
-                                'name': 'segment',
-                                'value': 1
-                            }
-                        ]
-                    }
+                    'customer': {}
                 };
             }
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
@@ -440,27 +420,7 @@ module OrangeFeSARQ.Services {
                 shoppingCart = {
                     'id': '',
                     'cartItem': [cartItemElement],
-                    'customer': {
-                        'relatedPartyRef': {
-                            'individual': {
-                                'id': '45888495C',
-                                'ospIdType': 'NIF'
-                            },
-                            'organization': {
-                                'id': '45888495C',
-                                'ospIdType': 'CIF'
-                            }
-                        },
-                        'id': '45888495C',
-                        'name': 'Juan Ostos',
-                        'status': 0,
-                        'customerCharacteristic': [
-                            {
-                                'name': 'segment',
-                                'value': 1
-                            }
-                        ]
-                    }
+                    'customer': {}
                 };
             }
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
@@ -632,7 +592,7 @@ module OrangeFeSARQ.Services {
                 shoppingCart.cartItem.push(cartItemElement);
             } else {
                 shoppingCart = {
-                    'id': '1',
+                    'id': '',
                     'cartItem': [cartItemElement],
                     'customer': {}
                 };
