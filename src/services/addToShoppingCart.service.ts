@@ -637,7 +637,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Añade un terminal sin tarifa al session storage del carrito
          */
-        putDeviceNoRateInShoppingCart(device) {
+        putDeviceNoRateInShoppingCart(device, uniquePaid: boolean) {
             let vm = this;
             let productItem;
             let deviceCartItemElement;
@@ -682,6 +682,30 @@ module OrangeFeSARQ.Services {
                 ];
             }
 
+            let uniqueItemPrice = [];
+            let vapCartItems = [];
+            for(let i in device.itemPrice) {
+                if(device.itemPrice[i].priceType === 'unico') {
+                    uniqueItemPrice.push(device.itemPrice[i]);
+                } else {
+                    let vapCartItem = {
+                        'id': device.itemPrice[i].id,
+                        'action': 'New',
+                        'product': {
+                            'productRelationship': [{'type': 'VAP'}],
+                            'characteristic': [{'name': 'CIMATerminalType', 'value': 'Primary'}]
+                        },
+                        'itemPrice': [device.itemPrice[i]],
+                        'productOffering': {'id': device.itemPrice[i].id},
+                        'cartItemRelationship': [{'id': device.siebelId}],
+                        'ospSelected' : true,
+                        'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                        'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                    };
+                    vapCartItems.push(vapCartItem);
+                }
+            }
+
             productItem = {
                 'href': device.srcImage,
                 'name': device.brand,
@@ -697,7 +721,7 @@ module OrangeFeSARQ.Services {
                 'id': device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': device.itemPrice[0],
+                'itemPrice': uniquePaid ? uniqueItemPrice : [{ 'priceType': 'aplazado' }],
                 'productOffering': {
                     id: device.siebelId,
                 },
@@ -711,7 +735,7 @@ module OrangeFeSARQ.Services {
 
             cartItemElement = {
                 'id': cartItemElementId,
-                'cartItem': [deviceCartItemElement],
+                'cartItem': uniquePaid ? [ deviceCartItemElement] : [deviceCartItemElement].concat(vapCartItems),
                 'action': 'New',
                 'cartItemRelationship': [{
                     id: commercialActId
