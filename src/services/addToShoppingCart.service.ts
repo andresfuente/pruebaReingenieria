@@ -246,7 +246,7 @@ module OrangeFeSARQ.Services {
 
             productItem = {
                 'href': device.srcImage,
-                'name': device.name,
+                'name': device.brand,
                 'description': device.litSubTitle,
                 'productRelationship': [{
                     'type': 'terminal'
@@ -287,7 +287,7 @@ module OrangeFeSARQ.Services {
                 'sTerminalId': (sTerminalLastId + 1),
                 'action': 'New',
                 'siebelId': device.siebelId,
-                'name': device.name,
+                'name': device.brand,
                 'description': device.litSubTitle,
                 'brand': device.litTitle,
                 'insuranceSiebelId': device.insuranceSiebelId,
@@ -597,7 +597,7 @@ module OrangeFeSARQ.Services {
                 'action': 'New',
                 'product': {
                     'href': device.srcImage ? device.srcImage : '',
-                    'name': device.name ? device.name : '',
+                    'name': device.brand ? device.brand : '',
                     'description': device.description ? device.description : '',
                     'productRelationship': [{
                         'type': 'terminal'
@@ -608,7 +608,7 @@ module OrangeFeSARQ.Services {
                 'itemPrice': uniquePaid ? uniqueItemPrice : [{ 'priceType': 'aplazado' }],
                 'productOffering': {
                     'id': device.siebelId ? device.siebelId : '',
-                    'name': device.name ? device.name : '',
+                    'name': device.brand ? device.brand : '',
                     'category': []
                 }
             };
