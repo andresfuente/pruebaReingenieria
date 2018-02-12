@@ -331,7 +331,7 @@ module OrangeFeSARQ.Services {
             rate.description = rate.rateDescription;
             // Se seleccionan las propiedades para session
             let rateForSession = _.pick(rate, ['rateId', 'otherSvaInfoList', 'siebelId', 'name', 'description',
-            'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName', 'typeService', 'svaInfoList', 'allSVAChildrenList']);
+            'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName', 'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack']);
 
             return rateForSession;
         }
@@ -571,6 +571,15 @@ module OrangeFeSARQ.Services {
             }
         }
 
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#setPayType
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @param idSiebel ID de Siebel
+         * @param {string} payType tipo de pago
+         * @description
+         * Establece el tipo de pago para un terminal
+         */
         setPayType(idSiebel, payType) {
             let vm = this;
             vm.deviceContainer.forEach(terminal => {
@@ -579,6 +588,27 @@ module OrangeFeSARQ.Services {
                 }
             });
             vm.putDevicesInSessionStorage();
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#getRatePack
+         * @param {string} rateSiebelId
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Obtine el pack de la tarifa 
+         * @return {string} Se retorna el pack de la tarifa
+         */
+         getRatePack(rateSiebelId: string): string {
+            let vm = this;
+            let pack = '';
+            vm.getcommercialData();
+            vm.rateContainer.forEach( rate => {
+                if(rate.siebelId === rateSiebelId) {
+                    pack = rate.pack;
+                }
+            });
+            return pack;
         }
 
     }
