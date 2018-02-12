@@ -212,6 +212,8 @@ module OrangeFeSARQ.Services {
             let sTerminalsLength = commercialData[commercialActIndex].sTerminals ? commercialData[commercialActIndex].sTerminals.length : 0;
             let sTerminalLastId = sTerminalsLength === 0 ? 0 : commercialData[commercialActIndex].sTerminals[sTerminalsLength - 1].id;
             let selectedCartItemId;
+            let selectedCartTerminal;
+            let selectedCartRate;
             let vapCartItems = [];
             let vapCartItem;
             let unPriceItem;
@@ -219,7 +221,7 @@ module OrangeFeSARQ.Services {
             let seguro;
 
             device.itemPrice.forEach( item => {
-                if(payType === "deferred" && item.priceType === 'inicial' || item.priceType === 'cuota') {
+                if(payType === 'deferred' && item.priceType === 'inicial' || item.priceType === 'cuota') {
                     vapCartItem = {
                         'id': item.id,
                         'action': 'New',
@@ -236,7 +238,7 @@ module OrangeFeSARQ.Services {
                     };
                     vapCartItems.push(vapCartItem);
                 }
-                if (payType === "unique" && item.priceType === "unico"){
+                if (payType === 'unique' && item.priceType === 'unico'){
                     unPriceItem = item;
                 }
 
@@ -270,7 +272,7 @@ module OrangeFeSARQ.Services {
                 'id': device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': payType === "deferred" ? [{ 'priceType': 'aplazado' }] : unPriceItem,
+                'itemPrice': payType === 'deferred' ? [{ 'priceType': 'aplazado' }] : unPriceItem,
                 'productOffering': {
                     id: device.siebelId,
                 },
@@ -313,15 +315,18 @@ module OrangeFeSARQ.Services {
                             currentItem.sTerminals = [];
                         }
                         currentItem.sTerminals.push({ 'siebelId': device.siebelId });
-                        selectedCartItemId = currentItem.id;
+                        selectedCartTerminal = currentItem.terminalSiebelId;
+                        selectedCartRate = currentItem.rateSiebelId;
                     }
                 });
             // Se inserta el terminal secundario en el shopping cart
             if (shoppingCart !== null && shoppingCart.cartItem.length > 0) {
                 shoppingCart.cartItem.forEach(currentCartItem => {
-                    if (currentCartItem.id === selectedCartItemId) {
+                    let rate = _.find(currentCartItem.cartItem, {'id': selectedCartRate});
+                    let terminal = _.find(currentCartItem.cartItem, {'id': selectedCartTerminal});
+                    if(rate && terminal) {
                         currentCartItem.cartItem.push(secundaryDeviceCartItem);
-                        if (payType === "deferred") {
+                        if (payType === 'deferred') {
                             currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
                         }
                         if (device.insuranceSiebelId) {
@@ -481,7 +486,8 @@ module OrangeFeSARQ.Services {
             let commercialActId: number;
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            let commercialActIndex = commercialData.length - 1;
+            let commercialActIndex = vm.getSelectedCommercialAct();
+            let insurance;
 
             // Se obtiene el ID del acto comercial que se esta creando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
@@ -509,11 +515,11 @@ module OrangeFeSARQ.Services {
                         'price': {
                             'dutyFreeAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePrice ? rate.ratePrice : ''
+                                'value': !isNaN(rate.ratePrice) ? rate.ratePrice : rate.taxFreePrice
                             },
                             'taxIncludedAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : ''
+                                'value': !isNaN(rate.ratePriceTaxIncluded) ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
                             },
                             'taxRate': rate.taxRate,
                             'ospTaxRateName': rate.taxRateName
@@ -534,8 +540,9 @@ module OrangeFeSARQ.Services {
 
             // TERMINAL PRIMARIO
             // Tipo del terminal
-            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar'
-            && commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
+            if(commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar' &&
+            commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard' &&
+            commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
                 device.characteristic = [
                     {
                         name: 'CIMATerminalType',
@@ -557,6 +564,9 @@ module OrangeFeSARQ.Services {
                     'value': device.IMEI
                 };
                 device.characteristic.push(imei);
+            }
+            if (device.insuranceSiebelId) {
+                insurance = vm.createInsuranceCartItem(device, 'primary');
             }
             let uniqueItemPrice = [];
             let vapCartItems = [];
@@ -615,7 +625,9 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': true
             };
-
+            if(insurance) {
+                cartItemElement.cartItem.push(insurance);
+            }
             if (shoppingCart !== null) {
                 shoppingCart.cartItem.push(cartItemElement);
             } else {

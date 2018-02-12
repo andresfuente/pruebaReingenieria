@@ -1038,8 +1038,52 @@ module OrangeFeSARQ.Services {
             if (!_.isEmpty(storeComp.section.listImage)) {
                 image = _.find(storeComp.section.listImage, { 'name': name });
             }
-            image.imageFile_bloblink_ = image ? image.imageFile_bloblink_ : null;
+            if (image && image.imageFile_bloblink_) {
+            // - image.imageFile_bloblink_ = image ? image.imageFile_bloblink_ : null;
             return image.imageFile_bloblink_;
+            } else {
+                return null;
+            }
+        }
+
+  /**
+         * @ngdoc service
+         * @name services.Controllers:Services#getCustomerCharacteristic
+         * @param {string} characteristicArray características de un cliente en el customerView
+         * @param {name} products name de una característica específica
+         * @methodOf OrangeFeSARQ.Services.Utils
+         * @description
+         * Devuelve valor correspondiente al name cado del characteristic del customerView
+         */
+        getCustomerCharacteristic(characteristicArray: Array<{name: string, value: string}>, name: string) : string {
+            let vm = this;
+
+            let characteristic = '';
+            let i = 0;
+            while (_.isEmpty(characteristic) && !_.isEmpty(characteristicArray) && i < characteristicArray.length) {
+                if (name === characteristicArray[i].name) {
+                    characteristic = characteristicArray[i].value;
+                }
+                i++;
+            }
+            return characteristic;
+        }
+
+
+getInfoCustomer(customerViewStore: any){
+            let _data = {
+                docType: "",
+                docNum: ""
+            }
+            if (customerViewStore && customerViewStore.info && customerViewStore.info.individual){
+                _data.docType = customerViewStore.info.individual.ospIDtype;
+                _data.docNum = customerViewStore.info.individual.id
+            }else{
+                _data.docType = customerViewStore.info.organization.ospIDtype;
+                _data.docNum = customerViewStore.info.organization.id
+            }
+            return _data;
+            
         }
 
     }
