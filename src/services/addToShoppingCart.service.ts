@@ -168,27 +168,7 @@ module OrangeFeSARQ.Services {
                 shoppingCart = {
                     'id': '',
                     'cartItem': [cartItemElement],
-                    'customer': {
-                        'relatedPartyRef': {
-                            'individual': {
-                                'id': '45888495C',
-                                'ospIdType': 'NIF'
-                            },
-                            'organization': {
-                                'id': '45888495C',
-                                'ospIdType': 'CIF'
-                            }
-                        },
-                        'id': '45888495C',
-                        'name': 'Juan Ostos',
-                        'status': 0,
-                        'customerCharacteristic': [
-                            {
-                                'name': 'segment',
-                                'value': 1
-                            }
-                        ]
-                    }
+                    'customer': {}
                 };
             }
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
@@ -246,7 +226,7 @@ module OrangeFeSARQ.Services {
 
             productItem = {
                 'href': device.srcImage,
-                'name': device.name,
+                'name': device.brand,
                 'description': device.litSubTitle,
                 'productRelationship': [{
                     'type': 'terminal'
@@ -287,7 +267,7 @@ module OrangeFeSARQ.Services {
                 'sTerminalId': (sTerminalLastId + 1),
                 'action': 'New',
                 'siebelId': device.siebelId,
-                'name': device.name,
+                'name': device.brand,
                 'description': device.litSubTitle,
                 'brand': device.litTitle,
                 'insuranceSiebelId': device.insuranceSiebelId,
@@ -397,6 +377,7 @@ module OrangeFeSARQ.Services {
                 'product': productItem,
                 'itemPrice': [
                     {
+                        'name': rate.typePriceName ? rate.typePriceName : '',
                         'priceType': 'cuota',
                         'price': {
                             'dutyFreeAmount': {
@@ -430,7 +411,7 @@ module OrangeFeSARQ.Services {
                 'cartItemRelationship': [{
                     id: commercialActId
                 }],
-                'ospCartItemType': 'alta',
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType,
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': true
             };
@@ -440,27 +421,7 @@ module OrangeFeSARQ.Services {
                 shoppingCart = {
                     'id': '',
                     'cartItem': [cartItemElement],
-                    'customer': {
-                        'relatedPartyRef': {
-                            'individual': {
-                                'id': '45888495C',
-                                'ospIdType': 'NIF'
-                            },
-                            'organization': {
-                                'id': '45888495C',
-                                'ospIdType': 'CIF'
-                            }
-                        },
-                        'id': '45888495C',
-                        'name': 'Juan Ostos',
-                        'status': 0,
-                        'customerCharacteristic': [
-                            {
-                                'name': 'segment',
-                                'value': 1
-                            }
-                        ]
-                    }
+                    'customer': {}
                 };
             }
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
@@ -511,15 +472,16 @@ module OrangeFeSARQ.Services {
                 },
                 'itemPrice': [
                     {
+                        'name': rate.typePriceName ? rate.typePriceName : '',
                         'priceType': 'cuota',
                         'price': {
                             'dutyFreeAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePrice ? rate.ratePrice : ''
+                                'value': !isNaN(rate.ratePrice) ? rate.ratePrice : rate.taxFreePrice
                             },
                             'taxIncludedAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : ''
+                                'value': !isNaN(rate.ratePriceTaxIncluded) ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
                             },
                             'taxRate': rate.taxRate,
                             'ospTaxRateName': rate.taxRateName
@@ -540,8 +502,9 @@ module OrangeFeSARQ.Services {
 
             // TERMINAL PRIMARIO
             // Tipo del terminal
-            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar'
-            && commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
+            if(commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar' &&
+            commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard' &&
+            commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
                 device.characteristic = [
                     {
                         name: 'CIMATerminalType',
@@ -596,7 +559,7 @@ module OrangeFeSARQ.Services {
                 'action': 'New',
                 'product': {
                     'href': device.srcImage ? device.srcImage : '',
-                    'name': device.name ? device.name : '',
+                    'name': device.brand ? device.brand : '',
                     'description': device.description ? device.description : '',
                     'productRelationship': [{
                         'type': 'terminal'
@@ -607,7 +570,7 @@ module OrangeFeSARQ.Services {
                 'itemPrice': uniquePaid ? uniqueItemPrice : [{ 'priceType': 'aplazado' }],
                 'productOffering': {
                     'id': device.siebelId ? device.siebelId : '',
-                    'name': device.name ? device.name : '',
+                    'name': device.brand ? device.brand : '',
                     'category': []
                 }
             };
@@ -631,7 +594,7 @@ module OrangeFeSARQ.Services {
                 shoppingCart.cartItem.push(cartItemElement);
             } else {
                 shoppingCart = {
-                    'id': '1',
+                    'id': '',
                     'cartItem': [cartItemElement],
                     'customer': {}
                 };
@@ -648,7 +611,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Añade un terminal sin tarifa al session storage del carrito
          */
-        putDeviceNoRateInShoppingCart(device) {
+        putDeviceNoRateInShoppingCart(device, uniquePaid: boolean) {
             let vm = this;
             let productItem;
             let deviceCartItemElement;
@@ -693,6 +656,30 @@ module OrangeFeSARQ.Services {
                 ];
             }
 
+            let uniqueItemPrice = [];
+            let vapCartItems = [];
+            for(let i in device.itemPrice) {
+                if(device.itemPrice[i].priceType === 'unico') {
+                    uniqueItemPrice.push(device.itemPrice[i]);
+                } else {
+                    let vapCartItem = {
+                        'id': device.itemPrice[i].id,
+                        'action': 'New',
+                        'product': {
+                            'productRelationship': [{'type': 'VAP'}],
+                            'characteristic': [{'name': 'CIMATerminalType', 'value': 'Primary'}]
+                        },
+                        'itemPrice': [device.itemPrice[i]],
+                        'productOffering': {'id': device.itemPrice[i].id},
+                        'cartItemRelationship': [{'id': device.siebelId}],
+                        'ospSelected' : true,
+                        'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                        'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                    };
+                    vapCartItems.push(vapCartItem);
+                }
+            }
+
             productItem = {
                 'href': device.srcImage,
                 'name': device.brand,
@@ -708,7 +695,7 @@ module OrangeFeSARQ.Services {
                 'id': device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': device.itemPrice[0],
+                'itemPrice': uniquePaid ? uniqueItemPrice : [{ 'priceType': 'aplazado' }],
                 'productOffering': {
                     id: device.siebelId,
                 },
@@ -722,7 +709,7 @@ module OrangeFeSARQ.Services {
 
             cartItemElement = {
                 'id': cartItemElementId,
-                'cartItem': [deviceCartItemElement],
+                'cartItem': uniquePaid ? [ deviceCartItemElement] : [deviceCartItemElement].concat(vapCartItems),
                 'action': 'New',
                 'cartItemRelationship': [{
                     id: commercialActId
