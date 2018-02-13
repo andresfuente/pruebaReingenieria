@@ -238,7 +238,7 @@ module OrangeFeSARQ.Services {
                     };
                     vapCartItems.push(vapCartItem);
                 }
-                if (payType === 'unique' && item.priceType === 'unico'){
+                if (payType === 'unique' && item.priceType === 'unico') {
                     unPriceItem = item;
                 }
 
@@ -272,7 +272,7 @@ module OrangeFeSARQ.Services {
                 'id': device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': payType === 'deferred' ? [{ 'priceType': 'aplazado' }] : unPriceItem,
+                'itemPrice': payType === 'deferred' ? [{ 'priceType': 'aplazado' }] : [unPriceItem],
                 'productOffering': {
                     id: device.siebelId,
                 },
