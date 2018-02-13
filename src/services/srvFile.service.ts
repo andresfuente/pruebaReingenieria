@@ -96,7 +96,7 @@ module OrangeFeSARQ.Services {
 
         setAccordion(label, view) {
             let vm = this;
-            vm.viewState.accordion[label] = view;
+            vm.viewState.accordion[label.trim()] = view;
         }
 
         createLabels(labels: Object): Array<Object> {
