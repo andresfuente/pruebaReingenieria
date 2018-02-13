@@ -411,7 +411,7 @@ module OrangeFeSARQ.Services {
                 'cartItemRelationship': [{
                     id: commercialActId
                 }],
-                'ospCartItemType': 'alta',
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType,
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': true
             };
