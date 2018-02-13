@@ -377,6 +377,7 @@ module OrangeFeSARQ.Services {
                 'product': productItem,
                 'itemPrice': [
                     {
+                        'name': rate.typePriceName ? rate.typePriceName : '',
                         'priceType': 'cuota',
                         'price': {
                             'dutyFreeAmount': {
@@ -471,6 +472,7 @@ module OrangeFeSARQ.Services {
                 },
                 'itemPrice': [
                     {
+                        'name': rate.typePriceName ? rate.typePriceName : '',
                         'priceType': 'cuota',
                         'price': {
                             'dutyFreeAmount': {
