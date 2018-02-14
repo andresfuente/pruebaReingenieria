@@ -50,7 +50,7 @@ module OrangeFeSARQ.Constant {
         .service('backOffice', OrangeFeSARQ.Services.BackOfficeSrv)
 
         // Product Catalog
-        .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
+        /* .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
             productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore, $injector) => {
             let genericConstant = $injector.get('genericConstant');
             if (navigator.userAgent.indexOf('PhantomJS') < 1 && !genericConstant.public) {
@@ -77,9 +77,9 @@ module OrangeFeSARQ.Constant {
 
                     });
             }
-        })
+        }) */
         // OWCS Images
-        .run((getImagesSrv: OrangeFeSARQ.Services.getImagesSrv) => {
+        /* .run((getImagesSrv: OrangeFeSARQ.Services.getImagesSrv) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
                 getImagesSrv.getData().then(
                     (response) => {
@@ -91,9 +91,9 @@ module OrangeFeSARQ.Constant {
                     }
                 );
             }
-        })
+        }) */
         // Client Data
-        .run((getDataClientSrv: OrangeFeSARQ.Services.GetdataClientSrv) => {
+        /* .run((getDataClientSrv: OrangeFeSARQ.Services.GetdataClientSrv) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
                 getDataClientSrv.getData().then(
                     (response) => {
@@ -101,8 +101,8 @@ module OrangeFeSARQ.Constant {
                     }
                 );
             }
-        })
-        .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter, $injector,
+        }) */
+        /* .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter, $injector,
             getConfigurationSrv: OrangeFeSARQ.Services.GetConfigurationSrv) => {
             let genericConstant = $injector.get('genericConstant');
             // Si no es mobile first || Es spa pública || O es Amena
@@ -138,7 +138,7 @@ module OrangeFeSARQ.Constant {
                     }
                 );
             }
-        })
+        }) */
 
     /*if (OrangeFeSARQ.Controllers.ParentController.shared
         && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
