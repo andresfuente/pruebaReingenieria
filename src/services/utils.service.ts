@@ -972,7 +972,7 @@ module OrangeFeSARQ.Services {
                     let isPack = false;
 
                     let ratePC = _.find(PC, (characteristic: any) => {
-                        return (characteristic.id === rateSiebelCode.value);
+                        return (characteristic.id === bundleSiebelCode.value);
                     });
 
                     if (ratePC && ratePC.ospFraseComercial && ratePC.ospFraseComercial !== null) {// la linea ppal tiene que ser conv
@@ -1014,9 +1014,10 @@ module OrangeFeSARQ.Services {
                         };
                         sessionStorage.setItem('clientData', JSON.stringify(clientData));
                     }
-                    if(info.isPack === true) {
+                    /* if(info.isPack === true) {
                         lines.push(info);
-                    }
+                    } */
+                    lines.push(info);
                 }
             }
 
