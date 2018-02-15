@@ -592,23 +592,22 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
-         * @name OFC.Services:SrvTerminalCompare#getRatePack
+         * @name OFC.Services:SrvTerminalCompare#getRate
          * @param {string} rateSiebelId
          * @methodOf OFC.Services:SrvTerminalCompare
          * @description
-         * Obtine el pack de la tarifa 
-         * @return {string} Se retorna el pack de la tarifa
+         * Se retorna la tarifa de multiselección
          */
-         getRatePack(rateSiebelId: string): string {
+         getRate(rateSiebelId: string) {
             let vm = this;
-            let pack = '';
+            let rate;
             vm.getcommercialData();
-            vm.rateContainer.forEach( rate => {
-                if(rate.siebelId === rateSiebelId) {
-                    pack = rate.pack;
+            vm.rateContainer.forEach( currentRate => {
+                if(currentRate.siebelId === rateSiebelId) {
+                    rate = currentRate;
                 }
             });
-            return pack;
+            return rate;
         }
 
     }
