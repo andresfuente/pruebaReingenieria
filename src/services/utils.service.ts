@@ -118,9 +118,9 @@ module OrangeFeSARQ.Services {
 
             return userService.getUser(searchUrl, value)
                 .then(
-                (response) => {
-                    return response;
-                }
+                    (response) => {
+                        return response;
+                    }
                 )
                 .catch(function (error) {
                     return error;
@@ -775,7 +775,7 @@ module OrangeFeSARQ.Services {
                         }
                         break;
 
-                        case 'num3':
+                    case 'num3':
                         pattern = /^[0-9]{0,3}$/;
                         if (pattern.test(value)) {
                             status = true;
@@ -956,8 +956,11 @@ module OrangeFeSARQ.Services {
                 if (mobileLines.length) {
 
                     // Sacamos datos necesarios del customerView: rango, numero línea y fecha de activación
-                    let rate = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                    let rateSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
                         return characteristic.name === 'Código Tarifa Siebel';
+                    });
+                    let bundleSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                        return characteristic.name === 'Product Bundle Siebel';
                     });
                     let MSISDN = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
                         return characteristic.name === 'MSISDN';
@@ -968,7 +971,7 @@ module OrangeFeSARQ.Services {
                     let isPack = false;
 
                     let ratePC = _.find(PC, (characteristic: any) => {
-                        return (characteristic.id === rate.value);
+                        return (characteristic.id === rateSiebelCode.value);
                     });
 
                     if (ratePC && ratePC.ospTypeService === 'movil_fijo') {
@@ -996,13 +999,14 @@ module OrangeFeSARQ.Services {
                         rateGroupName: ratePC ? ratePC.ospGroupName : '',
                         range: ranges ? ranges.productSpecCharacteristicValue[0].value : '',
                         startDate: startDate,
-                        siebelCode: rate ? rate.value : '',
-                        pack: ratePC ? ratePC.ospFraseComercial: '',
+                        siebelCode: rateSiebelCode ? rateSiebelCode.value : '',
+                        bundle: bundleSiebelCode ? bundleSiebelCode.value : '',
+                        pack: ratePC ? ratePC.ospFraseComercial : '',
                         isPack: isPack
                     };
-                    if(info.isPack) {
+                    if (info.isPack) {
                         let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                        if(!clientData) {
+                        if (!clientData) {
                             clientData = {};
                         }
                         clientData.principalLine = {
@@ -1035,6 +1039,7 @@ module OrangeFeSARQ.Services {
                     range: lines[i].range,
                     startDate: lines[i].startDate,
                     siebelCode: lines[i].siebelCode,
+                    bundle: lines[i].bundle,
                     pack: lines[i].pack,
                     isPack: lines[i].isPack
                 };
@@ -1053,23 +1058,23 @@ module OrangeFeSARQ.Services {
                 image = _.find(storeComp.section.listImage, { 'name': name });
             }
             if (image && image.imageFile_bloblink_) {
-            // - image.imageFile_bloblink_ = image ? image.imageFile_bloblink_ : null;
-            return image.imageFile_bloblink_;
+                // - image.imageFile_bloblink_ = image ? image.imageFile_bloblink_ : null;
+                return image.imageFile_bloblink_;
             } else {
                 return null;
             }
         }
 
-  /**
-         * @ngdoc service
-         * @name services.Controllers:Services#getCustomerCharacteristic
-         * @param {string} characteristicArray características de un cliente en el customerView
-         * @param {name} products name de una característica específica
-         * @methodOf OrangeFeSARQ.Services.Utils
-         * @description
-         * Devuelve valor correspondiente al name cado del characteristic del customerView
-         */
-        getCustomerCharacteristic(characteristicArray: Array<{name: string, value: string}>, name: string) : string {
+        /**
+               * @ngdoc service
+               * @name services.Controllers:Services#getCustomerCharacteristic
+               * @param {string} characteristicArray características de un cliente en el customerView
+               * @param {name} products name de una característica específica
+               * @methodOf OrangeFeSARQ.Services.Utils
+               * @description
+               * Devuelve valor correspondiente al name cado del characteristic del customerView
+               */
+        getCustomerCharacteristic(characteristicArray: Array<{ name: string, value: string }>, name: string): string {
             let vm = this;
 
             let characteristic = '';
@@ -1084,20 +1089,20 @@ module OrangeFeSARQ.Services {
         }
 
 
-getInfoCustomer(customerViewStore: any){
+        getInfoCustomer(customerViewStore: any) {
             let _data = {
                 docType: "",
                 docNum: ""
             }
-            if (customerViewStore && customerViewStore.info && customerViewStore.info.individual){
+            if (customerViewStore && customerViewStore.info && customerViewStore.info.individual) {
                 _data.docType = customerViewStore.info.individual.ospIDtype;
                 _data.docNum = customerViewStore.info.individual.id
-            }else{
+            } else {
                 _data.docType = customerViewStore.info.organization.ospIDtype;
                 _data.docNum = customerViewStore.info.organization.id
             }
             return _data;
-            
+
         }
 
     }

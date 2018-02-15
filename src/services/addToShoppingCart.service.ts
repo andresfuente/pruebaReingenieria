@@ -340,13 +340,16 @@ module OrangeFeSARQ.Services {
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
+                if(rate.groupName === 'Convergente' && rate.family === 'love') {
+                    commercialData[commercialActIndex].loveRateInShoppingCart = true;
+                }
+                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
             // Se comprueba si existe alguna tarifa en el shopping cart que se este modificando
             if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
                 commercialData[commercialActIndex].ospIsSelected) {
                 // Se eliminan las tarifas del acto comercial existentes en el shopping cart
                 shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
-                commercialData[commercialActIndex].isCompletedAC = false;
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
             // Se obtiene el id del ultimo elmento del cart item del shopping cart
@@ -453,6 +456,10 @@ module OrangeFeSARQ.Services {
             // Se obtiene el ID del acto comercial que se esta creando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
+                if(rate.groupName === 'Convergente' && rate.family === 'love') {
+                    commercialData[commercialActIndex].loveRateInShoppingCart = true;
+                }
+                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
             // Se obtiene el id del ultimo elemento del cart item del shopping cart
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
@@ -911,6 +918,29 @@ module OrangeFeSARQ.Services {
             };
 
             return svaCartItemElement;
+        }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#loveRateInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @return {boolean} true si se ha llegado al carrito con una tarifa love
+         * @description
+         * Devuelve si se ha llegado al carrito con una tarifa love
+         */
+        loveRateInShoppingCart(): boolean {
+            let vm = this;
+            let response = false;
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            if(commercialData) {
+                commercialData.forEach(function(commercialAct){
+                    if(commercialAct.loveRateInShoppingCart) {
+                        response = true;
+                    }
+                });
+
+            }
+            return response;
         }
     }
 }
