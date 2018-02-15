@@ -218,7 +218,7 @@ module OrangeFeSARQ.Services {
                     };
                     vapCartItems.push(vapCartItem);
                 }
-                if (payType === 'unique' && item.priceType === 'unico'){
+                if (payType === 'unique' && item.priceType === 'unico') {
                     unPriceItem = item;
                 }
 
@@ -252,7 +252,7 @@ module OrangeFeSARQ.Services {
                 'id': device.siebelId,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': payType === 'deferred' ? [{ 'priceType': 'aplazado' }] : unPriceItem,
+                'itemPrice': payType === 'deferred' ? [{ 'priceType': 'aplazado' }] : [unPriceItem],
                 'productOffering': {
                     id: device.siebelId,
                 },
@@ -377,6 +377,7 @@ module OrangeFeSARQ.Services {
                 'product': productItem,
                 'itemPrice': [
                     {
+                        'name': rate.typePriceName ? rate.typePriceName : '',
                         'priceType': 'cuota',
                         'price': {
                             'dutyFreeAmount': {
@@ -410,7 +411,7 @@ module OrangeFeSARQ.Services {
                 'cartItemRelationship': [{
                     id: commercialActId
                 }],
-                'ospCartItemType': 'alta',
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType,
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': true
             };
@@ -471,6 +472,7 @@ module OrangeFeSARQ.Services {
                 },
                 'itemPrice': [
                     {
+                        'name': rate.typePriceName ? rate.typePriceName : '',
                         'priceType': 'cuota',
                         'price': {
                             'dutyFreeAmount': {

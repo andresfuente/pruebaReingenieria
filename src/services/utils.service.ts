@@ -944,7 +944,8 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
             let lines = [];
-            let PC = productCatalogStore._specification;
+            /// let PC = productCatalogStore._specification;
+            let PC = productCatalogStore.productSpecification;
 
             // Sacamos las líneas móviles
             let mobileLines = _.filter(customerViewStore.product, (product: any) => {
@@ -956,7 +957,7 @@ module OrangeFeSARQ.Services {
 
                     // Sacamos datos necesarios del customerView: rango, numero línea y fecha de activación
                     let rate = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
-                        return characteristic.name === 'Código Tarifa';
+                        return characteristic.name === 'Código Tarifa Siebel';
                     });
                     let MSISDN = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
                         return characteristic.name === 'MSISDN';
@@ -970,7 +971,7 @@ module OrangeFeSARQ.Services {
                         return (characteristic.id === rate.value);
                     });
 
-                    if (ratePC && ratePC.ospTypeService === 'CONVERGENTE') {
+                    if (ratePC && ratePC.ospTypeService === 'movil_fijo') {
                         isPack = true;
                     };
 
@@ -993,12 +994,24 @@ module OrangeFeSARQ.Services {
                         id: 0,
                         rateName: ratePC ? ratePC.name : '',
                         rateGroupName: ratePC ? ratePC.ospGroupName : '',
-                        range: ranges.productSpecCharacteristicValue[0].value,
+                        range: ranges ? ranges.productSpecCharacteristicValue[0].value : '',
                         startDate: startDate,
-                        tmCode: rate ? rate.value : '',
+                        siebelCode: rate ? rate.value : '',
+                        pack: ratePC ? ratePC.ospFraseComercial: '',
                         isPack: isPack
                     };
-
+                    if(info.isPack) {
+                        let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                        if(!clientData) {
+                            clientData = {};
+                        }
+                        clientData.principalLine = {
+                            number: info.msisdn,
+                            siebelCode: info.siebelCode,
+                            pack: info.pack
+                        };
+                        sessionStorage.setItem('clientData', JSON.stringify(clientData));
+                    }
                     lines.push(info);
                 }
             }
@@ -1021,7 +1034,8 @@ module OrangeFeSARQ.Services {
                     rateGroupName: lines[i].rateGroupName,
                     range: lines[i].range,
                     startDate: lines[i].startDate,
-                    tmCode: lines[i].tmCode,
+                    siebelCode: lines[i].siebelCode,
+                    pack: lines[i].pack,
                     isPack: lines[i].isPack
                 };
                 orderLines2.push(info);
