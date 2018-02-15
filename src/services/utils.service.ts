@@ -946,6 +946,7 @@ module OrangeFeSARQ.Services {
             let lines = [];
             /// let PC = productCatalogStore._specification;
             let PC = productCatalogStore.productSpecification;
+            let ranges;
 
             // Sacamos las líneas móviles
             let mobileLines = _.filter(customerViewStore.product, (product: any) => {
@@ -965,7 +966,7 @@ module OrangeFeSARQ.Services {
                     let MSISDN = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
                         return characteristic.name === 'MSISDN';
                     });
-                    let startDate = mobileLines[i].startDate;
+                    let startDate = mobileLines[i].startDate; // activacion tarifa
 
                     // Buscamos en el productCatalog el resto de datos alineando las APIs con el "tmcode" (código de las tarifas)
                     let isPack = false;
@@ -974,22 +975,19 @@ module OrangeFeSARQ.Services {
                         return (characteristic.id === rateSiebelCode.value);
                     });
 
-                    if (ratePC && ratePC.ospTypeService === 'movil_fijo') {
+                    if (ratePC && ratePC.ospFraseComercial && ratePC.ospFraseComercial !== null) {// la linea ppal tiene que ser conv
                         isPack = true;
-                    };
+                    }
 
-                    let ranges = {
-                        productSpecCharacteristicValue: [
-                            {
-                                value: ''
-                            }
-                        ]
-                    };
-                    if (ratePC && ratePC.productSpecCharacteristic) {
+                    if(ratePC && ratePC.productSpecCharacteristic && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue) {
+                        ranges = ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue[0].value;
+                    }
+                    
+                    /* if (ratePC && ratePC.productSpecCharacteristic) {
                         ranges = _.find(ratePC.productSpecCharacteristic, (spec: any) => {
                             return spec.name === 'VALORNEGOCIO';
                         });
-                    }
+                    } */
 
                     let info = {
                         id2: (i + 1),
@@ -997,7 +995,7 @@ module OrangeFeSARQ.Services {
                         id: 0,
                         rateName: ratePC ? ratePC.name : '',
                         rateGroupName: ratePC ? ratePC.ospGroupName : '',
-                        range: ranges ? ranges.productSpecCharacteristicValue[0].value : '',
+                        range: ranges ? ranges : '',
                         startDate: startDate,
                         siebelCode: rateSiebelCode ? rateSiebelCode.value : '',
                         bundle: bundleSiebelCode ? bundleSiebelCode.value : '',
@@ -1016,7 +1014,9 @@ module OrangeFeSARQ.Services {
                         };
                         sessionStorage.setItem('clientData', JSON.stringify(clientData));
                     }
-                    lines.push(info);
+                    if(info.isPack === true) {
+                        lines.push(info);
+                    }
                 }
             }
 
@@ -1024,11 +1024,11 @@ module OrangeFeSARQ.Services {
             let orderLines = _(lines).chain()
                 .sortBy('id2').reverse()
                 .sortBy('startDate').reverse()
-                .sortBy('range')
+                /* .sortBy('range') */
                 .sortBy('isPack').reverse().value();
 
             // Eliminamos id2, isPack. Iniciar id segun orden de principal.
-            let orderLines2 = [];
+            /* let orderLines2 = [];
 
             for (let i = 0; i < lines.length; i++) {
                 let info = {
@@ -1044,8 +1044,8 @@ module OrangeFeSARQ.Services {
                     isPack: lines[i].isPack
                 };
                 orderLines2.push(info);
-            };
-            return orderLines2;
+            }; */
+            return lines;
         }
 
         /**
