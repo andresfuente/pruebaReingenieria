@@ -96,14 +96,8 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-        redirectEmail(userLogin: string, userDomain: string, userEmail: string, userOperation: string, componentName = 'row_input_email'): any {
+        redirectEmail(data: redirectAccount.Models.RedirectAccountRequest, componentName = 'row_input_email'): any {
             let vm = this;
-            let data = {
-                'login': userLogin.toLowerCase(),
-                'domain': userDomain.toLowerCase(),
-                'email': userEmail.toLowerCase(),
-                'operation': userOperation
-            };
             let _search: Object = {
                 queryParams: data,
                 urlParams: ['email', 'redirect']
