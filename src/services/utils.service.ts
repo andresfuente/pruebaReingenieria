@@ -1089,7 +1089,6 @@ module OrangeFeSARQ.Services {
             return characteristic;
         }
 
-
         getInfoCustomer(customerViewStore: any) {
             let _data = {
                 docType: "",
@@ -1105,6 +1104,71 @@ module OrangeFeSARQ.Services {
             return _data;
 
         }
+
+        // ************ Storage Methods ************
+
+        removeRequestStorage(storeName: string, msisdn: string): void {
+            let vm = this;
+
+            let storeRequestArray = [];
+            let storeRequestObject: any = {};
+            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+
+            storeRequestArray = sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(sessionStorageManager.getEntry(storeName)) : [];
+            storeRequestObject = _.find(storeRequestArray, { msisdn: msisdn }) ?
+                _.find(storeRequestArray, { msisdn: msisdn }) : {};
+            if (!_.isEmpty(storeRequestObject)) {
+                _.remove(storeRequestArray, storeRequestObject);
+            }
+            sessionStorageManager.removeEntry(storeName);
+            if (!_.isEmpty(storeRequestArray)) {
+                sessionStorageManager.setEntry(storeName, JSON.stringify(storeRequestArray));
+            }
+        }
+
+        getRequestStorage(obj: OrangeFeSARQ.Models.IObjName, msisdn: string, storeName: string) {
+            let vm = this;
+
+            let storeRemedyArray = [];
+            let storeRemedy = [];
+            let filterObject: any = {};
+            let storeRemedyObject: any = {};
+            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+
+            storeRemedyArray = sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(sessionStorageManager.getEntry(storeName)) : [];
+            storeRemedyObject = _.find(storeRemedyArray, { msisdn: msisdn }) ?
+                _.find(storeRemedyArray, { msisdn: msisdn }) : {};
+            if (!_.isEmpty(storeRemedyObject)) {
+                storeRemedy = storeRemedyObject.request ? storeRemedyObject.request : [];
+                filterObject = _.find(storeRemedy, obj) ? _.find(storeRemedy, obj) : {};
+                if (filterObject.value) {
+                    return filterObject.value;
+                } else {
+                    return '';
+                }
+            } else {
+                return '';
+            }
+        }
+
+        removeAllStorages(): void {
+            let vm = this;
+
+            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+            sessionStorageManager.removeEntry('searchparam');
+            sessionStorageManager.removeEntry('searchval');
+            sessionStorageManager.removeEntry('errorurlsearch');
+            sessionStorageManager.removeEntry('idActualVap');
+            sessionStorageManager.removeEntry('credentialInformation');
+            sessionStorageManager.removeEntry('unsubscribeClient');
+            sessionStorageManager.removeEntry('principalMsisdn');
+            sessionStorageManager.removeEntry('caseRequestStorage');
+            sessionStorageManager.removeEntry('remedyRequestStorage');
+        }
+
+        // *********************************************************************** //
 
     }
 
