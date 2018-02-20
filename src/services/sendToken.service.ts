@@ -25,10 +25,10 @@ module OrangeFeSARQ.Services {
           urlParams: [vm.genericConstant.brand,'getTokenRepair']
       }
 
-      return vm.httpCacheGeth(vm.genericConstant.token,_search, componentName)
+      return vm.httpCacheGett(vm.genericConstant.token,_search, componentName)
         .then(
           (response) => {
-              return response.chain;
+              return response.data.chain;
           },
           (error) => {
             return error;
