@@ -118,9 +118,9 @@ module OrangeFeSARQ.Services {
 
             return userService.getUser(searchUrl, value)
                 .then(
-                (response) => {
-                    return response;
-                }
+                    (response) => {
+                        return response;
+                    }
                 )
                 .catch(function (error) {
                     return error;
@@ -384,24 +384,24 @@ module OrangeFeSARQ.Services {
                 let i = 0;
                 while (i < sizeProducts && !found) {
                     // Si estoy buscando el id
-					//verifico si el producto es relativo a una línea prepago, pospago o fijo
-					if(products[i].ospProductType.match(/^(POSPAGO|PREPAGO|Número teléfono fijo VoIP)$/)) {
-						let sizePC = products[i].productCharacteristic.length;
-						if (products[i].productCharacteristic && sizePC > 0) {                        
-							
-								let productCh = products[i].productCharacteristic;
-								let sizeCh = productCh.length;
-								// Recorro el product caracteristic de este producto
-								let it = 0;
-								while (it < sizeCh && !found) {
-									if (productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
-										found = true;
-										return products[i].ospProductType;
-									}
-									++it;
-								}
-						}
-					}
+                    //verifico si el producto es relativo a una línea prepago, pospago o fijo
+                    if (products[i].ospProductType.match(/^(POSPAGO|PREPAGO|Número teléfono fijo VoIP|AMENA)$/)) {
+                        let sizePC = products[i].productCharacteristic.length;
+                        if (products[i].productCharacteristic && sizePC > 0) {
+
+                            let productCh = products[i].productCharacteristic;
+                            let sizeCh = productCh.length;
+                            // Recorro el product caracteristic de este producto
+                            let it = 0;
+                            while (it < sizeCh && !found) {
+                                if (productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
+                                    found = true;
+                                    return products[i].ospProductType;
+                                }
+                                ++it;
+                            }
+                        }
+                    }
                     ++i;
                 }
             }
@@ -632,14 +632,14 @@ module OrangeFeSARQ.Services {
              * Devuelve la propiedad de OWCS de la clave recibida
         **/
         getOWCSProperty(val: string): string {
-			let vm = this;
-			let result:string;
-		    if(OrangeFeSARQ.Controllers.ParentController.shared.properties){
-				result = OrangeFeSARQ.Controllers.ParentController.shared.properties[val];
-			}
+            let vm = this;
+            let result: string;
+            if (OrangeFeSARQ.Controllers.ParentController.shared.properties) {
+                result = OrangeFeSARQ.Controllers.ParentController.shared.properties[val];
+            }
             return result;
-        }		
-		
+        }
+
         /**
              * @ngdoc service
              * @name services.Controllers:Services#testPassRepeatNumber
@@ -674,14 +674,14 @@ module OrangeFeSARQ.Services {
 
         testPassSequentialNumbers(val: string, minLength: number, maxLength: number) {
             const pass: string = val;
-            let notValidPass: any = ["123456","87654321","1234567","7654321","000000","111111","222222","333333","444444","555555","666666","777777",
-            "888888","999999","0000000","2222222","3333333","4444444","5555555","6666666","7777777","8888888","9999999","12345678","654321",
-            "00000000","22222222","33333333","44444444","55555555","66666666","77777777","88888888","99999999","8765432","23456789","3456789",
-            "98765432","9876543","987654","000000","222222","333333","444444","555555","666666","777777","888888","999999", "876543"];
+            let notValidPass: any = ["123456", "87654321", "1234567", "7654321", "000000", "111111", "222222", "333333", "444444", "555555", "666666", "777777",
+                "888888", "999999", "0000000", "2222222", "3333333", "4444444", "5555555", "6666666", "7777777", "8888888", "9999999", "12345678", "654321",
+                "00000000", "22222222", "33333333", "44444444", "55555555", "66666666", "77777777", "88888888", "99999999", "8765432", "23456789", "3456789",
+                "98765432", "9876543", "987654", "000000", "222222", "333333", "444444", "555555", "666666", "777777", "888888", "999999", "876543"];
             if (pass) {
-                for(let i = 0; i <= notValidPass.length; i++){
-                    if(pass === notValidPass[i]){
-                         return true;
+                for (let i = 0; i <= notValidPass.length; i++) {
+                    if (pass === notValidPass[i]) {
+                        return true;
                     }
                 }
                 return false;
@@ -725,15 +725,16 @@ module OrangeFeSARQ.Services {
                         break;
 
                     case 'cp':
-                        pattern = /^[0-9]{4}$/;
+                        pattern = /^[0-9]{5}$/;
                         if (pattern.test(value)) {
                             status = true;
                         }
                         break;
 
                     case 'mail':
-                        pattern = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]+/;
-                        if (pattern.test(value)) {
+                        pattern = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]{5,30}$/;
+                        pattern2 = /^[\s\S]{0,40}$/;
+                        if (pattern.test(value) && pattern2.test(value)) {
                             status = true;
                         }
                         break;
@@ -774,6 +775,13 @@ module OrangeFeSARQ.Services {
                         }
                         break;
 
+                    case 'num3':
+                        pattern = /^[0-9]{0,3}$/;
+                        if (pattern.test(value)) {
+                            status = true;
+                        }
+                        break;
+
                     case 'alfNum':
                         pattern = /^[a-zA-Z0-9]{0,5}$/;
                         if (pattern.test(value)) {
@@ -794,13 +802,13 @@ module OrangeFeSARQ.Services {
                         break;
                     case 'passport':
                         status = true;
-                        
+
                         break;
                     case 'cif':
                         // pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
-                        pattern = /^[abehABEH][0-9]{8}$/;
-                        pattern1 = /^[kpqsKPQS][0-9]{7}[a-jA-J]$/;
-                        pattern2 = /^[cdfgjlmnruvwCDFGJLMNRUVW][0-9]{7}[0-9a-jA-J]$/;
+                        pattern = /^[abehABEH]{1}[0-9]{8}$/;
+                        pattern1 = /^[kpqsKPQS]{1}[0-9]{7}[a-jA-J]$/;
+                        pattern2 = /^[cdfgjlmnruvwCDFGJLMNRUVW]{1}[0-9]{7}[0-9a-jA-J]$/;
                         if (pattern.test(value) || pattern1.test(value) || pattern2.test(value)) {
                             status = true;
                         }
@@ -812,13 +820,13 @@ module OrangeFeSARQ.Services {
                         break;
                     case 'TNNCP':
                         if (vm.validateForm('telephone', value) || vm.validateForm('nif', value) || vm.validateForm('cif', value)
-                                || vm.validateForm('nie', value)|| vm.validateForm('passport', value)) {
+                            || vm.validateForm('nie', value) || vm.validateForm('passport', value)) {
                             status = true;
                         }
                         break;
                     case 'NNCP':
                         if (vm.validateForm('nif', value) || vm.validateForm('cif', value)
-                                || vm.validateForm('nie', value)|| vm.validateForm('passport', value)) {
+                            || vm.validateForm('nie', value) || vm.validateForm('passport', value)) {
                             status = true;
                         }
                         break;
@@ -855,32 +863,9 @@ module OrangeFeSARQ.Services {
 
             return status;
         };
-		
-		/**
-         * @ngdoc method
-         * @name services.Controllers:Services#trusHtml
-         * @param {ANY} customerViewStore contenido del customerView
-         * @methodOf services.Controllers:Services
-         * @description
-         * Recoge el documento del customerView
-         */
-		getInfoCustomer(customerViewStore: any){
-            let _data = {
-                docType: "",
-                docNum: ""
-            }
-            if (customerViewStore && customerViewStore.info && customerViewStore.info.individual){
-                _data.docType = customerViewStore.info.individual.ospIDtype;
-                _data.docNum = customerViewStore.info.individual.id
-            }else{
-                _data.docType = customerViewStore.info.organization.ospIDtype;
-                _data.docNum = customerViewStore.info.organization.id
-            }
-            return _data;
-            
-        }
-		
-		
+
+
+
 		/**
          * @ngdoc method
          * @name services.Controllers:Services#trusHtml
@@ -896,25 +881,341 @@ module OrangeFeSARQ.Services {
         }
 
         //El link que necesite llamar al chat ha de tener la inbenta-trigger.
-        inbenta(){
+        inbenta() {
             let chatAmena: HTMLElement = document.getElementsByClassName("inbenta-trigger")[0] as HTMLElement;
             chatAmena.click();
         }
 
-       /**
-        * @ngdoc service
-        * @name services.Controllers:Services#owcsParamFormat
-        * @param {string} value :Cadena OWCS
-        * @param {string} paramOwcs :Valor parametrizable recibido por OWCS
-        * @param {string} param : Valor parametrizable a remplazar por el de OWCS
-        * @return {string} Devuelve si en la contraseña hay tramos de msisdn y secuencias de numeros de mayor a menor y de menor a mayor
-        * @methodOf OrangeFeSARQ.Services.Utils
-        * @description
-        * Remplaza un valor parametrizable de un texto.
-        **/
+        /**
+         * @ngdoc service
+         * @name services.Controllers:Services#owcsParamFormat
+         * @param {string} value :Cadena OWCS
+         * @param {string} paramOwcs :Valor parametrizable recibido por OWCS
+         * @param {string} param : Valor parametrizable a remplazar por el de OWCS
+         * @return {string} Devuelve si en la contraseña hay tramos de msisdn y secuencias de numeros de mayor a menor y de menor a mayor
+         * @methodOf OrangeFeSARQ.Services.Utils
+         * @description
+         * Remplaza un valor parametrizable de un texto.
+         **/
         owcsParamFormat(value: string, paramOwcs: string, param: string): string {
             return value.replace(paramOwcs, param);
         }
+
+        /**
+         * @ngdoc service
+         * @name services.Controllers:Services#owcsParamFormat
+         * @param {string} msisdn Msisdn al que se le solicita el código morgane
+         * @param {any} products Los productos del cliente al que pertenece el msisdn que son recogidos del customerView
+         * @return {string} Devuelve el código Morgane
+         * @methodOf OrangeFeSARQ.Services.Utils
+         * @description
+         * Devuelve el código morgane del msisdn solicitado
+         */
+        getMorganeCode(msisdn: string, products: any) {
+            let vm = this;
+
+            if (vm.isFixedLine(+msisdn)) { // Solo los fijos tienen codigo Morgane
+                for (let i = 0, length = products.length; i < length; i++) {
+                    let productMorganeCodeArray: any = _.filter(products[i].productCharacteristic, { name: 'Código Morgane' });
+                    // Comprobamos que el producto tiene codigo morgane
+                    if (!_.isEmpty(productMorganeCodeArray)) {
+                        let productMsisdnArray: any = _.filter(products[i].productCharacteristic, { name: 'Número fijo Asociado' });
+                        // Comprobamos que el msisdn del producto coincida con el msisdn que se pide
+                        if (!_.isEmpty(productMsisdnArray) && productMsisdnArray[0].value === msisdn) {
+                            return productMorganeCodeArray[0].value;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:Utils#owcsParamFormat
+         * @methodOf OrangeFeSARQ.Services.Utils
+         * @param {any} productCatalogStore info del productCatalog
+         * @param {any} customerViewStore info del cliente
+         * @description
+         * Devuelve las líneas de un cliente ordenadas según la principal
+         */
+        getPrincipalLine(productCatalogStore: any, customerViewStore: any) {
+            let vm = this;
+
+            let lines = [];
+            /// let PC = productCatalogStore._specification;
+            let PC = productCatalogStore.productSpecification;
+            let ranges;
+
+            // Sacamos las líneas móviles
+            let mobileLines = _.filter(customerViewStore.product, (product: any) => {
+                return (product.ospProductType === 'PREPAGO' || product.ospProductType === 'POSPAGO');
+            });
+
+            for (let i in mobileLines) {
+                if (mobileLines.length) {
+
+                    // Sacamos datos necesarios del customerView: rango, numero línea y fecha de activación
+                    let rateSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                        return characteristic.name === 'Código Tarifa Siebel';
+                    });
+                    let bundleSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                        return characteristic.name === 'Product Bundle Siebel';
+                    });
+                    let MSISDN = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                        return characteristic.name === 'MSISDN';
+                    });
+                    let startDate = mobileLines[i].startDate; // activacion tarifa
+
+                    // Buscamos en el productCatalog el resto de datos alineando las APIs con el "tmcode" (código de las tarifas)
+                    let isPack = false;
+
+                    let ratePC = _.find(PC, (characteristic: any) => {
+                        return (characteristic.id === bundleSiebelCode.value);
+                    });
+
+                    if (ratePC && ratePC.ospFraseComercial && ratePC.ospFraseComercial !== null) {// la linea ppal tiene que ser conv
+                        isPack = true;
+                    }
+
+                    if(ratePC && ratePC.productSpecCharacteristic && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue) {
+                        ranges = ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue[0].value;
+                    }
+                    
+                    /* if (ratePC && ratePC.productSpecCharacteristic) {
+                        ranges = _.find(ratePC.productSpecCharacteristic, (spec: any) => {
+                            return spec.name === 'VALORNEGOCIO';
+                        });
+                    } */
+
+                    let info = {
+                        id2: (i + 1),
+                        msisdn: MSISDN ? MSISDN.value : '',
+                        id: 0,
+                        rateName: ratePC ? ratePC.name : '',
+                        rateGroupName: ratePC ? ratePC.ospGroupName : '',
+                        range: ranges ? ranges : '',
+                        startDate: startDate,
+                        siebelCode: rateSiebelCode ? rateSiebelCode.value : '',
+                        bundle: bundleSiebelCode ? bundleSiebelCode.value : '',
+                        pack: ratePC ? ratePC.ospFraseComercial : '',
+                        isPack: isPack
+                    };
+                    if (info.isPack) {
+                        let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                        if (!clientData) {
+                            clientData = {};
+                        }
+                        clientData.principalLine = {
+                            number: info.msisdn,
+                            siebelCode: info.siebelCode,
+                            pack: info.pack
+                        };
+                        sessionStorage.setItem('clientData', JSON.stringify(clientData));
+                    }
+                    /* if(info.isPack === true) {
+                        lines.push(info);
+                    } */
+                    lines.push(info);
+                }
+            }
+
+            // Por ultimo órdenamos nuestro array con éste órden de prioridad: rango > antigüedad > orden en el CV(id)
+            let orderLines = _(lines).chain()
+                .sortBy('id2').reverse()
+                .sortBy('startDate').reverse()
+                /* .sortBy('range') */
+                .sortBy('isPack').reverse().value();
+
+            // Eliminamos id2, isPack. Iniciar id segun orden de principal.
+            /* let orderLines2 = [];
+
+            for (let i = 0; i < lines.length; i++) {
+                let info = {
+                    id: (i + 1),
+                    msisdn: lines[i].msisdn,
+                    rateName: lines[i].rateName,
+                    rateGroupName: lines[i].rateGroupName,
+                    range: lines[i].range,
+                    startDate: lines[i].startDate,
+                    siebelCode: lines[i].siebelCode,
+                    bundle: lines[i].bundle,
+                    pack: lines[i].pack,
+                    isPack: lines[i].isPack
+                };
+                orderLines2.push(info);
+            }; */
+            return lines;
+        }
+
+        /**
+         * devuelve la imagen contribuido por OWCS. storeComp: store de webcenter del componente, name: imagen que buscamos
+         */
+        getImageOwcs(storeComp: any, name: string) {
+            let vm = this;
+            let image;
+            if (!_.isEmpty(storeComp.section.listImage)) {
+                image = _.find(storeComp.section.listImage, { 'name': name });
+            }
+            if (image && image.imageFile_bloblink_) {
+                // - image.imageFile_bloblink_ = image ? image.imageFile_bloblink_ : null;
+                return image.imageFile_bloblink_;
+            } else {
+                return null;
+            }
+        }
+
+        /**
+               * @ngdoc service
+               * @name services.Controllers:Services#getCustomerCharacteristic
+               * @param {string} characteristicArray características de un cliente en el customerView
+               * @param {name} products name de una característica específica
+               * @methodOf OrangeFeSARQ.Services.Utils
+               * @description
+               * Devuelve valor correspondiente al name cado del characteristic del customerView
+               */
+        getCustomerCharacteristic(characteristicArray: Array<{ name: string, value: string }>, name: string): string {
+            let vm = this;
+
+            let characteristic = '';
+            let i = 0;
+            while (_.isEmpty(characteristic) && !_.isEmpty(characteristicArray) && i < characteristicArray.length) {
+                if (name === characteristicArray[i].name) {
+                    characteristic = characteristicArray[i].value;
+                }
+                i++;
+            }
+            return characteristic;
+        }
+
+        getInfoCustomer(customerViewStore: any) {
+            let _data = {
+                docType: "",
+                docNum: ""
+            }
+            if (customerViewStore && customerViewStore.info && customerViewStore.info.individual) {
+                _data.docType = customerViewStore.info.individual.ospIDtype;
+                _data.docNum = customerViewStore.info.individual.id
+            } else {
+                _data.docType = customerViewStore.info.organization.ospIDtype;
+                _data.docNum = customerViewStore.info.organization.id
+            }
+            return _data;
+
+        }
+
+        // ************ Storage Methods ************
+
+        // Método que elimina el storage formulario perteneciente a un msisdn
+        removeRequestStorage(storeName: string, msisdn: string): void {
+            let vm = this;
+
+            let storeRequestArray = [];
+            let storeRequestObject: any = {};
+            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+
+            storeRequestArray = sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(sessionStorageManager.getEntry(storeName)) : [];
+            storeRequestObject = _.find(storeRequestArray, { msisdn: msisdn }) ?
+                _.find(storeRequestArray, { msisdn: msisdn }) : {};
+            if (!_.isEmpty(storeRequestObject)) {
+                _.remove(storeRequestArray, storeRequestObject);
+            }
+            sessionStorageManager.removeEntry(storeName);
+            if (!_.isEmpty(storeRequestArray)) {
+                sessionStorageManager.setEntry(storeName, JSON.stringify(storeRequestArray));
+            }
+        }
+
+        // Método para obtener el valor de un campo de un formulario almacenado
+        // - en el storage perteneciente a un msisdn a partir de un objeto {name: 'nombreDelCampo'}
+        getRequestStorage(obj: OrangeFeSARQ.Models.IObjName, msisdn: string, storeName: string) {
+            let vm = this;
+
+            let storeRemedyArray = [];
+            let storeRemedy = [];
+            let filterObject: any = {};
+            let storeRemedyObject: any = {};
+            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+
+            storeRemedyArray = sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(sessionStorageManager.getEntry(storeName)) : [];
+            storeRemedyObject = _.find(storeRemedyArray, { msisdn: msisdn }) ?
+                _.find(storeRemedyArray, { msisdn: msisdn }) : {};
+            if (!_.isEmpty(storeRemedyObject)) {
+                storeRemedy = storeRemedyObject.request ? storeRemedyObject.request : [];
+                filterObject = _.find(storeRemedy, obj) ? _.find(storeRemedy, obj) : {};
+                if (filterObject.value) {
+                    return filterObject.value;
+                } else {
+                    return '';
+                }
+            } else {
+                return '';
+            }
+        }
+
+        // Método que rellena los campos de nuestro formulario a partir de un objeto {name: 'nombreDelCampo'},
+        // - la razón (valor del campo), msisdn y el nombre del Storage formulario alamcenado en el sessionStorage
+        fillRequestStorage(obj: OrangeFeSARQ.Models.IObjName, reason: any, msisdn: string, storeName: string): void {
+            let vm = this;
+
+            let storeRemedyArray = [];
+            let storeRemedy = [];
+            let filterObject: any = {};
+            let storeRemedyObject: any = {};
+            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+
+            storeRemedyArray = sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(sessionStorageManager.getEntry(storeName)) : [];
+            storeRemedyObject = _.find(storeRemedyArray, { msisdn: msisdn }) ?
+                _.find(storeRemedyArray, { msisdn: msisdn }) : {};
+
+            if (!_.isEmpty(storeRemedyObject)) {
+                storeRemedy = storeRemedyObject.request ? storeRemedyObject.request : [];
+                _.remove(storeRemedyArray, storeRemedyObject);
+                if (!_.isEmpty(storeRemedy)) {
+                    filterObject = _.find(storeRemedy, obj) ? _.find(storeRemedy, obj) : {};
+                    if (!_.isEmpty(filterObject)) {
+                        _.remove(storeRemedy, filterObject);
+                        if (filterObject.name === 'reason2') {
+                            _.remove(storeRemedy, { name: 'reason3' });
+                        }
+                        if (filterObject.name === 'reason1') {
+                            _.remove(storeRemedy, { name: 'reason2' });
+                            _.remove(storeRemedy, { name: 'reason3' });
+                        }
+                    }
+                }
+            }
+            filterObject.name = obj.name;
+            filterObject.value = reason;
+            storeRemedy.push(filterObject);
+            storeRemedyObject = { msisdn: msisdn, request: storeRemedy };
+            storeRemedyArray.push(storeRemedyObject);
+            sessionStorageManager.removeEntry(storeName);
+            sessionStorageManager.setEntry(storeName, JSON.stringify(storeRemedyArray));
+        }
+
+        // Método que elimina todos los storage almacenados en el sessionStorage (Para que podamos usarlo todos,
+        // - se puede ir incrementando los storage a eliminar por parte de todos los proyectos SOE)
+        removeAllStorages(): void {
+            let vm = this;
+
+            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+            sessionStorageManager.removeEntry('searchparam');
+            sessionStorageManager.removeEntry('searchval');
+            sessionStorageManager.removeEntry('errorurlsearch');
+            sessionStorageManager.removeEntry('idActualVap');
+            sessionStorageManager.removeEntry('credentialInformation');
+            sessionStorageManager.removeEntry('unsubscribeClient');
+            sessionStorageManager.removeEntry('principalMsisdn');
+            sessionStorageManager.removeEntry('caseRequestStorage');
+            sessionStorageManager.removeEntry('remedyRequestStorage');
+        }
+
+        // *********************************************************************** //
 
     }
 
