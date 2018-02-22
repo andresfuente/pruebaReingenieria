@@ -827,7 +827,7 @@ module OrangeFeSARQ.Services {
                 cartItem: [],
                 product: {
                     name: 'seguro',
-                    description: 'appleCare',
+                    description: '',
                     href: '',
                     place: [],
                     productRelationship: [
@@ -860,7 +860,7 @@ module OrangeFeSARQ.Services {
                     }
                 ],
                 productOffering: {
-                    id: '7-1SPN'
+                    id: device.insuranceSiebelId
                 },
                 cartItemRelationship: [
                     {

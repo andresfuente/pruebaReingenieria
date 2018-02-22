@@ -1089,7 +1089,6 @@ module OrangeFeSARQ.Services {
             return characteristic;
         }
 
-
         getInfoCustomer(customerViewStore: any) {
             let _data = {
                 docType: "",
@@ -1105,6 +1104,118 @@ module OrangeFeSARQ.Services {
             return _data;
 
         }
+
+        // ************ Storage Methods ************
+
+        // Método que elimina el storage formulario perteneciente a un msisdn
+        removeRequestStorage(storeName: string, msisdn: string): void {
+            let vm = this;
+
+            let storeRequestArray = [];
+            let storeRequestObject: any = {};
+            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+
+            storeRequestArray = sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(sessionStorageManager.getEntry(storeName)) : [];
+            storeRequestObject = _.find(storeRequestArray, { msisdn: msisdn }) ?
+                _.find(storeRequestArray, { msisdn: msisdn }) : {};
+            if (!_.isEmpty(storeRequestObject)) {
+                _.remove(storeRequestArray, storeRequestObject);
+            }
+            sessionStorageManager.removeEntry(storeName);
+            if (!_.isEmpty(storeRequestArray)) {
+                sessionStorageManager.setEntry(storeName, JSON.stringify(storeRequestArray));
+            }
+        }
+
+        // Método para obtener el valor de un campo de un formulario almacenado
+        // - en el storage perteneciente a un msisdn a partir de un objeto {name: 'nombreDelCampo'}
+        getRequestStorage(obj: OrangeFeSARQ.Models.IObjName, msisdn: string, storeName: string) {
+            let vm = this;
+
+            let storeRemedyArray = [];
+            let storeRemedy = [];
+            let filterObject: any = {};
+            let storeRemedyObject: any = {};
+            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+
+            storeRemedyArray = sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(sessionStorageManager.getEntry(storeName)) : [];
+            storeRemedyObject = _.find(storeRemedyArray, { msisdn: msisdn }) ?
+                _.find(storeRemedyArray, { msisdn: msisdn }) : {};
+            if (!_.isEmpty(storeRemedyObject)) {
+                storeRemedy = storeRemedyObject.request ? storeRemedyObject.request : [];
+                filterObject = _.find(storeRemedy, obj) ? _.find(storeRemedy, obj) : {};
+                if (filterObject.value) {
+                    return filterObject.value;
+                } else {
+                    return '';
+                }
+            } else {
+                return '';
+            }
+        }
+
+        // Método que rellena los campos de nuestro formulario a partir de un objeto {name: 'nombreDelCampo'},
+        // - la razón (valor del campo), msisdn y el nombre del Storage formulario alamcenado en el sessionStorage
+        fillRequestStorage(obj: OrangeFeSARQ.Models.IObjName, reason: any, msisdn: string, storeName: string): void {
+            let vm = this;
+
+            let storeRemedyArray = [];
+            let storeRemedy = [];
+            let filterObject: any = {};
+            let storeRemedyObject: any = {};
+            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+
+            storeRemedyArray = sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(sessionStorageManager.getEntry(storeName)) : [];
+            storeRemedyObject = _.find(storeRemedyArray, { msisdn: msisdn }) ?
+                _.find(storeRemedyArray, { msisdn: msisdn }) : {};
+
+            if (!_.isEmpty(storeRemedyObject)) {
+                storeRemedy = storeRemedyObject.request ? storeRemedyObject.request : [];
+                _.remove(storeRemedyArray, storeRemedyObject);
+                if (!_.isEmpty(storeRemedy)) {
+                    filterObject = _.find(storeRemedy, obj) ? _.find(storeRemedy, obj) : {};
+                    if (!_.isEmpty(filterObject)) {
+                        _.remove(storeRemedy, filterObject);
+                        if (filterObject.name === 'reason2') {
+                            _.remove(storeRemedy, { name: 'reason3' });
+                        }
+                        if (filterObject.name === 'reason1') {
+                            _.remove(storeRemedy, { name: 'reason2' });
+                            _.remove(storeRemedy, { name: 'reason3' });
+                        }
+                    }
+                }
+            }
+            filterObject.name = obj.name;
+            filterObject.value = reason;
+            storeRemedy.push(filterObject);
+            storeRemedyObject = { msisdn: msisdn, request: storeRemedy };
+            storeRemedyArray.push(storeRemedyObject);
+            sessionStorageManager.removeEntry(storeName);
+            sessionStorageManager.setEntry(storeName, JSON.stringify(storeRemedyArray));
+        }
+
+        // Método que elimina todos los storage almacenados en el sessionStorage (Para que podamos usarlo todos,
+        // - se puede ir incrementando los storage a eliminar por parte de todos los proyectos SOE)
+        removeAllStorages(): void {
+            let vm = this;
+
+            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+            sessionStorageManager.removeEntry('searchparam');
+            sessionStorageManager.removeEntry('searchval');
+            sessionStorageManager.removeEntry('errorurlsearch');
+            sessionStorageManager.removeEntry('idActualVap');
+            sessionStorageManager.removeEntry('credentialInformation');
+            sessionStorageManager.removeEntry('unsubscribeClient');
+            sessionStorageManager.removeEntry('principalMsisdn');
+            sessionStorageManager.removeEntry('caseRequestStorage');
+            sessionStorageManager.removeEntry('remedyRequestStorage');
+        }
+
+        // *********************************************************************** //
 
     }
 
