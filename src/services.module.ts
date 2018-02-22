@@ -50,6 +50,7 @@ module OrangeFeSARQ.Constant {
         .service('owcsServices', OrangeFeSARQ.Services.OwcsServices)
         .service('backOffice', OrangeFeSARQ.Services.BackOfficeSrv)
         .service('bscsToSiebelSrv', OrangeFeSARQ.Services.BscsToSiebelSrv)
+        .service('shoppingCartSrv', OrangeFeSARQ.Services.ShoppingCartSrv)
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
