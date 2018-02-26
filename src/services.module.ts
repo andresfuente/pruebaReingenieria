@@ -52,6 +52,8 @@ module OrangeFeSARQ.Constant {
         .service('bscsToSiebelSrv', OrangeFeSARQ.Services.BscsToSiebelSrv)
         .service('shoppingCartSrv', OrangeFeSARQ.Services.ShoppingCartSrv)
         .service('RatesParentSrv', OrangeFeSARQ.Services.RatesParentSrv)
+        .service('rateInfoPopupSrv', rateInfoPopup.Services.RateInfoPopupSrv)
+        
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
