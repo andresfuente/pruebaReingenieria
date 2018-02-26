@@ -43,6 +43,34 @@ module OrangeFeSARQ.Services {
                 });
         }
 
+        //consulta infodatossim para saber si esta asociado o no
+        getData3(msisdn: string, msisdnsec:string, iccid:string, principal:boolean, segment: string = '', componentName: string = 'row_switch_services', refresh: boolean = false): ng.IPromise<any> {
+            let vm = this;
+            let _search : any = {
+                queryParams: {
+                    queryType: 'infoDatosSim',
+                    lineCategory: 'mobile',
+                    segment: segment,
+                },
+                urlParams: [vm.brand, 'service', msisdn]
+            };
+            if (!principal){
+                _search.queryParams.msisdnsec = msisdnsec;
+                _search.queryParams.iccid = iccid;
+            }
+
+            return vm.httpCacheGett(vm.urlActivationAndConfiguration, _search, componentName, refresh)
+                .then((successData) => {
+                    return successData;
+                },
+                (errorData) => {
+                    return errorData;
+                })
+                .catch(function (error) {
+                    return error;
+                });
+        }
+
         //  Se cambia el método 'service' por el método 'multipleServices' para la llamada al activationAndConfiguration 
         // en el componente activationFreeFriends para Amigos gratis
 
