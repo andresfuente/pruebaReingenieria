@@ -55,8 +55,11 @@ module OrangeFeSARQ.Services {
                 urlParams: [vm.brand, 'service', msisdn]
             };
             if (!principal){
-                _search.queryParams.msisdnsec = msisdnsec;
-                _search.queryParams.iccid = iccid;
+                if(msisdnsec !== '') {
+                    _search.queryParams.msisdnsec = msisdnsec;
+                } else {
+                    _search.queryParams.iccid = iccid;
+                }                
             }
 
             return vm.httpCacheGett(vm.urlActivationAndConfiguration, _search, componentName, refresh)
