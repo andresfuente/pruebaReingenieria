@@ -880,7 +880,6 @@ module OrangeFeSARQ.Services {
             
         }
 		
-		
 		/**
          * @ngdoc method
          * @name services.Controllers:Services#trusHtml
