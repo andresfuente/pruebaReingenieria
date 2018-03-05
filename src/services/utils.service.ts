@@ -855,7 +855,7 @@ module OrangeFeSARQ.Services {
 
             return status;
         };
-		
+
 		/**
          * @ngdoc method
          * @name services.Controllers:Services#trusHtml
