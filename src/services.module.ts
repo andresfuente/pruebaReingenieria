@@ -39,6 +39,7 @@ module OrangeFeSARQ.Constant {
         .service('srvTerminalCompare', OrangeFeSARQ.Services.SrvTerminalCompare)
         .service('srvFile', OrangeFeSARQ.Services.SrvFile)
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
+        .service('typificationStore', OrangeFeSARQ.Services.TypificationStore)
         .service('userManagementSrv', OrangeFeSARQ.Services.UserManagementSrv)
         .service('userSrv', OrangeFeSARQ.Services.UserSrv)
         .service('utils', OrangeFeSARQ.Services.Utils)
