@@ -21,6 +21,7 @@ module OrangeFeSARQ.Constant {
         .service('commercialDataSrv', OrangeFeSARQ.Services.CommercialDataSrv)
         .service('customerManagementSrv', OrangeFeSARQ.Services.CustomerManagementSrv)
         .service('detailRateSrv', OrangeFeSARQ.Services.DetailRateSrv)
+        .service('deviceRateSelectionPopupSrv' , OrangeFeSARQ.Services.DeviceRateSelectionPopupSrv)
         .service('getConfigurationSrv', OrangeFeSARQ.Services.GetConfigurationSrv)
         .service('getDataClientSrv', OrangeFeSARQ.Services.GetdataClientSrv)
         .service('getDataPermanencySrv', OrangeFeSARQ.Services.GetDataPermanencySrv)
