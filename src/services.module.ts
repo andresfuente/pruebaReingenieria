@@ -55,6 +55,7 @@ module OrangeFeSARQ.Constant {
         .service('rateInfoPopupSrv', rateInfoPopup.Services.RateInfoPopupSrv)  
         .service('productCatalogV2Srv', OrangeFeSARQ.Services.ProductCatalogV2Srv)
         .service('ratesComparatorSrv', ratesComparator.Services.RatesComparatorSrv)
+        .service('reservePopupSrv', reservePopup.Services.ReservePopupSrv)
         
         
 
