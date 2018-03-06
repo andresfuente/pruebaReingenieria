@@ -18,11 +18,13 @@ module OrangeFeSARQ.Constant {
         .service('changeRateFixedSrv', OrangeFeSARQ.Services.ChangeRateFixedOWCSSrv)
         .service('contactFormSrv', OrangeFeSARQ.Services.ContactFormSrv)
         .service('contractsSrv', OrangeFeSARQ.Services.ContractsSrv)
+        .service('commercialDataSrv', OrangeFeSARQ.Services.CommercialDataSrv)
         .service('customerManagementSrv', OrangeFeSARQ.Services.CustomerManagementSrv)
         .service('detailRateSrv', OrangeFeSARQ.Services.DetailRateSrv)
+        .service('deviceRateSelectionPopupSrv' , OrangeFeSARQ.Services.DeviceRateSelectionPopupSrv)
         .service('getConfigurationSrv', OrangeFeSARQ.Services.GetConfigurationSrv)
         .service('getDataClientSrv', OrangeFeSARQ.Services.GetdataClientSrv)
-        .service('getDataPermanencySrv', OrangeFeSARQ.Services.GetDataPermanencySrv)        
+        .service('getDataPermanencySrv', OrangeFeSARQ.Services.GetDataPermanencySrv)
         .service('getHeaderFooterSrv', OrangeFeSARQ.Services.GetHeaderFooter)
         .service('getImagesSrv', OrangeFeSARQ.Services.getImagesSrv)
         .service('getMenuItemsModule', OrangeFeSARQ.Services.GetMenuItemsService)
@@ -36,8 +38,10 @@ module OrangeFeSARQ.Constant {
         .service('productContractedTranslateSrv', OrangeFeSARQ.Service.ProductContractedTranslateSrv)
         .service('productInventorySrv', OrangeFeSARQ.Services.ProductInventoryService)
         .service('productOrderSrv', OrangeFeSARQ.Services.ProductOrderSrv)
+        .service('sendToken',OrangeFeSARQ.Services.SendTokenSrv)
         .service('srvTerminalCompare', OrangeFeSARQ.Services.SrvTerminalCompare)
         .service('srvFile', OrangeFeSARQ.Services.SrvFile)
+        .service('rateDeviceSelectionPopupSrv', OrangeFeSARQ.Services.RateDeviceSelectionPopupSrv)
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
         .service('userManagementSrv', OrangeFeSARQ.Services.UserManagementSrv)
         .service('userSrv', OrangeFeSARQ.Services.UserSrv)
@@ -46,10 +50,19 @@ module OrangeFeSARQ.Constant {
         .service('voiceMailPopUpSrv', OrangeFeSARQ.Services.VoiceMailPopUpSrv)
         .service('owcsServices', OrangeFeSARQ.Services.OwcsServices)
         .service('backOffice', OrangeFeSARQ.Services.BackOfficeSrv)
+        .service('bscsToSiebelSrv', OrangeFeSARQ.Services.BscsToSiebelSrv)
+        .service('shoppingCartSrv', OrangeFeSARQ.Services.ShoppingCartSrv)
+        .service('RatesParentSrv', OrangeFeSARQ.Services.RatesParentSrv)
+        .service('rateInfoPopupSrv', rateInfoPopup.Services.RateInfoPopupSrv)  
+        .service('productCatalogV2Srv', OrangeFeSARQ.Services.ProductCatalogV2Srv)
+        .service('ratesComparatorSrv', ratesComparator.Services.RatesComparatorSrv)
+        .service('reservePopupSrv', reservePopup.Services.ReservePopupSrv)
+        
+        
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
-              productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore, $injector) => {
+            productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore, $injector) => {
             let genericConstant = $injector.get('genericConstant');
             if (navigator.userAgent.indexOf('PhantomJS') < 1 && !genericConstant.public) {
 
@@ -101,9 +114,9 @@ module OrangeFeSARQ.Constant {
             }
         })
         .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter, $injector,
-              getConfigurationSrv: OrangeFeSARQ.Services.GetConfigurationSrv) => {
+            getConfigurationSrv: OrangeFeSARQ.Services.GetConfigurationSrv) => {
             let genericConstant = $injector.get('genericConstant');
-            // Si no es mobile first || Es spa pública
+            // Si no es mobile first || Es spa pública || O es Amena
             if (navigator.userAgent.indexOf('PhantomJS') < 1
                 && (genericConstant.site !== 'eCareResidencial' || genericConstant.public === true)) {
                 getHeaderFooterSrv.getData().then(
@@ -117,56 +130,60 @@ module OrangeFeSARQ.Constant {
 
                     }
                 );
-            // Si es mobile first y no es spa publica
-            } else if (navigator.userAgent.indexOf('PhantomJS') < 1
-                       && (genericConstant.site === 'eCareResidencial' && genericConstant.public === false)) {
+            }
+            // Si es mobile first y no es spa publica || O es Amena
+            if (navigator.userAgent.indexOf('PhantomJS') < 1
+                && (genericConstant.site === 'eCareResidencial' && genericConstant.public === false)
+                || (genericConstant.site === 'eCareResidencialAmena')) {
                 getConfigurationSrv.getData().then(
                     (response) => {
                         // Guardo datos en ParentController
                         if (OrangeFeSARQ.Controllers.ParentController.shared === undefined) {
                             OrangeFeSARQ.Controllers.ParentController.shared = {};
                         }
-                        OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore = response.data.data;
-
+                        //Este if evita que se entre cuando es eCareResidencialAmena
+                        if (genericConstant.site === 'eCareResidencial') {
+                            OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore = response.data.data;
+                        }
                         // OrangeFeSARQ.Controllers.ParentController.shared.breadCrumbsStore = response.data.breadCrumbs;
                     }
                 );
             }
-        });
+        })
 
-        /*if (OrangeFeSARQ.Controllers.ParentController.shared
-            && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
-            menuStore.menu = {
-                pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
-                prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
-                fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
-
-            };
-            fillCurrent();
-        } else {
-            $rootScope.$watch(
-                () => OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore,
-                (newValue, oldValue) => {
-                    if (OrangeFeSARQ.Controllers.ParentController.shared
-                        && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
-                        menuStore.menu = {
-                            pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
-                            prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
-                            fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
-                        };
-                        fillCurrent();
-                    }
-                });
-        }
-
-        let prepaid: boolean;
-        let pospaid: boolean;
-        let fixed: boolean;
-
+    /*if (OrangeFeSARQ.Controllers.ParentController.shared
+        && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
+        menuStore.menu = {
+            pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
+            prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
+            fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
+ 
+        };
+        fillCurrent();
+    } else {
         $rootScope.$watch(
-            () => msisdnStore.msisdn,
+            () => OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore,
             (newValue, oldValue) => {
-                fillCurrent();
+                if (OrangeFeSARQ.Controllers.ParentController.shared
+                    && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
+                    menuStore.menu = {
+                        pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
+                        prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
+                        fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
+                    };
+                    fillCurrent();
+                }
             });
-    }*/
+    }
+ 
+    let prepaid: boolean;
+    let pospaid: boolean;
+    let fixed: boolean;
+ 
+    $rootScope.$watch(
+        () => msisdnStore.msisdn,
+        (newValue, oldValue) => {
+            fillCurrent();
+        });
+}*/
 }

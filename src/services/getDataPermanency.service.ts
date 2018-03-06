@@ -18,11 +18,11 @@ module OrangeFeSARQ.Services {
             vm.genericConstant = $injector.get('genericConstant');
         }
 
-        getData() {
+        getData(type) {
             let vm = this;
             let _search: Object = {
                 queryParams: {},
-                urlParams: []
+                urlParams: [type]
 
             };
 

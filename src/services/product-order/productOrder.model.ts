@@ -34,4 +34,20 @@ declare module OrangeFeSARQ.Models {
     msisdn : string,
     productsIdQuery : string[];
   }
+  export class SetPromotions {
+    msisdn: string;
+    productId: string;
+    action: string;
+    imei: string;
+    segment: string;
+    lineCategory: string;
+    docNumber: string;
+    codMorgane: string;
+    ProductCharacteristic: Array<Models.ProductCharacteristicSetProm>;
+  }
+
+  export class ProductCharacteristicSetProm {
+    name: string;
+    value: string;
+  }
 }

@@ -41,6 +41,26 @@ module OrangeFeSARQ.Services {
                     }
                 );
         }
+
+        genToken(body: any, compName: string = 'tokenSrv') {
+            let vm = this;
+            let apiUrl: string = vm.genericConstant.token;
+            const method: string = 'token';
+            const brand: string = vm.genericConstant.brand;
+
+            let _search: Object = {
+                body: body,
+                urlParams: [brand, method]
+            };
+
+            return vm.httpPost(apiUrl, _search, compName)
+                .then( (response) => {
+                    return response.data;
+                })
+                .catch( (error) => {
+                    return error.data;
+                });
+        }
     }
     angular.module('tokenModule', [])
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv);
