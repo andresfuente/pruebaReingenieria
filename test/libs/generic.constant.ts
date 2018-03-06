@@ -21,7 +21,6 @@ module OrangeFeSARQ.Constant {
       productOrder: 'api/productOrdering/v1',
       activationAndConfiguration: 'api/activationAndConfiguration/v1',
       customerView: 'api/customerView/v1',
-      communications: 'api/communication/v1',
       linesUsage: 'api/linesUsage/v1',
       bucketBalance: 'api/bucketBalance/v1',
       productCatalog: 'api/productCatalog/v1',

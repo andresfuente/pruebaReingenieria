@@ -24,13 +24,10 @@ module OrangeFeSARQ.Services {
             // vm.http = $injector.get('$http');
         }
 
-        getData(id?:string, msisdn?:string): ng.IPromise<any> {
+        getData(): ng.IPromise<any> {
             let vm = this;
             let _search: Object = {
-                queryParams: {
-                    id:id,
-                    publicKey:msisdn
-                },
+                queryParams: {},
                 urlParams: [vm.genericConstant.brand, 'getUser']
  
             };

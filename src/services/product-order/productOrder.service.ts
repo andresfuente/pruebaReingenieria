@@ -90,57 +90,22 @@ module OrangeFeSARQ.Services {
     }
 	
   // Se añade el parametro segment para contratar los servicios con este método en PAE
-  changeStatetProduct(msisdn: string, productId: string, action: string, imei: string = '',
-  componentName: string = 'generic_bonus', bonosApilados? : number, segment = ''): ng.IPromise<any> {
+	changeStatetProduct(msisdn: string, productId: string, action: string, imei: string = '', componentName: string = 'generic_bonus'): ng.IPromise<any> {
       let vm = this;
       let queryParams = {};
       if (imei !== '') {
-        if(bonosApilados){
-          queryParams = {
-            imei: imei,
-            msisdn: msisdn,
-            action: action,
-            productId: productId,
-            segment: segment,
-            productCharacteristic: [
-              {
-                name: 'BONOS APILADOS',
-                value: bonosApilados.toString()
-              }
-            ]
-            };
-        }else {
-          queryParams = {
-            imei: imei,
-            msisdn: msisdn,
-            action: action,
-            productId: productId,
-            segment: segment
-          };
-        }
+        queryParams = {
+          imei: imei,
+          msisdn: msisdn,
+          action: action,
+          productId: productId,
+        };
       } else {
-        if(bonosApilados) {
-          queryParams = {
-            msisdn: msisdn,
-            action: action,
-            productId: productId,
-            segment: segment,
-            productCharacteristic: [
-              {
-                name: 'BONOS APILADOS',
-                value: bonosApilados.toString()
-              }
-            ]
-          };
-        }else {
-          queryParams = {
-            msisdn: msisdn,
-            action: action,
-            productId: productId,
-            segment: segment
-          };
-        }
-        
+        queryParams = {
+          msisdn: msisdn,
+          action: action,
+          productId: productId,
+        };
       }
       // No necesita brand porque esta llamada es solo parte de Orange
       let _search: Object = {
@@ -159,24 +124,6 @@ module OrangeFeSARQ.Services {
         .catch(function (error) {
           return error;
         });
-    }
-
-    setPromotions(body: Models.ProductOrder, componentName: string) {
-      let vm = this;
-
-      let _search: Object = {
-        queryParams: body,
-        urlParams: [vm.genericConstant.brand, 'setPromotions']
-      };
-
-      return vm.httpPost(vm.urlProductOrder, _search, componentName)
-        .then(function(success) {
-          return success.data;
-        })
-        .catch(function(error) {
-          return error.data;
-        })
-      ;
     }
 
     moreMegasAmena(msisdnMegas: string, componentName: string) {
@@ -313,15 +260,14 @@ module OrangeFeSARQ.Services {
         });
     }
 
-    getProductBonusIncompatibility(msisdn: string, products:any, componentName: string): ng.IPromise<any> {
+    getProductBonusIncompatibility(msisdn: string, productsIdQuery: string[], componentName: string): ng.IPromise<any> {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'productBonusIncompatibility';
       let qParams = {
         msisdn,
-        products
+        productsIdQuery
       }
-      
       let _search: Object = {
         urlParams: [BRAND, METHOD],
         queryParams: qParams
@@ -401,47 +347,6 @@ module OrangeFeSARQ.Services {
       .catch((error) => {
         return error;
       });
-    }
-
-    /**
-     * @ngdoc method
-     * @name OrangeFeSARQ.Services:ProductOrderSrv#postLeaveAmena
-     * @methodOf OrangeFeSARQ.Services.ProductOrderSrv
-     * @param {string} msisdn - Número del telefono del cliente
-     * @param {string} document - documento de identidad del cliente
-     * @param {string} action - Baja de Amena o cambio a Orange
-     * @param {string} idProduct - id de producto 
-     * @param {string} componentN
-     * @description
-     * Si la notificación es pegasus, modifica 
-     */
-    postPaymentOrange(msisdn: string, document: string, action: string, idProduct: string, productName: string,
-      componentName: string): ng.IPromise<any> {
-      let vm = this;
-      let BRAND = vm.genericConstant.brand;
-      let METHOD = 'extraManagement';
-      let _search: Object = {
-        urlParams: [BRAND, METHOD],
-        queryParams: null,
-        body: {
-          'productId': idProduct,
-          'action': action,
-          'msisdn': msisdn,
-          'docNumber': document,
-          'productName': productName
-        }
-      };
-      return vm.httpPost(vm.urlProductOrder, _search, componentName)
-        .then((response) => {
-          let _resp = response.data;
-          if (_resp.error) {
-            throw _resp.error;
-          }
-          return _resp.productOrder;
-        })
-        .catch(function (error) {
-          return error.data;
-        });
     }
   }
 }

@@ -46,26 +46,20 @@ module OrangeFeSARQ.Services {
         }
 
         /* Datos del terminal */
-        getData(str_id, sfid, fileTerminalCompOWCSStore) {
+        getData(str_id, relatedRateId, sfid, fileTerminalCompOWCSStore) {
+
             let srv = this;
-            let relatedProductOffering;
 
             if(srv.cachedTerminalName && srv.cachedTerminalName === str_id) {
                 return srv.cachedTerminalPromise;
             } else {
                 let dataOT = srv.MosaicFileSrv.getDataOT();
-                // Se define el tipo de tarifa dependiendo del segmento del cliente
-                if(dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
-                    relatedProductOffering = dataOT.relatedRateResidential;
-                } else {
-                    relatedProductOffering = dataOT.relatedRateBusiness;
-                }
 
                 srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
                     str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
                     dataOT.ospCartItemSubType, srv.riskLevel[dataOT.creditRiskRating],
-                    dataOT.channel, sfid , relatedProductOffering,
-                    fileTerminalCompOWCSStore, dataOT.profile, dataOT.priceName,
+                    dataOT.channel, sfid , relatedRateId,
+                    fileTerminalCompOWCSStore, dataOT.profile, '',
                     dataOT.ospCustomerSegment,
                     dataOT.stateOrProvince
                 ).then((terminal) => {
@@ -96,7 +90,7 @@ module OrangeFeSARQ.Services {
 
         setAccordion(label, view) {
             let vm = this;
-            vm.viewState.accordion[label.trim()] = view;
+            vm.viewState.accordion[label] = view;
         }
 
         createLabels(labels: Object): Array<Object> {

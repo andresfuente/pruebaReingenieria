@@ -47,28 +47,5 @@ module OrangeFeSARQ.Services {
           return error.data;
         });
     }
-
-    getPaymentServices(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
-      let vm = this;
-      let BRAND = vm.genericConstant.brand;
-      let METHOD = 'identityServices';
-      let _search: Object = {
-        queryParams: {
-          'publicKey': msisdn
-        },
-        urlParams: [BRAND, METHOD]
-      };
-      return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
-        .then(function(response) {
-          if (response.data) {
-            return response.data;
-          }
-          throw response.data.error;
-        })
-        .catch(function(error) {
-          return error.data;
-        });
-    }
-
   }
 }
