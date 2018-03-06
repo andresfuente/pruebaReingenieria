@@ -43,6 +43,7 @@ module OrangeFeSARQ.Constant {
         .service('srvFile', OrangeFeSARQ.Services.SrvFile)
         .service('rateDeviceSelectionPopupSrv', OrangeFeSARQ.Services.RateDeviceSelectionPopupSrv)
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
+        .service('typificationStore', OrangeFeSARQ.Services.TypificationStore)
         .service('userManagementSrv', OrangeFeSARQ.Services.UserManagementSrv)
         .service('userSrv', OrangeFeSARQ.Services.UserSrv)
         .service('utils', OrangeFeSARQ.Services.Utils)

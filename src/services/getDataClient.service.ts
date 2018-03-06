@@ -32,7 +32,7 @@ module OrangeFeSARQ.Services {
                     publicKey:msisdn
                 },
                 urlParams: [vm.genericConstant.brand, 'getUser']
-
+ 
             };
 
             return vm.httpCacheGett(vm.genericConstant.getDataClient, _search)
