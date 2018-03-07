@@ -77,11 +77,9 @@ module OrangeFeSARQ.Services {
                 delete params.idTecnologiaList;
             }
 
-
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
             _headers.set('Geolocation-client', vm.customerProvince);
-            
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -144,11 +142,10 @@ module OrangeFeSARQ.Services {
             if (!releatedRatesClient || releatedRatesClient === '') {
                 delete params.idParqueList;
             }
-            
+
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', srv.storeProvince );
+            _headers.set('Geolocation-local', srv.storeProvince);
             _headers.set('Geolocation-client', srv.customerProvince);
-           
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
@@ -176,7 +173,7 @@ module OrangeFeSARQ.Services {
                 productType: 'sva', // Tipo de producto
                 idSvaList: idSvaList, // Lista de Id´s de SVA
             };
-           
+
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince : 'Madrid');
             _headers.set('Geolocation-client', srv.customerProvince);
@@ -208,11 +205,11 @@ module OrangeFeSARQ.Services {
                 productType: 'sva', // Tipo de producto
                 idSvaList: idSvaList, // Lista de Id´s de SVA
             };
-            
+
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince : 'Madrid');
             _headers.set('Geolocation-client', srv.customerProvince);
-            
+
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
@@ -231,11 +228,10 @@ module OrangeFeSARQ.Services {
                 productType: 'sva',
                 idSvaList: idList
             };
-            
+
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local',  vm.storeProvince);
+            _headers.set('Geolocation-local', vm.storeProvince);
             _headers.set('Geolocation-client', vm.customerProvince);
-        
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -292,11 +288,11 @@ module OrangeFeSARQ.Services {
             if (technologyString === '') {
                 delete params.idTecnologiaList;
             }
-            
+
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince);
             _headers.set('Geolocation-client', vm.customerProvince);
-            
+
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -345,11 +341,11 @@ module OrangeFeSARQ.Services {
             if (technologyString === '') {
                 delete params.idTecnologiaList;
             }
-            
+
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince);
             _headers.set('Geolocation-client', vm.customerProvince);
-            
+
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
@@ -486,12 +482,12 @@ module OrangeFeSARQ.Services {
 
             return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName)
                 .then(
-                (response) => {
-                    return response.data;
-                },
-                (error) => {
-                    throw error.data;
-                }
+                    (response) => {
+                        return response.data;
+                    },
+                    (error) => {
+                        throw error.data;
+                    }
                 );
         }
 
@@ -511,12 +507,12 @@ module OrangeFeSARQ.Services {
 
             return srv.httpPostFull(srv.genericConstant.shoppingCart, _search, componentName)
                 .then(
-                (response) => {
-                    return response.data;
-                },
-                (error) => {
-                    throw error.data;
-                }
+                    (response) => {
+                        return response.data;
+                    },
+                    (error) => {
+                        throw error.data;
+                    }
                 );
         }
 

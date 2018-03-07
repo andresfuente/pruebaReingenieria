@@ -317,7 +317,7 @@ module ratesParent.Models {
         public svaChildrenList: Array<RateSVA> = []; // Array de los SVA hijos
         public href: string;
         public show = true;
-        // Promociones
+        // Promociones SVA
         public typePriceName: string;
         public taxRate: number;
         public taxRateName: string;
@@ -386,7 +386,6 @@ module ratesParent.Models {
                                                 price.taxIncludedAmount;
                                             sva.ratePricePromotional = priceElement.productOfferingPriceAlteration.
                                                 price.dutyFreeAmount;
-
                                         }
                                     });
                                 }

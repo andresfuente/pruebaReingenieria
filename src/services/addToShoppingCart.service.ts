@@ -526,11 +526,14 @@ module OrangeFeSARQ.Services {
                     }
                 ];
             }
+            let deviceReserve = _.find(commercialData[commercialActIndex].terminals, (o: any) => {
+                return (device.siebelId === o.siebelId);
+            });
             // Se guarda el IMEI del terminal si se dispone de el
-            if (device && device.IMEI  && device.IMEI !== undefined) {
+            if (device && deviceReserve && deviceReserve.IMEI) {
                 let imei = {
                     'name': 'IMEI',
-                    'value': device.IMEI
+                    'value': deviceReserve.IMEI
                 };
                 device.characteristic.push(imei);
             }
