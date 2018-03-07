@@ -979,7 +979,8 @@ module OrangeFeSARQ.Services {
                         isPack = true;
                     }
 
-                    if(ratePC && ratePC.productSpecCharacteristic && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue) {
+                    if(ratePC && ratePC.productSpecCharacteristic
+                     && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue.length > 0) {
                         ranges = ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue[0].value;
                     }
                     
