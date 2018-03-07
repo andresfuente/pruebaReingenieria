@@ -13,6 +13,7 @@ module reservePopup.Services {
 
         // Injection vars
         public reservePopupSrvVars: reservePopupSrv.Models.IReservePopupVarsModel;
+        public refreshShoppingCart: boolean;
         public informationCenter: OrangeFeSARQ.Services.InformationCenterSrv;
 
         constructor(public $injector) {
@@ -95,6 +96,7 @@ module reservePopup.Services {
         showReservePopup(terminals): void {
             let vm = this;
 
+            vm.refreshShoppingCart = false;
             vm.reservePopupSrvVars = <reservePopupSrv.Models.IReservePopupVarsModel>{
                 size: '',
                 visible: true,
