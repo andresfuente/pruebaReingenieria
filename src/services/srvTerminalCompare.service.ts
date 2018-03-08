@@ -102,14 +102,25 @@ module OrangeFeSARQ.Services {
             device.description = device.litSubTitle;
             device.isModified = false;
             device.action = 'New';
+        
+            // Buscamos Esim en dispositivo
+            if (device.icon){
+                for ( let i = 0; i < device.icon.length; i++){
+                    if (device.icon[i].description === 'eSIM' ){
+                        device.eSim = true;
+                        break;
+                    }
+                }
+            }
+          
             // Se seleccionan las propiedades para session
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
             'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-            'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName', 'tipoPago']);
+            'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName', 'tipoPago' , 'eSim']);
             if(device.renewRates !== undefined && device.renewRates) {
                 deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                 'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-                'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates']);
+                'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates' , 'eSim']);
             }
 
             return deviceForSession;
