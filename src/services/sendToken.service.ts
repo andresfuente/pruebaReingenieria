@@ -13,61 +13,45 @@ module OrangeFeSARQ.Services {
     setInjections($injector) {
       let vm = this;
     }
-
-  
-    getToken(msisdn: string, componentName: string){
+    getToken(msisdn: any, componentName: string) {
       let vm = this;
-
       let _search  = {
           queryParams: {
-            msisdn: msisdn
+            "msisdn": msisdn,
           },
-          urlParams: [vm.genericConstant.brand,'getTokenRepair']
-      }
+          urlParams: [vm.genericConstant.brand, 'tokenManager']
+      };
 
-      return vm.httpCacheGett(vm.genericConstant.token,_search, componentName)
+      return vm.httpCacheGett(vm.genericConstant.token, _search, componentName)
         .then(
           (response) => {
-              return response.data.chain;
+              return response;
           },
           (error) => {
             return error;
           }
         );
-      
     }
 
-
-    sendTokenMessage(msisdn: string, token: string, componentName: string) {
-
+    checkToken(msisdn: any, token: any, componentName: string) {
       let vm = this;
-      let _search = {
-        body: {
-
-          "msisdn": msisdn,
-          "template": "9000000",
-          "version": "",
-          "numFields": "1",
-          "parameters": [
-            {
-              "name": "TOKEN",
-              "value": token
-            }
-          ]
-
-        },
-        urlParams: ['communications', 'sendSms'],
+      let _search  = {
+          queryParams: {
+            "msisdn": msisdn,
+            "token": token
+          },
+          urlParams: ['tokenValidate']
       };
-      
-      return vm.httpPost(vm.genericConstant.communications, _search, componentName)
+
+      return vm.httpCacheGett(vm.genericConstant.token, _search, componentName)
         .then(
           (response) => {
-            return response.data;
+              return response;
           },
           (error) => {
-            throw error.data;
+            return error;
           }
         );
     }
   }
-}      
+}
