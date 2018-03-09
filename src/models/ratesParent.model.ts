@@ -87,7 +87,7 @@ module ratesParent.Models {
         // Promocion
         public ratePriceTaxIncludedPromotional;
         public ratePricePromotional;
-        public existProductOfferingPriceAlteration;
+        public descriptionPromotion;
 
         constructor(rateData, priceData) {
             this.rateSubName = rateData.ospTitulo;
@@ -141,8 +141,7 @@ module ratesParent.Models {
                                     return price.priceType === 'techniquePriceRate';
                                 });
 
-                                this.existProductOfferingPriceAlteration = priceData[i].productOfferingPrice[j].
-                                    productOfferingPriceAlteration;
+                                let productOfferingPriceAlteration = priceData[i].productOfferingPrice[j].productOfferingPriceAlteration;
 
                                 if (promotionalPrice) {
                                     this.typePriceName = promotionalPrice.priceType;
@@ -155,22 +154,16 @@ module ratesParent.Models {
                                         this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
                                         this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
                                     }
-                                } else if (priceData[i].productOfferingPrice[j].productOfferingPriceAlteration) {
-                                    this.typePriceName = priceData[i].productOfferingPrice[j].productOfferingPriceAlteration.priceType;
-                                    this.taxRate = priceData[i].productOfferingPrice[j].productOfferingPriceAlteration.price.taxRate;
-                                    this.taxRateName = priceData[i].productOfferingPrice[j].productOfferingPriceAlteration.
+                                } else if (productOfferingPriceAlteration) {
+                                    this.typePriceName = productOfferingPriceAlteration.priceType;
+                                    this.taxRate = productOfferingPriceAlteration.price.taxRate;
+                                    this.taxRateName = productOfferingPriceAlteration.
                                         price.ospTaxRateName;
-                                    if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
-                                        this.ratePriceTaxIncludedPromotional = priceData[i].productOfferingPrice[j].
-                                            productOfferingPriceAlteration.price.taxIncludedAmount;
-                                        this.ratePricePromotional = priceData[i].productOfferingPrice[j].
-                                            productOfferingPriceAlteration.price.dutyFreeAmount;
-                                    } else {
-                                        this.ratePriceTaxIncludedPromotional = priceData[i].productOfferingPrice[j].
-                                            productOfferingPriceAlteration.price.taxIncludedAmount;
-                                        this.ratePricePromotional = priceData[i].productOfferingPrice[j].
-                                            productOfferingPriceAlteration.price.dutyFreeAmount;
-                                    }
+                                    this.descriptionPromotion = productOfferingPriceAlteration.description;
+                                    this.ratePriceTaxIncludedPromotional = productOfferingPriceAlteration.
+                                        price.taxIncludedAmount;
+                                    this.ratePricePromotional = productOfferingPriceAlteration.
+                                        price.dutyFreeAmount;
                                 }
 
                                 if (commercialPrice) {
