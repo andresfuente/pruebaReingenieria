@@ -84,10 +84,10 @@ module ratesComparator.Services {
             vm.setCustomerData();
             vm.setStoreProvince();
 
-            var _headers = new HashMap();
-                _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince.toUpperCase() : '');          
-                _headers.set('Geolocation-client',vm.customerProvince ? vm.customerProvince.toUpperCase() : '');          
-            
+            let _headers = {
+                'Geolocation-local': vm.storeProvince.toUpperCase(),
+                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            };
 
             let params = {
                 channel: channel,
@@ -161,6 +161,8 @@ module ratesComparator.Services {
             let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
             if (shopInfo !== null && shopInfo.province) {
                 vm.storeProvince = shopInfo.province;
+            } else {
+                vm.storeProvince = 'Madrid';
             }
         }
     }
