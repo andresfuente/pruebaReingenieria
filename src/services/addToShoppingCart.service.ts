@@ -348,6 +348,7 @@ module OrangeFeSARQ.Services {
             // Se comprueba si existe alguna tarifa en el shopping cart que se este modificando
             if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
                 commercialData[commercialActIndex].ospIsSelected) {
+                commercialData[commercialActIndex].isCompletedAC = false;
                 // Se eliminan las tarifas del acto comercial existentes en el shopping cart
                 shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
