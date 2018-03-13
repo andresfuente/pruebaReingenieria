@@ -50,22 +50,25 @@ module reservePopup.Services {
                 quantity: '1',
                 reserva: []
             };
+            let position = 0;
             for (let i in reservas) {
                 if (reservas.length > 0 && reservas[i].aleatorio === 'true' && !reservas[i].reservado) {
-                    body.reserva[i] = {
+                    body.reserva[position] = {
                         typeDoc: tipoDocumento,
                         numDoc: dni,
                         material: reservas[i].id,
                         quantity: '1'
-                    }
+                    };
+                    position++;
                 }else if(reservas.length > 0 && reservas[i].aleatorio === 'false' && !reservas[i].reservado) {
-                    body.reserva[i] = {
+                    body.reserva[position] = {
                         typeDoc: tipoDocumento,
                         numDoc: dni,
                         material: reservas[i].id,
                         quantity: '1',
                         serialnumber: reservas[i].imei
-                    }
+                    };
+                    position++;
                 }
             }
             let _search = {
