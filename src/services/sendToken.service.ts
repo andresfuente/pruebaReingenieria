@@ -13,11 +13,12 @@ module OrangeFeSARQ.Services {
     setInjections($injector) {
       let vm = this;
     }
-    getToken(msisdn: any, componentName: string) {
+    getToken(msisdn: any, doc: any, componentName: string) {
       let vm = this;
       let _search  = {
           queryParams: {
             "msisdn": msisdn,
+            "doc": doc
           },
           urlParams: [vm.genericConstant.brand, 'tokenManager']
       };
