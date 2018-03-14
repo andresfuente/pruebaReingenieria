@@ -936,7 +936,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let response = false;
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            if(commercialData) {
+            if(commercialData && commercialData.length > 0) {
                 commercialData.forEach(function(commercialAct){
                     if(commercialAct.loveRateInShoppingCart) {
                         response = true;
