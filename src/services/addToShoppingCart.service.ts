@@ -431,6 +431,86 @@ module OrangeFeSARQ.Services {
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
+         /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Añade una tarifa al session storage del carrito
+         */
+        putRateInShoppingCartForSva(rate) {
+            let vm = this;
+            let productItem;
+            let rateCartItemElement;
+            let cartItemElement;
+            let cartItemElementId, cartItemIndex, lastCartItemId, commercialActId: number;
+            let svaCartItemList = [];
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let commercialActIndex = vm.getSelectedCommercialAct();
+
+            productItem = {
+                'href': '',
+                'name': rate.name ? rate.name : '',
+                'description': rate.rateDescription ? rate.rateDescription : '',
+                'productRelationship': [{
+                    'type': 'tarifa'
+                }],
+                'place': [],
+                'characteristic': []
+            };
+
+            rateCartItemElement = {
+                'id': rate.siebelId ? rate.siebelId : '',
+                'action': 'New',
+                'product': productItem,
+                'itemPrice': [
+                    {
+                        'name': rate.typePriceName ? rate.typePriceName : '',
+                        'priceType': 'cuota',
+                        'price': {
+                            'dutyFreeAmount': {
+                                'unit': 'EUR',
+                                'value': rate.ratePrice ? rate.ratePrice : rate.taxFreePrice
+                            },
+                            'taxIncludedAmount': {
+                                'unit': 'EUR',
+                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
+                            },
+                            taxRate: rate.taxRate,
+                            ospTaxRateName: rate.taxRateName
+                        },
+                        'priceAlteration': [{}]
+                    }
+                ],
+                'productOffering': {
+                    'id': rate.siebelId ? rate.siebelId : '',
+                    'name': rate.name ? rate.name : '',
+                    'category': [],
+                    'isBundle': true
+                }
+            };
+
+
+            cartItemElement = {
+                'id': 1.1,
+                'cartItem': [rateCartItemElement].concat(svaCartItemList),
+                'action': 'New',
+                'cartItemRelationship': [{
+                    id: commercialActId
+                }],
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType,
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
+                'ospSelected': true
+            };
+        
+            let shoppingCart = {
+                    'id': '',
+                    'cartItem': [cartItemElement],
+                    'customer': {}
+                }; 
+            return shoppingCart;
+        }
+
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateAndDeviceInShoppingCart
