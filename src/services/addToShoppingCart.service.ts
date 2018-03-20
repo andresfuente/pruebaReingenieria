@@ -90,7 +90,7 @@ module OrangeFeSARQ.Services {
             };
 
             // Se guarda el IMEI del terminal si se dispone de el
-            if (device && device.IMEI  && device.IMEI !== undefined) {
+            if (device && device.IMEI && device.IMEI !== undefined) {
                 let imei = {
                     'name': 'IMEI',
                     'value': device.IMEI
@@ -148,6 +148,8 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': ''
             };
 
+
+
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
 
             cartItemElement = {
@@ -161,6 +163,15 @@ module OrangeFeSARQ.Services {
                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
             };
+
+            // Añadir cartItem compromiso de permanencia CP
+            if (device.cpDescription && device.cpSiebel) {
+                cartItemElement.cartItem.push(vm.createCPCartItem(device));
+            }
+
+
+
+
 
             if (shoppingCart !== null) {
                 shoppingCart.cartItem.push(cartItemElement);
@@ -200,19 +211,19 @@ module OrangeFeSARQ.Services {
             let sTerminalsSC = [];
             let seguro;
 
-            device.itemPrice.forEach( item => {
-                if(payType === 'deferred' && item.priceType === 'inicial' || item.priceType === 'cuota') {
+            device.itemPrice.forEach(item => {
+                if (payType === 'deferred' && item.priceType === 'inicial' || item.priceType === 'cuota') {
                     vapCartItem = {
                         'id': item.id,
                         'action': 'New',
                         'product': {
-                            'productRelationship': [{'type': 'VAP'}],
-                            'characteristic': [{'name': 'CIMATerminalType', 'value': 'Secundary'}]
+                            'productRelationship': [{ 'type': 'VAP' }],
+                            'characteristic': [{ 'name': 'CIMATerminalType', 'value': 'Secundary' }]
                         },
                         'itemPrice': [item],
-                        'productOffering': {'id': item.id},
-                        'cartItemRelationship': [{'id': device.siebelId}],
-                        'ospSelected' : true,
+                        'productOffering': { 'id': item.id },
+                        'cartItemRelationship': [{ 'id': device.siebelId }],
+                        'ospSelected': true,
                         'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                         'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
                     };
@@ -239,7 +250,7 @@ module OrangeFeSARQ.Services {
             };
 
             // Si viene IMEI se añade
-            if (device && device.IMEI  && device.IMEI !== undefined) {
+            if (device && device.IMEI && device.IMEI !== undefined) {
                 let imei = {
                     'name': 'IMEI',
                     'value': device.IMEI
@@ -302,9 +313,9 @@ module OrangeFeSARQ.Services {
             // Se inserta el terminal secundario en el shopping cart
             if (shoppingCart !== null && shoppingCart.cartItem.length > 0) {
                 shoppingCart.cartItem.forEach(currentCartItem => {
-                    let rate = _.find(currentCartItem.cartItem, {'id': selectedCartRate});
-                    let terminal = _.find(currentCartItem.cartItem, {'id': selectedCartTerminal});
-                    if(rate && terminal) {
+                    let rate = _.find(currentCartItem.cartItem, { 'id': selectedCartRate });
+                    let terminal = _.find(currentCartItem.cartItem, { 'id': selectedCartTerminal });
+                    if (rate && terminal) {
                         currentCartItem.cartItem.push(secundaryDeviceCartItem);
                         if (payType === 'deferred') {
                             currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
@@ -340,7 +351,7 @@ module OrangeFeSARQ.Services {
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
-                if(rate.groupName === 'Convergente' && rate.family === 'love') {
+                if (rate.groupName === 'Convergente' && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 }
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
@@ -357,9 +368,9 @@ module OrangeFeSARQ.Services {
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
             // Si la tarifa posee SVA's seleccionados
-            if(rate.selectedSvaList && rate.selectedSvaList.length > 0 ) {
+            if (rate.selectedSvaList && rate.selectedSvaList.length > 0) {
                 // Se crean los cartItem de los SVA's seleccionados
-                rate.selectedSvaList.forEach( sva => {
+                rate.selectedSvaList.forEach(sva => {
                     svaCartItemList.push(vm.createSVACartItem(sva));
                 });
             }
@@ -431,13 +442,13 @@ module OrangeFeSARQ.Services {
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
-         /**
-         * @ngdoc method
-         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
-         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
-         * @description
-         * Añade una tarifa al session storage del carrito
-         */
+        /**
+        * @ngdoc method
+        * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
+        * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+        * @description
+        * Añade una tarifa al session storage del carrito
+        */
         putRateInShoppingCartForSva(rate) {
             let vm = this;
             let productItem;
@@ -502,12 +513,12 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': true
             };
-        
+
             let shoppingCart = {
-                    'id': '',
-                    'cartItem': [cartItemElement],
-                    'customer': {}
-                }; 
+                'id': '',
+                'cartItem': [cartItemElement],
+                'customer': {}
+            };
             return shoppingCart;
         }
 
@@ -537,7 +548,7 @@ module OrangeFeSARQ.Services {
             // Se obtiene el ID del acto comercial que se esta creando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
-                if(rate.groupName === 'Convergente' && rate.family === 'love') {
+                if (rate.groupName === 'Convergente' && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 }
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
@@ -590,9 +601,9 @@ module OrangeFeSARQ.Services {
 
             // TERMINAL PRIMARIO
             // Tipo del terminal
-            if(commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar' &&
-            commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard' &&
-            commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
+            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar' &&
+                commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard' &&
+                commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
                 device.characteristic = [
                     {
                         name: 'CIMATerminalType',
@@ -621,23 +632,25 @@ module OrangeFeSARQ.Services {
             if (device.insuranceSiebelId) {
                 insurance = vm.createInsuranceCartItem(device, 'primary');
             }
+
+
             let uniqueItemPrice = [];
             let vapCartItems = [];
-            for(let i in device.itemPrice) {
-                if(device.itemPrice[i].priceType === 'unico') {
+            for (let i in device.itemPrice) {
+                if (device.itemPrice[i].priceType === 'unico') {
                     uniqueItemPrice.push(device.itemPrice[i]);
                 } else {
                     let vapCartItem = {
                         'id': device.itemPrice[i].id,
                         'action': 'New',
                         'product': {
-                            'productRelationship': [{'type': 'VAP'}],
-                            'characteristic': [{'name': 'CIMATerminalType', 'value': 'Primary'}]
+                            'productRelationship': [{ 'type': 'VAP' }],
+                            'characteristic': [{ 'name': 'CIMATerminalType', 'value': 'Primary' }]
                         },
                         'itemPrice': [device.itemPrice[i]],
-                        'productOffering': {'id': device.itemPrice[i].id},
-                        'cartItemRelationship': [{'id': device.siebelId}],
-                        'ospSelected' : true,
+                        'productOffering': { 'id': device.itemPrice[i].id },
+                        'cartItemRelationship': [{ 'id': device.siebelId }],
+                        'ospSelected': true,
                         'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                         'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
                     };
@@ -669,7 +682,7 @@ module OrangeFeSARQ.Services {
             cartItemElement = {
                 'id': cartItemElementId,
                 'cartItem': uniquePaid ? [rateCartItemElement, deviceCartItemElement] :
-                                         [rateCartItemElement, deviceCartItemElement].concat(vapCartItems),
+                    [rateCartItemElement, deviceCartItemElement].concat(vapCartItems),
                 'action': 'New',
                 'cartItemRelationship': [{
                     id: commercialActId
@@ -678,7 +691,13 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': true
             };
-            if(insurance) {
+
+            // Añadir cartItem compromiso de permanencia CP
+            if (device.cpDescription && device.cpSiebel && !uniquePaid) {
+                cartItemElement.cartItem.push(vm.createCPCartItem(device));
+            }
+
+            if (insurance) {
                 cartItemElement.cartItem.push(insurance);
             }
             if (shoppingCart !== null) {
@@ -749,21 +768,21 @@ module OrangeFeSARQ.Services {
 
             let uniqueItemPrice = [];
             let vapCartItems = [];
-            for(let i in device.itemPrice) {
-                if(device.itemPrice[i].priceType === 'unico') {
+            for (let i in device.itemPrice) {
+                if (device.itemPrice[i].priceType === 'unico') {
                     uniqueItemPrice.push(device.itemPrice[i]);
                 } else {
                     let vapCartItem = {
                         'id': device.itemPrice[i].id,
                         'action': 'New',
                         'product': {
-                            'productRelationship': [{'type': 'VAP'}],
-                            'characteristic': [{'name': 'CIMATerminalType', 'value': 'Primary'}]
+                            'productRelationship': [{ 'type': 'VAP' }],
+                            'characteristic': [{ 'name': 'CIMATerminalType', 'value': 'Primary' }]
                         },
                         'itemPrice': [device.itemPrice[i]],
-                        'productOffering': {'id': device.itemPrice[i].id},
-                        'cartItemRelationship': [{'id': device.siebelId}],
-                        'ospSelected' : true,
+                        'productOffering': { 'id': device.itemPrice[i].id },
+                        'cartItemRelationship': [{ 'id': device.siebelId }],
+                        'ospSelected': true,
                         'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                         'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
                     };
@@ -800,7 +819,7 @@ module OrangeFeSARQ.Services {
 
             cartItemElement = {
                 'id': cartItemElementId,
-                'cartItem': uniquePaid ? [ deviceCartItemElement] : [deviceCartItemElement].concat(vapCartItems),
+                'cartItem': uniquePaid ? [deviceCartItemElement] : [deviceCartItemElement].concat(vapCartItems),
                 'action': 'New',
                 'cartItemRelationship': [{
                     id: commercialActId
@@ -983,7 +1002,7 @@ module OrangeFeSARQ.Services {
             };
 
             svaCartItemElement = {
-                'id' : sva.id,
+                'id': sva.id,
                 'action': 'New',
                 'product': productItem,
                 'itemPrice': sva.itemPrice,
@@ -993,15 +1012,68 @@ module OrangeFeSARQ.Services {
                     category: []
                 },
                 cartItemRelationship: [],
-                 'ospSelected' : false,
-                 'ospSelectable': true,
-                 'ospMandatory': true,
-                 'ospObjectType': '',
-                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
-                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                'ospSelected': false,
+                'ospSelectable': true,
+                'ospMandatory': true,
+                'ospObjectType': '',
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
             };
 
             return svaCartItemElement;
+        }
+
+        /**
+ * @ngdoc method
+ * @name orangeFeSARQ.Services:AddToShoppingCartSrv#createCPCartItem
+ * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+ * @param sva sva
+ * @description
+ * Crea el Cart Item de un SVA
+ */
+        createCPCartItem(device) {
+            let vm = this;
+            let productItem;
+            let cpCartItemElement, cartItemElement;
+            let cartItemElementId, cartItemIndex, lastCartItemId, commercialActId: number;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let commercialActIndex = vm.getSelectedCommercialAct();
+
+            productItem = {
+                'name': 'CPT-CPC',
+                'description': device.cpDescription,
+                'productRelationship': [{
+                    'type': 'CPT-CPC'
+                }],
+                'place': [],
+                'characteristic': []
+            };
+
+            cpCartItemElement = {
+                'id': device.cpSiebel,
+                'action': 'New',
+                'product': productItem,
+                'itemPrice': [],
+                'productOffering': {
+                    id: device.cpSiebel,
+                    name: device.cpDescription,
+                    category: []
+                },
+                cartItemRelationship: [
+                    {
+                        id: device.siebelId
+                    }
+                ],
+                'ospSelected': false,
+                'ospSelectable': true,
+                'ospMandatory': true,
+                'ospObjectType': '',
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+            };
+
+            return cpCartItemElement;
         }
 
         /**
@@ -1016,9 +1088,9 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let response = false;
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            if(commercialData && commercialData.length > 0) {
-                commercialData.forEach(function(commercialAct){
-                    if(commercialAct.loveRateInShoppingCart) {
+            if (commercialData && commercialData.length > 0) {
+                commercialData.forEach(function (commercialAct) {
+                    if (commercialAct.loveRateInShoppingCart) {
                         response = true;
                     }
                 });

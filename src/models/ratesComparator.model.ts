@@ -85,6 +85,8 @@ module ratesComparator.Models {
         public initialPriceFree: number;
         public IMEI;
         public error: boolean;
+        public cpSiebel : string;
+        public cpDescription : string;
 
         public selected = false;
         public plazos = false;
@@ -110,6 +112,8 @@ module ratesComparator.Models {
             this.insuranceSelected = terminal.insuranceSelected;
             this.srcImage = terminal.srcImage;
             this.name = terminal.name;
+            this.cpSiebel = terminal.cpSiebel;
+            this.cpDescription = terminal.cpDescription;
 
             if(terminal.IMEI) {
                 this.IMEI = terminal.IMEI;
