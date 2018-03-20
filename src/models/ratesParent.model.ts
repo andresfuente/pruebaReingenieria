@@ -115,6 +115,7 @@ module ratesParent.Models {
                     }
                 });
             }
+
             for (let i in priceData) {
                 if (priceData.length > 0) {
                     if (priceData[i].isBundle === true) {
@@ -214,10 +215,10 @@ module ratesParent.Models {
                             }
                         }
                     } else {
-                        // Recoger info
-                        let info: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
-                        this.pupupInfo.push(info);
-
+                        if (!priceData[i].isBundle && priceData[i].bundledProductOffering[0].id === rateData.id) {
+                            let info: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
+                            this.pupupInfo.push(info);
+                        }
                     }
                 }
             }
