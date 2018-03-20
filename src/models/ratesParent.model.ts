@@ -356,7 +356,7 @@ module ratesParent.Models {
                                                 // Precio sin iva si es residencial
                                                 if (customerSegment.toLocaleLowerCase() === 'residencial') {
                                                     sva.price = currentPrice.dutyFreeAmount;
-                                                } else { // Precio con iva si es empresa o autónomo 
+                                                } else { // Precio con iva si es empresa o autónomo
                                                     sva.price = currentPrice.taxIncludedAmount;
                                                 }
                                                 // ItemPrice
