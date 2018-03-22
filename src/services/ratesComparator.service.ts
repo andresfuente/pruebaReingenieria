@@ -165,5 +165,57 @@ module ratesComparator.Services {
                 vm.storeProvince = 'Madrid';
             }
         }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:RatesComparator#getClientType
+         * @methodOf OrangeFeSARQ.Services:RatesComparator
+         * @param {string} siebelId idSiebel de la tarifa con la que se llama a la OT
+         * @description
+         * Calcula el tipo de cliente con el que se hace la llamada a la OT         
+         */
+        getClientType(siebelId: string) {
+            let vm = this;
+            let type = '2'; // Por defecto es el valor que se devuelve
+
+            let cv = sessionStorage.getItem('cv');
+
+            if (!cv || cv === null || cv === undefined) {
+                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+
+                // Buscamos el tipo de esta tarifa en commercial data
+                if (commercialData && commercialData.length > 0) {
+                    let currentAct : any = _.find(commercialData, {'ospIsSelected': true});
+
+                    if (currentAct !== null && currentAct.rates && currentAct.rates.length > 0) {
+                        let movilFijoRate : any = _.find(currentAct.rates, function (rate : any) {
+                            if (rate.siebelId === siebelId && rate.typeService === 'movil_fijo') {
+                                return rate;
+                            }
+                        });
+
+                        let movilRate : any = _.find(currentAct.rates, function (rate : any) {
+                            if (rate.siebelId === siebelId && rate.typeService === 'movil') {
+                                return rate;
+                            }
+                        });
+
+                        if (movilFijoRate !== undefined && movilFijoRate !== null) {
+                            type = '2';
+                        } else if (movilRate !== undefined && movilRate !== null) {
+                            type = '0';
+                        }
+                    }
+                }
+            } else {
+                let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+                if (clientData && clientData.clientType) {
+                    type = clientData.clientType;
+                }
+            }
+
+            return type;
+        }
     }
 }
