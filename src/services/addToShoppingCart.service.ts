@@ -1117,7 +1117,6 @@ module OrangeFeSARQ.Services {
                         response = true;
                     }
                 });
-
             }
             return response;
         }
