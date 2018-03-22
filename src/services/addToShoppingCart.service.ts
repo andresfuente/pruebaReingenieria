@@ -286,11 +286,17 @@ module OrangeFeSARQ.Services {
                 'insuranceSelected': device.insuranceSelected,
                 'stock': device.stock,
                 'itemPrice': device.itemPrice[0],
-                'shoppingCart': [secundaryDeviceCartItem].concat(vapCartItems)
+                'shoppingCart': [secundaryDeviceCartItem].concat(vapCartItems),
+                'cpSiebel': device.cpSiebel,
+                'cpDuration': device.cpDuration,
+                'cpDescription' : device.cpDescription
             };
             if (device.insuranceSiebelId) {
                 seguro = vm.createInsuranceCartItem(device, 'secundary');
             }
+
+
+
 
             // Se inserta el terminal en el array de terminales secundarios
             if (!commercialData[commercialActIndex].sTerminals) {
@@ -319,6 +325,12 @@ module OrangeFeSARQ.Services {
                         currentCartItem.cartItem.push(secundaryDeviceCartItem);
                         if (payType === 'deferred') {
                             currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
+
+                            // Añadir cartItem compromiso de permanencia CP
+                            if (device.cpDescription && device.cpSiebel) {
+                                currentCartItem.cartItem.push(vm.createCPCartItem(device, true));
+                            }
+
                         }
                         if (device.insuranceSiebelId) {
                             currentCartItem.cartItem.push(seguro);
@@ -1031,7 +1043,7 @@ module OrangeFeSARQ.Services {
  * @description
  * Crea el Cart Item de un SVA
  */
-        createCPCartItem(device) {
+        createCPCartItem(device, type?) {
             let vm = this;
             let productItem;
             let cpCartItemElement, cartItemElement;
@@ -1041,20 +1053,31 @@ module OrangeFeSARQ.Services {
             let commercialActIndex = vm.getSelectedCommercialAct();
 
             productItem = {
-                'name': 'CPT-CPC',
+                'name': type ? 'CPD' : 'CPT-CPC',
                 'description': device.cpDescription,
                 'productRelationship': [{
-                    'type': 'CPT-CPC'
+                    'type': type ? 'CPD' : 'CPT-CPC'
                 }],
                 'place': [],
-                'characteristic': []
+                'characteristic': [
+                    {
+                        'name': 'CIMATerminalType',
+                        'value': type ? 'Secundary' : 'Primary'
+                    },
+                ]
             };
 
             cpCartItemElement = {
                 'id': device.cpSiebel,
                 'action': 'New',
                 'product': productItem,
-                'itemPrice': [],
+                'itemPrice': [
+                    {
+                        priceType : 'cuota',
+                        recurringChargePeriod : device.cpDuration
+
+                    }
+                ],
                 'productOffering': {
                     id: device.cpSiebel,
                     name: device.cpDescription,

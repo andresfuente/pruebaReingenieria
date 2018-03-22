@@ -87,6 +87,7 @@ module ratesComparator.Models {
         public error: boolean;
         public cpSiebel : string;
         public cpDescription : string;
+        public cpDuration : string;
 
         public selected = false;
         public plazos = false;
@@ -114,6 +115,7 @@ module ratesComparator.Models {
             this.name = terminal.name;
             this.cpSiebel = terminal.cpSiebel;
             this.cpDescription = terminal.cpDescription;
+            this.cpDuration = terminal.cpDuration;
 
             if(terminal.IMEI) {
                 this.IMEI = terminal.IMEI;
