@@ -41,7 +41,7 @@ module ratesComparator.Services {
          */
         setInjections($injector) {
             let srv = this;
-            srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');            
+            srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
         }
 
         /** @ngdoc method
@@ -85,14 +85,14 @@ module ratesComparator.Services {
             vm.setStoreProvince();
 
             // CABECERA PANGEA
-            // let _headers = {
-            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
-            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            // };
+            let _headers = {
+                'Geolocation-local': vm.storeProvince.toUpperCase(),
+                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            };
             // CABECERA HASHMAP
-            let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
+            // let _headers = new HashMap<string, string>();
+            // _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
+            // _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
 
             let params = {
                 channel: channel,

@@ -102,8 +102,8 @@ module ratesParent.Models {
             this.groupName = rateData.ospGroupName;
             this.typeService = rateData.ospTypeService;
 
-            // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente)
-            if (rateData.ospTecnology !== rateData.id) {
+            // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
+            if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
                 this.ospTecnology = rateData.ospTecnology;
             }
 
