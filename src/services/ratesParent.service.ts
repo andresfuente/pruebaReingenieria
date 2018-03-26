@@ -78,14 +78,14 @@ module OrangeFeSARQ.Services {
             }
 
             // CABECERA PANGEA
-            let _headers = {
-                'Geolocation-local': vm.storeProvince.toUpperCase(),
-                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            };
+            // let _headers = {
+            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
+            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            // };
             // CABECERA HASHMAP
-            // let _headers = new HashMap<string, string>();
-            // _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            // _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -150,14 +150,14 @@ module OrangeFeSARQ.Services {
             }
 
             // CABECERA PANGEA
-            let _headers = {
-                'Geolocation-local': srv.storeProvince.toUpperCase(),
-                'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
-            };
+            // let _headers = {
+            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
+            //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
+            // };
             // CABECERA HASHMAP
-            // let _headers = new HashMap<string, string>();
-            // _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            // _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
@@ -187,14 +187,14 @@ module OrangeFeSARQ.Services {
             };
 
             // CABECERA PANGEA
-            let _headers = {
-                'Geolocation-local': srv.storeProvince.toUpperCase(),
-                'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
-            };
+            // let _headers = {
+            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
+            //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
+            // };
             // CABECERA HASHMAP
-            // let _headers = new HashMap<string, string>();
-            // _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            // _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -225,14 +225,14 @@ module OrangeFeSARQ.Services {
             };
 
             // CABECERA PANGEA
-            let _headers = {
-                'Geolocation-local': srv.storeProvince.toUpperCase(),
-                'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
-            };
+            // let _headers = {
+            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
+            //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
+            // };
             // CABECERA HASHMAP
-            // let _headers = new HashMap<string, string>();
-            // _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            // _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
 
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
@@ -255,14 +255,14 @@ module OrangeFeSARQ.Services {
             };
 
             // CABECERA PANGEA
-            let _headers = {
-                'Geolocation-local': vm.storeProvince.toUpperCase(),
-                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            };
+            // let _headers = {
+            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
+            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            // };
             // CABECERA HASHMAP
-            // let _headers = new HashMap<string, string>();
-            // _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
-            // _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -321,14 +321,14 @@ module OrangeFeSARQ.Services {
             }
 
             // CABECERA PANGEA
-            let _headers = {
-                'Geolocation-local': vm.storeProvince.toUpperCase(),
-                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            };
+            // let _headers = {
+            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
+            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            // };
             // CABECERA HASHMAP
-            // let _headers = new HashMap<string, string>();
-            // _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
-            // _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -379,14 +379,14 @@ module OrangeFeSARQ.Services {
             }
 
             // CABECERA PANGEA
-            let _headers = {
-                'Geolocation-local': vm.storeProvince.toUpperCase(),
-                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            };
+            // let _headers = {
+            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
+            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            // };
             // CABECERA HASHMAP
-            // let _headers = new HashMap<string, string>();
-            // _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
-            // _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
