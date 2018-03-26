@@ -18,9 +18,9 @@ module ratesParent.Models {
 
         loadRates(specificationData, offeringData) {
             let vm = this;
-            let productOffering = [];
             if (specificationData.productSpecification && offeringData.productOffering) {
                 specificationData.productSpecification.forEach(function (specification) {
+                    let productOffering = [];
                     offeringData.productOffering.forEach(function (offering) {
                         if (specification.id === offering.productSpecification.id ||
                             specification.id === offering.bundledProductOffering[0].id) {
@@ -120,24 +120,26 @@ module ratesParent.Models {
             for (let i in priceData) {
                 if (priceData.length > 0) {
                     if (priceData[i].isBundle === true) {
-                        //Buscamos si afecta el revamp de tarifas Love 
-                        if (priceData[i].bundledProductOffering[0].id == rateData.id) {
-                            //Comprobamos la fecha 
+                        // Buscamos si afecta el revamp de tarifas Love 
+                        if (priceData[i].bundledProductOffering[0].id === rateData.id) {
+                            // Comprobamos la fecha 
                             let fechaServicio = priceData[i].validFor.endDateTime;
                             let fechaLocal: any = new Date();
                             let fechaServicioTransf = new Date(fechaServicio);
                             let fechaLocalTransf = new Date(fechaLocal);
                             let urlNewConditions = priceData[i].attachment[0].url;
-                            //Si el string no es una fecha o si fechaSrv es null, undefined o vacio y fechaSrv es posterios a fecha local
-                            if(fechaServicioTransf && fechaServicioTransf !== undefined && fechaServicioTransf > fechaLocalTransf && urlNewConditions && urlNewConditions !== undefined){
-                                //Recogemos la info de fecha y url 
-                                let infoNewConditions: RatePopupInfoDate = new RatePopupInfoDate(priceData[i].validFor.endDateTime, priceData[i].attachment[0].url);
+                            // Si el string no es una fecha o si fechaSrv es null, undefined o vacio y fechaSrv es posterios a fecha local
+                            if (fechaServicioTransf && fechaServicioTransf !== undefined &&
+                                fechaServicioTransf > fechaLocalTransf && urlNewConditions && urlNewConditions !== undefined) {
+                                // Recogemos la info de fecha y url 
+                                let infoNewConditions: RatePopupInfoDate =
+                                new RatePopupInfoDate(priceData[i].validFor.endDateTime, priceData[i].attachment[0].url);
                                 this.pupupInfoNewConditions.push(infoNewConditions);
                                 this.newRateConditions = true;
                             } else {
-                                this.newRateConditions = false; 
+                                this.newRateConditions = false;
                             }
-                        } else {
+
                             // Recoger precios
                             for (let j in priceData[i].productOfferingPrice) {
                                 if (priceData[i].productOfferingPrice.length > 0) {
@@ -242,11 +244,11 @@ module ratesParent.Models {
                             }
                         }
                     } else {
-                        if(priceData[i].bundledProductOffering[0].id == rateData.id) {
-                        // Recoger info
-                        let info: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
-                        this.pupupInfo.push(info);
-                        } 
+                        if (priceData[i].bundledProductOffering[0].id === rateData.id) {
+                            // Recoger info
+                            let info: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
+                            this.pupupInfo.push(info);
+                        }
                     }
                 }
             }
@@ -281,7 +283,7 @@ module ratesParent.Models {
             this.date = date;
             this.url = url;
         }
-    } 
+    }
 
     export class RatesProductBundleAdditionalProductCheckList {
         public title: string;
