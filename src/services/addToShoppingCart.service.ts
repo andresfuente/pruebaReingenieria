@@ -289,14 +289,11 @@ module OrangeFeSARQ.Services {
                 'shoppingCart': [secundaryDeviceCartItem].concat(vapCartItems),
                 'cpSiebel': device.cpSiebel,
                 'cpDuration': device.cpDuration,
-                'cpDescription' : device.cpDescription
+                'cpDescription': device.cpDescription
             };
             if (device.insuranceSiebelId) {
                 seguro = vm.createInsuranceCartItem(device, 'secundary');
             }
-
-
-
 
             // Se inserta el terminal en el array de terminales secundarios
             if (!commercialData[commercialActIndex].sTerminals) {
@@ -397,7 +394,6 @@ module OrangeFeSARQ.Services {
                 'place': [],
                 'characteristic': []
             };
-
             rateCartItemElement = {
                 'id': rate.siebelId ? rate.siebelId : '',
                 'action': 'New',
@@ -442,6 +438,12 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': true
             };
+
+            // Si viene tecnologia creamos cartItem
+            if (rate.ospTecnology) {
+                cartItemElement.cartItem.push(vm.createIdTechnologyCartItem(rate));
+            }
+
             if (shoppingCart !== null) {
                 shoppingCart.cartItem.push(cartItemElement);
             } else {
@@ -513,7 +515,6 @@ module OrangeFeSARQ.Services {
                 }
             };
 
-
             cartItemElement = {
                 'id': 1.1,
                 'cartItem': [rateCartItemElement].concat(svaCartItemList),
@@ -533,7 +534,53 @@ module OrangeFeSARQ.Services {
             };
             return shoppingCart;
         }
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#createIdTechnologyCartItem
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @param rate rate
+         * @description
+         * Crea el item de ospTecnology cuando existe
+         */
+        createIdTechnologyCartItem(rate) {
+            let vm = this;
+            let ospTecnology;
+            let flagTvItem = {};
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let commercialActIndex = vm.getSelectedCommercialAct();
 
+            ospTecnology = {
+                'id': rate.ospTecnology,
+                'action': 'New',
+                'product': {
+                    'productRelationship': [{
+                        'type': 'technology'
+                    }],
+                    'place': [],
+                    'characteristic': []
+                },
+                'productOffering': {
+                    id: rate.ospTecnology
+                },
+                'ospSelected': false,
+                'ospSelectable': true,
+                'ospMandatory': true,
+                'ospObjectType': '',
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+            };
+
+            // Añadir Flag TV 
+            if (rate.tvFlag && rate.tvFlag !== undefined && rate.tvFlag !== null) {
+                flagTvItem = {
+                    name: 'Flag TV',
+                    value: rate.tvFlag ? rate.tvFlag : 'N'
+                };
+                ospTecnology.characteristic.push(flagTvItem);
+            }
+
+            return ospTecnology;
+        }
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateAndDeviceInShoppingCart
@@ -645,7 +692,6 @@ module OrangeFeSARQ.Services {
                 insurance = vm.createInsuranceCartItem(device, 'primary');
             }
 
-
             let uniqueItemPrice = [];
             let vapCartItems = [];
             for (let i in device.itemPrice) {
@@ -703,6 +749,11 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': true
             };
+
+            // Si viene tecnologia creamos cartItem
+            if (rate.ospTecnology) {
+                cartItemElement.cartItem.push(vm.createIdTechnologyCartItem(rate));
+            }
 
             // Añadir cartItem compromiso de permanencia CP
             if (device.cpDescription && device.cpSiebel && !uniquePaid) {
@@ -780,6 +831,7 @@ module OrangeFeSARQ.Services {
 
             let uniqueItemPrice = [];
             let vapCartItems = [];
+
             for (let i in device.itemPrice) {
                 if (device.itemPrice[i].priceType === 'unico') {
                     uniqueItemPrice.push(device.itemPrice[i]);
@@ -1036,13 +1088,13 @@ module OrangeFeSARQ.Services {
         }
 
         /**
- * @ngdoc method
- * @name orangeFeSARQ.Services:AddToShoppingCartSrv#createCPCartItem
- * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
- * @param sva sva
- * @description
- * Crea el Cart Item de un SVA
- */
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#createCPCartItem
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @param sva sva
+         * @description
+         * Crea el Cart Item de un SVA
+         */
         createCPCartItem(device, type?) {
             let vm = this;
             let productItem;
@@ -1073,8 +1125,8 @@ module OrangeFeSARQ.Services {
                 'product': productItem,
                 'itemPrice': [
                     {
-                        priceType : 'cuota',
-                        recurringChargePeriod : device.cpDuration
+                        priceType: 'cuota',
+                        recurringChargePeriod: device.cpDuration
 
                     }
                 ],

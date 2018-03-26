@@ -70,6 +70,10 @@ module ratesParent.Models {
         public otherSvaInfoList: Array<ratesParent.Models.RateSVA> = [];
         public newRateConditions: boolean = false;
 
+        // Id Tech
+
+        public ospTecnology : string;
+
         // Estructura que contiene la fibra y las linea con sus respectivos iconos
         public productBundle: RatesProductBundle[] = [];
         public rateOfferingPrice: number; // Precio de la tarifa
@@ -97,6 +101,12 @@ module ratesParent.Models {
             this.siebelId = rateData.id;
             this.groupName = rateData.ospGroupName;
             this.typeService = rateData.ospTypeService;
+
+            // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente)
+            if (rateData.ospTecnology !== rateData.id) {
+                this.ospTecnology = rateData.ospTecnology;
+            }
+
             this.pack = (typeof (rateData.ospFraseComercial) !== 'undefined' && rateData.ospFraseComercial !== null) ?
                 rateData.ospFraseComercial : '';
 
