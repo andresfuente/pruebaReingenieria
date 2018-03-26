@@ -34,7 +34,7 @@ module OrangeFeSARQ.Services {
         );
     }
 
-    checkToken(msisdn: any, token: any, componentName: string) {
+    checkToken(msisdn: any, token: any, jwt: any) {
       let vm = this;
       let _search  = {
           queryParams: {
@@ -43,8 +43,10 @@ module OrangeFeSARQ.Services {
           },
           urlParams: ['tokenValidate']
       };
-
-      return vm.httpCacheGett(vm.genericConstant.token, _search, componentName)
+      let _headers = {
+        "jwt_token_data": jwt
+      };
+      return vm.httpCacheGeth(vm.genericConstant.token, _search, _headers)
         .then(
           (response) => {
               return response;
