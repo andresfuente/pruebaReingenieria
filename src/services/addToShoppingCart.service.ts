@@ -456,7 +456,7 @@ module OrangeFeSARQ.Services {
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
-        /**
+       /**
         * @ngdoc method
         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
@@ -756,7 +756,7 @@ module OrangeFeSARQ.Services {
                     if (commercialData[commercialActIndex].rates[i].selectedSvaList.length !== 0) {
                         for (let j = 0; j < commercialData[commercialActIndex].rates[i].selectedSvaList.length; j++) {
                             cartItemElement.cartItem
-                            .push(vm.createSVACartItem(commercialData[commercialActIndex].rates[i].selectedSvaList[j]));
+                                .push(vm.createSVACartItem(commercialData[commercialActIndex].rates[i].selectedSvaList[j]));
                         }
                     }
                 }
