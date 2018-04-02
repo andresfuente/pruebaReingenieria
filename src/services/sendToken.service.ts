@@ -22,8 +22,9 @@ module OrangeFeSARQ.Services {
           },
           urlParams: [vm.genericConstant.brand, 'tokenManager']
       };
+      let refresh = true;
 
-      return vm.httpCacheGett(vm.genericConstant.token, _search, componentName)
+      return vm.httpCacheGett(vm.genericConstant.token, _search, componentName, refresh)
         .then(
           (response) => {
               return response;
@@ -34,7 +35,7 @@ module OrangeFeSARQ.Services {
         );
     }
 
-    checkToken(msisdn: any, token: any, jwt: any) {
+    checkToken(msisdn: any, token: any, jwt: any, componentName: string) {
       let vm = this;
       let _search  = {
           queryParams: {
@@ -46,7 +47,8 @@ module OrangeFeSARQ.Services {
       let _headers = {
         "jwt_token_data": jwt
       };
-      return vm.httpCacheGeth(vm.genericConstant.token, _search, _headers)
+      let refresh = true;
+      return vm.httpCacheGeth(vm.genericConstant.token, _search, _headers, componentName, refresh)
         .then(
           (response) => {
               return response;
