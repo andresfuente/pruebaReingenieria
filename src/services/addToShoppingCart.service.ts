@@ -750,6 +750,17 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
+            // Comprobar SVAs Asociados a la tarifa y al carrito
+            for (let i = 0; i < commercialData[commercialActIndex].rates.length; i++) {
+                if (commercialData[commercialActIndex].rates[i].siebelId === rate.siebelId) {
+                    if (commercialData[commercialActIndex].rates[i].selectedSvaList.length !== 0) {
+                        for (let j = 0; j < commercialData[commercialActIndex].rates[i].selectedSvaList.length; j++) {
+                            cartItemElement.cartItem
+                            .push(vm.createSVACartItem(commercialData[commercialActIndex].rates[i].selectedSvaList[j]));
+                        }
+                    }
+                }
+            }
             // Si viene tecnologia creamos cartItem
             if (rate.ospTecnology) {
                 cartItemElement.cartItem.push(vm.createIdTechnologyCartItem(rate));
@@ -1091,9 +1102,10 @@ module OrangeFeSARQ.Services {
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#createCPCartItem
          * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
-         * @param sva sva
+         * @param device
+         * @param type (Opcional)
          * @description
-         * Crea el Cart Item de un SVA
+         * Crea el Cart Item de Compropiso de permanencia
          */
         createCPCartItem(device, type?) {
             let vm = this;
