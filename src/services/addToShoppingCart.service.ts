@@ -590,7 +590,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Añade un terminal primario y su tarifa al session storage del carrito
          */
-        putRateAndDeviceInShoppingCart(rate, device, uniquePaid: boolean) {
+        putRateAndDeviceInShoppingCart(rate, device, uniquePaid: boolean, preId? : string) {
             let vm = this;
             let rateCartItemElement;
             let deviceCartItemElement;
@@ -603,6 +603,11 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
             let insurance;
+
+            // Eliminar cuando es sustituir elemento 
+            if (preId && preId !== undefined && preId !== null){
+                _.remove(shoppingCart.cartItem, {id : preId});
+            }
 
             // Se obtiene el ID del acto comercial que se esta creando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
@@ -738,7 +743,7 @@ module OrangeFeSARQ.Services {
             };
 
             cartItemElement = {
-                'id': cartItemElementId,
+                'id': preId ? preId : cartItemElementId,
                 'cartItem': uniquePaid ? [rateCartItemElement, deviceCartItemElement] :
                     [rateCartItemElement, deviceCartItemElement].concat(vapCartItems),
                 'action': 'New',
