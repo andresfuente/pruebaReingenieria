@@ -85,14 +85,14 @@ module ratesComparator.Services {
             vm.setStoreProvince();
 
             // CABECERA PANGEA
-            // let _headers = {
-            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
-            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            // };
+            let _headers = {
+                'Geolocation-local': vm.storeProvince.toUpperCase(),
+                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            };
             // CABECERA HASHMAP
-            let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
+            //let _headers = new HashMap<string, string>();
+            //_headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
+            //_headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
 
             let params = {
                 channel: channel,
@@ -194,13 +194,13 @@ module ratesComparator.Services {
 
                     if (currentAct !== null && currentAct.rates && currentAct.rates.length > 0) {
                         let movilFijoRate : any = _.find(currentAct.rates, function (rate : any) {
-                            if (rate.siebelId === siebelId && rate.typeService === 'movil_fijo') {
+                            if (rate.siebelId === siebelId && rate.typeService.toUpperCase() === 'MOVIL_FIJO') {
                                 return rate;
                             }
                         });
 
                         let movilRate : any = _.find(currentAct.rates, function (rate : any) {
-                            if (rate.siebelId === siebelId && rate.typeService === 'movil') {
+                            if (rate.siebelId === siebelId && rate.typeServic.toUpperCase() !== 'MOVIL_FIJO') {
                                 return rate;
                             }
                         });

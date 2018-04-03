@@ -139,13 +139,16 @@ module OrangeFeSARQ.Services {
          * @description
          * Obtiene los datos de los SVAS recomendados de una tarifa
          */
-        getProductCatalogSVAS(svasList, componentName) {
+        getProductCatalogSVAS(svasList, isExistingCustomer, segment, commercialAction, componentName) {
             let vm = this;
 
             let _search = {
                 queryParams: {
+                    commercialAction: commercialAction,
                     productType: 'sva',
-                    idSvaList: svasList
+                    idSvaList: svasList,
+                    segment: segment,
+                    isExistingCustomer: isExistingCustomer
                 },
                 urlParams: [vm.genericConstant.brand, 'productOfferingv2View/OSP']
             };
@@ -169,13 +172,16 @@ module OrangeFeSARQ.Services {
          * @description
          * Obtiene los datos de los SVAS recomendados de una tarifa
          */
-        getSpecificationSVAS(svasList, componentName) {
+        getSpecificationSVAS(svasList, isExistingCustomer, segment, commercialAction, componentName) {
             let vm = this;
 
             let _search = {
                 queryParams: {
+                    commercialAction: commercialAction,
                     productType: 'sva',
-                    idSvaList: svasList
+                    idSvaList: svasList,
+                    segment: segment,
+                    isExistingCustomer: isExistingCustomer
                 },
                 urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
             };
