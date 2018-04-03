@@ -194,13 +194,13 @@ module ratesComparator.Services {
 
                     if (currentAct !== null && currentAct.rates && currentAct.rates.length > 0) {
                         let movilFijoRate : any = _.find(currentAct.rates, function (rate : any) {
-                            if (rate.siebelId === siebelId && rate.typeService === 'movil_fijo') {
+                            if (rate.siebelId === siebelId && rate.typeService.toUpperCase() === 'MOVIL_FIJO') {
                                 return rate;
                             }
                         });
 
                         let movilRate : any = _.find(currentAct.rates, function (rate : any) {
-                            if (rate.siebelId === siebelId && rate.typeService === 'movil') {
+                            if (rate.siebelId === siebelId && rate.typeService.toUpperCase() !== 'MOVIL_FIJO') {
                                 return rate;
                             }
                         });
