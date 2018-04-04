@@ -574,7 +574,7 @@ module OrangeFeSARQ.Services {
                         if(commercialData[i].terminals !== null) {
                             vm.deviceContainer = commercialData[i].terminals;
                         }
-                        if(commercialData[i].rates) {
+                        if(commercialData[i].rates && commercialData[i].rates.length > 0) {
                             vm.rateContainer = commercialData[i].rates;
                         }
                     }
