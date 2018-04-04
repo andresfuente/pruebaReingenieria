@@ -416,7 +416,10 @@ module OrangeFeSARQ.Services {
          * Inserta una tarifa en el contenedor de tarifas
          */
         insertInRateContainer(rate) {
-            this.rateContainer.push(rate);
+            let vm = this;
+
+            vm.rateContainer.push(rate);
+            vm.putRatesInSessionStorage();
         }
 
         /**
