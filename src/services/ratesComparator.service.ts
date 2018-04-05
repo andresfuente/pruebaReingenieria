@@ -73,10 +73,10 @@ module ratesComparator.Services {
 
         ) {
             let vm = this;
-            if(riskLevel === 'bajo' || riskLevel === 'medio') {
+            if (riskLevel === 'bajo' || riskLevel === 'medio') {
                 riskLevel += ',alto';
             }
-            if(commercialAction.toLowerCase() === 'migracion') {
+            if (commercialAction.toLowerCase() === 'migracion') {
                 portabilityOrigin = 'todos';
                 nameSgmr = '';
             }
@@ -107,28 +107,28 @@ module ratesComparator.Services {
                 campaignName: nameSgmr,
                 fields: 'deviceOffering'
             };
-            return vm.httpCacheGeth(vm.genericConstant.getTerminalDetails, {queryParams: params}, _headers
-                    ).then((response) => {
-                        if(response.data.length > 0) {
-                            let data = {
-                                rateSiebelId: rate.siebelId,
-                                terminalsiebelId: terminal.siebelId,
-                                deviceOffering: response.data[0].deviceOffering
-                            };
-                            return data;
+            return vm.httpCacheGeth(vm.genericConstant.getTerminalDetails, { queryParams: params }, _headers
+            ).then((response) => {
+                if (response.data.length > 0) {
+                    let data = {
+                        rateSiebelId: rate.siebelId,
+                        terminalsiebelId: terminal.siebelId,
+                        deviceOffering: response.data[0].deviceOffering
+                    };
+                    return data;
 
-                        } else {
-                            let data = {
-                                rateSiebelId: rate.siebelId,
-                                terminalsiebelId: terminal.siebelId,
-                                deviceOffering: response.data
-                            };
-                            return data;
-                        }
+                } else {
+                    let data = {
+                        rateSiebelId: rate.siebelId,
+                        terminalsiebelId: terminal.siebelId,
+                        deviceOffering: response.data
+                    };
+                    return data;
+                }
 
             }).catch((error) => {
-                    throw error;
-              });
+                throw error;
+            });
         }
         /**
          * @ngdoc method
@@ -149,7 +149,7 @@ module ratesComparator.Services {
                 // Provincia                
                 if (clientData.postalContact && clientData.postalContact.stateOrProvince &&
                     clientData.postalContact.stateOrProvince.length > 0) {
-                        vm.customerProvince = clientData.postalContact.stateOrProvince;
+                    vm.customerProvince = clientData.postalContact.stateOrProvince;
                 }
             }
         }
@@ -190,16 +190,16 @@ module ratesComparator.Services {
 
                 // Buscamos el tipo de esta tarifa en commercial data
                 if (commercialData && commercialData.length > 0) {
-                    let currentAct : any = _.find(commercialData, {'ospIsSelected': true});
+                    let currentAct: any = _.find(commercialData, { 'ospIsSelected': true });
 
                     if (currentAct !== null && currentAct.rates && currentAct.rates.length > 0) {
-                        let movilFijoRate : any = _.find(currentAct.rates, function (rate : any) {
+                        let movilFijoRate: any = _.find(currentAct.rates, function (rate: any) {
                             if (rate.siebelId === siebelId && rate.typeService.toUpperCase() === 'MOVIL_FIJO') {
                                 return rate;
                             }
                         });
 
-                        let movilRate : any = _.find(currentAct.rates, function (rate : any) {
+                        let movilRate: any = _.find(currentAct.rates, function (rate: any) {
                             if (rate.siebelId === siebelId && rate.typeService.toUpperCase() !== 'MOVIL_FIJO') {
                                 return rate;
                             }

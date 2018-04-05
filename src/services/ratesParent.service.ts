@@ -321,8 +321,8 @@ module OrangeFeSARQ.Services {
 
             // CABECERA PANGEA
             let _headers = {
-               'Geolocation-local': vm.storeProvince.toUpperCase(),
-               'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+                'Geolocation-local': vm.storeProvince.toUpperCase(),
+                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
             };
             // CABECERA HASHMAP
             // let _headers = new HashMap<string, string>();
