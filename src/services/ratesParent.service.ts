@@ -568,17 +568,17 @@ module OrangeFeSARQ.Services {
         changeRateListv2(originRate) {
             let srv = this;
             let ratesIdListString = '';
-            let tariffList = [];
+            let productSpecification = [];
             return srv.httpCacheGeth(srv.genericConstant.productCatalog + srv.genericConstant.changeRateList + originRate,
                 {}, {})
                 .then((response) => {
-                    if (response && response.data.error === null && response.data.tariffList) {
-                        tariffList = response.data.tariffList;
+                    if (response && response.data.error === null && response.data.productSpecification) {
+                        productSpecification = response.data.productSpecification;
                         // Se recorre el array de tarifas disponibles para realizar el cambio
-                        tariffList.forEach((element, index) => {
+                        productSpecification.forEach((element, index) => {
                             // Se genera un string con cada uno de los siebelId de las tarifas, separados por coma
-                            ratesIdListString += (index === (tariffList.length - 1)) ?
-                                element.targetTariffId : element.targetTariffId + ',';
+                            ratesIdListString += (index === (productSpecification.length - 1)) ?
+                                element.id : element.id + ',';
                         });
                         return ratesIdListString;
                     }
