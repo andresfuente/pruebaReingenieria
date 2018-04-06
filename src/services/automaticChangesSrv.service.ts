@@ -43,7 +43,7 @@ module OrangeFeSARQ.Services {
                 urlParams: ['getSummaryRateAutoChanges']
             };
 
-            return vm.httpCacheGett( vm.genericConstant.productOrder, _search, comp)
+            return vm.httpCacheGett( vm.genericConstant.productOrdering, _search, comp)
                 .then(
                     (response) => {
                         return response.data;
