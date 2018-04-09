@@ -52,7 +52,8 @@ module reservePopup.Services {
             };
             let position = 0;
             for (let i in reservas) {
-                if (reservas.length > 0 && reservas[i].aleatorio === 'true' && !reservas[i].reservado) {
+                if (reservas.length > 0 && reservas[i].aleatorio === 'true'
+                 && reservas[i].reservado === '') {
                     body.reserva[position] = {
                         typeDoc: tipoDocumento,
                         numDoc: dni,
@@ -60,13 +61,14 @@ module reservePopup.Services {
                         quantity: '1'
                     };
                     position++;
-                }else if(reservas.length > 0 && reservas[i].aleatorio === 'false' && !reservas[i].reservado) {
+                }else if(reservas.length > 0 && reservas[i].aleatorio === 'false'
+                && reservas[i].reservado === '') {
                     body.reserva[position] = {
                         typeDoc: tipoDocumento,
                         numDoc: dni,
                         material: reservas[i].id,
                         quantity: '1',
-                        serialnumber: reservas[i].imei
+                        serialnumber: reservas[i].serialnumber
                     };
                     position++;
                 }
