@@ -202,7 +202,6 @@ module OrangeFeSARQ.Services {
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
             _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
-
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
@@ -524,13 +523,12 @@ module OrangeFeSARQ.Services {
 
         generateShoppingCart(rate: ratesParent.Models.Rate, componentName: string) {
             let vm = this;
-            vm.addToShoppingCartSrv.putRateInShoppingCart(rate);
-            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let rateOtherSva: any = vm.addToShoppingCartSrv.putRateInShoppingCartForSva(rate);
 
             let _search = {
                 body: {
                     ospCartItemReqPost: [
-                        shoppingCart.cartItem[0]
+                        rateOtherSva.cartItem[0]
                     ]
                 },
                 urlParams: ['ospShoppingCart'],

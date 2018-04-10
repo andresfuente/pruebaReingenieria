@@ -112,8 +112,9 @@ module ratesParent.Models {
 
             if (rateData.productSpecCharacteristic) {
                 rateData.productSpecCharacteristic.forEach(element => {
-                    if (element.name === 'CARACTERISTICA') {
-                        let raProductBundle: RatesProductBundle = new RatesProductBundle(element.ospImagen, element.description);
+                    if (element.name === 'CARACTERISTICA' || element.name === 'CARACTERISTICATECNOLOGIA') {
+                        let raProductBundle: RatesProductBundle =
+                        new RatesProductBundle(element.ospImagen, element.description, element.name);
                         this.productBundle.push(raProductBundle);
                     }
                 });
@@ -259,10 +260,12 @@ module ratesParent.Models {
     export class RatesProductBundle {
         public image: string;
         public title: string;
+        public type: string;
 
-        constructor(src: string, name: string) {
+        constructor(src: string, name: string, type: string) {
             this.image = src;
             this.title = name;
+            this.type = type;
         }
     }
 
