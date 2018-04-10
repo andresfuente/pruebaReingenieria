@@ -237,7 +237,7 @@ module OrangeFeSARQ.Services {
 
             productItem = {
                 'href': device.srcImage,
-                'name': device.brand,
+                'name': device.name,
                 'description': device.litSubTitle,
                 'productRelationship': [{
                     'type': 'terminal'
@@ -387,7 +387,7 @@ module OrangeFeSARQ.Services {
             productItem = {
                 'href': '',
                 'name': rate.name ? rate.name : '',
-                'description': rate.rateDescription ? rate.rateDescription : '',
+                'description': rate.description ? rate.description : '',
                 'productRelationship': [{
                     'type': 'tarifa'
                 }],
@@ -476,7 +476,7 @@ module OrangeFeSARQ.Services {
             productItem = {
                 'href': '',
                 'name': rate.name ? rate.name : '',
-                'description': rate.rateDescription ? rate.rateDescription : '',
+                'description': rate.description ? rate.description : '',
                 'productRelationship': [{
                     'type': 'tarifa'
                 }],
@@ -627,7 +627,7 @@ module OrangeFeSARQ.Services {
                 'product': {
                     'href': '',
                     'name': rate.name ? rate.name : '',
-                    'description': rate.rateDescription ? rate.rateDescription : '',
+                    'description': rate.description ? rate.description : '',
                     'productRelationship': [{
                         'type': 'tarifa'
                     }],
