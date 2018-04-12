@@ -44,9 +44,9 @@ module OrangeFeSARQ.Services {
           },
           urlParams: ['tokenValidate']
       };
-      let _headers = {
-        "jwt_token_data": jwt
-      };
+      let _headers = new HashMap<string, string>();
+      _headers.set('jwt_token_data', jwt);
+
       let refresh = true;
       return vm.httpCacheGeth(vm.genericConstant.token, _search, _headers, componentName, refresh)
         .then(

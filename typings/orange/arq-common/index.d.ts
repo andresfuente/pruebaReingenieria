@@ -142,6 +142,8 @@ declare module validator.controller {
 declare module OrangeFeSARQ.Controllers {
     /** Main Arquitecture Controller */
     class OrangeArqCtrl {
+        private $rootScope;
+        constructor($rootScope: any);
     }
 }
 declare module OrangeFeSARQ.Controllers {
@@ -151,6 +153,9 @@ declare module OrangeFeSARQ.Controllers {
         setInjections($injector: any): void;
         setBindData(): void;
         initComp(): void;
+        addHeader(nameHeader: string, valueHeader: string): void;
+        deleteHeader(nameHeader: string): void;
+        deleteAllHeaders(): void;
     }
     /**
      * @ngdoc controller
@@ -205,6 +210,7 @@ declare module OrangeFeSARQ.Controllers {
         $injector: any;
         static $inject: string[];
         static _$index: any[];
+        static components: HashMap<string, OrangeFeSARQ.Models.Index>;
         isFinished: boolean;
         static shared: any;
         httpCacheOrange: OrangeFeSARQ.Services.HttpCache;
@@ -240,7 +246,39 @@ declare module OrangeFeSARQ.Controllers {
         private watcher;
         private watcherDestroy;
         $http: ng.IHttpService;
+        private headersStore;
         constructor($injector: any);
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Controllers:parentController#addHeader
+         * @param {string} nameHeader nombre de la cabecera.
+         * @param {string} valueHeader valor de la cabecera.
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @description
+         * Añade una cabecera para que luego se envíe en cada
+         * petición HTTP independientemente del verbo utilizado.
+         */
+        addHeader(nameHeader: string, valueHeader: string): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:parentController#deleteHeader
+         * @param {string} nameHeader nombre de la cabecera.
+         * @methodOf OrangeFeSARQ.Services:parentController
+         * @description
+         * Borra una cabecera para que ya no se envíe en cada
+         * petición HTTP independientemente del verbo utilizado.
+         */
+        deleteHeader(nameHeader: string): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:parentController#deleteAllHeaders
+         * @methodOf OrangeFeSARQ.Services:parentController
+         * @description
+         * Borra todas las cabeceras para que ya no se envíe
+         * ninguna cabecera en las peticiones HTTP independientemente
+         * del verbo utilizado.
+         */
+        deleteAllHeaders(): void;
         getIndex(): number;
         $onDestroy(): void;
         /**
@@ -358,7 +396,7 @@ declare module OrangeFeSARQ.Controllers {
          * ```
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
-        httpCacheGett(url: string, params: any, refresh?: boolean): ng.IPromise<any>;
+        httpCacheGett(url: string, params: any, componentName?: string, refresh?: boolean): ng.IPromise<any>;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Controllers:parentController#httpCacheGeth
@@ -384,7 +422,7 @@ declare module OrangeFeSARQ.Controllers {
          * ```
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
-        httpCacheGeth(url: string, params: any, headers: any, refresh?: boolean): ng.IPromise<any>;
+        httpCacheGeth(url: string, params: any, headers: HashMap<string, string>, componentName?: string, refresh?: boolean): ng.IPromise<any>;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Controllers:parentController#saveInSession
@@ -421,7 +459,7 @@ declare module OrangeFeSARQ.Controllers {
          * ```
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
-        httpPut(url: string, data: any, config?: {}): ng.IPromise<any>;
+        httpPut(url: string, data: any, config?: {}, resetCache?: string, headers?: HashMap<string, string>): ng.IPromise<any>;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Controllers:parentController#httpPost
@@ -444,7 +482,7 @@ declare module OrangeFeSARQ.Controllers {
          * ```
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
-        httpPost(url: string, data: any, config?: {}): ng.IPromise<any>;
+        httpPost(url: string, data: any, config?: {}, resetCache?: string, headers?: HashMap<string, string>): ng.IPromise<any>;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Controllers:parentController#httpDelete
@@ -643,6 +681,7 @@ declare module OrangeFeSARQ.Models {
         title: string;
         desc: any;
         typeMessage: string;
+        codeError: string;
     }
     /**
      * @ngdoc object
@@ -702,6 +741,12 @@ declare module OrangeFeSARQ.Models {
         msisdn: number;
         name: string;
         surname: string;
+    }
+}
+declare module OrangeFeSARQ.Models {
+    class Index {
+        index: number;
+        isUse: boolean;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -813,7 +858,39 @@ declare module OrangeFeSARQ.Services {
         httpCacheOrange: OrangeFeSARQ.Services.HttpCache;
         genericConstant: any;
         private $http;
+        private headersStore;
         constructor($injector: any);
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Controllers:parentController#addHeader
+         * @param {string} nameHeader nombre de la cabecera.
+         * @param {string} valueHeader valor de la cabecera.
+         * @methodOf OrangeFeSARQ.Controllers:parentController
+         * @description
+         * Añade una cabecera para que luego se envíe en cada
+         * petición HTTP independientemente del verbo utilizado.
+         */
+        addHeader(nameHeader: string, valueHeader: string): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:parentController#deleteHeader
+         * @param {string} nameHeader nombre de la cabecera.
+         * @methodOf OrangeFeSARQ.Services:parentController
+         * @description
+         * Borra una cabecera para que ya no se envíe en cada
+         * petición HTTP independientemente del verbo utilizado.
+         */
+        deleteHeader(nameHeader: string): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:parentController#deleteAllHeaders
+         * @methodOf OrangeFeSARQ.Services:parentController
+         * @description
+         * Borra todas las cabeceras para que ya no se envíe
+         * ninguna cabecera en las peticiones HTTP independientemente
+         * del verbo utilizado.
+         */
+        deleteAllHeaders(): void;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:ParentService#httpCacheGett
@@ -865,7 +942,7 @@ declare module OrangeFeSARQ.Services {
          * ```
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
-        httpCacheGeth(url: string, params: any, headers: any, componentName?: string, refresh?: boolean): ng.IPromise<any>;
+        httpCacheGeth(url: string, params: any, headers: HashMap<string, string>, componentName?: string, refresh?: boolean): ng.IPromise<any>;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:ParentService#httpPut
@@ -888,7 +965,7 @@ declare module OrangeFeSARQ.Services {
          * ```
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
-        httpPut(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+        httpPut(url: string, data: any, compName: string, config?: {}, resetCache?: string, headers?: HashMap<string, string>): ng.IPromise<any>;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:ParentService#httpPost
@@ -911,7 +988,7 @@ declare module OrangeFeSARQ.Services {
          * ```
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
-        httpPost(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+        httpPost(url: string, data: any, compName: string, config?: {}, resetCache?: string, headers?: HashMap<string, string>): ng.IPromise<any>;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:ParentService#httpDelete
@@ -957,7 +1034,7 @@ declare module OrangeFeSARQ.Services {
          * ```
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
-        httpPutFull(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+        httpPutFull(url: string, data: any, compName: string, config?: {}, headers?: HashMap<string, string>): ng.IPromise<any>;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:ParentService#httpPutFull
@@ -981,6 +1058,160 @@ declare module OrangeFeSARQ.Services {
          * @return {ng.IPromise<any>} ng.IPromise<any>
          */
         httpPostFull(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+    }
+}
+declare module OrangeFeSARQ.Services {
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:ParentService
+     * @description
+     * Controlador padre que inyecta servicios básicos de las aplicaciones.
+     * Estos servicios estan accesibles desde las siguientes variables:
+     * ```js
+     * public httpCacheOrange : OrangeFeSARQ.Services.HttpCache;
+     * public genericConstant;
+     * ```
+     *
+     * @example
+     * ```js
+     * export class serviceSrv extends OrangeFeSARQ.Services.ParentServiceV2{
+     *
+     *         constructor(public $injector) {
+     *             super($injector);
+     *             let vm = this;
+     * }
+     * ```
+     *
+     */
+    class ParentServiceV2 {
+        $injector: any;
+        private $http;
+        private $cacheFactory;
+        private $q;
+        static $inject: string[];
+        static keys: string[];
+        constructor($injector: any, $http: ng.IHttpService, $cacheFactory: ng.ICacheFactoryService, $q: ng.IQService);
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentServiceV2#httpCacheGeth
+         * @param {string} url de la api sin parametros.
+         * @param {Object} params Parámetros en queryString y path.
+         * @param {Object} headers parametros  de cabecera http.
+         * @param {string} componentName Nombre del componente desde el que se invoca
+         * el servicio para gestionar la respuesta con el catalogo, por defecto "noComponent"
+         * @param {boolean=} [refresh=false] Invalida la cache por defecto false
+         * @methodOf OrangeFeSARQ.Services:ParentServiceV2
+         * @description
+         * Servicio de cache con configuracion de API (pasandole cabeceras).
+         * @example
+         * ```js
+         * let _search:Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get']
+         *    };
+         * let _headers =  {
+         * 'Component-Name': 'locator'
+         * }
+         *  vm.httpCacheGeth("URL", _search, _headers);
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpGet(url: string, params: any, headers: any, time?: number, componentName?: string, resetCacheKey?: String, refresh?: Boolean): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentServiceV2#httpPut
+         * @methodOf OrangeFeSARQ.Services:ParentServiceV2
+         * @param {string} url de la api sin parametros.
+         * @param {any} data JSON con el body de la petición, PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición PUT HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         * let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get'],
+         *        body: { }
+         *    };
+         *  vm.httpPut('URL', data, 'loginComp');
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpPut(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentServiceV2#httpPost
+         * @methodOf OrangeFeSARQ.Services:ParentServiceV2
+         * @param {string} url de la api sin parametros.
+         * @param {any} data JSON con el body de la petición, PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición POST HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         * let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get'],
+         *        body: { }
+         *    };
+         *  vm.httpPost('URL', data, 'loginComp');
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpPost(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentServiceV2#httpDelete
+         * @methodOf OrangeFeSARQ.Services:ParentServiceV2
+         * @param {string} url de la api sin parametros.
+         * @param {any} data PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición DELETE HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         *  let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get']
+         *    };
+         *  vm.httpDelete('URL', data, 'loginComp');
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpDelete(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ParentServiceV2#httpPatch
+         * @methodOf OrangeFeSARQ.Services:ParentServiceV2
+         * @param {string} url de la api sin parametros.
+         * @param {any} data PathParameters y QueryString.
+         * @param {any=} [config={}] parametros de configuración de la petición http, por ejemplo cabeceras.
+         * @description
+         * Realiza una petición PATCH HTTP considerando el componente a la hora de gestionar una posible respuesta erronea de MS
+         * @example
+         * ```js
+         *  let data : Object = {
+         *        queryParams: {
+         *             msisdn: msisdn
+         *        },
+         *        urlParams: ['orange', 'customerView', 'get']
+         *    };
+         *  vm.httpPatch('URL', data, 'loginComp');
+         * ```
+         * @return {ng.IPromise<any>} ng.IPromise<any>
+         */
+        httpPatch(url: string, data: any, compName: string, config?: {}): ng.IPromise<any>;
+        private configURL(url, data, compName, config?);
+        private removeCache(resetCacheKey);
+        private static extractProperties(obj);
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -1267,6 +1498,75 @@ declare module OrangeFeSARQ.Services {
 declare module OrangeFeSARQ.Services {
 }
 declare module OrangeFeSARQ.Services {
+    interface IHeadersStore {
+        addHeader(nameHeader: string, valueHeader: string): void;
+        deleteHeader(nameHeader: string): void;
+        deleteAllHeaders(): void;
+        getHeaders(): HashMap<string, string>;
+        toJson(): string;
+    }
+    /**
+     * @ngdoc Store service
+     * @name OrangeFeSARQ.Services:HeadersStore
+     * @module headersStoreOrange
+     * @description
+     * Store que gestiona las cabeceras HTTP
+     */
+    class HeadersStore implements IHeadersStore {
+        private static headers;
+        constructor();
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:HeadersStore#addHeader
+         * @param {string} nameHeader nombre de la cabecera.
+         * @param {string} valueHeader valor de la cabecera.
+         * @methodOf OrangeFeSARQ.Services:HeadersStore
+         * @description
+         * Añade una cabecera para que luego se envíe en cada
+         * petición HTTP independientemente del verbo utilizado.
+         */
+        addHeader(nameHeader: string, valueHeader: string): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:HeadersStore#deleteHeader
+         * @param {string} nameHeader nombre de la cabecera.
+         * @methodOf OrangeFeSARQ.Services:HeadersStore
+         * @description
+         * Borra una cabecera para que ya no se envíe en cada
+         * petición HTTP independientemente del verbo utilizado.
+         */
+        deleteHeader(nameHeader: string): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:HeadersStore#deleteAllHeaders
+         * @methodOf OrangeFeSARQ.Services:HeadersStore
+         * @description
+         * Borra todas las cabeceras para que ya no se envíe
+         * ninguna cabecera en las peticiones HTTP independientemente
+         * del verbo utilizado.
+         */
+        deleteAllHeaders(): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:HeadersStore#getHeaders
+         * @methodOf OrangeFeSARQ.Services:HeadersStore
+         * @description
+         * Devuelve todas las cabeceras almacenadas en caché.
+         * @return {HashMap} Type HashMap<string, string>
+         */
+        getHeaders(): HashMap<string, string>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:HeadersStore#toJson
+         * @methodOf OrangeFeSARQ.Services:HeadersStore
+         * @description
+         * Devuelve todas las cabeceras almacenadas en caché en formato JSON.
+         * @return {string} string
+         */
+        toJson(): string;
+    }
+}
+declare module OrangeFeSARQ.Services {
     interface IHttp302RedirectInterceptor {
         response: Function;
     }
@@ -1291,17 +1591,75 @@ declare module OrangeFeSARQ.Services {
      * en caso de que sea necesario
      */
     class HttpCache {
+        $injector: any;
         private $http;
         private $q;
         private $cacheFactory;
         static $inject: string[];
+        private headersStore;
         static keys: string[];
-        constructor($http: ng.IHttpService, $q: ng.IQService, $cacheFactory: ng.ICacheFactoryService);
+        static observer: HashMap<string, Rx.Observable<any>>;
+        constructor($injector: any, $http: ng.IHttpService, $q: ng.IQService, $cacheFactory: ng.ICacheFactoryService);
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:httpCacheOrange#post
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros
+         * @param {string=} [resetCacheKey=''] restea las llamadas a una url
+         * @param {HashMap<string, string>} [headers=''] cabeceras a pasar en la llamada
+         * @methodOf OrangeFeSARQ.Services:httpCacheOrange
+         * @description
+         * realiza la peticion post, los parámetros que recibe son:
+         * @example
+         * Typical usage
+         * ```js
+         *  return vm.httpCacheOrange.post(vm.genericConstant.activityRegister,
+         *  _search,'/sites/REST/controller/GridController/FichaCliente')
+         * .then(function (response) {
+         *          return response.data;
+         *       })
+         * .catch(function (error) {
+         *           return error;
+         *       })
+         * }
+         * ```
+         *
+         * @return {Object} Type ng.IPromise<any>
+         */
+        post(url: string, data: any, resetCacheKey?: string, headers?: HashMap<string, string>): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:httpCacheOrange#put
+         * @param {string} url de la api sin parametros.
+         * @param {Object} params Parámetros
+         * @param {HashMap<string, string>} [headers=''] cabeceras a pasar en la llamada
+         * @param {string=} [resetCacheKey=''] restea las llamadas a una url
+         * @methodOf OrangeFeSARQ.Services:httpCacheOrange
+         * @description
+         * realiza la peticion put, los parámetros que recibe son:
+         * @example
+         * Typical usage
+         * ```js
+         *  return vm.httpCacheOrange.put(vm.genericConstant.activityRegister,
+         *  _search,'/sites/REST/controller/GridController/FichaCliente')
+         * .then(function (response) {
+         *          return response.data;
+         *       })
+         * .catch(function (error) {
+         *           return error;
+         *       })
+         * }
+         * ```
+         *
+         * @return {Object} Type ng.IPromise<any>
+         */
+        put(url: string, data: any, resetCacheKey?: any, headers?: HashMap<string, string>): ng.IPromise<any>;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:httpCacheOrange#delete
+         * @param {string} url de la api sin parametros.
+         * @param {Object} params Parámetros
+         * @param {HashMap<string, string>} [headers=''] cabeceras a pasar en la llamada
          * @param {string=} [resetCacheKey=''] restea las llamadas a una url
          * @methodOf OrangeFeSARQ.Services:httpCacheOrange
          * @description
@@ -1322,8 +1680,7 @@ declare module OrangeFeSARQ.Services {
          *
          * @return {Object} Type ng.IPromise<any>
          */
-        post(url: string, params: any, resetCacheKey?: string): ng.IPromise<any>;
-        put(url: string, params: any, resetCacheKey?: any): ng.IPromise<any>;
+        delete(url: string, data: any, resetCacheKey?: string): ng.IPromise<any>;
         private static extractProperties(obj);
         /**
          * @ngdoc method
@@ -1377,7 +1734,7 @@ declare module OrangeFeSARQ.Services {
          * @name OrangeFeSARQ.Services:httpCacheOrange#getth
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
-         * @param {Object} headers Cabecera de la petición.
+         * @param {HashMap<string, string>} headers Cabecera de la petición.
          * @param {number=} [time=(1000 * 5 * 60)] Tiempo de vida de la cache por defecto 5 mimutos.
          * @param {boolean=} [refresh=false] Invalida la cache por defecto false
          * @methodOf OrangeFeSARQ.Services:httpCacheOrange
@@ -1407,13 +1764,13 @@ declare module OrangeFeSARQ.Services {
          *
          * @return {Object} Type ng.IPromise<any>
          */
-        getth(url: string, params: any, headers: any, time?: number, refresh?: boolean): ng.IPromise<any>;
+        getth(url: string, params: any, headers: HashMap<string, string>, time?: number, refresh?: boolean): ng.IPromise<any>;
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:httpCacheOrange#getthConfig
          * @param {string} url de la api sin parametros.
          * @param {Object} params Parámetros en queryString y path.
-         * @param {Object} headers Cabecera de la petición.
+         * @param {HashMap<string, string>} headers Cabecera de la petición.
          * @param {object} componentConfig de cache del componente.
          * @param {object} APIConfig de cache del componente.
          * @param {boolean=} [refresh=false] Invalida la cache por defecto false
@@ -1444,8 +1801,10 @@ declare module OrangeFeSARQ.Services {
          *
          * @return {Object} Type ng.IPromise<any>
          */
-        getthConfig(url: string, params: any, headers: any, componentConfig: OrangeFeSARQ.Models.Cache, APIConfig: OrangeFeSARQ.Models.Cache, refresh?: boolean): ng.IPromise<any>;
+        getthConfig(url: string, params: any, headers: HashMap<string, string>, componentConfig: OrangeFeSARQ.Models.Cache, APIConfig: OrangeFeSARQ.Models.Cache, refresh?: boolean): ng.IPromise<any>;
+        hashCode(str: any): number;
         private getConfig(componentConfig, APIConfig, key, url, _search, refresh);
+        private getAllHeaders(headersToMethod);
         private static mixCache(cacheComp, cacheAPI);
     }
 }
@@ -1535,9 +1894,10 @@ declare module OrangeFeSARQ.Services {
         private msisdnStore;
         private genericConstant;
         private $rootElement;
+        private $window;
         static $inject: string[];
         private appName;
-        constructor($http: ng.IHttpService, $log: ng.ILogService, appConfigSrv: OrangeFeSARQ.Services.AppConfigManager, uuidSrv: OrangeFeSARQ.Services.IUUID, msisdnStore: OrangeFeSARQ.Services.MsisdnStore, genericConstant: any, $rootElement: ng.IRootElementService);
+        constructor($http: ng.IHttpService, $log: ng.ILogService, appConfigSrv: OrangeFeSARQ.Services.AppConfigManager, uuidSrv: OrangeFeSARQ.Services.IUUID, msisdnStore: OrangeFeSARQ.Services.MsisdnStore, genericConstant: any, $rootElement: ng.IRootElementService, $window: ng.IWindowService);
         sendTraces: (trace: Models.Trace) => void;
         traceConsole: (trace: Models.Trace) => void;
         /**
@@ -1629,6 +1989,7 @@ declare module OrangeFeSARQ.Services {
      */
     class MsisdnStore {
         private _msisdn;
+        private _dontNavigate;
         constructor();
         /**
          * @ngdoc method
@@ -1658,6 +2019,34 @@ declare module OrangeFeSARQ.Services {
          * @return {void} void
          */
         msisdn: string;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:msisdnStore#dontNavigate
+         * @methodOf OrangeFeSARQ.Services:msisdnStore
+         * @description
+         * getter del dontNavigate
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.msisdnStore.dontNavigate()
+         * ```
+         * @return {boolean} dontNavigate
+         */
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:msisdnStore#dontNavigate
+         * @param {boolean} dontNavigate dontNavigate a guardar.
+         * @methodOf OrangeFeSARQ.Services:msisdnStore
+         * @description
+         * setter del dontNavigate
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.msisdnStore.dontNavigate(value)
+         * ```
+         * @return {void} void
+         */
+        dontNavigate: boolean;
     }
 }
 declare module OrangeFeSARQ.Services {
@@ -1675,7 +2064,8 @@ declare module OrangeFeSARQ.Services {
         setDataInStore(section: any): void;
         changeComp(element: any): any;
         getLayoutMetada(key: string, exp?: number): any;
-        private getLayout(key, exp?);
+        getLayoutMetadaWithParam(key: string, params: any, exp?: number): any;
+        private getLayout(key, exp?, _reset?, queryParams?);
         getLayoutMetadaConcat(key: string, exp?: number): any;
         changeLayaoutMetada(layoutMetaData: any): any;
         changeSection(section: any): any;
@@ -1746,6 +2136,20 @@ declare module OrangeFeSARQ.Services {
          * @return {void} void
          */
         removeEntry(key: string): void;
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:sessionStorageSrv#clear
+         * @methodOf OrangeFeSARQ.Services:sessionStorageSrv
+         * @description
+         * elimina todo lo que se haya guardado en sessionStorage
+         * @example
+         * Se hace uso del servicio con herencia de ParentController
+         * ```js
+         *  vm.sessionStorageManager.clear()
+         * ```
+         * @return {void} void
+         */
+        clear(): void;
     }
 }
 declare module OrangeFeSARQ.Services {

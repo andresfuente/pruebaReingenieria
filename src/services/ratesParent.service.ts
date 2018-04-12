@@ -581,8 +581,9 @@ module OrangeFeSARQ.Services {
             let srv = this;
             let ratesIdListString = '';
             let productSpecification = [];
+            let _headers = new HashMap<string, string>()
             return srv.httpCacheGeth(srv.genericConstant.productCatalog + srv.genericConstant.changeRateList + originRate,
-                {}, {})
+                {}, _headers)
                 .then((response) => {
                     if (response && response.data.error === null && response.data.productSpecification) {
                         productSpecification = response.data.productSpecification;
