@@ -71,14 +71,14 @@ module OrangeFeSARQ.Services {
             let deviceForSession = vm.selectDeviceProperties(device);
 
             // Si el terminal seleccinado ya esta en multiselección, se remueve.            
-            if(vm.isInDeviceContainer(deviceForSession)) {
+            if (vm.isInDeviceContainer(deviceForSession)) {
                 vm.deleteTerminal(deviceForSession);
                 return false;
-            }else { // Si el terminal no existe en multiselección 
+            } else { // Si el terminal no existe en multiselección 
                 // Si ya existen 3 terminales seleccinados
-                if(vm.deviceContainerVolume() === 3) {
+                if (vm.deviceContainerVolume() === 3) {
                     vm.$scope.$broadcast('cantSelectTerminal');
-                } else if(vm.deviceContainerVolume() <= 2) {
+                } else if (vm.deviceContainerVolume() <= 2) {
                     // Si existen menos de 2 terminales seleccinados
                     vm.insertInDeviceContainer(deviceForSession);
                     return true;
@@ -102,25 +102,25 @@ module OrangeFeSARQ.Services {
             device.description = device.litSubTitle;
             device.isModified = false;
             device.action = 'New';
-        
+
             // Buscamos Esim en dispositivo
-            if (device.icon){
-                for ( let i = 0; i < device.icon.length; i++){
-                    if (device.icon[i].description === 'eSIM' ){
+            if (device.icon) {
+                for (let i = 0; i < device.icon.length; i++) {
+                    if (device.icon[i].description === 'eSIM') {
                         device.eSim = true;
                         break;
                     }
                 }
             }
-          
+
             // Se seleccionan las propiedades para session
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
-            'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-            'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName', 'tipoPago' , 'eSim', 'cpDescription' , 'cpSiebel' , 'cpDuration']);
-            if(device.renewRates !== undefined && device.renewRates) {
-                deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                 'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-                'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates' , 'eSim' , 'cpDescription' , 'cpSiebel', 'cpDuration']);
+                'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName', 'tipoPago', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration']);
+            if (device.renewRates !== undefined && device.renewRates) {
+                deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
+                    'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
+                    'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration']);
             }
 
             return deviceForSession;
@@ -168,11 +168,11 @@ module OrangeFeSARQ.Services {
          * @description
          * Remueve un terminal del contenedor de terminales
          */
-        deleteTerminal (device) {
+        deleteTerminal(device) {
             let vm = this;
             _.remove(vm.deviceContainer, function (currentDevice) {
                 return currentDevice.siebelId === device.siebelId;
-              });
+            });
             vm.resetDevicesId();
         }
 
@@ -226,7 +226,7 @@ module OrangeFeSARQ.Services {
          */
         resetDevicesId() {
             let vm = this;
-            vm.deviceContainer.forEach( (device, index)  => {
+            vm.deviceContainer.forEach((device, index) => {
                 vm.deviceContainer[index].terminalId = index + 1;
             });
             vm.putDevicesInSessionStorage();
@@ -244,9 +244,9 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let deviceForSession = vm.selectDeviceProperties(variant);
             vm.deviceContainer.forEach((currentDevice, index) => {
-                if(currentDevice.name === deviceForSession.name &&
+                if (currentDevice.name === deviceForSession.name &&
                     currentDevice.siebelId !== deviceForSession.siebelId) {
-                        vm.deviceContainer[index] = deviceForSession;
+                    vm.deviceContainer[index] = deviceForSession;
                 }
             });
             vm.putDevicesInSessionStorage();
@@ -264,7 +264,7 @@ module OrangeFeSARQ.Services {
         setInsuranceCheck(isChecked: boolean, device) {
             let vm = this;
             vm.deviceContainer.forEach((currentDevice, index) => {
-                if(currentDevice.siebelId === device.siebelId) {
+                if (currentDevice.siebelId === device.siebelId) {
                     vm.deviceContainer[index].insuranceSelected = isChecked;
                 }
             });
@@ -281,10 +281,10 @@ module OrangeFeSARQ.Services {
          */
         isInsuranceChecked(device) {
             let vm = this;
-            let insuranceSelected = _.result(_.find(vm.deviceContainer, function(currentDevice) {
-                    return currentDevice.siebelId === device.siebelId;
-                }), 'insuranceSelected');
-            if(insuranceSelected) {
+            let insuranceSelected = _.result(_.find(vm.deviceContainer, function (currentDevice) {
+                return currentDevice.siebelId === device.siebelId;
+            }), 'insuranceSelected');
+            if (insuranceSelected) {
                 return insuranceSelected;
             } else {
                 return false;
@@ -308,14 +308,14 @@ module OrangeFeSARQ.Services {
             let rateForSession = vm.selectRateProperties(rate);
 
             // Si la tarifa seleccinado ya esta en multiselección, se remueve.            
-            if(vm.isInRateContainer(rateForSession)) {
+            if (vm.isInRateContainer(rateForSession)) {
                 vm.deleteRate(rateForSession);
                 return false;
-            }else { // Si la tarifa no existe en multiselección 
+            } else { // Si la tarifa no existe en multiselección 
                 // Si ya existen 3 tarifas seleccinadas
-                if(vm.rateContainerVolume() === 3) {
+                if (vm.rateContainerVolume() === 3) {
                     vm.$scope.$broadcast('cantSelectRate');
-                } else if(vm.rateContainerVolume() <= 2) {
+                } else if (vm.rateContainerVolume() <= 2) {
                     // Si existen menos de 2 tarifas seleccinadas
                     vm.insertInRateContainer(rateForSession);
                     return true;
@@ -341,9 +341,11 @@ module OrangeFeSARQ.Services {
             rate.taxIncludedPrice = rate.ratePriceTaxIncluded;
             rate.description = rate.rateDescription;
             // Se seleccionan las propiedades para session
-            let rateForSession = _.pick(rate, ['rateId', 'otherSvaInfoList', 'siebelId', 'name', 'description',
-            'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName', 'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack',
-            'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology']);
+
+            let rateForSession = _.pick(rate, ['rateId', 'otherSvaInfoList', 'siebelId',
+                'name', 'description', 'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName',
+                'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack',
+                'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology', 'type']);
 
             return rateForSession;
         }
@@ -359,11 +361,11 @@ module OrangeFeSARQ.Services {
         generateSelectedSVAList() {
             let vm = this;
             let svaList = [];
-            vm.rateContainer.forEach( currentRate  => {
+            vm.rateContainer.forEach(currentRate => {
                 // Se todos los arrays de SVA's 
                 svaList = currentRate.svaInfoList.concat(currentRate.otherSvaInfoList).concat(currentRate.allSVAChildrenList);
                 // Se remueven los sva que no estan chequeados
-                _.remove( svaList, function (currentSVA) {
+                _.remove(svaList, function (currentSVA) {
                     return !currentSVA.isSelected;
                 });
                 // Se asigna el array de SVA's seleccionados a la tarifa
@@ -434,7 +436,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             _.remove(vm.rateContainer, function (currentRate) {
                 return currentRate.siebelId === rate.siebelId;
-              });
+            });
             vm.resetRatesId();
         }
 
@@ -465,7 +467,7 @@ module OrangeFeSARQ.Services {
         isConvergentRateContainer() {
             let vm = this;
             return _.some(vm.rateContainer, function (currentRate) {
-                return (currentRate.groupName === 'Convergente' && currentRate.typeService === 'movil_fijo' );
+                return (currentRate.groupName === 'Convergente' && currentRate.typeService === 'movil_fijo');
             });
         }
 
@@ -491,7 +493,7 @@ module OrangeFeSARQ.Services {
          */
         resetRatesId() {
             let vm = this;
-            vm.rateContainer.forEach( (rate, index)  => {
+            vm.rateContainer.forEach((rate, index) => {
                 vm.rateContainer[index].rateId = index + 1;
             });
         }
@@ -506,8 +508,8 @@ module OrangeFeSARQ.Services {
          */
         selectSVA(rate) {
             let vm = this;
-            vm.rateContainer.forEach( currentRate => {
-                if(currentRate.siebelId === rate.siebelId) {
+            vm.rateContainer.forEach(currentRate => {
+                if (currentRate.siebelId === rate.siebelId) {
                     currentRate.svaInfoList = rate.svaInfoList;
                 }
             });
@@ -524,9 +526,9 @@ module OrangeFeSARQ.Services {
         putDevicesInSessionStorage() {
             let vm = this;
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            if(commercialData !== null) {
-                for(let i in commercialData) {
-                    if(commercialData.length > 0 && commercialData[i].ospIsSelected) {
+            if (commercialData !== null) {
+                for (let i in commercialData) {
+                    if (commercialData.length > 0 && commercialData[i].ospIsSelected) {
                         commercialData[i].terminals = vm.deviceContainer;
                         sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
                     }
@@ -545,9 +547,9 @@ module OrangeFeSARQ.Services {
         putRatesInSessionStorage() {
             let vm = this;
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            if(commercialData !== null) {
-                for(let i in commercialData) {
-                    if(commercialData.length > 0 && commercialData[i].ospIsSelected) {
+            if (commercialData !== null) {
+                for (let i in commercialData) {
+                    if (commercialData.length > 0 && commercialData[i].ospIsSelected) {
                         commercialData[i].rates = vm.rateContainer;
                         sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
                     }
@@ -571,13 +573,13 @@ module OrangeFeSARQ.Services {
             // Se obtiene el commercialData del session storage
             commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             // Se insertan en el comparador los terminales acto comercial
-            if(commercialData !== null) {
-                for(let i in commercialData) {
-                    if(commercialData.length > 0 && commercialData[i].ospIsSelected) {
-                        if(commercialData[i].terminals !== null) {
+            if (commercialData !== null) {
+                for (let i in commercialData) {
+                    if (commercialData.length > 0 && commercialData[i].ospIsSelected) {
+                        if (commercialData[i].terminals !== null) {
                             vm.deviceContainer = commercialData[i].terminals;
                         }
-                        if(commercialData[i].rates && commercialData[i].rates.length > 0) {
+                        if (commercialData[i].rates && commercialData[i].rates.length > 0) {
                             vm.rateContainer = commercialData[i].rates;
                         }
                     }
@@ -598,7 +600,7 @@ module OrangeFeSARQ.Services {
         setPayType(idSiebel, payType) {
             let vm = this;
             vm.deviceContainer.forEach(terminal => {
-                if(terminal.siebelId === idSiebel) {
+                if (terminal.siebelId === idSiebel) {
                     terminal.tipoPago = payType;
                 }
             });
@@ -613,12 +615,12 @@ module OrangeFeSARQ.Services {
          * @description
          * Se retorna la tarifa de multiselección
          */
-         getRate(rateSiebelId: string) {
+        getRate(rateSiebelId: string) {
             let vm = this;
             let rate;
             vm.getcommercialData();
-            vm.rateContainer.forEach( currentRate => {
-                if(currentRate.siebelId === rateSiebelId) {
+            vm.rateContainer.forEach(currentRate => {
+                if (currentRate.siebelId === rateSiebelId) {
                     rate = currentRate;
                 }
             });
