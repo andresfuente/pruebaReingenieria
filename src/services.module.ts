@@ -59,6 +59,7 @@ module OrangeFeSARQ.Constant {
         .service('reservePopupSrv', reservePopup.Services.ReservePopupSrv)
         .service('automaticChangesSrv', OrangeFeSARQ.Services.AutomaticChangesSrv)
         .service('deviceCatalogSrv', OrangeFeSARQ.Services.DeviceCatalogSrv)
+        .service('bankAccountSrv', OrangeFeSARQ.Services.BankAccountSrv)
 
 
         // Product Catalog
