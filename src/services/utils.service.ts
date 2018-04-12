@@ -118,9 +118,9 @@ module OrangeFeSARQ.Services {
 
             return userService.getUser(searchUrl, value)
                 .then(
-                    (response) => {
-                        return response;
-                    }
+                (response) => {
+                    return response;
+                }
                 )
                 .catch(function (error) {
                     return error;
@@ -256,8 +256,10 @@ module OrangeFeSARQ.Services {
         findByName(name, array, value = 'value') {
             if (array && array.length >= 1) {
                 for (let i = 0; i < array.length; i++) {
-                    if (array[i].name.replace(" ", "") === name.replace(" ", "")) {
-                        return array[i][value];
+                    if (array[i].name !== null) {
+                        if (array[i].name.replace(" ", "") === name.replace(" ", "")) {
+                            return array[i][value];
+                        }
                     }
                 }
                 return null;
@@ -266,8 +268,10 @@ module OrangeFeSARQ.Services {
 
         findByInArray(array, value, campo = 'name') {
             for (let i = 0; i < array.length; i++) {
-                if (array[i][campo].replace(" ", "") === value.replace(" ", "")) {
-                    return array[i];
+                if (array[i].name !== null) {
+                    if (array[i][campo].replace(" ", "") === value.replace(" ", "")) {
+                        return array[i];
+                    }
                 }
             }
             return null;
