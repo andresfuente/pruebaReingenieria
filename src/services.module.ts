@@ -60,7 +60,7 @@ module OrangeFeSARQ.Constant {
         .service('automaticChangesSrv', OrangeFeSARQ.Services.AutomaticChangesSrv)
         .service('deviceCatalogSrv', OrangeFeSARQ.Services.DeviceCatalogSrv)
         .service('bankAccountSrv', OrangeFeSARQ.Services.BankAccountSrv)
-
+        .service('MosaicFileSrv', OrangeFeSARQ.Services.MosaicFileSrv)
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
