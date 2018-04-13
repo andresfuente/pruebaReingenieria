@@ -92,7 +92,6 @@ module OrangeFeSARQ.Constant {
                     });
             }
         })
-        
         // OWCS Images
         .run((getImagesSrv: OrangeFeSARQ.Services.getImagesSrv) => {
             if (navigator.userAgent.indexOf('PhantomJS') < 1) {
