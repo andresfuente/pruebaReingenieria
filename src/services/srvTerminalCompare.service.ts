@@ -334,6 +334,7 @@ module OrangeFeSARQ.Services {
         selectRateProperties(rate) {
             let vm = this;
             // Se crean las caracteristicas necesarias de la tarifa, para el session storage
+            
             rate.rateId = (vm.rateContainer.length + 1);
             rate.name = rate.rateSubName;
             rate.siebelId = rate.siebelId;

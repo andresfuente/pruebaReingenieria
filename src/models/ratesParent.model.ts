@@ -404,6 +404,7 @@ module ratesParent.Models {
                                 currentSVAOffering.productSpecification.id === currentSVA.id) {
                                 if (currentSVAOffering.productOfferingPrice) {
                                     currentSVAOffering.productOfferingPrice.forEach(priceElement => {
+                                        svaPriceItem = new RatePriceItem();
                                         if (priceElement.priceType.toLowerCase() === 'pago aplazado') {
                                             priceElement.price.forEach(currentPrice => {
                                                 // Precio sin iva si es residencial

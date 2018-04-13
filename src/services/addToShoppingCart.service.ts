@@ -148,8 +148,6 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': ''
             };
 
-
-
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
 
             cartItemElement = {
@@ -168,10 +166,6 @@ module OrangeFeSARQ.Services {
             if (device.cpDescription && device.cpSiebel) {
                 cartItemElement.cartItem.push(vm.createCPCartItem(device));
             }
-
-
-
-
 
             if (shoppingCart !== null) {
                 shoppingCart.cartItem.push(cartItemElement);
@@ -456,13 +450,13 @@ module OrangeFeSARQ.Services {
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
-       /**
-        * @ngdoc method
-        * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
-        * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
-        * @description
-        * Añade una tarifa al session storage del carrito
-        */
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Añade una tarifa al session storage del carrito
+         */
         putRateInShoppingCartForSva(rate) {
             let vm = this;
             let productItem;
@@ -590,7 +584,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Añade un terminal primario y su tarifa al session storage del carrito
          */
-        putRateAndDeviceInShoppingCart(rate, device, uniquePaid: boolean, preId? : string) {
+        putRateAndDeviceInShoppingCart(rate, device, uniquePaid: boolean, preId?: string) {
             let vm = this;
             let rateCartItemElement;
             let deviceCartItemElement;
@@ -605,8 +599,8 @@ module OrangeFeSARQ.Services {
             let insurance;
 
             // Eliminar cuando es sustituir elemento 
-            if (preId && preId !== undefined && preId !== null){
-                _.remove(shoppingCart.cartItem, {id : preId});
+            if (preId && preId !== undefined && preId !== null) {
+                _.remove(shoppingCart.cartItem, { id: preId });
             }
 
             // Se obtiene el ID del acto comercial que se esta creando
