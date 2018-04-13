@@ -112,11 +112,20 @@ module ratesParent.Models {
 
             if (rateData.productSpecCharacteristic) {
                 rateData.productSpecCharacteristic.forEach(element => {
-                    if (element.name === 'CARACTERISTICA' || element.name === 'CARACTERISTICATECNOLOGIA') {
+                    if (element.ospCategory === 'highlight') {
                         let raProductBundle: RatesProductBundle =
-                        new RatesProductBundle(element.ospImagen, element.description, element.name);
+                        new RatesProductBundle(element.attachment ? element.attachment.href : '',
+                                                element.name,
+                                                element.ospCategory);
                         this.productBundle.push(raProductBundle);
                     }
+                    /* if (element.name === 'CARACTERISTICATECNOLOGIA') {
+                        let raProductBundle: RatesProductBundle =
+                        new RatesProductBundle(element.attachment ? element.attachment.href : '',
+                                                element.name,
+                                                element.ospCategory);
+                        this.productBundle.push(raProductBundle);
+                    } */
                 });
             }
             // Se obtienen los Id's de los SVA de la tarifa

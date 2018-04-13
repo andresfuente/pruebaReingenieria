@@ -342,16 +342,16 @@ module OrangeFeSARQ.Services {
 
             //Cabeceras Pangea
 
-            // let _headers = {
-            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
-            //     'Geolocation-client': stateOrProvinceBinding ? stateOrProvinceBinding.toUpperCase() : srv.storeProvince.toUpperCase
-            // };
+            let _headers = {
+                'Geolocation-local': srv.storeProvince.toUpperCase(),
+                'Geo}location-client': stateOrProvinceBinding ? stateOrProvinceBinding.toUpperCase() : srv.storeProvince.toUpperCase
+            };
 
             //Cabeceras Ficha 
 
-            let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            _headers.set('Geolocation-client', stateOrProvinceBinding);
+            // let _headers = new HashMap<string, string>();
+            // _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            // _headers.set('Geolocation-client', stateOrProvinceBinding);
             
 
             params = {
