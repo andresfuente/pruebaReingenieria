@@ -68,22 +68,39 @@ module OrangeFeSARQ.Services {
      * @name getEncryptUrlToken.GetEncryptUrlTokenSrv
      * @returns {object} Devuelve una promesa con el response
      */
-        getEncryptURLToken(emailAdress: string, nameFirst: string, nameLast: string, compName: string, refresh: boolean = false) {
+        getEncryptURLToken(emailAdress: string, nameFirst: string, nameLast: string,msisdn:string, documentID: string, documentType: string, compName: string, refresh: boolean = false) {
             let vm = this;
+            let _search: Object = {};
             let apiUrl: string = vm.genericConstant.token;
-
-            let _search: Object = {
-                queryParams: {
-                    p_userid: emailAdress,
-                    p_passwd: '',
-                    'p_email.addr': emailAdress,
-                    'p_name.first': nameFirst,
-                    'p_name.last': nameLast,
-                    p_li_passwd: 'db846445891927ba',
-                },
-                urlParams: ['encryptUrlToken']
-            };
-
+            if(documentType === 'NIF'){
+                _search = {
+                    queryParams: {
+                        p_userid: emailAdress,
+                        p_passwd: '',
+                        'p_email.addr': emailAdress,
+                        'p_name.first': nameFirst,
+                        'p_name.last': nameLast,
+                        'p_ccf_3': msisdn,
+                        p_li_passwd: 'db846445891927ba',
+                        'p_ccf_41': documentID,
+                    },
+                    urlParams: ['encryptUrlToken']
+                };
+            }else{
+                _search = {
+                    queryParams: {
+                        p_userid: emailAdress,
+                        p_passwd: '',
+                        'p_email.addr': emailAdress,
+                        'p_name.first': nameFirst,
+                        'p_name.last': nameLast,
+                        'p_ccf_3': msisdn,
+                        p_li_passwd: 'db846445891927ba',
+                        'p_ccf_42': documentID,
+                    },
+                    urlParams: ['encryptUrlToken']
+                };
+            }
             return vm.httpCacheGett(apiUrl, _search, compName, refresh)
                 .then((successData) => {
                     return successData;
