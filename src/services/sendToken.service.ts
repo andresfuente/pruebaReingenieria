@@ -13,16 +13,18 @@ module OrangeFeSARQ.Services {
     setInjections($injector) {
       let vm = this;
     }
-    getToken(msisdn: any, componentName: string) {
+    getToken(msisdn: any, doc: any, componentName: string) {
       let vm = this;
       let _search  = {
           queryParams: {
             "msisdn": msisdn,
+            "doc": doc
           },
           urlParams: [vm.genericConstant.brand, 'tokenManager']
       };
+      let refresh = true;
 
-      return vm.httpCacheGett(vm.genericConstant.token, _search, componentName)
+      return vm.httpCacheGett(vm.genericConstant.token, _search, componentName, refresh)
         .then(
           (response) => {
               return response;
@@ -33,7 +35,7 @@ module OrangeFeSARQ.Services {
         );
     }
 
-    checkToken(msisdn: any, token: any, componentName: string) {
+    checkToken(msisdn: any, token: any, jwt: any, componentName: string) {
       let vm = this;
       let _search  = {
           queryParams: {
@@ -42,8 +44,11 @@ module OrangeFeSARQ.Services {
           },
           urlParams: ['tokenValidate']
       };
+      let _headers = new HashMap<string, string>();
+      _headers.set('jwt_token_data', jwt);
 
-      return vm.httpCacheGett(vm.genericConstant.token, _search, componentName)
+      let refresh = true;
+      return vm.httpCacheGeth(vm.genericConstant.token, _search, _headers, componentName, refresh)
         .then(
           (response) => {
               return response;

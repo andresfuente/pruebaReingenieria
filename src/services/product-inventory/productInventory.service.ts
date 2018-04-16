@@ -70,5 +70,22 @@ module OrangeFeSARQ.Services {
         });
     }
 
+    getContractedServices(_search, componentName: string) {
+      let vm = this;
+
+      return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName)
+        .then(
+          (response) => {
+            return response.data;
+          }
+        )
+        .catch(
+          (error) => {
+            throw error.data;
+          }
+        )
+      ;
+    }
+
   }
 }

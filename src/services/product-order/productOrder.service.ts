@@ -9,7 +9,7 @@ module OrangeFeSARQ.Services {
     constructor(public $injector) {
       super($injector);
       let vm = this;
-      vm.urlProductOrder = vm.genericConstant.productOrder;
+      vm.urlProductOrder = vm.genericConstant.productOrdering;
       vm.brand = vm.genericConstant.brand;
       vm.setInjections($injector);
     }

@@ -1,8 +1,6 @@
 module OrangeFeSARQ.Services {
     'use strict';
 
-    /**
-    */
     export class SrvFile extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
@@ -54,6 +52,7 @@ module OrangeFeSARQ.Services {
                 return srv.cachedTerminalPromise;
             } else {
                 let dataOT = srv.MosaicFileSrv.getDataOT();
+                dataOT.profile = localStorage.getItem('profile').toLocaleUpperCase();
                 // Se define el tipo de tarifa dependiendo del segmento del cliente
                 if(dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
                     relatedProductOffering = dataOT.relatedRateResidential;
@@ -61,13 +60,16 @@ module OrangeFeSARQ.Services {
                     relatedProductOffering = dataOT.relatedRateBusiness;
                 }
 
+                if (dataOT.creditRiskRating === 'bajo' || dataOT.creditRiskRating === 'medio') {
+                    dataOT.creditRiskRating += ',alto';
+                }
+
                 srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
                     str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
-                    dataOT.ospCartItemSubType, srv.riskLevel[dataOT.creditRiskRating],
+                    dataOT.ospCartItemSubType, dataOT.creditRiskRating,
                     dataOT.channel, sfid , relatedProductOffering,
                     fileTerminalCompOWCSStore, dataOT.profile, dataOT.priceName,
-                    dataOT.ospCustomerSegment,
-                    dataOT.stateOrProvince
+                    dataOT.ospCustomerSegment, dataOT.stateOrProvince
                 ).then((terminal) => {
                     srv.viewState.selectedVariant = terminal.variants[0];
                     return terminal;

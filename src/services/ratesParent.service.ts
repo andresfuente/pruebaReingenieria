@@ -77,10 +77,15 @@ module OrangeFeSARQ.Services {
                 delete params.idTecnologiaList;
             }
 
-            let _headers = {
-                'Geolocation-local': vm.storeProvince,
-                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            };
+            // CABECERA PANGEA
+            // let _headers = {
+            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
+            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            // };
+            // CABECERA HASHMAP
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -144,10 +149,15 @@ module OrangeFeSARQ.Services {
                 delete params.idParqueList;
             }
 
-            let _headers = {
-                'Geolocation-local': srv.storeProvince.toUpperCase(),
-                'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
-            }
+            // CABECERA PANGEA
+            // let _headers = {
+            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
+            //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
+            // };
+            // CABECERA HASHMAP
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
@@ -166,20 +176,32 @@ module OrangeFeSARQ.Services {
          * @name OrangeFeSARQ.Services:RatesParentSrv#getSpecificationData
          * @methodOf ratesParent.Services:RatesParentSrv
          * @param {string} idSvaList Lista de Id's de SVA's separados por coma
+         * @param {string} commercialAction Tipo de dato del sessionCommercialData
+         * @param {string} segment Tipo de segmento del sessionStorage
+         * @param {string} isExistingCustomer cliente existente?
          * @description
          * Consulta al productSpecification de la lista de SVA's de la tarifa
          */
-        getSVASpecificationData(idSvaList: string): ng.IPromise<{} | void> {
+        getSVASpecificationData(idSvaList: string, commercialAction: string, segment: string,
+            isExistingCustomer: boolean): ng.IPromise<{} | void> {
             let srv = this;
             let params = {
                 productType: 'sva', // Tipo de producto
                 idSvaList: idSvaList, // Lista de Id´s de SVA
+                commercialAction: commercialAction,
+                segment: segment,
+                isExistingCustomer: isExistingCustomer
             };
 
-            let _headers = {
-                'Geolocation-local': srv.storeProvince.toUpperCase(),
-                'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
-            }
+            // CABECERA PANGEA
+            // let _headers = {
+            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
+            //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
+            // };
+            // CABECERA HASHMAP
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -198,21 +220,32 @@ module OrangeFeSARQ.Services {
          * @methodOf ratesParent.Services:RatesParentSrv
          * @param {string} idSvaList Lista de Id's de SVA's separados por coma
          * @param specificationData data del productSpecification del SVA
+         * @param {string} commercialAction Tipo de dato del sessionCommercialData
+         * @param {string} segment Tipo de segmento del sessionStorage
+         * @param {string} isExistingCustomer cliente existente?
          * @description
          * Consulta al productOffering de la lista de SVA's de la tarifa
          */
-        getSVAOfferingData(idSvaList: string, specificationData) {
+        getSVAOfferingData(idSvaList: string, specificationData, commercialAction: string, segment: string, isExistingCustomer: boolean) {
             let srv = this;
             let customerSegment = srv.getCustomerSegment();
             let params = {
                 productType: 'sva', // Tipo de producto
                 idSvaList: idSvaList, // Lista de Id´s de SVA
+                commercialAction: commercialAction,
+                segment: segment,
+                isExistingCustomer: isExistingCustomer
             };
 
-            let _headers = {
-                'Geolocation-local': srv.storeProvince.toUpperCase(),
-                'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
-            }
+            // CABECERA PANGEA
+            // let _headers = {
+            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
+            //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
+            // };
+            // CABECERA HASHMAP
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
@@ -233,10 +266,15 @@ module OrangeFeSARQ.Services {
                 idSvaList: idList
             };
 
-            let _headers = {
-                'Geolocation-local': vm.storeProvince.toUpperCase(),
-                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            }
+            // CABECERA PANGEA
+            // let _headers = {
+            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
+            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            // };
+            // CABECERA HASHMAP
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -294,11 +332,15 @@ module OrangeFeSARQ.Services {
                 delete params.idTecnologiaList;
             }
 
-            let _headers = {
-                'Geolocation-local': vm.storeProvince.toUpperCase(),
-                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            }
-
+            // CABECERA PANGEA
+            // let _headers = {
+            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
+            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            // };
+            // CABECERA HASHMAP
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -348,10 +390,15 @@ module OrangeFeSARQ.Services {
                 delete params.idTecnologiaList;
             }
 
-            let _headers = {
-                'Geolocation-local': vm.storeProvince.toUpperCase(),
-                'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            }
+            // CABECERA PANGEA
+            // let _headers = {
+            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
+            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            // };
+            // CABECERA HASHMAP
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
@@ -477,13 +524,12 @@ module OrangeFeSARQ.Services {
 
         generateShoppingCart(rate: ratesParent.Models.Rate, componentName: string) {
             let vm = this;
-            vm.addToShoppingCartSrv.putRateInShoppingCart(rate);
-            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let rateOtherSva: any = vm.addToShoppingCartSrv.putRateInShoppingCartForSva(rate);
 
             let _search = {
                 body: {
                     ospCartItemReqPost: [
-                        shoppingCart.cartItem[0]
+                        rateOtherSva.cartItem[0]
                     ]
                 },
                 urlParams: ['ospShoppingCart'],
@@ -534,17 +580,18 @@ module OrangeFeSARQ.Services {
         changeRateListv2(originRate) {
             let srv = this;
             let ratesIdListString = '';
-            let tariffList = [];
+            let productSpecification = [];
+            let _headers = new HashMap<string, string>()
             return srv.httpCacheGeth(srv.genericConstant.productCatalog + srv.genericConstant.changeRateList + originRate,
-                {}, {})
+                {}, _headers)
                 .then((response) => {
-                    if (response && response.data.error === null && response.data.tariffList) {
-                        tariffList = response.data.tariffList;
+                    if (response && response.data.error === null && response.data.productSpecification) {
+                        productSpecification = response.data.productSpecification;
                         // Se recorre el array de tarifas disponibles para realizar el cambio
-                        tariffList.forEach((element, index) => {
+                        productSpecification.forEach((element, index) => {
                             // Se genera un string con cada uno de los siebelId de las tarifas, separados por coma
-                            ratesIdListString += (index === (tariffList.length - 1)) ?
-                                element.targetTariffId : element.targetTariffId + ',';
+                            ratesIdListString += (index === (productSpecification.length - 1)) ?
+                                element.id : element.id + ',';
                         });
                         return ratesIdListString;
                     }

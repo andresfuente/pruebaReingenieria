@@ -118,9 +118,9 @@ module OrangeFeSARQ.Services {
 
             return userService.getUser(searchUrl, value)
                 .then(
-                    (response) => {
-                        return response;
-                    }
+                (response) => {
+                    return response;
+                }
                 )
                 .catch(function (error) {
                     return error;
@@ -256,8 +256,10 @@ module OrangeFeSARQ.Services {
         findByName(name, array, value = 'value') {
             if (array && array.length >= 1) {
                 for (let i = 0; i < array.length; i++) {
-                    if (array[i].name.replace(" ", "") === name.replace(" ", "")) {
-                        return array[i][value];
+                    if (array[i].name !== null) {
+                        if (array[i].name.replace(" ", "") === name.replace(" ", "")) {
+                            return array[i][value];
+                        }
                     }
                 }
                 return null;
@@ -266,8 +268,10 @@ module OrangeFeSARQ.Services {
 
         findByInArray(array, value, campo = 'name') {
             for (let i = 0; i < array.length; i++) {
-                if (array[i][campo].replace(" ", "") === value.replace(" ", "")) {
-                    return array[i];
+                if (array[i].name !== null) {
+                    if (array[i][campo].replace(" ", "") === value.replace(" ", "")) {
+                        return array[i];
+                    }
                 }
             }
             return null;
@@ -979,11 +983,11 @@ module OrangeFeSARQ.Services {
                         isPack = true;
                     }
 
-                    if(ratePC && ratePC.productSpecCharacteristic && ratePC.productSpecCharacteristic.length > 0
-                     && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue.length > 0) {
+                    if (ratePC && ratePC.productSpecCharacteristic && ratePC.productSpecCharacteristic.length > 0
+                        && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue.length > 0) {
                         ranges = ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue[0].value;
                     }
-                    
+
                     /* if (ratePC && ratePC.productSpecCharacteristic) {
                         ranges = _.find(ratePC.productSpecCharacteristic, (spec: any) => {
                             return spec.name === 'VALORNEGOCIO';
@@ -1011,7 +1015,8 @@ module OrangeFeSARQ.Services {
                         clientData.principalLine = {
                             number: info.msisdn,
                             siebelCode: info.siebelCode,
-                            pack: info.pack
+                            pack: info.pack,
+                            bundle: info.bundle
                         };
                         sessionStorage.setItem('clientData', JSON.stringify(clientData));
                     }
@@ -1068,14 +1073,14 @@ module OrangeFeSARQ.Services {
         }
 
         /**
-               * @ngdoc service
-               * @name services.Controllers:Services#getCustomerCharacteristic
-               * @param {string} characteristicArray características de un cliente en el customerView
-               * @param {name} products name de una característica específica
-               * @methodOf OrangeFeSARQ.Services.Utils
-               * @description
-               * Devuelve valor correspondiente al name cado del characteristic del customerView
-               */
+         * @ngdoc service
+         * @name services.Controllers:Services#getCustomerCharacteristic
+         * @param {string} characteristicArray características de un cliente en el customerView
+         * @param {name} products name de una característica específica
+         * @methodOf OrangeFeSARQ.Services.Utils
+         * @description
+         * Devuelve valor correspondiente al name cado del characteristic del customerView
+         */
         getCustomerCharacteristic(characteristicArray: Array<{ name: string, value: string }>, name: string): string {
             let vm = this;
 

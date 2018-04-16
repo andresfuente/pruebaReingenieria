@@ -17,6 +17,7 @@ module ratesComparator.Models {
         public ratePriceTaxIncludedPromotional: number;
         public ratePricePromotional: number;
         public paymentsNumber: number;
+        public typeService: string;
         public terminals: Array<ratesComparator.Models.Terminal>;
 
         /**
@@ -42,6 +43,7 @@ module ratesComparator.Models {
             this.ratePriceTaxIncludedPromotional = rate.ratePriceTaxIncludedPromotional;
             this.ratePricePromotional = rate.ratePricePromotional;
             this.description = rate.description;
+            this.typeService = rate.typeService;
             this.terminals = [];
         }
     }
@@ -83,8 +85,12 @@ module ratesComparator.Models {
         public uniquePaidFree: number;
         public monthlyPriceFree: number;
         public initialPriceFree: number;
-        public IMEI;
+        public IMEI: string;
+        public stock: number;
         public error: boolean;
+        public cpSiebel : string;
+        public cpDescription : string;
+        public cpDuration : string;
 
         public selected = false;
         public plazos = false;
@@ -110,10 +116,18 @@ module ratesComparator.Models {
             this.insuranceSelected = terminal.insuranceSelected;
             this.srcImage = terminal.srcImage;
             this.name = terminal.name;
+            this.cpSiebel = terminal.cpSiebel;
+            this.cpDescription = terminal.cpDescription;
+            this.cpDuration = terminal.cpDuration;
 
-            if(terminal.IMEI) {
+            if (terminal.stock) {
+                this.stock = terminal.stock;
+            }
+
+            if (terminal.IMEI) {
                 this.IMEI = terminal.IMEI;
             }
+
             let priceItem: ratesComparator.Models.OrangeMosaicFileTerminalFileIPriceItem;
             let filePrice: ratesComparator.Models.OrangeMosaicFileTerminalFilePrice;
 

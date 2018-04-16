@@ -54,11 +54,17 @@ module OrangeFeSARQ.Constant {
         .service('bscsToSiebelSrv', OrangeFeSARQ.Services.BscsToSiebelSrv)
         .service('shoppingCartSrv', OrangeFeSARQ.Services.ShoppingCartSrv)
         .service('RatesParentSrv', OrangeFeSARQ.Services.RatesParentSrv)
-        .service('rateInfoPopupSrv', rateInfoPopup.Services.RateInfoPopupSrv)  
+        .service('rateInfoPopupSrv', rateInfoPopup.Services.RateInfoPopupSrv)
         .service('productCatalogV2Srv', OrangeFeSARQ.Services.ProductCatalogV2Srv)
         .service('ratesComparatorSrv', ratesComparator.Services.RatesComparatorSrv)
         .service('reservePopupSrv', reservePopup.Services.ReservePopupSrv)
-        
+        .service('automaticChangesSrv', OrangeFeSARQ.Services.AutomaticChangesSrv)
+        .service('deviceCatalogSrv', OrangeFeSARQ.Services.DeviceCatalogSrv)
+        .service('bankAccountSrv', OrangeFeSARQ.Services.BankAccountSrv)
+        .service('MosaicFileSrv', OrangeFeSARQ.Services.MosaicFileSrv)
+        .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)  
+        .service('documentValidatorSrv', OrangeFeSARQ.Services.DocumentValidatorSrv)     
+        .service('configSrv', OrangeFeSARQ.Services.ConfigSrv) 
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
@@ -157,7 +163,7 @@ module OrangeFeSARQ.Constant {
             pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
             prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
             fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
- 
+
         };
         fillCurrent();
     } else {
@@ -175,11 +181,11 @@ module OrangeFeSARQ.Constant {
                 }
             });
     }
- 
+
     let prepaid: boolean;
     let pospaid: boolean;
     let fixed: boolean;
- 
+
     $rootScope.$watch(
         () => msisdnStore.msisdn,
         (newValue, oldValue) => {

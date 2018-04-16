@@ -78,8 +78,8 @@ module OrangeFeSARQ.Services {
          * @description
          * Obtiene los datos del specification de un producto a través de Solr
          */
-          getProductCatalogSpecificationV2(contractType, category, segment, commercialAction,
-          productType, isExistingCustomer, idOfertaComercialList, componentName) {
+        getProductCatalogSpecificationV2(contractType, category, segment, commercialAction,
+            productType, isExistingCustomer, idOfertaComercialList, componentName) {
             let vm = this;
 
             let _search = {
@@ -103,31 +103,31 @@ module OrangeFeSARQ.Services {
                     return error;
                 });
         }
- 
+
         getProductCatalogPrincipalLineV2(channel, contractType, category, segment, commercialAction, productType, componentName) {
-              let vm = this;
-  
-              let _search = {
-                  queryParams: {
-                      channel: channel,
-                      contractType: contractType,
-                      category: category,
-                      segment: segment,
-                      commercialAction: commercialAction,
-                      productType: productType,
-                      componentName: componentName
-                  },
-                  urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
-              };
-  
-              return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, componentName)
-                  .then((response) => {
-                      return response.data;
-                  })
-                  .catch((error) => {
-                      return error;
-                  });
-          }
+            let vm = this;
+
+            let _search = {
+                queryParams: {
+                    channel: channel,
+                    contractType: contractType,
+                    category: category,
+                    segment: segment,
+                    commercialAction: commercialAction,
+                    productType: productType,
+                    componentName: componentName
+                },
+                urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
+            };
+
+            return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, componentName)
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((error) => {
+                    return error;
+                });
+        }
 
         /**
          * @ngdoc method
@@ -139,13 +139,16 @@ module OrangeFeSARQ.Services {
          * @description
          * Obtiene los datos de los SVAS recomendados de una tarifa
          */
-        getProductCatalogSVAS(svasList, componentName) {
+        getProductCatalogSVAS(svasList, isExistingCustomer, segment, commercialAction, componentName) {
             let vm = this;
 
             let _search = {
                 queryParams: {
+                    commercialAction: commercialAction,
                     productType: 'sva',
-                    idSvaList: svasList
+                    idSvaList: svasList,
+                    segment: segment,
+                    isExistingCustomer: isExistingCustomer
                 },
                 urlParams: [vm.genericConstant.brand, 'productOfferingv2View/OSP']
             };
@@ -169,13 +172,16 @@ module OrangeFeSARQ.Services {
          * @description
          * Obtiene los datos de los SVAS recomendados de una tarifa
          */
-        getSpecificationSVAS(svasList, componentName) {
+        getSpecificationSVAS(svasList, isExistingCustomer, segment, commercialAction, componentName) {
             let vm = this;
 
             let _search = {
                 queryParams: {
+                    commercialAction: commercialAction,
                     productType: 'sva',
-                    idSvaList: svasList
+                    idSvaList: svasList,
+                    segment: segment,
+                    isExistingCustomer: isExistingCustomer
                 },
                 urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
             };
