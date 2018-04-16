@@ -112,11 +112,20 @@ module ratesParent.Models {
 
             if (rateData.productSpecCharacteristic) {
                 rateData.productSpecCharacteristic.forEach(element => {
-                    if (element.name === 'CARACTERISTICA' || element.name === 'CARACTERISTICATECNOLOGIA') {
+                    if (element.ospCategory === 'highlight') {
                         let raProductBundle: RatesProductBundle =
-                        new RatesProductBundle(element.ospImagen, element.description, element.name);
+                        new RatesProductBundle(element.attachment ? element.attachment.href : '',
+                                                element.name,
+                                                element.ospCategory);
                         this.productBundle.push(raProductBundle);
                     }
+                    /* if (element.name === 'CARACTERISTICATECNOLOGIA') {
+                        let raProductBundle: RatesProductBundle =
+                        new RatesProductBundle(element.attachment ? element.attachment.href : '',
+                                                element.name,
+                                                element.ospCategory);
+                        this.productBundle.push(raProductBundle);
+                    } */
                 });
             }
             // Se obtienen los Id's de los SVA de la tarifa
@@ -395,13 +404,14 @@ module ratesParent.Models {
                                 currentSVAOffering.productSpecification.id === currentSVA.id) {
                                 if (currentSVAOffering.productOfferingPrice) {
                                     currentSVAOffering.productOfferingPrice.forEach(priceElement => {
+                                        svaPriceItem = new RatePriceItem();
                                         if (priceElement.priceType.toLowerCase() === 'pago aplazado') {
                                             priceElement.price.forEach(currentPrice => {
                                                 // Precio sin iva si es residencial
                                                 if (customerSegment.toLocaleLowerCase() === 'residencial') {
-                                                    sva.price = currentPrice.dutyFreeAmount;
-                                                } else { // Precio con iva si es empresa o autónomo 
                                                     sva.price = currentPrice.taxIncludedAmount;
+                                                } else { // Precio con iva si es empresa o autónomo 
+                                                    sva.price = currentPrice.dutyFreeAmount;
                                                 }
                                                 // ItemPrice
                                                 svaPriceItem.priceType = priceElement.priceType;
