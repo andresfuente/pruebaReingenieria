@@ -409,9 +409,9 @@ module ratesParent.Models {
                                             priceElement.price.forEach(currentPrice => {
                                                 // Precio sin iva si es residencial
                                                 if (customerSegment.toLocaleLowerCase() === 'residencial') {
-                                                    sva.price = currentPrice.dutyFreeAmount;
-                                                } else { // Precio con iva si es empresa o autónomo 
                                                     sva.price = currentPrice.taxIncludedAmount;
+                                                } else { // Precio con iva si es empresa o autónomo 
+                                                    sva.price = currentPrice.dutyFreeAmount;
                                                 }
                                                 // ItemPrice
                                                 svaPriceItem.priceType = priceElement.priceType;
