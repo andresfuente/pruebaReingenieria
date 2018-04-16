@@ -339,10 +339,9 @@ module OrangeFeSARQ.Services {
         ) {
             let srv = this;
             let params;
-            let headers = {
-                'Geolocation-local': srv.storeProvince.toUpperCase(),
-                'Geolocation-client': stateOrProvinceBinding ? stateOrProvinceBinding.toUpperCase() : srv.storeProvince.toUpperCase
-            };
+            let headers = new HashMap<string, string>();
+            headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            headers.set('Geolocation-client', stateOrProvinceBinding ? stateOrProvinceBinding.toUpperCase() : srv.storeProvince.toUpperCase());
 
             params = {
                 channel: channel,
@@ -769,7 +768,7 @@ module OrangeFeSARQ.Services {
             sfid: string
         ) {
             let srv = this;
-            let headers = {};
+            let headers = new HashMap<string, string>();
             let params;
             params = {
                 channel: channel,
