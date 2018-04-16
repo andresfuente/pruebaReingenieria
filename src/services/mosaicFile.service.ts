@@ -339,10 +339,18 @@ module OrangeFeSARQ.Services {
         ) {
             let srv = this;
             let params;
-            let headers = {
-                'Geolocation-local': srv.storeProvince.toUpperCase(),
-                'Geolocation-client': stateOrProvinceBinding ? stateOrProvinceBinding.toUpperCase() : srv.storeProvince.toUpperCase
-            };
+
+            //Cabeceras Pangea
+            // let _headers = {
+            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
+            //     'Geolocation-client': stateOrProvinceBinding ? stateOrProvinceBinding.toUpperCase() : srv.storeProvince.toUpperCase
+            // };
+
+            //Cabeceras FdC
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', stateOrProvinceBinding);
+
 
             params = {
                 channel: channel,
@@ -409,7 +417,7 @@ module OrangeFeSARQ.Services {
                 mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
 
                 if (terminalName) {
-                    srv.httpCacheGeth(srv.genericConstant.getTerminalDetails, { queryParams: params }, headers, 'mosaicFile')
+                    srv.httpCacheGeth(srv.genericConstant.getTerminalDetails, { queryParams: params }, _headers, 'mosaicFile')
                         .then((response) => {
                             // Si la respuesta es vacia se muestra el mensaje de error
                             if (response.data.length === 0) {
