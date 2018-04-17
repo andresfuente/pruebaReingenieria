@@ -33,7 +33,7 @@ module OrangeFeSARQ.Services {
          */
         generateShoppingCart(body, componentName: string) {
             let vm = this;
-
+            let _headers = vm.getParentSfid();
             let _search = {
                 body: {
                     ospCartItemReqPost: [
@@ -42,8 +42,7 @@ module OrangeFeSARQ.Services {
                 },
                 urlParams: ['ospShoppingCart']
             };
-
-            return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName)
+            return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
                 .then(
                     (response) => {
                         return response.data;
@@ -67,12 +66,13 @@ module OrangeFeSARQ.Services {
         putOspShoppingCart(body, id: string, componentName: string) {
             let vm = this;
 
+            let _headers = vm.getParentSfid();
             let _search = {
                 body: body,
                 urlParams: ['ospShoppingCart', id]
             };
 
-            return vm.httpPut(vm.genericConstant.shoppingCart, _search, componentName)
+            return vm.httpPut(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
                 .then(
                     (response) => {
                         return response.data;
@@ -98,11 +98,12 @@ module OrangeFeSARQ.Services {
         getOspShoppingCart(id: string, componentName: string) {
             let vm = this;
 
+            let _headers = vm.getParentSfid();
             let _search = {
                 urlParams: ['ospShoppingCart', id]
             };
 
-            return vm.httpCacheGett(vm.genericConstant.shoppingCart, _search, componentName)
+            return vm.httpCacheGeth(vm.genericConstant.shoppingCart, _search, _headers, componentName)
                 .then(
                     (response) => {
                         return response.data;
@@ -128,12 +129,13 @@ module OrangeFeSARQ.Services {
         getSvas(body, componentName: string) {
             let vm = this;
 
+            let _headers = vm.getParentSfid();
             let _search = {
                 body: body,
                 urlParams: ['ospShoppingCart', 'cartItemProposal']
             };
 
-            return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName)
+            return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
                 .then(
                     (response) => {
                         return response.data;
@@ -142,6 +144,17 @@ module OrangeFeSARQ.Services {
                         throw error.data;
                     }
                 );
+        }
+
+        getParentSfid() {
+            let shopInfo;
+            let _headers;
+            shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
+            if(shopInfo && shopInfo.parentSfid) {
+                _headers = new HashMap<string, string>();
+                _headers.set('parentSfid', shopInfo.parentSfid);
+            }
+            return _headers;
         }
     }
 
