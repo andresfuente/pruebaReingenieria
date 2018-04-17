@@ -231,8 +231,8 @@ module OrangeFeSARQ.Services {
 
             productItem = {
                 'href': device.srcImage,
-                'name': device.name,
-                'description': device.litSubTitle,
+                'name': device.litTitle,
+                'description': device.litSubTitle ? device.litSubTitle : device.description ,
                 'productRelationship': [{
                     'type': 'terminal'
                 }],
@@ -272,7 +272,7 @@ module OrangeFeSARQ.Services {
                 'sTerminalId': (sTerminalLastId + 1),
                 'action': 'New',
                 'siebelId': device.siebelId,
-                'name': device.brand,
+                'name': device.litTitle,
                 'description': device.litSubTitle,
                 'brand': device.litTitle,
                 'insuranceSiebelId': device.insuranceSiebelId,
@@ -1025,11 +1025,11 @@ module OrangeFeSARQ.Services {
                         price: {
                             dutyFreeAmount: {
                                 unit: 'EUR',
-                                value: device.insurancePriceFree
+                                value: device.insurancePriceFree ?  device.insurancePriceFree  : device.litInsurancePaid
                             },
                             taxIncludedAmount: {
                                 unit: 'EUR',
-                                value: device.insurancePrice
+                                value: device.insurancePrice ? device.insurancePrice : device.litInsurancePaid
                             }
                         },
                         taxRate: 0.21,
