@@ -116,7 +116,8 @@ module ratesParent.Models {
                         let raProductBundle: RatesProductBundle =
                         new RatesProductBundle(element.attachment ? element.attachment.href : '',
                                                 element.name,
-                                                element.ospCategory);
+                                                element.ospCategory,
+                                                element.productSpecSubcharacteristic);
                         this.productBundle.push(raProductBundle);
                     }
                     /* if (element.name === 'CARACTERISTICATECNOLOGIA') {
@@ -270,11 +271,35 @@ module ratesParent.Models {
         public image: string;
         public title: string;
         public type: string;
+        public subcharacteristic: RatesSubcharacteristic[] = [];
 
-        constructor(src: string, name: string, type: string) {
+        constructor(src: string, name: string, type: string, subchar) {
             this.image = src;
             this.title = name;
             this.type = type;
+            this.subcharacteristic = [];
+
+            if (subchar && subchar.length > 0) {
+                let elem : RatesSubcharacteristic;
+
+                for (let i = 0; i < subchar.length; i++) {
+                    this.subcharacteristic.push(
+                        new RatesSubcharacteristic(subchar[i].name, subchar[i].description, subchar[i].ospLargeDescription)
+                    );
+                }
+            }
+        }
+    }
+
+    export class RatesSubcharacteristic {
+        public name: string;
+        public description: string;
+        public largeDescription: string;
+
+        constructor(name: string, description: string, largeDescription: string) {
+            this.name = name;
+            this.description = description;
+            this.largeDescription = largeDescription;
         }
     }
 

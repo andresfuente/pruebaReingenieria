@@ -736,6 +736,14 @@ module OrangeFeSARQ.Services {
                             dataOT.relatedRateBusiness = commercialData[commercialActIndex].originRate;
                         }
                         break;
+                    case 'best_renove':
+                        // Si es mejorRenove -> meter la campaña
+                        ///dataOT = new mosaicFile.Models.DataOT();
+                        dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
+                        dataOT.ospCartItemType = 'renove';
+                        dataOT.isExistingCustomer = '';
+                        dataOT.channel = 'noChannel';
+                        break;
 
                     default: dataOT.priceName = 'primario';
                 }

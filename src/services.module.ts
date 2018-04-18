@@ -66,6 +66,11 @@ module OrangeFeSARQ.Constant {
         .service('documentValidatorSrv', OrangeFeSARQ.Services.DocumentValidatorSrv)     
         .service('configSrv', OrangeFeSARQ.Services.ConfigSrv) 
         .service('discriminatorSrv', OrangeFeSARQ.Services.DiscriminatorSrv)
+        .service('deleteRatesPopupSrv', OrangeFeSARQ.Services.DeleteRatesPopupSrv)
+        .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)
+        .service('documentValidatorSrv', OrangeFeSARQ.Services.DocumentValidatorSrv)
+
+    
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,

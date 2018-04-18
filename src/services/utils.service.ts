@@ -974,10 +974,13 @@ module OrangeFeSARQ.Services {
 
                     // Buscamos en el productCatalog el resto de datos alineando las APIs con el "tmcode" (código de las tarifas)
                     let isPack = false;
+                    let ratePC;
 
-                    let ratePC = _.find(PC, (characteristic: any) => {
-                        return (characteristic.id === bundleSiebelCode.value);
-                    });
+                    if (bundleSiebelCode && bundleSiebelCode.value) {
+                        ratePC = _.find(PC, (characteristic: any) => {
+                            return (characteristic.id === bundleSiebelCode.value);
+                        });
+                    }
 
                     if (ratePC && ratePC.ospFraseComercial && ratePC.ospFraseComercial !== null) {// la linea ppal tiene que ser conv
                         isPack = true;
