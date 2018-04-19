@@ -31,14 +31,15 @@ module OrangeFeSARQ.Services {
          * Crea/valida el carrito
          * @returns {object} Devuelve una promesa con el response.
          */
-        generateShoppingCart(body, componentName: string) {
+        generateShoppingCart(body, componentName: string, customer?) {
             let vm = this;
             let _headers = vm.getParentSfid();
             let _search = {
                 body: {
                     ospCartItemReqPost: [
                         body
-                    ]
+                    ],
+                    customer
                 },
                 urlParams: ['ospShoppingCart']
             };
