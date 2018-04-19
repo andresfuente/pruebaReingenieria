@@ -18,6 +18,8 @@ module ratesComparator.Models {
         public ratePricePromotional: number;
         public paymentsNumber: number;
         public typeService: string;
+        public taxRate : number;
+        public taxRateName : string;
         public terminals: Array<ratesComparator.Models.Terminal>;
 
         /**
@@ -44,6 +46,8 @@ module ratesComparator.Models {
             this.ratePricePromotional = rate.ratePricePromotional;
             this.description = rate.description;
             this.typeService = rate.typeService;
+            this.taxRate = rate.taxRate;
+            this.taxRateName = rate.taxRateName;
             this.terminals = [];
         }
     }
