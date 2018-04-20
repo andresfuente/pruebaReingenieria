@@ -22,7 +22,7 @@ module OrangeFeSARQ.Services {
             vm.apiBaseURL = vm.genericConstant.documentValidator;
         }
 
-        public documentValidation(brand: string, lineNumber: string, documentType: string, documentId: string): ng.IPromise<documentValidator.Models.PostResponse> {
+        public documentValidation(brand: string, lineNumber: string, documentType: string, documentId: string): ng.IPromise<documentValidatorFCU.Models.PostResponse> {
             let vm = this;
             let url = vm.apiBaseURL + '/' + brand + '/validator/' + lineNumber + '/' + documentType + '/' + documentId;
 
