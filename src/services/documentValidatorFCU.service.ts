@@ -2,11 +2,11 @@ module OrangeFeSARQ.Services {
     'use strict';
     /**
      * @ngdoc service
-     * @name DocumentValidatorSrv.DocumentValidatorSrv
+     * @name DocumentValidatorFCUSrv.DocumentValidatorSrv
      * @description
      *
      */
-    export class DocumentValidatorSrv extends OrangeFeSARQ.Services.ParentService {
+    export class DocumentValidatorFCUSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
         public apiBaseURL: string;
@@ -33,7 +33,7 @@ module OrangeFeSARQ.Services {
         }
 
     }
-    angular.module('documentValidatorModule', [])
-        .service('documentValidatorSrv', OrangeFeSARQ.Services.DocumentValidatorSrv);
+    angular.module('documentValidatorFCUModule', [])
+        .service('documentValidatorFCUSrv', OrangeFeSARQ.Services.DocumentValidatorFCUSrv);
 
 }

@@ -63,12 +63,11 @@ module OrangeFeSARQ.Constant {
         .service('bankAccountSrv', OrangeFeSARQ.Services.BankAccountSrv)
         .service('MosaicFileSrv', OrangeFeSARQ.Services.MosaicFileSrv)
         .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)  
-        .service('documentValidatorSrv', OrangeFeSARQ.Services.DocumentValidatorSrv)     
+        .service('documentValidatorFCUSrv', OrangeFeSARQ.Services.DocumentValidatorFCUSrv)     
         .service('configSrv', OrangeFeSARQ.Services.ConfigSrv) 
         .service('discriminatorSrv', OrangeFeSARQ.Services.DiscriminatorSrv)
         .service('deleteRatesPopupSrv', OrangeFeSARQ.Services.DeleteRatesPopupSrv)
         .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)
-        .service('documentValidatorSrv', OrangeFeSARQ.Services.DocumentValidatorSrv)
 
     
 
