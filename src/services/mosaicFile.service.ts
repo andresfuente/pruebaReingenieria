@@ -583,7 +583,7 @@ module OrangeFeSARQ.Services {
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
-            defaultData.profile = localStorage.getItem('profile') ? JSON.parse(localStorage.getItem('profile')) : PDV ;
+            defaultData.profile = localStorage.getItem('profile') ? JSON.parse(localStorage.getItem('profile')) : 'PDV' ;
 
             // Si el segmento y/o el tipo de acto está en el clientData, lo recogemos
             if (clientData) {
