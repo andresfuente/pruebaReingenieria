@@ -54,7 +54,7 @@ module OrangeFeSARQ.Services {
          * Método para mapear la información a partir del archivo de mapeos y el sessionStorage
          */
 
-        getData(mapeosDE, sessionClientData: any, sessionLoginData: any, sessionShoppingCart: any) {
+        getData(mapeosDE, sessionClientData: any, sessionLoginData: any, sessionPrescoring: any, sessionShoppingCart: any) {
             let vm = this;
             let responseObj = [];
             // Recorro el archivo de mapeos (la parte de datos de cliente) para aplicar la lógica correspondiente
@@ -169,6 +169,61 @@ module OrangeFeSARQ.Services {
                 // Si no hay ni dependencias ni equivalencias creo un objeto con el dato extraido directamente de session
                 if (flagDep === false && flagEquiv === false) {
                     vm.insertarCampo(dCC, dDE, sessionLoginData[cont], contene, responseObj);
+                }
+            });
+
+            _.each(mapeosDE.prescoring, function (value) {
+                let dCC = value.datoCc;
+                let dDE = value.datoDe;
+                let cont = value.sessionOrigin;
+                let contene = value.contenedor;
+                let valueDep;
+                let lastObj;
+                let flagDep = false;
+                let flagEquiv = false;
+
+                // Recorro el array de dependencias dentro del archivo de mapeos
+                if (value.dependencias) {
+                    // Recorro las dependencias
+                    for (let i = 0; i <= value.dependencias.length; i++) {
+                        // Cuando es la primera iteracion coge el valor del sessionOrigin para sacarlo del session
+                        if(sessionPrescoring[cont] === null) { // Si el valor esta vacio se rellena del mismo modo en <CONTENIDO>
+                            valueDep = '';
+                        } else {
+                            if (i === 0) {
+                                // Recojo en la primera iteracion el primer nivel de profundidad
+                                valueDep = sessionPrescoring[cont];
+                                lastObj = valueDep;
+                            } else {
+                                // Cuando deja de ser la primera iteración recojo los siguientes valores en los siguientes niveles
+                                if(lastObj[value.dependencias[i - 1]]) {
+                                    valueDep = lastObj[value.dependencias[i - 1]];
+                                    lastObj = valueDep;
+                                } else {
+                                    valueDep = '';
+                                }
+                            }
+                        }
+                    }
+                    // Añadimos el objeto al array
+                    vm.insertarCampo(dCC, dDE, valueDep, contene, responseObj);
+                }
+
+                if (valueDep !== undefined) {
+                    flagDep = true;
+                }
+
+                // Recorro el array de equivalencias dentro del archivo de mapeos
+                _.each(value.equivalencias, function (value) {
+                    // Si existe valueDep creo un objeto que matcheo posteriormente con session
+                    if (value.origen === sessionPrescoring[cont]) {
+                        vm.insertarCampo(dCC, dDE, value.value, contene, responseObj);
+                    }
+                    flagEquiv = true;
+                });
+                // Si no hay ni dependencias ni equivalencias creo un objeto con el dato extraido directamente de session
+                if (flagDep === false && flagEquiv === false) {
+                    vm.insertarCampo(dCC, dDE, sessionPrescoring[cont], contene, responseObj);
                 }
             });
 
