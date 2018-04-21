@@ -290,6 +290,11 @@ module OrangeFeSARQ.Services {
                             let seguro: any = _.find(selectedOptions[i].cartItem, (data: any) => {
                                 return _.find(data.product.productRelationship, { 'type': 'seguro' })
                             });
+
+                            let tarifas: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
+                                return _.find(data.product.productRelationship, {'type': 'tarifa' })
+                            });
+
                             if (terminals && terminals.length > 0) {
                                 for (let j = 0; j < terminals.length; j++) {
                                     let type = _.find(terminals[j].product.characteristic, (data: any) => {
@@ -330,7 +335,29 @@ module OrangeFeSARQ.Services {
                                     }
 
                                 }
-                            };
+                            }
+
+                            if (tarifas && tarifas.length > 0) {
+                                for (let j = 0; j < tarifas.length; j++) {
+                                    if (cont === 'dselAgrupacionTarifaVozSC1') {
+                                        vm.insertarCampo(dCC, dDE, tarifas[j].product.name, contene, responseObj);
+                                    }
+
+                                    if (cont === 'dTarifaSC1') {
+                                        vm.insertarCampo(dCC, dDE, tarifas[j].product.name, contene, responseObj);
+                                    }
+
+                                    if (cont === 'dselTarifaDatosSC1') {
+                                        vm.insertarCampo(dCC, dDE, tarifas[j].product.name, contene, responseObj);
+                                    }
+
+                                    if (cont === 'dTipoPagoSC1') {
+                                        vm.insertarCampo(dCC, dDE, '', contene, responseObj);
+                                    }
+
+                                }
+                            }
+
                             numOferta++;
                         }
                     }
