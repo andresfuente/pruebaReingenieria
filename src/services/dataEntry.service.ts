@@ -94,6 +94,15 @@ module OrangeFeSARQ.Services {
                             // if (dDE  === 'dprov') {
                             //     valueDep = valueDep.stateOrProvince.toUpperCase();
                             // }
+                            if (dDE === 'dtitulApoCargo' && valueDep.value) {
+                                if (valueDep.value === 'Ama de Casa') {
+                                    valueDep.value = 'AMA_DE_CASA';
+                                } else if (valueDep.value === 'Otros') {
+                                    valueDep.value = 'OTROS';
+                                } else {
+                                    valueDep.value = '';
+                                }
+                            }
                         }
                     }
                     // Añadimos el objeto al array
@@ -206,8 +215,17 @@ module OrangeFeSARQ.Services {
                             }
                         }
                     }
-                    // Añadimos el objeto al array
-                    vm.insertarCampo(dCC, dDE, valueDep, contene, responseObj);
+                    if (dDE === 'dTipoConDonanT') {
+                        if (sessionPrescoring[cont][0].ospCartItemType.toUpperCase() !== 'PORTABILIDAD') {
+                            vm.insertarCampo(dCC, dDE, 'TODOS', contene, responseObj);
+                        } else {
+                            vm.insertarCampo(dCC, dDE, valueDep, contene, responseObj);
+                        }
+
+                    } else {
+                        // Añadimos el objeto al array
+                        vm.insertarCampo(dCC, dDE, valueDep, contene, responseObj);
+                    }
                 }
 
                 if (valueDep !== undefined) {
@@ -341,14 +359,14 @@ module OrangeFeSARQ.Services {
 
                             if (tarifas && tarifas.length > 0) {
                                 for (let j = 0; j < tarifas.length; j++) {
-                                    let familia  = '';
+                                    let familia = '';
                                     let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                                     if (commercialData && commercialData.length) {
                                         for (let comAct = 0; comAct < commercialData.length; comAct++) {
                                             for (let rate = 0; rate < commercialData[comAct].rates.length; rate++) {
                                                 if (commercialData[comAct].rates[rate].siebelId === tarifas[j].id) {
                                                     familia = commercialData[comAct].rates[rate].family;
-                                                    if (commercialData[comAct].rates[rate].typeService === 'mifijo') {
+                                                    if (commercialData[comAct].rates[rate].typeService === 'mifijo' && terminals) {
                                                         typePrice = 'subvencionado';
                                                     }
                                                 }
