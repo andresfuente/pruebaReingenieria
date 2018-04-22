@@ -366,7 +366,8 @@ module OrangeFeSARQ.Services {
                                             for (let rate = 0; rate < commercialData[comAct].rates.length; rate++) {
                                                 if (commercialData[comAct].rates[rate].siebelId === tarifas[j].id) {
                                                     familia = commercialData[comAct].rates[rate].family;
-                                                    if (commercialData[comAct].rates[rate].typeService === 'mifijo' && terminals) {
+                                                    if (commercialData[comAct].rates[rate].typeService === 'mifijo' &&
+                                                    commercialData[comAct].terminals.length) {
                                                         typePrice = 'subvencionado';
                                                     }
                                                 }
