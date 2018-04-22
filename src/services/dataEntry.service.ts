@@ -74,7 +74,7 @@ module OrangeFeSARQ.Services {
                     // Recorro las dependencias
                     for (let i = 0; i <= value.dependencias.length; i++) {
                         // Cuando es la primera iteracion coge el valor del sessionOrigin para sacarlo del session
-                        if(sessionClientData[cont] === null ||
+                        if (sessionClientData[cont] === null ||
                             sessionClientData[cont] === undefined) { // Si el valor esta vacio se rellena del mismo modo en <CONTENIDO>
                             valueDep = '';
                         } else {
@@ -84,7 +84,7 @@ module OrangeFeSARQ.Services {
                                 lastObj = valueDep;
                             } else {
                                 // Cuando deja de ser la primera iteración recojo los siguientes valores en los siguientes niveles
-                                if(lastObj[value.dependencias[i - 1]]) {
+                                if (lastObj[value.dependencias[i - 1]]) {
                                     valueDep = lastObj[value.dependencias[i - 1]];
                                     lastObj = valueDep;
                                 } else {
@@ -133,7 +133,7 @@ module OrangeFeSARQ.Services {
                     // Recorro las dependencias
                     for (let i = 0; i <= value.dependencias.length; i++) {
                         // Cuando es la primera iteracion coge el valor del sessionOrigin para sacarlo del session
-                        if(sessionLoginData[cont] === null) { // Si el valor esta vacio se rellena del mismo modo en <CONTENIDO>
+                        if (sessionLoginData[cont] === null) { // Si el valor esta vacio se rellena del mismo modo en <CONTENIDO>
                             valueDep = '';
                         } else {
                             if (i === 0) {
@@ -142,7 +142,7 @@ module OrangeFeSARQ.Services {
                                 lastObj = valueDep;
                             } else {
                                 // Cuando deja de ser la primera iteración recojo los siguientes valores en los siguientes niveles
-                                if(lastObj[value.dependencias[i - 1]]) {
+                                if (lastObj[value.dependencias[i - 1]]) {
                                     valueDep = lastObj[value.dependencias[i - 1]];
                                     lastObj = valueDep;
                                 } else {
@@ -188,7 +188,7 @@ module OrangeFeSARQ.Services {
                     // Recorro las dependencias
                     for (let i = 0; i <= value.dependencias.length; i++) {
                         // Cuando es la primera iteracion coge el valor del sessionOrigin para sacarlo del session
-                        if(sessionPrescoring[cont] === null) { // Si el valor esta vacio se rellena del mismo modo en <CONTENIDO>
+                        if (sessionPrescoring[cont] === null) { // Si el valor esta vacio se rellena del mismo modo en <CONTENIDO>
                             valueDep = '';
                         } else {
                             if (i === 0) {
@@ -197,7 +197,7 @@ module OrangeFeSARQ.Services {
                                 lastObj = valueDep;
                             } else {
                                 // Cuando deja de ser la primera iteración recojo los siguientes valores en los siguientes niveles
-                                if(lastObj[value.dependencias[i - 1]]) {
+                                if (lastObj[value.dependencias[i - 1]]) {
                                     valueDep = lastObj[value.dependencias[i - 1]];
                                     lastObj = valueDep;
                                 } else {
@@ -293,7 +293,7 @@ module OrangeFeSARQ.Services {
                             });
 
                             let tarifas: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
-                                return _.find(data.product.productRelationship, {'type': 'tarifa' })
+                                return _.find(data.product.productRelationship, { 'type': 'tarifa' })
                             });
 
                             if (terminals && terminals.length > 0) {
@@ -334,7 +334,6 @@ module OrangeFeSARQ.Services {
                                             contene,
                                             responseObj);
                                     }
-
                                 }
                             } else {
                                 typePrice = 'solo sim';
@@ -342,8 +341,22 @@ module OrangeFeSARQ.Services {
 
                             if (tarifas && tarifas.length > 0) {
                                 for (let j = 0; j < tarifas.length; j++) {
+                                    let familia  = '';
+                                    let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                                    if (commercialData && commercialData.length) {
+                                        for (let comAct = 0; comAct < commercialData.length; comAct++) {
+                                            for (let rate = 0; rate < commercialData[comAct].rates.length; rate++) {
+                                                if (commercialData[comAct].rates[rate].siebelId === tarifas[j].id) {
+                                                    familia = commercialData[comAct].rates[rate].family;
+                                                    if (commercialData[comAct].rates[rate].typeService === 'mifijo') {
+                                                        typePrice = 'subvencionado';
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                     if (cont === 'dselAgrupacionTarifaVozSC1') {
-                                        vm.insertarCampo(dCC, dDE, tarifas[j].product.name, contene, responseObj);
+                                        vm.insertarCampo(dCC, dDE, familia, contene, responseObj);
                                     }
 
                                     if (cont === 'dTarifaSC1') {
@@ -355,18 +368,6 @@ module OrangeFeSARQ.Services {
                                     }
 
                                     if (cont === 'dTipoPagoSC1') {
-                                        let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                                        if(commercialData && commercialData.length) {
-                                            for(let comAct = 0; comAct < commercialData.length; comAct++) {
-                                                for(let rate = 0; rate < commercialData[comAct].rates.length; rate ++) {
-                                                    if(commercialData[comAct].rates[rate].siebelId === tarifas[j].id) {
-                                                        if(commercialData[comAct].rates[rate].typeService === 'mifijo') {
-                                                            typePrice = 'subvencionado';
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
                                         vm.insertarCampo(dCC, dDE, typePrice, contene, responseObj);
                                     }
 
