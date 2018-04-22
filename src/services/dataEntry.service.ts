@@ -74,7 +74,8 @@ module OrangeFeSARQ.Services {
                     // Recorro las dependencias
                     for (let i = 0; i <= value.dependencias.length; i++) {
                         // Cuando es la primera iteracion coge el valor del sessionOrigin para sacarlo del session
-                        if(sessionClientData[cont] === null) { // Si el valor esta vacio se rellena del mismo modo en <CONTENIDO>
+                        if(sessionClientData[cont] === null ||
+                            sessionClientData[cont] === undefined) { // Si el valor esta vacio se rellena del mismo modo en <CONTENIDO>
                             valueDep = '';
                         } else {
                             if (i === 0) {
@@ -335,6 +336,8 @@ module OrangeFeSARQ.Services {
                                     }
 
                                 }
+                            } else {
+                                typePrice = 'solo sim';
                             }
 
                             if (tarifas && tarifas.length > 0) {
@@ -352,7 +355,19 @@ module OrangeFeSARQ.Services {
                                     }
 
                                     if (cont === 'dTipoPagoSC1') {
-                                        vm.insertarCampo(dCC, dDE, '', contene, responseObj);
+                                        let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                                        if(commercialData && commercialData.length) {
+                                            for(let comAct = 0; comAct < commercialData.length; comAct++) {
+                                                for(let rate = 0; rate < commercialData[comAct].rates.length; rate ++) {
+                                                    if(commercialData[comAct].rates[rate].siebelId === tarifas[j].id) {
+                                                        if(commercialData[comAct].rates[rate].typeService === 'mifijo') {
+                                                            typePrice = 'subvencionado';
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        vm.insertarCampo(dCC, dDE, typePrice, contene, responseObj);
                                     }
 
                                 }
