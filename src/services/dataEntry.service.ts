@@ -367,23 +367,48 @@ module OrangeFeSARQ.Services {
                             if (tarifas && tarifas.length > 0) {
 
                                 for (let j = 0; j < tarifas.length; j++) {
-                                    let familia = '';
+                                    let agrupation = '';
                                     let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                                     if (commercialData && commercialData.length) {
                                         for (let comAct = 0; comAct < commercialData.length; comAct++) {
                                             for (let rate = 0; rate < commercialData[comAct].rates.length; rate++) {
                                                 if (commercialData[comAct].rates[rate].siebelId === tarifas[j].id) {
-                                                    familia = commercialData[comAct].rates[rate].family;
                                                     if (commercialData[comAct].rates[rate].typeService === 'mifijo' &&
-                                                    commercialData[comAct].terminals.length) {
+                                                        commercialData[comAct].terminals.length) {
                                                         typePrice = 'subvencionado';
+                                                    }
+                                                    if (sessionClientData.ospCustomerSegment && commercialData[comAct].rates[rate].type) {
+                                                        let segment = sessionClientData.ospCustomerSegment;
+                                                        let type = commercialData[comAct].rates[rate].type;
+                                                        let siebelId = commercialData[comAct].rates[rate].siebelId;
+                                                        if (type === 'Convergente' && segment === 'residencial') {
+                                                            agrupation = 'Love';
+                                                        } else if (type === 'Convergente' && segment === 'empresas') {
+                                                            agrupation = 'Love Negocio';
+                                                        } else if (type === 'Movil' && segment === 'residencial') {
+                                                            agrupation = 'Go';
+                                                        } else if (type === 'Movil' && segment === 'empresas') {
+                                                            agrupation = 'Go Negocio';
+                                                        } else if (siebelId === '1-OKX2HG') {
+                                                            agrupation = 'Ardilla';
+                                                        } else if (type === 'Fijo' && siebelId === '1-15VD39') {
+                                                            agrupation = 'Mi Fijo';
+                                                        } else if (type === 'Fijo' &&
+                                                            (siebelId === '1-15PLF2' || siebelId === '1-1C3JRF')) {
+                                                                agrupation = 'Mi Fijo Pro';
+                                                        } else if (type === 'Fijo' && segment === 'residencial') {
+                                                            agrupation = 'IEW';
+                                                        } else if (type === 'Fijo' && sessionClientData.ospCustomerSegment === 'empresas') {
+                                                            agrupation = 'IEW Pro';
+                                                        }
+
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                     if (cont === 'dselAgrupacionTarifaVozSC1') {
-                                        vm.insertarCampo(dCC, dDE, familia, contene, responseObj);
+                                        vm.insertarCampo(dCC, dDE, agrupation, contene, responseObj);
                                     }
 
                                     if (cont === 'dTarifaSC1') {
