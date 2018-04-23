@@ -19,6 +19,7 @@ module OrangeFeSARQ.Constant {
         .service('contactFormSrv', OrangeFeSARQ.Services.ContactFormSrv)
         .service('contractsSrv', OrangeFeSARQ.Services.ContractsSrv)
         .service('commercialDataSrv', OrangeFeSARQ.Services.CommercialDataSrv)
+        .service('communicationsSrv', OrangeFeSARQ.Services.CommunicationsSrv)
         .service('customerManagementSrv', OrangeFeSARQ.Services.CustomerManagementSrv)
         .service('dataEntrySrv', OrangeFeSARQ.Services.DataEntrySrv)
         .service('detailRateSrv', OrangeFeSARQ.Services.DetailRateSrv)
