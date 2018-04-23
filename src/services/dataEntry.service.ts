@@ -58,13 +58,15 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let responseObj = [];
             // Recorro el archivo de mapeos (la parte de datos de cliente) para aplicar la lógica correspondiente
-            // CLIENTDATA
+            // CLIENT DATA
             _.each(mapeosDE.clientData, function (value) {
                 // Almaceno los valores en variables para no perderlos cuando cambie de ámbito
                 let dCC = value.datoCc;
                 let dDE = value.datoDe;
                 let cont = value.sessionOrigin;
                 let contene = value.contenedor;
+                let defaultData = value.default;
+
                 let valueDep;
                 let lastObj;
                 let flagDep = false;
@@ -106,7 +108,7 @@ module OrangeFeSARQ.Services {
                         }
                     }
                     // Añadimos el objeto al array
-                    vm.insertarCampo(dCC, dDE, valueDep, contene, responseObj);
+                    vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                 }
 
                 if (valueDep !== undefined) {
@@ -116,22 +118,24 @@ module OrangeFeSARQ.Services {
                 _.each(value.equivalencias, function (value) {
                     // Si existe valueDep creo un objeto que matcheo posteriormente con session
                     if (value.origen === sessionClientData[cont]) {
-                        vm.insertarCampo(dCC, dDE, value.value, contene, responseObj);
+                        vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
                     }
                     flagEquiv = true;
                 });
+
                 // Si no hay ni dependencias ni equivalencias creo un objeto con el dato extraido directamente de session
                 if (flagDep === false && flagEquiv === false) {
-                    vm.insertarCampo(dCC, dDE, sessionClientData[cont], contene, responseObj);
+                    vm.insertarCampo(dCC, dDE, sessionClientData[cont] ? sessionClientData[cont] : defaultData, contene, responseObj);
                 }
-
             });
 
+            // LOGIN DATA
             _.each(mapeosDE.loginData, function (value) {
                 let dCC = value.datoCc;
                 let dDE = value.datoDe;
                 let cont = value.sessionOrigin;
                 let contene = value.contenedor;
+                let defaultData = value.contenedor;
                 let valueDep;
                 let lastObj;
                 let flagDep = false;
@@ -161,7 +165,7 @@ module OrangeFeSARQ.Services {
                         }
                     }
                     // Añadimos el objeto al array
-                    vm.insertarCampo(dCC, dDE, valueDep, contene, responseObj);
+                    vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                 }
 
                 if (valueDep !== undefined) {
@@ -172,21 +176,23 @@ module OrangeFeSARQ.Services {
                 _.each(value.equivalencias, function (value) {
                     // Si existe valueDep creo un objeto que matcheo posteriormente con session
                     if (value.origen === sessionLoginData[cont]) {
-                        vm.insertarCampo(dCC, dDE, value.value, contene, responseObj);
+                        vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
                     }
                     flagEquiv = true;
                 });
                 // Si no hay ni dependencias ni equivalencias creo un objeto con el dato extraido directamente de session
                 if (flagDep === false && flagEquiv === false) {
-                    vm.insertarCampo(dCC, dDE, sessionLoginData[cont], contene, responseObj);
+                    vm.insertarCampo(dCC, dDE, sessionLoginData[cont] ? sessionLoginData[cont] : defaultData, contene, responseObj);
                 }
             });
 
+            // PRESCORING DATA
             _.each(mapeosDE.prescoring, function (value) {
                 let dCC = value.datoCc;
                 let dDE = value.datoDe;
                 let cont = value.sessionOrigin;
                 let contene = value.contenedor;
+                let defaultData = value.default;
                 let valueDep;
                 let lastObj;
                 let flagDep = false;
@@ -219,12 +225,12 @@ module OrangeFeSARQ.Services {
                         if (sessionPrescoring[cont][0].ospCartItemType.toUpperCase() !== 'PORTABILIDAD') {
                             vm.insertarCampo(dCC, dDE, 'TODOS', contene, responseObj);
                         } else {
-                            vm.insertarCampo(dCC, dDE, valueDep, contene, responseObj);
+                            vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                         }
 
                     } else {
                         // Añadimos el objeto al array
-                        vm.insertarCampo(dCC, dDE, valueDep, contene, responseObj);
+                        vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                     }
                 }
 
@@ -236,24 +242,25 @@ module OrangeFeSARQ.Services {
                 _.each(value.equivalencias, function (value) {
                     // Si existe valueDep creo un objeto que matcheo posteriormente con session
                     if (value.origen === sessionPrescoring[cont]) {
-                        vm.insertarCampo(dCC, dDE, value.value, contene, responseObj);
+                        vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
                     }
                     flagEquiv = true;
                 });
                 // Si no hay ni dependencias ni equivalencias creo un objeto con el dato extraido directamente de session
                 if (flagDep === false && flagEquiv === false) {
-                    vm.insertarCampo(dCC, dDE, sessionPrescoring[cont], contene, responseObj);
+                    vm.insertarCampo(dCC, dDE, sessionPrescoring[cont] ? sessionPrescoring[cont] : defaultData, contene, responseObj);
                 }
             });
 
             // Recorro el archivo de mapeos (la parte de datos shoppingCart) para aplicar la lógica correspondiente
-            // SHOPPINGCART
+            // SHOPPINGCART DATA
             _.each(mapeosDE.shoppingCart, function (value) {
                 // Almaceno los valores en variables para no perderlos cuando cambie de ámbito
                 let dCC = value.datoCc;
                 let dDE = value.datoDe;
                 let cont = value.sessionOrigin;
                 let contene = value.contenedor;
+                let defaultData = value.default;
                 let valueDep;
                 let lastObj;
                 let typePrice;
@@ -277,7 +284,7 @@ module OrangeFeSARQ.Services {
                         }
                     }
                     // Añadimos el objeto al array
-                    vm.insertarCampo(dCC, dDE, valueDep, contene, responseObj);
+                    vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                 }
 
                 if (valueDep !== undefined) {
@@ -287,7 +294,7 @@ module OrangeFeSARQ.Services {
                 _.each(value.equivalencias, (value) => {
                     // Si existe valueDep creo un objeto que matcheo posteriormente con session
                     if (value.origen === sessionShoppingCart[cont]) {
-                        vm.insertarCampo(dCC, dDE, value.value, contene, responseObj);
+                        vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
                     }
                     flagEquiv = true;
                 });
@@ -358,6 +365,7 @@ module OrangeFeSARQ.Services {
                             }
 
                             if (tarifas && tarifas.length > 0) {
+
                                 for (let j = 0; j < tarifas.length; j++) {
                                     let familia = '';
                                     let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
