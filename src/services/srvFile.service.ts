@@ -57,7 +57,6 @@ module OrangeFeSARQ.Services {
                 }else {
                     dataOT.profile = localStorage.getItem('rol').toLocaleUpperCase();
                 }
-                dataOT.profile = localStorage.getItem('profile').toLocaleUpperCase();
                 // Se define el tipo de tarifa dependiendo del segmento del cliente
                 if(dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
                     relatedProductOffering = dataOT.relatedRateResidential;
