@@ -63,14 +63,15 @@ module OrangeFeSARQ.Constant {
         .service('deviceCatalogSrv', OrangeFeSARQ.Services.DeviceCatalogSrv)
         .service('bankAccountSrv', OrangeFeSARQ.Services.BankAccountSrv)
         .service('MosaicFileSrv', OrangeFeSARQ.Services.MosaicFileSrv)
-        .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)  
-        .service('documentValidatorFCUSrv', OrangeFeSARQ.Services.DocumentValidatorFCUSrv)     
-        .service('configSrv', OrangeFeSARQ.Services.ConfigSrv) 
+        .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)
+        .service('documentValidatorFCUSrv', OrangeFeSARQ.Services.DocumentValidatorFCUSrv)
+        .service('configSrv', OrangeFeSARQ.Services.ConfigSrv)
         .service('discriminatorSrv', OrangeFeSARQ.Services.DiscriminatorSrv)
         .service('deleteRatesPopupSrv', OrangeFeSARQ.Services.DeleteRatesPopupSrv)
+        .service('directionPopupSrv', OrangeFeSARQ.Services.DirectionPopupSrv)
         .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)
 
-    
+
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
