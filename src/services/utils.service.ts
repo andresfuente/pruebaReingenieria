@@ -1222,6 +1222,7 @@ module OrangeFeSARQ.Services {
             sessionStorageManager.removeEntry('principalMsisdn');
             sessionStorageManager.removeEntry('caseRequestStorage');
             sessionStorageManager.removeEntry('remedyRequestStorage');
+            sessionStorageManager.removeEntry('personalDataStore');
         }
 
         // *********************************************************************** //
