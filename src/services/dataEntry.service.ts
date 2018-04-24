@@ -300,11 +300,14 @@ module OrangeFeSARQ.Services {
                 });
                 // Si no hay ni dependencias ni equivalencias creo un objeto con el dato extraido directamente de session
                 if (flagDep === false && flagEquiv === false) {
-                    let terminalType = 'primario';
+                    let primaryTerminalTypePrice = '';
+                    let secundaryTerminalTypePrice = '';
+                    let agrupation = '';
                     let numOferta = 1;
                     let selectedOptions: any = _.filter(sessionShoppingCart.cartItem, { 'ospSelected': true });
                     let terminals;
-                    let aux;
+                    let auxPrimary = 'SC';
+                    let auxSecundary = 'SecSC';
 
                     // Comprobamos que hay cartItem con la propiedad ospSelected a true, y cuántos hay
                     if (selectedOptions && selectedOptions.length > 0 && cont !== 'nLineas') {
@@ -313,116 +316,159 @@ module OrangeFeSARQ.Services {
                             let terminals: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
                                 return _.find(data.product.productRelationship, { 'type': 'terminal' });
                             });
-                            let seguro: any = _.find(selectedOptions[i].cartItem, (data: any) => {
-                                return _.find(data.product.productRelationship, { 'type': 'seguro' })
+                            let primaryTerminal: any = _.find(terminals, (terminal:any) => {
+                                let terminalType = _.find(terminal.product.characteristic, (char: any) => {
+                                    return char.name === 'CIMATerminalType';
+                                });
+                                if (terminalType) {
+                                    return terminalType.value === 'Primary';
+                                }
+                            });
+                            let secundaryTerminal: any = _.find(terminals, (terminal: any) => {
+                                let terminalType = _.find(terminal.product.characteristic, (char: any) => {
+                                    return char.name === 'CIMATerminalType';
+                                });
+                                if (terminalType) {
+                                    return terminalType.value === 'Secundary';
+                                }
+                            });
+                            let insurances: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
+                                return _.find(data.product.productRelationship, { 'type': 'seguro' });
+                            });
+                            let insurancePrimaryTerminal: any = _.find(insurances, (insurance: any) => {
+                                let terminalType = _.find(insurance.product.characteristic, (char: any) => {
+                                    return char.name === 'CIMATerminalType';
+                                });
+                                if (terminalType) {
+                                    return terminalType.value === 'Primary';
+                                }
+                            });
+                            let insuranceSecundaryTerminal: any = _.find(insurances, (insurance: any) => {
+                                let terminalType = _.find(insurance.product.characteristic, (char: any) => {
+                                    return char.name === 'CIMATerminalType';
+                                });
+                                if (terminalType) {
+                                    return terminalType.value === 'Secundary';
+                                }
+                            });
+                            let rate: any = _.find(selectedOptions[i].cartItem, (data: any) => {
+                                return _.find(data.product.productRelationship, { 'type': 'tarifa' });
                             });
 
-                            let tarifas: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
-                                return _.find(data.product.productRelationship, { 'type': 'tarifa' })
-                            });
-
-                            if (terminals && terminals.length > 0) {
-                                for (let j = 0; j < terminals.length; j++) {
-                                    let type = _.find(terminals[j].product.characteristic, (data: any) => {
-                                        return data.value === 'Primary';
+                            if (rate) {
+                                let comData = JSON.parse(sessionStorage.getItem('commercialData'));
+                                let rateComData;
+                                // Se busca la tarifa en los actos comerciales para obtener sus datos
+                                if (comData) {
+                                    let index = Math.floor(selectedOptions[i].id) - 1;
+                                    rateComData = _.find(comData[index].rates, (rateData: any) => {
+                                        return rateData.siebelId === rate.id;
                                     });
-                                    if (!type) {
-                                        terminalType = 'secundario';
-                                        aux = 'SecSC';
-                                    } else {
-                                        terminalType = 'primario';
-                                        aux = 'SC';
-                                    }
-                                    if (cont === 'typePrice') {
-                                        _.find(terminals[j].itemPrice, (data: any) => {
-                                            typePrice = data.priceType;
-                                        });
-                                        if (typePrice === 'aplazado') {
-                                            typePrice = 'pago aplazado';
-                                        } else {
-                                            typePrice = 'pago unico';
-                                        }
-                                        vm.insertarCampo(dCC + ' ' + terminalType + ' ' + 'oferta' + numOferta,
-                                            dDE + aux + numOferta, typePrice,
-                                            contene,
-                                            responseObj);
-                                    } else if (cont === 'seguro') {
-                                        if (seguro !== undefined && seguro.cartItemRelationship[0].id === terminals[j].id) {
-                                            vm.insertarCampo(dCC + ' ' + terminalType + ' ' + 'oferta' + numOferta,
-                                                dDE + numOferta, 'seguro móvil',
-                                                contene,
-                                                responseObj);
-                                        }
-                                    } else {
-                                        vm.insertarCampo(dCC + ' ' + terminalType + ' ' + 'oferta' + numOferta,
-                                            dDE + aux + numOferta, terminals[j].product[cont],
-                                            contene,
-                                            responseObj);
+                                    // Agrupacion tarifa
+                                    let segment = sessionClientData.ospCustomerSegment;
+                                    let type = rateComData.type;
+                                    let siebelId = rateComData.siebelId;
+                                    if (type === 'Convergente' && segment === 'residencial') {
+                                        agrupation = 'Love';
+                                    } else if (type === 'Convergente' && segment === 'empresas') {
+                                        agrupation = 'Love Negocio';
+                                    } else if (type === 'Movil' && segment === 'residencial') {
+                                        agrupation = 'Go';
+                                    } else if (type === 'Movil' && segment === 'empresas') {
+                                        agrupation = 'Go Negocio';
+                                    } else if (siebelId === '1-OKX2HG') {
+                                        agrupation = 'Ardilla';
+                                    } else if (type === 'Fijo' && siebelId === '1-15VD39') {
+                                        agrupation = 'Mi Fijo';
+                                    } else if (type === 'Fijo' &&
+                                        (siebelId === '1-15PLF2' || siebelId === '1-1C3JRF')) {
+                                        agrupation = 'Mi Fijo Pro';
+                                    } else if (type === 'Fijo' && segment === 'residencial') {
+                                        agrupation = 'IEW';
+                                    } else if (type === 'Fijo' && sessionClientData.ospCustomerSegment === 'empresas') {
+                                        agrupation = 'IEW Pro';
                                     }
                                 }
-                            } else {
-                                typePrice = 'solo sim';
                             }
-
-                            if (tarifas && tarifas.length > 0) {
-
-                                for (let j = 0; j < tarifas.length; j++) {
-                                    let agrupation = '';
-                                    let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                                    if (commercialData && commercialData.length) {
-                                        for (let comAct = 0; comAct < commercialData.length; comAct++) {
-                                            for (let rate = 0; rate < commercialData[comAct].rates.length; rate++) {
-                                                if (commercialData[comAct].rates[rate].siebelId === tarifas[j].id) {
-                                                    if (commercialData[comAct].rates[rate].typeService === 'mifijo' &&
-                                                        commercialData[comAct].terminals.length) {
-                                                        typePrice = 'subvencionado';
-                                                    }
-                                                    if (sessionClientData.ospCustomerSegment && commercialData[comAct].rates[rate].type) {
-                                                        let segment = sessionClientData.ospCustomerSegment;
-                                                        let type = commercialData[comAct].rates[rate].type;
-                                                        let siebelId = commercialData[comAct].rates[rate].siebelId;
-                                                        if (type === 'Convergente' && segment === 'residencial') {
-                                                            agrupation = 'Love';
-                                                        } else if (type === 'Convergente' && segment === 'empresas') {
-                                                            agrupation = 'Love Negocio';
-                                                        } else if (type === 'Movil' && segment === 'residencial') {
-                                                            agrupation = 'Go';
-                                                        } else if (type === 'Movil' && segment === 'empresas') {
-                                                            agrupation = 'Go Negocio';
-                                                        } else if (siebelId === '1-OKX2HG') {
-                                                            agrupation = 'Ardilla';
-                                                        } else if (type === 'Fijo' && siebelId === '1-15VD39') {
-                                                            agrupation = 'Mi Fijo';
-                                                        } else if (type === 'Fijo' &&
-                                                            (siebelId === '1-15PLF2' || siebelId === '1-1C3JRF')) {
-                                                                agrupation = 'Mi Fijo Pro';
-                                                        } else if (type === 'Fijo' && segment === 'residencial') {
-                                                            agrupation = 'IEW';
-                                                        } else if (type === 'Fijo' && sessionClientData.ospCustomerSegment === 'empresas') {
-                                                            agrupation = 'IEW Pro';
-                                                        }
-
-                                                    }
-                                                }
-                                            }
+                            // Tipo precio 
+                            if (cont === 'typePrice') {
+                                // Terminal primario
+                                if (primaryTerminal) {
+                                    if (rate && (rate.id === '1-15VD39' || rate.id === '1-1C3JRF' || rate.id === '1-15PLF2')) {
+                                        primaryTerminalTypePrice = 'subvencionado';
+                                    } else {
+                                        _.find(primaryTerminal, (data: any) => {
+                                            primaryTerminalTypePrice = data.priceType;
+                                        });
+                                        if (primaryTerminalTypePrice === 'aplazado') {
+                                            typePrice = 'pago aplazado';
+                                        } else {
+                                            primaryTerminalTypePrice = 'pago unico';
                                         }
                                     }
-                                    if (cont === 'dselAgrupacionTarifaVozSC1') {
-                                        vm.insertarCampo(dCC, dDE, agrupation, contene, responseObj);
+                                } else {
+                                    primaryTerminalTypePrice = 'solo sim';
+                                }
+                                vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                    dDE + auxPrimary + numOferta, primaryTerminalTypePrice,
+                                    contene,
+                                    responseObj);
+                                // Terminal secundario
+                                /* if (secundaryTerminal) {
+                                    if (rate && (rate.id === '1-15VD39' || rate.id === '1-1C3JRF' || rate.id === '1-15PLF2')) {
+                                        secundaryTerminalTypePrice = 'subvencionado';
+                                    } else {
+                                        _.find(secundaryTerminal, (data: any) => {
+                                            secundaryTerminalTypePrice = data.priceType;
+                                        });
+                                        if (secundaryTerminalTypePrice === 'aplazado') {
+                                            typePrice = 'pago aplazado';
+                                        } else {
+                                            secundaryTerminalTypePrice = 'pago unico';
+                                        }
                                     }
-
-                                    if (cont === 'dTarifaSC1') {
-                                        vm.insertarCampo(dCC, dDE, tarifas[j].product.name, contene, responseObj);
-                                    }
-
-                                    if (cont === 'dselTarifaDatosSC1') {
-                                        vm.insertarCampo(dCC, dDE, tarifas[j].product.name, contene, responseObj);
-                                    }
-
-                                    if (cont === 'dTipoPagoSC1') {
-                                        vm.insertarCampo(dCC, dDE, typePrice, contene, responseObj);
-                                    }
-
+                                } else {
+                                    secundaryTerminalTypePrice = 'solo sim';
+                                } */
+                                /* vm.insertarCampo(dCC + ' ' + 'secundario' + ' ' + 'oferta' + numOferta,
+                                    dDE + auxSecundary + numOferta, secundayTerminalTypePrice,
+                                    contene,
+                                    responseObj); */
+                            } else if (cont === 'seguro') {
+                                // Terminal primario
+                                if(insurancePrimaryTerminal) {
+                                    vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                        dDE + numOferta, 'seguro móvil',
+                                        contene, responseObj);
+                                }
+                                // Terminal secundario
+                                /* if(insuranceSecundaryTerminal) {
+                                    vm.insertarCampo(dCC + ' ' + 'secundario oferta' + numOferta,
+                                        dDE + numOferta, 'seguro móvil',
+                                        contene,
+                                        responseObj);
+                                } */
+                            } else if (cont === 'agrupacion') {
+                                if(rate) {
+                                    vm.insertarCampo(dCC + numOferta, dDE + numOferta,
+                                        agrupation, contene, responseObj);
+                                }
+                            } else if(cont === 'nombreTarifa') {
+                                if(rate) {
+                                    vm.insertarCampo(dCC + numOferta, dDE + numOferta,
+                                        rate.product.name, contene, responseObj);
+                                }
+                            } else if (cont === 'seleccion') {
+                                if(rate) {
+                                    vm.insertarCampo(dCC + numOferta, dDE + numOferta,
+                                        rate.product.name, contene, responseObj);
+                                }
+                            } else {
+                                if(primaryTerminal) {
+                                    vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                            dDE + auxPrimary + numOferta, primaryTerminal.product[cont],
+                                            contene,
+                                            responseObj);
                                 }
                             }
 
@@ -436,7 +482,7 @@ module OrangeFeSARQ.Services {
                             contene,
                             responseObj);
 
-                    };
+                    }
                 }
 
             });
