@@ -228,6 +228,10 @@ module OrangeFeSARQ.Services {
                             vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                         }
 
+                    } else if (dDE === 'dtp_cont_don') {
+                        if (sessionPrescoring[cont][0].ospCartItemType.toUpperCase() !== 'PORTABILIDAD') {
+                            vm.insertarCampo(dCC, dDE, '', contene, responseObj);
+                        }
                     } else {
                         // Añadimos el objeto al array
                         vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
@@ -241,7 +245,9 @@ module OrangeFeSARQ.Services {
                 // Recorro el array de equivalencias dentro del archivo de mapeos
                 _.each(value.equivalencias, function (value) {
                     // Si existe valueDep creo un objeto que matcheo posteriormente con session
-                    if (value.origen === sessionPrescoring[cont]) {
+                    if (dDE === 'dtp_cont_don') {
+                        vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
+                    } else if (value.origen === sessionPrescoring[cont]) {
                         vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
                     }
                     flagEquiv = true;
