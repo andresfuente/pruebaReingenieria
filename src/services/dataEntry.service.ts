@@ -245,7 +245,8 @@ module OrangeFeSARQ.Services {
                 // Recorro el array de equivalencias dentro del archivo de mapeos
                 _.each(value.equivalencias, function (value) {
                     // Si existe valueDep creo un objeto que matcheo posteriormente con session
-                    if (dDE === 'dtp_cont_don' && value.origen === sessionPrescoring[cont][0].ospCartItemType) {
+                    if (dDE === 'dtp_cont_don' && sessionPrescoring[cont][0].ospCartItemType.toUpperCase() === 'PORTABILIDAD'
+                    && value.origen === sessionPrescoring[cont][0].originType) {
                         vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
                     } else if (value.origen === sessionPrescoring[cont]) {
                         vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
