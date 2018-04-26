@@ -390,9 +390,9 @@ module OrangeFeSARQ.Services {
                                         (siebelId === '1-15PLF2' || siebelId === '1-1C3JRF')) {
                                         agrupation = 'Mi Fijo Pro';
                                     } else if (type === 'Fijo' && segment === 'residencial') {
-                                        agrupation = 'EIW';
+                                        agrupation = 'IEW';
                                     } else if (type === 'Fijo' && sessionClientData.ospCustomerSegment === 'empresas') {
-                                        agrupation = 'EIW Pro';
+                                        agrupation = 'IEW Pro';
                                     }
                                 }
                             }
