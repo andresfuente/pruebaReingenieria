@@ -245,8 +245,7 @@ module OrangeFeSARQ.Services {
                 // Recorro el array de equivalencias dentro del archivo de mapeos
                 _.each(value.equivalencias, function (value) {
                     // Si existe valueDep creo un objeto que matcheo posteriormente con session
-                    if (dDE === 'dtp_cont_don' && sessionPrescoring[cont][0].ospCartItemType.toUpperCase() === 'PORTABILIDAD'
-                    && value.origen === sessionPrescoring[cont][0].originType) {
+                    if (dDE === 'dtp_cont_don' && value.origen === sessionPrescoring[cont][0].ospCartItemType) {
                         vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
                     } else if (value.origen === sessionPrescoring[cont]) {
                         vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
@@ -391,9 +390,9 @@ module OrangeFeSARQ.Services {
                                         (siebelId === '1-15PLF2' || siebelId === '1-1C3JRF')) {
                                         agrupation = 'Mi Fijo Pro';
                                     } else if (type === 'Fijo' && segment === 'residencial') {
-                                        agrupation = 'IEW';
+                                        agrupation = 'EIW';
                                     } else if (type === 'Fijo' && sessionClientData.ospCustomerSegment === 'empresas') {
-                                        agrupation = 'IEW Pro';
+                                        agrupation = 'EIW Pro';
                                     }
                                 }
                             }
