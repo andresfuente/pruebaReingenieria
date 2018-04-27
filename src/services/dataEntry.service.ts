@@ -404,6 +404,12 @@ module OrangeFeSARQ.Services {
                     if (selectedOptions && selectedOptions.length > 0 && cont !== 'nLineas') {
                         for (let i = 0; i < selectedOptions.length; i++) {
 
+                            let multisim: any = _.find(selectedOptions[i].cartItem, (data: any) => {
+                                if (data.product && data.product.name && data.product.name.toUpperCase() === 'MULTISIM') {
+                                    return data;
+                                }
+                            });
+
                             let terminals: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
                                 return _.find(data.product.productRelationship, { 'type': 'terminal' });
                             });
@@ -553,6 +559,10 @@ module OrangeFeSARQ.Services {
                                 if(rate) {
                                     vm.insertarCampo(dCC + numOferta, dDE + numOferta,
                                         '', contene, responseObj);
+                                }
+                            } else if (cont === 'multisim') {
+                                if (multisim && multisim.action && multisim.action === 'New') {
+                                    vm.insertarCampo(dCC, dDE, 'si', contene, responseObj);
                                 }
                             } else {
                                 if(primaryTerminal) {
