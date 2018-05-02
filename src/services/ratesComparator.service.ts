@@ -107,6 +107,16 @@ module ratesComparator.Services {
                 campaignName: nameSgmr,
                 fields: 'deviceOffering'
             };
+            // Prepago   
+            if (sessionStorage.getItem('commercialData')) {
+                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                let commercialActIndex = vm.getSelectedCommercialAct();
+                if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemSubtype && commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
+                    if (commercialAction === 'portabilidad') {
+                        delete params.portabilityOrigin;
+                    }
+                }
+            }
             return vm.httpCacheGeth(vm.genericConstant.getTerminalDetails, { queryParams: params }, _headers
             ).then((response) => {
                 if (response.data.length > 0) {
@@ -130,6 +140,24 @@ module ratesComparator.Services {
                 throw error;
             });
         }
+        
+        /**
+        * @ngdoc method
+        * @name ratesComparator.Services:RatesComparatorSrv#getSelectedCommercialAct
+        * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
+        * @description
+        * @return {boolean} Retorna el indice del commercialData que se esta modificando,
+        * en caso contrario retorna -1
+        */
+       getSelectedCommercialAct(): number {
+           let commercialData = [];
+           commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+
+           return _.findIndex(commercialData, function (currentCommercialAct) {
+               return currentCommercialAct.ospIsSelected === true;
+           });
+       }
+
         /**
          * @ngdoc method
          * @name ratesComparator.Services:RatesComparatorSrv#setCustomerProvince

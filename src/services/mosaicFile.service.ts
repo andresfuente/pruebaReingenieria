@@ -175,7 +175,11 @@ module OrangeFeSARQ.Services {
             let commercialActIndex = srv.getSelectedCommercialAct();
 
             if (commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
-                delete params.portabilityOrigin;
+                if (commercialAction) {
+                    if (commercialAction.toLowerCase() === 'portabilidad') {
+                        delete params.portabilityOrigin;
+                    }
+                } 
                 let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
 
                 if (defaultData && defaultData.relatedRatePrepaid) {
@@ -379,7 +383,11 @@ module OrangeFeSARQ.Services {
             let commercialActIndex = srv.getSelectedCommercialAct();
 
             if (commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
-                delete params.portabilityOrigin;
+                if (commercialAction) {
+                    if (commercialAction.toLowerCase() === 'portabilidad') {
+                        delete params.portabilityOrigin;
+                    }
+                } 
                 let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
 
                 if (defaultData && defaultData.relatedRatePrepaid) {
