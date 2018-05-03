@@ -82,6 +82,8 @@ module OrangeFeSARQ.Services {
             //     'Geolocation-local': vm.storeProvince.toUpperCase(),
             //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
             // };
+            vm.setCustomerData();
+            vm.setStoreProvince();
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
@@ -154,9 +156,11 @@ module OrangeFeSARQ.Services {
             //     'Geolocation-local': srv.storeProvince.toUpperCase(),
             //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
             // };
+            srv.setCustomerData();
+            srv.setStoreProvince();
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
             _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
@@ -198,9 +202,11 @@ module OrangeFeSARQ.Services {
             //     'Geolocation-local': srv.storeProvince.toUpperCase(),
             //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
             // };
+            srv.setCustomerData();
+            srv.setStoreProvince();
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
             _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productSpecificationv2View/OSP',
@@ -242,9 +248,11 @@ module OrangeFeSARQ.Services {
             //     'Geolocation-local': srv.storeProvince.toUpperCase(),
             //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
             // };
+            srv.setCustomerData();
+            srv.setStoreProvince();
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
             _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
@@ -271,9 +279,11 @@ module OrangeFeSARQ.Services {
             //     'Geolocation-local': vm.storeProvince.toUpperCase(),
             //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
             // };
+            vm.setCustomerData();
+            vm.setStoreProvince();
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
+            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince.toUpperCase() : 'Madrid');
             _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
@@ -337,6 +347,8 @@ module OrangeFeSARQ.Services {
             //     'Geolocation-local': vm.storeProvince.toUpperCase(),
             //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
             // };
+            vm.setCustomerData();
+            vm.setStoreProvince();
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
@@ -395,6 +407,8 @@ module OrangeFeSARQ.Services {
             //     'Geolocation-local': vm.storeProvince.toUpperCase(),
             //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
             // };
+            vm.setCustomerData();
+            vm.setStoreProvince();
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
@@ -422,7 +436,7 @@ module OrangeFeSARQ.Services {
          */
         setCustomerData() {
             let srv = this;
-            srv.customerProvince = 'Madrid'; // REMOVER
+        //    srv.customerProvince = 'Madrid'; // REMOVER
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             // Si los datos de clientes se encuentran en el session storage
             if (clientData !== null) {

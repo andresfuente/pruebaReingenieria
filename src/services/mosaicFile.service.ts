@@ -349,7 +349,7 @@ module OrangeFeSARQ.Services {
             //Cabeceras FdC
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            _headers.set('Geolocation-client', stateOrProvinceBinding);
+            _headers.set('Geolocation-client', stateOrProvinceBinding.toUpperCase());
 
 
             params = {
@@ -645,11 +645,13 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let prescoring = JSON.parse(sessionStorage.getItem('prescoring'));
             let defaultDataOT: mosaicFile.Models.DataOT = vm.getDefaultDataOT();
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
             let commercialActIndex;
 
             // Se obtienen los datos por defecto           
             dataOT = _.cloneDeep(defaultDataOT);
-            dataOT.stateOrProvince = 'Madrid'; // REMOVER
+            dataOT.stateOrProvince = shopInfo.province ? shopInfo.province : 'Madrid';
+            //dataOT.stateOrProvince = 'Madrid'; // REMOVER
 
             // Si los datos de clientes se encuentran en el session storage
             if (clientData) {
