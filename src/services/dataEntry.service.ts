@@ -48,12 +48,91 @@ module OrangeFeSARQ.Services {
         }
 
         /**
+         * @ngdoc method
+         * @name OFC.Services.DataEntry
+         * @description
+         * Comprueba si la cuenta bancaria corresponde a un dummy
+         */
+        isValidAccount() {
+            let vm = this;
+
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+            let info = {
+                bic: '',
+                domiciliation: '',
+                accountHolder: '',
+                iban: ''
+            };
+
+            if (clientData && clientData.billingInfo) {
+                if (clientData.billingInfo.bankName) {
+                    switch (clientData.billingInfo.bankName) {
+                        case 'La Caixa':
+                            info = {
+                                bic: '2100',
+                                domiciliation: '0000',
+                                accountHolder: '66',
+                                iban: '1234567890'
+                            };
+                            break;
+                        case 'Santander':
+                            info = {
+                                bic: '0049',
+                                domiciliation: '0000',
+                                accountHolder: '06',
+                                iban: '1234567890'
+                            };
+                            break;
+                        case 'BBVA':
+                            info = {
+                                bic: '0182',
+                                domiciliation: '0000',
+                                accountHolder: '96',
+                                iban: '1234567890'
+                            };
+                            break;
+                        case 'Bankia':
+                            info = {
+                                bic: '2038',
+                                domiciliation: '0000',
+                                accountHolder: '76',
+                                iban: '1234567890'
+                            };
+                            break;
+                        case 'Otros':
+                            info = {
+                                bic: '2013',
+                                domiciliation: '0000',
+                                accountHolder: '16',
+                                iban: '1234567890'
+                            };
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (clientData.billingInfo.bic === info.bic && clientData.billingInfo.domiciliation === info.domiciliation
+                    && clientData.billingInfo.accountHolder === info.accountHolder && clientData.billingInfo.iban === info.iban) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } else { // No hay bankName, es una cuenta propia del cliente
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        }
+
+
+        /**
          * @ngdoc service
          * @name @name OFC.Services.DataEntry
          *  @description
          * Método para mapear la información a partir del archivo de mapeos y el sessionStorage
          */
-
         getData(mapeosDE, sessionClientData: any, sessionLoginData: any, sessionPrescoring: any, sessionShoppingCart: any) {
             let vm = this;
             let responseObj = [];
@@ -71,8 +150,8 @@ module OrangeFeSARQ.Services {
                 let lastObj;
                 let flagDep = false;
                 let flagEquiv = false;
-                // Recorro el array de dependencias dentro del archivo de mapeos
-                if (value.dependencias) {
+
+                if (value.dependencias) { // Recorro el array de dependencias dentro del archivo de mapeos
                     // Recorro las dependencias
                     for (let i = 0; i <= value.dependencias.length; i++) {
                         // Cuando es la primera iteracion coge el valor del sessionOrigin para sacarlo del session
@@ -107,8 +186,13 @@ module OrangeFeSARQ.Services {
                             }
                         }
                     }
-                    // Añadimos el objeto al array
-                    vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
+
+                    if ((dDE !== 'dentidad' && dDE !== 'dsucursal' && dDE !== 'ddc' && dDE !== 'dcuenta')
+                    || vm.isValidAccount()) {
+                        vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
+                    } else if (dDE === 'dentidad' || dDE === 'dsucursal' || dDE === 'ddc' || dDE === 'dcuenta') {
+                        vm.insertarCampo(dCC, dDE, '', contene, responseObj);
+                    }
                 }
 
                 if (valueDep !== undefined) {
@@ -320,6 +404,12 @@ module OrangeFeSARQ.Services {
                     if (selectedOptions && selectedOptions.length > 0 && cont !== 'nLineas') {
                         for (let i = 0; i < selectedOptions.length; i++) {
 
+                            let multisim: any = _.find(selectedOptions[i].cartItem, (data: any) => {
+                                if (data.product && data.product.name && data.product.name.toUpperCase() === 'MULTISIM') {
+                                    return data;
+                                }
+                            });
+
                             let terminals: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
                                 return _.find(data.product.productRelationship, { 'type': 'terminal' });
                             });
@@ -469,6 +559,10 @@ module OrangeFeSARQ.Services {
                                 if(rate) {
                                     vm.insertarCampo(dCC + numOferta, dDE + numOferta,
                                         '', contene, responseObj);
+                                }
+                            } else if (cont === 'multisim') {
+                                if (multisim && multisim.action && multisim.action === 'New') {
+                                    vm.insertarCampo(dCC, dDE, 'si', contene, responseObj);
                                 }
                             } else {
                                 if(primaryTerminal) {

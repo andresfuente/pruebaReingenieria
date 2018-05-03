@@ -232,7 +232,7 @@ module OrangeFeSARQ.Services {
             productItem = {
                 'href': device.srcImage,
                 'name': device.litTitle,
-                'description': device.litSubTitle ? device.litSubTitle : device.description ,
+                'description': device.litSubTitle ? device.litSubTitle : device.description,
                 'productRelationship': [{
                     'type': 'terminal'
                 }],
@@ -1025,7 +1025,7 @@ module OrangeFeSARQ.Services {
                         price: {
                             dutyFreeAmount: {
                                 unit: 'EUR',
-                                value: device.insurancePriceFree ?  device.insurancePriceFree  : device.litInsurancePaid
+                                value: device.insurancePriceFree ? device.insurancePriceFree : device.litInsurancePaid
                             },
                             taxIncludedAmount: {
                                 unit: 'EUR',
@@ -1078,6 +1078,7 @@ module OrangeFeSARQ.Services {
             svaCartItemElement = {
                 'id': sva.id,
                 'action': 'New',
+                'href': sva.href,
                 'product': productItem,
                 'itemPrice': sva.itemPrice,
                 'productOffering': {
