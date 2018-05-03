@@ -179,13 +179,6 @@ module OrangeFeSARQ.Services {
                     if (commercialAction.toLowerCase() === 'portabilidad') {
                         delete params.portabilityOrigin;
                     }
-                } 
-                let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
-
-                if (defaultData && defaultData.relatedRatePrepaid) {
-                    params.relatedProductOffering = defaultData.relatedRatePrepaid;
-                } else {
-                    params.relatedProductOffering = '1-PD62X9';
                 }
             }
 
@@ -387,13 +380,6 @@ module OrangeFeSARQ.Services {
                     if (commercialAction.toLowerCase() === 'portabilidad') {
                         delete params.portabilityOrigin;
                     }
-                } 
-                let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
-
-                if (defaultData && defaultData.relatedRatePrepaid) {
-                    params.relatedProductOffering = defaultData.relatedRatePrepaid;
-                } else {
-                    params.relatedProductOffering = '1-PD62X9';
                 }
             }
 
@@ -696,7 +682,12 @@ module OrangeFeSARQ.Services {
                         rates = _.sortBy(commercialData[commercialActIndex].rates, ['taxIncludedPrice']);
                         rates.reverse();
                         // Obtenemos la tarifa con mayor valor
-                        dataOT.relatedRateResidential = rates[0].siebelId;
+                        if(commercialData[commercialActIndex].ospCartItemSubtype &&
+                            commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
+                                dataOT.relatedRatePrepaid = rates[0].siebelId;
+                        } else {
+                            dataOT.relatedRateResidential = rates[0].siebelId;
+                        }
                         dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRateResidential);
                     } else {
                         rates = _.sortBy(commercialData[commercialActIndex].rates, ['taxeFreePrice']);
