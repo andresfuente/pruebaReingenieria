@@ -40,4 +40,9 @@ module ratesComparatorMRenove.Models {
         actual: Item;
     }
 
+    export class RateModificable {
+        line: string;
+        noModificable: boolean;
+    }
+
 }    
