@@ -40,6 +40,7 @@ module OrangeFeSARQ.Constant {
         .service('productContractedTranslateSrv', OrangeFeSARQ.Service.ProductContractedTranslateSrv)
         .service('productInventorySrv', OrangeFeSARQ.Services.ProductInventoryService)
         .service('productOrderSrv', OrangeFeSARQ.Services.ProductOrderSrv)
+        .service('ratesComparatorMRenoveSrv', OrangeFeSARQ.Services.RatesComparatorMRenoveSrv)
         .service('sendToken',OrangeFeSARQ.Services.SendTokenSrv)
         .service('srvTerminalCompare', OrangeFeSARQ.Services.SrvTerminalCompare)
         .service('srvFile', OrangeFeSARQ.Services.SrvFile)
