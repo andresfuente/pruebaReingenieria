@@ -545,16 +545,10 @@ module OrangeFeSARQ.Services {
             let commercialActIndex = vm.getSelectedCommercialAct();
             let coverage = JSON.parse(sessionStorage.getItem('coverage'));
 
-            if (coverage && coverage.ProductOfferingQualificationItem) {
-                coverage.ProductOfferingQualificationItem.forEach(item => {
-                    if (item.product && item.product.characteristic) {
-                        item.product.characteristic.forEach(characteristic => {
-                            // Asignamos el valor de isTv
-                            if (characteristic.name === 'idTecnologia' &&
-                                characteristic.value === rate.ospTecnology) {
-                                vm.objectTv = _.find(item.product.characteristic, {'name': 'television'});
-                            }
-                        });
+            if (coverage && coverage.hasFlagTv) {
+                coverage.hasFlagTv.forEach(item => {
+                    if (item.id && item.isTv) {
+                        vm.objectTv = item.isTv;
                     }
                 });
             }
