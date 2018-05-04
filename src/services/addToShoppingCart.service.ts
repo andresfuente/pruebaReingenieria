@@ -10,6 +10,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
 
         public srvTerminalCompare: OrangeFeSARQ.Services.SrvTerminalCompare;
+        public objectTv;
 
         /**
          * @ngdoc method
@@ -542,6 +543,21 @@ module OrangeFeSARQ.Services {
             let flagTvItem = {};
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
+            let coverage = JSON.parse(sessionStorage.getItem('coverage'));
+
+            if (coverage && coverage.ProductOfferingQualificationItem) {
+                coverage.ProductOfferingQualificationItem.forEach(item => {
+                    if (item.product && item.product.characteristic) {
+                        item.product.characteristic.forEach(characteristic => {
+                            // Asignamos el valor de isTv
+                            if (characteristic.name === 'idTecnologia' &&
+                                characteristic.value === rate.ospTecnology) {
+                                vm.objectTv = _.find(item.product.characteristic, {'name': 'television'});
+                            }
+                        });
+                    }
+                });
+            }
 
             ospTecnology = {
                 'id': rate.ospTecnology,
@@ -565,12 +581,12 @@ module OrangeFeSARQ.Services {
             };
 
             // Añadir Flag TV 
-            if (rate.tvFlag && rate.tvFlag !== undefined && rate.tvFlag !== null) {
+            if (vm.objectTv && vm.objectTv !== undefined && vm.objectTv !== null) {
                 flagTvItem = {
                     name: 'Flag TV',
-                    value: rate.tvFlag ? rate.tvFlag : 'N'
+                    value: vm.objectTv.value === 'Y' ? 'true' : 'false'
                 };
-                ospTecnology.characteristic.push(flagTvItem);
+                ospTecnology.product.characteristic.push(flagTvItem);
             }
 
             return ospTecnology;
