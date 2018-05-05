@@ -669,7 +669,7 @@ module OrangeFeSARQ.Services {
             if (commercialData && commercialActIndex !== -1) {
                 // Tipo de Contrato
                 if (commercialData[commercialActIndex].originType && commercialData[commercialActIndex].originType.length > 0) {
-                    dataOT.ospCartItemSubType = commercialData[commercialActIndex].originType;
+                    dataOT.ospCartItemSubType = commercialData[commercialActIndex].ospCartItemSubtype;
                 }
                 // Identificador del acto comercial
                 if (commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.length > 0) {
@@ -683,12 +683,13 @@ module OrangeFeSARQ.Services {
                         rates.reverse();
                         // Obtenemos la tarifa con mayor valor
                         if(commercialData[commercialActIndex].ospCartItemSubtype &&
-                            commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
-                                dataOT.relatedRatePrepaid = rates[0].siebelId;
+                        commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
+                            dataOT.relatedRatePrepaid = rates[0].siebelId;
+                            dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRatePrepaid);
                         } else {
                             dataOT.relatedRateResidential = rates[0].siebelId;
+                            dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRateResidential);
                         }
-                        dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRateResidential);
                     } else {
                         rates = _.sortBy(commercialData[commercialActIndex].rates, ['taxeFreePrice']);
                         rates.reverse();
