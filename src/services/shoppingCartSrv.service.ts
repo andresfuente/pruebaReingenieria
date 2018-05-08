@@ -127,9 +127,9 @@ module OrangeFeSARQ.Services {
          * Obtiene los svas compatibles con la tarifa seleccionada
          * @returns {object} Devuelve una promesa con el response.
          */
-        getSvas(body, componentName: string) {
+        getSvas(body, componentName: string, customer) {
             let vm = this;
-
+            body.customer = customer;
             let _headers = vm.getParentSfid();
             let _search = {
                 body: body,
