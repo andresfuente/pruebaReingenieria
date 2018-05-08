@@ -190,7 +190,8 @@ module OrangeFeSARQ.Services {
                 params.channel = '';
                 params.campaignName = campana_txt;
                 // Se seleccionan los parametros necesarios para la llamada a la OT
-                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'primary_renew') { // Renove primario
+                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'primary_renew' ||
+                    commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') { // Renove primario
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName']);
                 } else { // Renove secundario
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
@@ -391,7 +392,8 @@ module OrangeFeSARQ.Services {
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 let commercialActIndex = srv.getSelectedCommercialAct();
                 // Renove pimaraio
-                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew') {
+                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew' ||
+                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'best_renove') {
                     priceNameBinding = 'primario';
                     params = _.pick(params, ['channel', 'commercialAction', 'modelId']);
                 }
