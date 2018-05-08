@@ -522,7 +522,7 @@ module OrangeFeSARQ.Services {
          * @returns {IPromise<TResult>}
          */
 
-        generateShoppingCart(rate: ratesParent.Models.Rate, componentName: string) {
+        generateShoppingCart(rate: ratesParent.Models.Rate, componentName: string, customer?) {
             let vm = this;
             let rateOtherSva: any = vm.addToShoppingCartSrv.putRateInShoppingCartForSva(rate);
 
@@ -530,7 +530,8 @@ module OrangeFeSARQ.Services {
                 body: {
                     ospCartItemReqPost: [
                         rateOtherSva.cartItem[0]
-                    ]
+                    ],
+                    customer
                 },
                 urlParams: ['ospShoppingCart'],
             };
@@ -552,8 +553,10 @@ module OrangeFeSARQ.Services {
          * @param componentName
          * @returns {IPromise<TResult>}
          */
-        getSvas(body, componentName) {
+        getSvas(body, componentName, customer?) {
             let srv = this;
+
+            body.customer = customer;
 
             let _search = {
                 body: body,
