@@ -71,6 +71,7 @@ module OrangeFeSARQ.Constant {
         .service('deleteRatesPopupSrv', OrangeFeSARQ.Services.DeleteRatesPopupSrv)
         .service('directionPopupSrv', OrangeFeSARQ.Services.DirectionPopupSrv)
         .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)
+        .service('linkComercialClientSrv', linkComercialClient.Services.LinkComercialClientSrv)
 
 
 
