@@ -674,6 +674,7 @@ module OrangeFeSARQ.Services {
                 // Tipo de Contrato
                 if (commercialData[commercialActIndex].originType && commercialData[commercialActIndex].originType.length > 0) {
                     dataOT.ospCartItemSubType = commercialData[commercialActIndex].ospCartItemSubtype;
+                    dataOT.originType = commercialData[commercialActIndex].originType;
                 }
                 // Identificador del acto comercial
                 if (commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.length > 0) {

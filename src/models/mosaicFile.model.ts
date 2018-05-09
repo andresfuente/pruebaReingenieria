@@ -714,6 +714,7 @@ module mosaicFile.Models {
         public isExistingCustomer: string;
         public ospCustomerSegment: string;
         public ospCartItemType: string;
+        public originType: string;
         public ospCartItemSubType: string;
         public relatedRateResidential: string;
         public relatedRateBusiness: string;
