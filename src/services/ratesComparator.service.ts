@@ -117,6 +117,18 @@ module ratesComparator.Services {
                     }
                 }
             }
+            // Cliente existente para Renove   
+            if (sessionStorage.getItem('commercialData')) {
+                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                let commercialActIndex = vm.getSelectedCommercialAct();
+                if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemSubtype && commercialData[commercialActIndex].ospCartItemType === 'Renove') {
+                        delete params.isExistingCustomer;
+                        delete params.portabilityOrigin;
+                        delete params.riskLevel;
+                        delete params.profile;
+                }
+            }
+
             return vm.httpCacheGeth(vm.genericConstant.getTerminalDetails, { queryParams: params }, _headers
             ).then((response) => {
                 if (response.data.length > 0) {
