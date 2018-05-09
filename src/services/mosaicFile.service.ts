@@ -648,7 +648,7 @@ module OrangeFeSARQ.Services {
 
             // Se obtienen los datos por defecto           
             dataOT = _.cloneDeep(defaultDataOT);
-            dataOT.stateOrProvince = shopInfo.province ? shopInfo.province : 'Madrid';
+            dataOT.stateOrProvince = (shopInfo && shopInfo.province) ? shopInfo.province : 'Madrid';
             //dataOT.stateOrProvince = 'Madrid'; // REMOVER
 
             // Si los datos de clientes se encuentran en el session storage
