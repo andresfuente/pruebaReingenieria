@@ -51,6 +51,34 @@ module OrangeFeSARQ.Services {
          * @ngdoc method
          * @name OFC.Services.DataEntry
          * @description
+         * Comprueba si la cuenta es de tipo 'OTROS'
+         */
+        isOtherBank() {
+            let vm = this;
+
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+            let other = {
+                bic: '2013',
+                domiciliation: '0000',
+                accountHolder: '16',
+                iban: '1234567890'
+            };
+
+            if (clientData && clientData.billingInfo && clientData.billingInfo.bankName) {
+                let accData = clientData.billingInfo;
+
+                return (accData.bic === other.bic && accData.domiciliation === other.domiciliation
+                    && accData.accountHolder === other.accountHolder && accData.iban === other.iban);
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services.DataEntry
+         * @description
          * Comprueba si la cuenta bancaria corresponde a un dummy
          */
         isValidAccount() {
@@ -187,11 +215,12 @@ module OrangeFeSARQ.Services {
                         }
                     }
 
-                    if ((dDE !== 'dentidad' && dDE !== 'dsucursal' && dDE !== 'ddc' && dDE !== 'dcuenta')
-                    || vm.isValidAccount()) {
-                        vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
-                    } else if (dDE === 'dentidad' || dDE === 'dsucursal' || dDE === 'ddc' || dDE === 'dcuenta') {
+                    if ((dDE === 'dsucursal' || dDE === 'ddc' || dDE === 'dcuenta') && !vm.isValidAccount()) {
                         vm.insertarCampo(dCC, dDE, '', contene, responseObj);
+                    } else if (dDE === 'dentidad' && !vm.isValidAccount() && vm.isOtherBank()) {
+                        vm.insertarCampo(dCC, dDE, '', contene, responseObj);
+                    } else {
+                        vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                     }
                 }
 
