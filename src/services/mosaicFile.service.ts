@@ -179,13 +179,6 @@ module OrangeFeSARQ.Services {
                     if (commercialAction.toLowerCase() === 'portabilidad') {
                         delete params.portabilityOrigin;
                     }
-                } 
-                let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
-
-                if (defaultData && defaultData.relatedRatePrepaid) {
-                    params.relatedProductOffering = defaultData.relatedRatePrepaid;
-                } else {
-                    params.relatedProductOffering = '1-PD62X9';
                 }
             }
 
@@ -197,7 +190,8 @@ module OrangeFeSARQ.Services {
                 params.channel = '';
                 params.campaignName = campana_txt;
                 // Se seleccionan los parametros necesarios para la llamada a la OT
-                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'primary_renew') { // Renove primario
+                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'primary_renew' ||
+                    commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') { // Renove primario
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName']);
                 } else { // Renove secundario
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
@@ -387,13 +381,6 @@ module OrangeFeSARQ.Services {
                     if (commercialAction.toLowerCase() === 'portabilidad') {
                         delete params.portabilityOrigin;
                     }
-                } 
-                let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
-
-                if (defaultData && defaultData.relatedRatePrepaid) {
-                    params.relatedProductOffering = defaultData.relatedRatePrepaid;
-                } else {
-                    params.relatedProductOffering = '1-PD62X9';
                 }
             }
 
@@ -405,7 +392,8 @@ module OrangeFeSARQ.Services {
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 let commercialActIndex = srv.getSelectedCommercialAct();
                 // Renove pimaraio
-                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew') {
+                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew' ||
+                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'best_renove') {
                     priceNameBinding = 'primario';
                     params = _.pick(params, ['channel', 'commercialAction', 'modelId']);
                 }
@@ -685,7 +673,7 @@ module OrangeFeSARQ.Services {
             if (commercialData && commercialActIndex !== -1) {
                 // Tipo de Contrato
                 if (commercialData[commercialActIndex].originType && commercialData[commercialActIndex].originType.length > 0) {
-                    dataOT.ospCartItemSubType = commercialData[commercialActIndex].originType;
+                    dataOT.ospCartItemSubType = commercialData[commercialActIndex].ospCartItemSubtype;
                 }
                 // Identificador del acto comercial
                 if (commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.length > 0) {
@@ -698,8 +686,14 @@ module OrangeFeSARQ.Services {
                         rates = _.sortBy(commercialData[commercialActIndex].rates, ['taxIncludedPrice']);
                         rates.reverse();
                         // Obtenemos la tarifa con mayor valor
-                        dataOT.relatedRateResidential = rates[0].siebelId;
-                        dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRateResidential);
+                        if(commercialData[commercialActIndex].ospCartItemSubtype &&
+                        commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
+                            dataOT.relatedRatePrepaid = rates[0].siebelId;
+                            dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRatePrepaid);
+                        } else {
+                            dataOT.relatedRateResidential = rates[0].siebelId;
+                            dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRateResidential);
+                        }
                     } else {
                         rates = _.sortBy(commercialData[commercialActIndex].rates, ['taxeFreePrice']);
                         rates.reverse();

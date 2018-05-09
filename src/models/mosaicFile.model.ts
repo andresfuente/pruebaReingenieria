@@ -588,7 +588,8 @@ module mosaicFile.Models {
                         });
                     }
                     // Si es renove primario se guardan todas las tarifas asociadas
-                    if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'primary_renew') {
+                    if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'primary_renew' ||
+                        commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'best_renove') {
                         serviceData.deviceOffering.forEach((deviceOff, x) => {
                             if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length) {
                                 deviceOff.deviceOfferingPrice.forEach((price, x) => {

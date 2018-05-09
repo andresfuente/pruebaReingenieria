@@ -428,6 +428,22 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#deleteRateByLine
+         * @param {ratesParent.Models.Rate} rate tarifa
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Remueve una tarifa del contenedor de tarifas teniendo en cuenta la línea
+         */
+        deleteRateByLine(rate, line) {
+            let vm = this;
+            _.remove(vm.rateContainer, function (currentRate) {
+                return currentRate.siebelId === rate.siebelId && currentRate.line === rate.line;
+            });
+            vm.resetRatesId();
+        }
+
+        /**
+         * @ngdoc method
          * @name OFC.Services:SrvTerminalCompare#deleteRate
          * @param {ratesParent.Models.Rate} rate tarifa
          * @methodOf OFC.Services:SrvTerminalCompare
