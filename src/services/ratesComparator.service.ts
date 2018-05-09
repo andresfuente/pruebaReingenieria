@@ -121,7 +121,7 @@ module ratesComparator.Services {
             if (sessionStorage.getItem('commercialData')) {
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 let commercialActIndex = vm.getSelectedCommercialAct();
-                if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemSubtype && commercialData[commercialActIndex].ospCartItemType === 'Renove') {
+                if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.toLowerCase() === 'renove') {
                         delete params.isExistingCustomer;
                         delete params.portabilityOrigin;
                         delete params.riskLevel;
