@@ -23,7 +23,7 @@ module OrangeFeSARQ.Services {
 
         public pressChangeRate: boolean;
 
-        public campaing: any = {};
+        public campaing: any;
 
         public owcsCommercialCampaings: any = {};
 
