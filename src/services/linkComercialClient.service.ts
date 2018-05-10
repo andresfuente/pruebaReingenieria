@@ -27,7 +27,7 @@ module linkComercialClient.Services {
 
         setRenove(renove: boolean) {
             let vm = this;
-            
+
             vm.renove = renove;
         }
 
