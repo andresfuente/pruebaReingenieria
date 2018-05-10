@@ -48,7 +48,6 @@ module linkComercialClient.Services {
 
             return vm.commercialCampaigns;
         }
-        
 
         getProfile() {
             let vm = this;
