@@ -384,6 +384,7 @@ module ratesParent.Models {
         public svaChildrenList: Array<RateSVA> = []; // Array de los SVA hijos
         public href: string;
         public show = true;
+        public ospTv: string;
         // Promociones SVA
         public typePriceName: string;
         public taxRate: number;
@@ -416,6 +417,7 @@ module ratesParent.Models {
                     sva.subCategory = (currentSVA.ospTypeService ? currentSVA.ospTypeService.toLowerCase() : '');
                     sva.childrenList = (currentSVA.ospExternalCode ? currentSVA.ospExternalCode : '');
                     sva.href = (currentSVA.href ? currentSVA.href : '');
+                    sva.ospTv = (currentSVA.ospTv ? _.snakeCase(currentSVA.ospTv) : '');
 
                     // Se estable el precio del SVA
                     if (offeringData) {
