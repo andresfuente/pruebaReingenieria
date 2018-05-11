@@ -68,7 +68,7 @@ module reservePopup.Services {
                         numDoc: dni,
                         material: reservas[i].id,
                         quantity: '1',
-                        serialnumber: reservas[i].imei
+                        serialnumber: reservas[i].serialnumber
                     };
                     position++;
                 }
