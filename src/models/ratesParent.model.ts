@@ -94,6 +94,7 @@ module ratesParent.Models {
         public ratePriceTaxIncludedPromotional;
         public ratePricePromotional;
         public descriptionPromotion;
+        public applicationDuration;
 
         constructor(rateData, priceData) {
             this.rateSubName = rateData.ospTitulo;
@@ -198,6 +199,7 @@ module ratesParent.Models {
                                         this.descriptionPromotion = productOfferingPriceAlteration.description;
                                         this.ratePriceTaxIncludedPromotional = productOfferingPriceAlteration.price.taxIncludedAmount;
                                         this.ratePricePromotional = productOfferingPriceAlteration.price.dutyFreeAmount;
+                                        this.applicationDuration = productOfferingPriceAlteration.applicationDuration;
                                     }
 
                                     if (commercialPrice) {
