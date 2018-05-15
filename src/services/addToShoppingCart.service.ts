@@ -784,7 +784,12 @@ module OrangeFeSARQ.Services {
                 cartItemElement.cartItem.push(insurance);
             }
             if (shoppingCart !== null) {
-                shoppingCart.cartItem.push(cartItemElement);
+                if (preId) {
+                    let index = Number(preId.toString().split('.')[1]) - 1;
+                    shoppingCart.cartItem.splice(index, 0, (cartItemElement));
+                } else {
+                    shoppingCart.cartItem.push(cartItemElement);
+                }
             } else {
                 shoppingCart = {
                     'id': '',
