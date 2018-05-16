@@ -575,6 +575,47 @@ module OrangeFeSARQ.Services {
         }
 
         /**
+         * llamada que te devuelve el listado de SVAs utilizando la respuesta del servicio de validación para empresas
+         * @param {string} msisdn número de línea
+         * @param {string} contractType POSPAGO o PREPAGO
+         * @param {string} originRate tarifa de origen 
+         * @returns {IPromise<TResult>}
+         * @description Realiza la llamada al end point changeRateList de productCatalog
+         */
+        changeRateListBusiness(msisdn:string, contractType:string, originRate:string) {
+            let srv = this;
+            let ratesIdListString = '';
+            let productSpecification = [];
+            let _headers = new HashMap<string, string>();
+
+            let params = {
+                contractType: contractType, // pospago o prepago
+                tmCodeOrigen: originRate, // codigo tarifa origen
+                isOriginBundle: true,
+                //rateType: rateType, // voz o datos (opcional)
+                //segment: 'business' // business (opcional)
+            }
+
+            return srv.httpCacheGeth(srv.genericConstant.productCatalog + '/' + srv.genericConstant.brand + srv.genericConstant.changeRateListBusiness + msisdn,
+                { queryParams: params }, _headers, 'ratesParent')
+                .then((response) => {
+                    if (response && response.data.error === null && response.data.productSpecification) {
+                        productSpecification = response.data.productSpecification;
+                        // Se recorre el array de tarifas disponibles para realizar el cambio
+                        productSpecification.forEach((element, index) => {
+                            // Se genera un string con cada uno de los siebelId de las tarifas, separados por coma
+                            ratesIdListString += (index === (productSpecification.length - 1)) ?
+                                element.id : element.id + ',';
+                        });
+                        return ratesIdListString;
+                    }
+                })
+                .catch((error) => {
+                    throw error;
+                });
+        }
+
+        /**
          * llamada que te devuelve el listado de SVAs utilizando la respuesta del servicio de validación
          * @param {string} originRate tarifa de origen 
          * @returns {IPromise<TResult>}
