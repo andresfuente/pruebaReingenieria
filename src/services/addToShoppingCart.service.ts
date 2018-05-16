@@ -284,7 +284,8 @@ module OrangeFeSARQ.Services {
                 'shoppingCart': [secundaryDeviceCartItem].concat(vapCartItems),
                 'cpSiebel': device.cpSiebel,
                 'cpDuration': device.cpDuration,
-                'cpDescription': device.cpDescription
+                'cpDescription': device.cpDescription,
+                'id': device.id
             };
             if (device.insuranceSiebelId) {
                 seguro = vm.createInsuranceCartItem(device, 'secundary');
