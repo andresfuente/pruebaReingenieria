@@ -1084,6 +1084,7 @@ module OrangeFeSARQ.Services {
             productItem = {
                 'name': sva.title,
                 'description': sva.description,
+                'href': sva.href,
                 'productRelationship': [{
                     'type': 'SVA'
                 }],
@@ -1094,7 +1095,6 @@ module OrangeFeSARQ.Services {
             svaCartItemElement = {
                 'id': sva.id,
                 'action': 'New',
-                'href': sva.href,
                 'product': productItem,
                 'itemPrice': sva.itemPrice,
                 'productOffering': {
