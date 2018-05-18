@@ -672,7 +672,8 @@ module OrangeFeSARQ.Services {
             // Tipo del terminal
             if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar' &&
                 commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard' &&
-                commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
+                commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew' &&
+                commercialData[commercialActIndex].ospTerminalWorkflow !== 'primary_renew') {
                 device.characteristic = [
                     {
                         name: 'CIMATerminalType',
