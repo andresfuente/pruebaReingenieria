@@ -394,6 +394,7 @@ module ratesParent.Models {
         public ratePriceTaxIncludedPromotional: number;
         public ratePricePromotional: number;
         public descriptionPromotion: string;
+        public applicationDuration: number;
 
         /**
          * @ngdoc method
@@ -458,6 +459,7 @@ module ratesParent.Models {
                                                 price.taxIncludedAmount;
                                             sva.ratePricePromotional = priceElement.productOfferingPriceAlteration.
                                                 price.dutyFreeAmount;
+                                            sva.applicationDuration = priceElement.productOfferingPriceAlteration.applicationDuration;
                                         }
                                     });
                                 }
