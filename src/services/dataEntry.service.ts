@@ -524,6 +524,8 @@ module OrangeFeSARQ.Services {
                                             agrupation = 'IEW';
                                         } else if (type === 'Fijo' && sessionClientData.ospCustomerSegment === 'empresas') {
                                             agrupation = 'IEW Pro';
+                                        } else if (type === 'Mundo') {
+                                            agrupation = 'Mundo';
                                         }
                                     }
                                 }
