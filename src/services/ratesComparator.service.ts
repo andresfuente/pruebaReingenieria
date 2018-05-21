@@ -1,4 +1,4 @@
-module ratesComparator.Services {
+module OrangeFeSARQ.Services {
     'use strict';
 
     /**
