@@ -395,12 +395,12 @@ module OrangeFeSARQ.Services {
                 if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew' ||
                     commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'best_renove') {
                     priceNameBinding = 'primario';
-                    params = _.pick(params, ['channel', 'commercialAction', 'modelId']);
+                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
                 }
                 // Renove secundario
                 if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
                     priceNameBinding = 'secundario';
-                    params = _.pick(params, ['channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
                 }
             }
             if (riskLevel === 'bajo' || riskLevel === 'medio') {
