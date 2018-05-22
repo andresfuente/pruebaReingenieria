@@ -284,7 +284,8 @@ module OrangeFeSARQ.Services {
                 'shoppingCart': [secundaryDeviceCartItem].concat(vapCartItems),
                 'cpSiebel': device.cpSiebel,
                 'cpDuration': device.cpDuration,
-                'cpDescription': device.cpDescription
+                'cpDescription': device.cpDescription,
+                'id': device.id
             };
             if (device.insuranceSiebelId) {
                 seguro = vm.createInsuranceCartItem(device, 'secundary');
@@ -671,7 +672,8 @@ module OrangeFeSARQ.Services {
             // Tipo del terminal
             if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar' &&
                 commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard' &&
-                commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew') {
+                commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew' &&
+                commercialData[commercialActIndex].ospTerminalWorkflow !== 'primary_renew') {
                 device.characteristic = [
                     {
                         name: 'CIMATerminalType',
@@ -1078,6 +1080,7 @@ module OrangeFeSARQ.Services {
             productItem = {
                 'name': sva.title,
                 'description': sva.description,
+                'href': sva.href,
                 'productRelationship': [{
                     'type': 'SVA'
                 }],
@@ -1088,7 +1091,6 @@ module OrangeFeSARQ.Services {
             svaCartItemElement = {
                 'id': sva.id,
                 'action': 'New',
-                'href': sva.href,
                 'product': productItem,
                 'itemPrice': sva.itemPrice,
                 'productOffering': {
