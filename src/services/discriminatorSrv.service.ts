@@ -27,10 +27,11 @@ module OrangeFeSARQ.Services {
          * @methodOf discriminatorSrv.DiscriminatoriSrv
          * @returns {object} Devuelve una promesa con el response.
          */
-        postAC(obj: Object, componentName: string): any {
+        postAC(body, componentName: string): any {
             let vm = this;
 
-            let body = obj;
+            // Ponemos en mayúscula el DNI
+            body.numDoc = body.numDoc.toUpperCase();
 
             let _search: Object = {
                 // Valores variables
@@ -52,20 +53,20 @@ module OrangeFeSARQ.Services {
                 );
         }
 
-/**
- * @ngdoc method
- * @name discriminatorSrv.Services:discriminatorSrv#getClientType
- * @methodOf discriminatorSrv.Services:discriminatorSrv
- * @param {string} document documento identificador del cliente
- * @param {string} brand marca a la que hacer la llamada
- * @param {string} docType tipo del documento que se ha introducido
- * @param {string} clientType tipo del cliente sobre el que se quiere consultar
- * @param {string} componentName nombre del componente que hace la llamada
- * @param {string} refresh bandera para indicar si obligar a hacer la petición
- * @description
- * Obtiene la información del sistema en el que se encuentra el cliente
- * @return {Object} Una promesa con los datos del sistema al que pertenece el cliente
- */
+        /**
+         * @ngdoc method
+         * @name discriminatorSrv.Services:discriminatorSrv#getClientType
+         * @methodOf discriminatorSrv.Services:discriminatorSrv
+         * @param {string} document documento identificador del cliente
+         * @param {string} brand marca a la que hacer la llamada
+         * @param {string} docType tipo del documento que se ha introducido
+         * @param {string} clientType tipo del cliente sobre el que se quiere consultar
+         * @param {string} componentName nombre del componente que hace la llamada
+         * @param {string} refresh bandera para indicar si obligar a hacer la petición
+         * @description
+         * Obtiene la información del sistema en el que se encuentra el cliente
+         * @return {Object} Una promesa con los datos del sistema al que pertenece el cliente
+         */
         getClientType(document: string, brand: string, docType: string, clientType: string,
             componentName: string = 'discriminatorSrv', refresh: boolean = false): any {
             let vm = this;
