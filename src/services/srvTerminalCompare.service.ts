@@ -347,7 +347,7 @@ module OrangeFeSARQ.Services {
                 'name', 'description', 'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName',
                 'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack',
                 'taxRate', 'taxRateName',
-                'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology', 'type']);
+                'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology', 'type' , 'associatedLine']);
 
             return rateForSession;
         }
