@@ -64,6 +64,7 @@ module mosaicFile.Models {
             let variants = [];
 
             serviceData.forEach((terminalVariant) => {
+
                 let variant = new OrangeMosaicFileTerminalVariant(terminalVariant, ospCustomerSegment, priceName, mosaicFileCompOWCSStore);
                 variants.push(variant);
             });
