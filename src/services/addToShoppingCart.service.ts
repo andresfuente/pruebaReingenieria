@@ -792,12 +792,7 @@ module OrangeFeSARQ.Services {
                 cartItemElement.cartItem.push(insurance);
             }
             if (shoppingCart !== null) {
-                if (preId) {
-                    let index = Number(preId.toString().split('.')[1]) - 1;
-                    shoppingCart.cartItem.splice(index, 0, (cartItemElement));
-                } else {
-                    shoppingCart.cartItem.push(cartItemElement);
-                }
+                shoppingCart.cartItem.push(cartItemElement);
             } else {
                 shoppingCart = {
                     'id': '',
@@ -1206,6 +1201,44 @@ module OrangeFeSARQ.Services {
                 });
             }
             return response;
+        }
+
+        createCommercialDataPacks(dato1?, dato2?){
+            let vm = this;
+
+            let sessionCommercial = sessionStorage.getItem('commercialData');
+
+            let cm: any = {
+                'id': 0,
+                'isCompletedAC': true,
+                'ospIsSelected': false,
+                'terminals': [
+
+                ],
+                'rates': [
+
+                ],
+                'idSgmr': null,
+                'nameSgmr': '3-Altas de clientes ADSL/Fibra',
+                'ospCartItemType': 'cambioTarifa',
+                'renewalType': null,
+                'ospCartItemSubtype': 'Convergente',
+                'originType': 'pospago',
+                'originRate': 'IL1G',
+                'ospTerminalWorkflow': 'change_rate',
+                'actParent': '',   //  En teoria representa el actoCommercialPadre
+                'changeRateInfo': {
+                    'clickedLine': '656004082',
+                    'campaign': 'pasateALove',
+                    'numLine': '',
+                    'type': 'alta',
+                    'rateCode': 'IL1G'
+                },
+                'originRateSiebelId': ''
+            };
+
+            sessionStorage.setItem('commercialData' , JSON.stringify(''));
+
         }
     }
 }

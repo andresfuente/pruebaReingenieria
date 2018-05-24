@@ -69,6 +69,7 @@ module ratesParent.Models {
         public allSVAChildrenList: Array<ratesParent.Models.RateSVA> = []; // Lista con todos los SVA hijos. 
         public otherSvaInfoList: Array<ratesParent.Models.RateSVA> = [];
         public newRateConditions: boolean = false;
+        public associatedLine : Array<Object>;
 
         // Id Tech
 
@@ -132,6 +133,15 @@ module ratesParent.Models {
                     }
                 });
             }
+
+            // Buscamos lineas asociadas en productSpecificationRelationship del rate 
+            let  associatedLine = [];
+            associatedLine = _.filter(rateData.productSpecificationRelationship, {type : 'associatedLine'});
+
+            if (associatedLine !== undefined && associatedLine.length !== 0) {
+                this.associatedLine = associatedLine;
+            }
+
             for (let i in priceData) {
                 if (priceData.length > 0) {
                     if (priceData[i].isBundle === true) {

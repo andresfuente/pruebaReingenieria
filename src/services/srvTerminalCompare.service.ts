@@ -116,11 +116,13 @@ module OrangeFeSARQ.Services {
             // Se seleccionan las propiedades para session
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                 'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-                'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName', 'tipoPago', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration']);
+                'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName',
+                'tipoPago', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc']);
             if (device.renewRates !== undefined && device.renewRates) {
                 deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                     'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-                    'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration']);
+                    'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates', 'eSim',
+                    'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc']);
             }
 
             return deviceForSession;
@@ -347,7 +349,7 @@ module OrangeFeSARQ.Services {
                 'name', 'description', 'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName',
                 'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack',
                 'taxRate', 'taxRateName',
-                'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology', 'type']);
+                'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology', 'type' , 'associatedLine']);
 
             return rateForSession;
         }
