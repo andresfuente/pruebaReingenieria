@@ -670,7 +670,13 @@ module OrangeFeSARQ.Services {
 
             // TERMINAL PRIMARIO
             // Tipo del terminal
-            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar' &&
+            device.characteristic = [
+                {
+                    name: 'CIMATerminalType',
+                    value: 'Primary'
+                }
+            ];
+            /* if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar' &&
                 commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard' &&
                 commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew' &&
                 commercialData[commercialActIndex].ospTerminalWorkflow !== 'primary_renew') {
@@ -687,7 +693,7 @@ module OrangeFeSARQ.Services {
                         value: 'Primary'
                     }
                 ];
-            }
+            } */
             let deviceReserve = _.find(commercialData[commercialActIndex].terminals, (o: any) => {
                 return (device.siebelId === o.siebelId);
             });
