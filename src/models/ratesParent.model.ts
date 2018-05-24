@@ -181,6 +181,7 @@ module ratesParent.Models {
                                     let productOfferingPriceAlteration = priceData[i].productOfferingPrice[j].
                                     productOfferingPriceAlteration;
 
+                                    // Precios tarifa con promociones
                                     if (promotionalPrice) {
                                         this.typePriceName = promotionalPrice.priceType;
                                         this.taxRate = promotionalPrice.taxRate;
@@ -202,6 +203,7 @@ module ratesParent.Models {
                                         this.applicationDuration = productOfferingPriceAlteration.applicationDuration;
                                     }
 
+                                    // Precios tarifas sin promo
                                     if (commercialPrice) {
                                         this.typePriceName = commercialPrice.priceType;
                                         this.taxRate = commercialPrice.taxRate;
