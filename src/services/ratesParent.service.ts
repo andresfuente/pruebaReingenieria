@@ -42,12 +42,13 @@ module OrangeFeSARQ.Services {
          * @param {boolean} isExistingCustomer es cliente existente?
          * @param {Array<string>} tecnologyList lista de tecnologias (id)
          * @param {string} ratesIdListString lista de tarifas (idBundle) a consultar
+         * @param {string} releatedRatesClient Tarifas para el idParqueList
          * @description
          * Consulta al productSpecification del catalogo la información de las tarifas segun los parámetros de entrada
          */
         getSpecificationData(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
-            ratesIdListString: string, pack?: string, type?: string): ng.IPromise<{} | void> {
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string): ng.IPromise<{} | void> {
             let vm = this;
             let technologyString = '';
             if (technologyList) {
@@ -62,6 +63,7 @@ module OrangeFeSARQ.Services {
                 idTecnologiaList: technologyString, // Listado de id de tecnologia
                 commercialAction: commercialAction, // Tipo de acto comercial
                 isExistingCustomer: isExistingCustomer, // Cliente existente?,
+                idParqueList: releatedRatesClient, // Tarifas del cliente
                 pack: pack, // Pack de las tarifas
                 type: type // [movil/ movilfijo]
             };
@@ -75,6 +77,9 @@ module OrangeFeSARQ.Services {
             }
             if (technologyString === '') {
                 delete params.idTecnologiaList;
+            }
+            if (!releatedRatesClient || releatedRatesClient === '') {
+                delete params.idParqueList;
             }
 
             // CABECERA PANGEA
