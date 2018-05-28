@@ -536,12 +536,13 @@ module OrangeFeSARQ.Services {
                                         if (rate && (rate.id === '1-15VD39' || rate.id === '1-1C3JRF' || rate.id === '1-15PLF2')) {
                                             primaryTerminalTypePrice = 'subvencionado';
                                         } else {
-                                            _.find(primaryTerminal, (data: any) => {
-                                                primaryTerminalTypePrice = data.priceType;
+                                            // Cogemos el primer terminal
+                                            let terminal = _.find(primaryTerminal, (data: any) => {
+                                                return data;
                                             });
-                                            if (primaryTerminalTypePrice === 'aplazado') {
+                                            if (terminal.priceType === 'aplazado') {
                                                 typePrice = 'pago aplazado';
-                                            } else {
+                                            } else if (terminal.priceType === 'unico') {
                                                 primaryTerminalTypePrice = 'pago unico';
                                             }
                                         }
