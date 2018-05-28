@@ -121,7 +121,7 @@ module OrangeFeSARQ.Services {
          */
         getOfferingData(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, specificationData, technologyList,
-            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string) {
+            ratesIdListString: string, releatedRatesClient: string, type?: string, pack?: string) {
             let srv = this;
             let technologyString = '';
             if (technologyList) {
