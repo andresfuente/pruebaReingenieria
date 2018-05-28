@@ -48,7 +48,7 @@ module OrangeFeSARQ.Services {
          */
         getSpecificationData(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
-            ratesIdListString: string, releatedRatesClient: string, type?: string, pack?: string): ng.IPromise<{} | void> {
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string): ng.IPromise<{} | void> {
             let vm = this;
             let technologyString = '';
             if (technologyList) {
