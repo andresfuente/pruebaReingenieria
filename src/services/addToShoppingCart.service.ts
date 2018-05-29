@@ -11,6 +11,7 @@ module OrangeFeSARQ.Services {
 
         public srvTerminalCompare: OrangeFeSARQ.Services.SrvTerminalCompare;
         public objectTv;
+        private productCatalogV2Srv;
 
         /**
          * @ngdoc method
@@ -37,6 +38,7 @@ module OrangeFeSARQ.Services {
         setInjections($injector) {
             let vm = this;
             vm.srvTerminalCompare = $injector.get('srvTerminalCompare');
+            vm.productCatalogV2Srv = $injector.get('productCatalogV2Srv');
         }
 
         /**
@@ -778,6 +780,60 @@ module OrangeFeSARQ.Services {
                     }
                 }
             }
+
+            for (let i = 0; i < commercialData[commercialActIndex].terminals.length; i++) {
+                if(commercialData[commercialActIndex].terminals[i].bonusId){ 
+                     
+                    let params = {
+                        commercialAction: '',
+                        idSvaList: commercialData[commercialActIndex].terminals[i].bonusId,
+                        isExistingCustomer: false,
+                        segment: ''                      
+                    };
+                     let cv = JSON.parse(sessionStorage.getItem('cv'));
+                     let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                    let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));  
+
+                    // Obtenemos si es cliente existente
+                    if (!cv || cv === null || cv === undefined) {
+                        params.isExistingCustomer = false;
+                    } else {
+                        params.isExistingCustomer = true;
+                    }
+
+                    // Obtenemos el segmento
+                    if (!clientData || clientData === null || clientData === undefined) {
+                        params.segment = defaultData.ospCustomerSegment;
+                    } else {
+                        params.segment = clientData.ospCustomerSegment;
+                    }
+
+                    if (params.segment.toUpperCase() === 'RESIDENCIAL') {
+                        params.segment = 'Residencial';
+                    } else {
+                        params.segment = 'Empresas';
+                    }
+
+                    if (!commercialData && commercialData === null || commercialData === undefined) {
+                        params.commercialAction = defaultData.ospCartItemType;
+                    } else {
+                        params.commercialAction = commercialData.ospCartItemType;
+                    } 
+
+                    vm.productCatalogV2Srv.getSpecificationSVAS(params.idSvaList,params.isExistingCustomer, params.segment, 
+                        params.commercialAction)
+                            .then((spec) => {
+                                if (spec) {
+                                    //Este Funciona
+                                    cartItemElement.cartItem.push(vm.createSVACartItem(spec.productSpecification[0]));
+                                    sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+                                }
+                            })
+                            .catch((error => {
+                            }));  
+                }
+            }   
+
             // Si viene tecnologia creamos cartItem
             if (rate.ospTecnology) {
                 cartItemElement.cartItem.push(vm.createIdTechnologyCartItem(rate));
@@ -1083,36 +1139,86 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
 
-            productItem = {
-                'name': sva.title,
-                'description': sva.description,
-                'href': sva.href,
-                'productRelationship': [{
-                    'type': 'SVA'
-                }],
-                'place': [],
-                'characteristic': []
-            };
+            if(sva.title){
+                productItem = {
+                    'name': sva.title,
+                    'description': sva.description,
+                    'href': sva.href,
+                    'productRelationship': [{
+                        'type': 'SVA'
+                    }],
+                    'place': [],
+                    'characteristic': []
+                };
+            } else {
+                productItem = {
+                    'name': sva.name,
+                    'description': sva.description,
+                    'href': sva.href,
+                    'productRelationship': [{
+                        'type': 'SVA'
+                    }],
+                    'place': [],
+                    'characteristic': []
+                };
+            }
 
-            svaCartItemElement = {
-                'id': sva.id,
-                'action': 'New',
-                'product': productItem,
-                'itemPrice': sva.itemPrice,
-                'productOffering': {
-                    id: sva.id,
-                    name: sva.title,
-                    category: []
-                },
-                cartItemRelationship: [],
-                'ospSelected': false,
-                'ospSelectable': true,
-                'ospMandatory': true,
-                'ospObjectType': '',
-                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
-                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
-            };
-
+             if(sva.ospTitulo){
+                svaCartItemElement = {
+                    'id': sva.id,
+                    'action': 'New',
+                    'product': productItem,
+                    //'itemPrice': sva.itemPrice,
+                    'itemPrice': [  
+                        {  
+                           "price":{  
+                              "dutyFreeAmount":{  
+                                 "unit":"EUR",
+                                 "value":0
+                              },
+                              "taxIncludedAmount":{  
+                                 "value":0,
+                                 "unit":"EUR"
+                              },
+                              "taxRate":0.21,
+                              "ospTaxRateName":""
+                           },
+                           "priceType": "siebelPriceSva"
+                        }
+                     ],
+                    'productOffering': {
+                        id: sva.id,
+                        name: sva.ospTitulo,
+                        category: []
+                    },
+                    cartItemRelationship: [],
+                    'ospSelected': false,
+                    'ospSelectable': true,
+                    'ospMandatory': true,
+                    'ospObjectType': '',
+                    'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                    'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                };
+            } else { 
+                    svaCartItemElement = {
+                        'id': sva.id,
+                        'action': 'New',
+                        'product': productItem,
+                        'itemPrice': sva.itemPrice,
+                        'productOffering': {
+                            id: sva.id,
+                            name: sva.title,
+                            category: []
+                        },
+                        cartItemRelationship: [],
+                        'ospSelected': false,
+                        'ospSelectable': true,
+                        'ospMandatory': true,
+                        'ospObjectType': '',
+                        'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                        'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                    };
+                }
             return svaCartItemElement;
         }
 
