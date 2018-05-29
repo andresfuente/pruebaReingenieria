@@ -782,17 +782,17 @@ module OrangeFeSARQ.Services {
             }
 
             for (let i = 0; i < commercialData[commercialActIndex].terminals.length; i++) {
-                if(commercialData[commercialActIndex].terminals[i].bonusId){ 
-                     
+                if (commercialData[commercialActIndex].terminals[i].bonusId) {
+
                     let params = {
                         commercialAction: '',
                         idSvaList: commercialData[commercialActIndex].terminals[i].bonusId,
                         isExistingCustomer: false,
-                        segment: ''                      
+                        segment: ''
                     };
-                     let cv = JSON.parse(sessionStorage.getItem('cv'));
-                     let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                    let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));  
+                    let cv = JSON.parse(sessionStorage.getItem('cv'));
+                    let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                    let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
 
                     // Obtenemos si es cliente existente
                     if (!cv || cv === null || cv === undefined) {
@@ -818,21 +818,21 @@ module OrangeFeSARQ.Services {
                         params.commercialAction = defaultData.ospCartItemType;
                     } else {
                         params.commercialAction = commercialData.ospCartItemType;
-                    } 
+                    }
 
-                    vm.productCatalogV2Srv.getSpecificationSVAS(params.idSvaList,params.isExistingCustomer, params.segment, 
+                    vm.productCatalogV2Srv.getSpecificationSVAS(params.idSvaList, params.isExistingCustomer, params.segment,
                         params.commercialAction)
-                            .then((spec) => {
-                                if (spec) {
-                                    //Este Funciona
-                                    cartItemElement.cartItem.push(vm.createSVACartItem(spec.productSpecification[0]));
-                                    sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
-                                }
-                            })
-                            .catch((error => {
-                            }));  
+                        .then((spec) => {
+                            if (spec) {
+                                // Pasamos true como parámetro opcional porque es un bono de terminal
+                                cartItemElement.cartItem.push(vm.createSVACartItem(spec.productSpecification[0], true));
+                                sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+                            }
+                        })
+                        .catch((error => {
+                        }));
                 }
-            }   
+            }
 
             // Si viene tecnologia creamos cartItem
             if (rate.ospTecnology) {
@@ -1130,7 +1130,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Crea el Cart Item de un SVA
          */
-        createSVACartItem(sva) {
+        createSVACartItem(sva, isBono?) {
             let vm = this;
             let productItem;
             let svaCartItemElement, cartItemElement;
@@ -1139,7 +1139,7 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
 
-            if(sva.title){
+            if (sva.title) {
                 productItem = {
                     'name': sva.title,
                     'description': sva.description,
@@ -1163,29 +1163,36 @@ module OrangeFeSARQ.Services {
                 };
             }
 
-             if(sva.ospTitulo){
+            if (sva.ospTitulo) {
+                let itemPrice;
+                // Si no viene informado expresamente el precio del bono, añadimos 0 por defecto
+                if (isBono) {
+                    itemPrice =  [
+                            {
+                                "price": {
+                                    "dutyFreeAmount": {
+                                        "unit": "EUR",
+                                        "value": 0
+                                    },
+                                    "taxIncludedAmount": {
+                                        "value": 0,
+                                        "unit": "EUR"
+                                    },
+                                    "taxRate": 0.21,
+                                    "ospTaxRateName": ""
+                                },
+                                "priceType": "siebelPriceSva"
+                            }
+                        ];
+                }else {
+                    itemPrice = sva.itemPrice;
+                }
+
                 svaCartItemElement = {
                     'id': sva.id,
                     'action': 'New',
                     'product': productItem,
-                    //'itemPrice': sva.itemPrice,
-                    'itemPrice': [  
-                        {  
-                           "price":{  
-                              "dutyFreeAmount":{  
-                                 "unit":"EUR",
-                                 "value":0
-                              },
-                              "taxIncludedAmount":{  
-                                 "value":0,
-                                 "unit":"EUR"
-                              },
-                              "taxRate":0.21,
-                              "ospTaxRateName":""
-                           },
-                           "priceType": "siebelPriceSva"
-                        }
-                     ],
+                    'itemPrice': itemPrice,
                     'productOffering': {
                         id: sva.id,
                         name: sva.ospTitulo,
@@ -1199,26 +1206,26 @@ module OrangeFeSARQ.Services {
                     'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                     'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
                 };
-            } else { 
-                    svaCartItemElement = {
-                        'id': sva.id,
-                        'action': 'New',
-                        'product': productItem,
-                        'itemPrice': sva.itemPrice,
-                        'productOffering': {
-                            id: sva.id,
-                            name: sva.title,
-                            category: []
-                        },
-                        cartItemRelationship: [],
-                        'ospSelected': false,
-                        'ospSelectable': true,
-                        'ospMandatory': true,
-                        'ospObjectType': '',
-                        'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
-                        'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
-                    };
-                }
+            } else {
+                svaCartItemElement = {
+                    'id': sva.id,
+                    'action': 'New',
+                    'product': productItem,
+                    'itemPrice': sva.itemPrice,
+                    'productOffering': {
+                        id: sva.id,
+                        name: sva.title,
+                        category: []
+                    },
+                    cartItemRelationship: [],
+                    'ospSelected': false,
+                    'ospSelectable': true,
+                    'ospMandatory': true,
+                    'ospObjectType': '',
+                    'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                    'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                };
+            }
             return svaCartItemElement;
         }
 
@@ -1309,7 +1316,7 @@ module OrangeFeSARQ.Services {
             return response;
         }
 
-        createCommercialDataPacks(dato1?, dato2?){
+        createCommercialDataPacks(dato1?, dato2?) {
             let vm = this;
 
             let sessionCommercial = sessionStorage.getItem('commercialData');
@@ -1343,7 +1350,7 @@ module OrangeFeSARQ.Services {
                 'originRateSiebelId': ''
             };
 
-            sessionStorage.setItem('commercialData' , JSON.stringify(''));
+            sessionStorage.setItem('commercialData', JSON.stringify(''));
 
         }
     }
