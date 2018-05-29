@@ -6,7 +6,6 @@ module OrangeFeSARQ.Services {
         private url: string;
         public genericConstant;
 
-
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:HootSrv#constructor
@@ -21,7 +20,6 @@ module OrangeFeSARQ.Services {
             vm.setInjections($injector);
         }
 
-
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:HootSrv#setInjections
@@ -34,7 +32,6 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.genericConstant = $injector.get('genericConstant');
         }
-
 
         /**
          * @ngdoc method
@@ -150,6 +147,21 @@ module OrangeFeSARQ.Services {
                     throw error.data;
                 }
                 );
+        }
+
+        getPrincipalLineV2(data: Object, componentName: string) {
+            let vm = this;
+
+            let _data = {
+                body: data
+            };
+
+            return vm.httpPost(vm.genericConstant.hoot + '/' + vm.genericConstant.brand + '/principalV2', _data, componentName)
+            .then((response) => {
+                return response.data;
+            }).catch((error) => {
+                throw error.data;
+            });
         }
 
     }
