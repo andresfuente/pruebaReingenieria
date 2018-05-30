@@ -642,10 +642,8 @@ module OrangeFeSARQ.Services {
                                 dDE, selectedOptions.length,
                                 contene,
                                 responseObj);
-
                         }
                     }
-
                 });
             }
 
