@@ -451,45 +451,59 @@ module OrangeFeSARQ.Services {
                                 });
 
                                 let terminals: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
-                                    return _.find(data.product.productRelationship, { 'type': 'terminal' });
+                                    if (data.product && data.product.productRelationship) {
+                                        return _.find(data.product.productRelationship, { 'type': 'terminal' });
+                                    }
                                 });
                                 let primaryTerminal: any = _.find(terminals, (terminal: any) => {
-                                    let terminalType = _.find(terminal.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Primary';
+                                    if (terminal.product && terminal.product.productRelationship) {
+                                        let terminalType = _.find(terminal.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Primary';
+                                        }
                                     }
                                 });
                                 let secundaryTerminal: any = _.find(terminals, (terminal: any) => {
-                                    let terminalType = _.find(terminal.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Secundary';
+                                    if (terminal.product && terminal.product.characteristic) {
+                                        let terminalType = _.find(terminal.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Secundary';
+                                        }
                                     }
                                 });
                                 let insurances: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
-                                    return _.find(data.product.productRelationship, { 'type': 'seguro' });
+                                    if (data.product && data.product.productRelationship) {
+                                        return _.find(data.product.productRelationship, { 'type': 'seguro' });
+                                    }
                                 });
                                 let insurancePrimaryTerminal: any = _.find(insurances, (insurance: any) => {
-                                    let terminalType = _.find(insurance.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Primary';
+                                    if (insurance.product && insurance.product.characteristic) {
+                                        let terminalType = _.find(insurance.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Primary';
+                                        }
                                     }
                                 });
                                 let insuranceSecundaryTerminal: any = _.find(insurances, (insurance: any) => {
-                                    let terminalType = _.find(insurance.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Secundary';
+                                    if (insurance.product && insurance.product.characteristic) {
+                                        let terminalType = _.find(insurance.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Secundary';
+                                        }
                                     }
                                 });
                                 let rate: any = _.find(selectedOptions[i].cartItem, (data: any) => {
-                                    return _.find(data.product.productRelationship, { 'type': 'tarifa' });
+                                    if (data.product && data.product.productRelationship) {
+                                        return _.find(data.product.productRelationship, { 'type': 'tarifa' });
+                                    }
                                 });
 
                                 if (rate) {
