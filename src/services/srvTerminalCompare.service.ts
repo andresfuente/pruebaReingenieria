@@ -458,6 +458,7 @@ module OrangeFeSARQ.Services {
                 return currentRate.siebelId === rate.siebelId;
             });
             vm.resetRatesId();
+            vm.putRatesInSessionStorage();
         }
 
         /**
