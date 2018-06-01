@@ -21,6 +21,7 @@ module ratesComparator.Models {
         public taxRate : number;
         public taxRateName : string;
         public terminals: Array<ratesComparator.Models.Terminal>;
+        public applicationDuration : number;
 
         /**
          * @ngdoc method
@@ -49,6 +50,7 @@ module ratesComparator.Models {
             this.taxRate = rate.taxRate;
             this.taxRateName = rate.taxRateName;
             this.terminals = [];
+            this.applicationDuration = rate.applicationDuration;
         }
     }
 
