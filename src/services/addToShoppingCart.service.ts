@@ -769,12 +769,12 @@ module OrangeFeSARQ.Services {
                         'id': device.itemPrice[i].id,
                         'action': 'New',
                         'product': {
-                            'productRelationship': [{'type': 'VAP' }],
-                            'characteristic': [{'name': 'CIMATerminalType', 'value': 'Primary' }]
+                            'productRelationship': [{ 'type': 'VAP' }],
+                            'characteristic': [{ 'name': 'CIMATerminalType', 'value': 'Primary' }]
                         },
                         'itemPrice': [device.itemPrice[i]],
-                        'productOffering': {'id': device.itemPrice[i].id },
-                        'cartItemRelationship': [{'id': device.siebelId }],
+                        'productOffering': { 'id': device.itemPrice[i].id },
+                        'cartItemRelationship': [{ 'id': device.siebelId }],
                         'ospSelected': true,
                         'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                         'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
