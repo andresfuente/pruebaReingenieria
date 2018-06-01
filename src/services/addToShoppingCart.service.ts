@@ -1152,7 +1152,7 @@ module OrangeFeSARQ.Services {
                 };
             } else {
                 productItem = {
-                    'name': sva.name,
+                    'name': sva.ospTitulo,
                     'description': sva.description,
                     'href': sva.href,
                     'productRelationship': [{
