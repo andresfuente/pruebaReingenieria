@@ -412,7 +412,23 @@ module OrangeFeSARQ.Services {
                             taxRate: rate.taxRate,
                             ospTaxRateName: rate.taxRateName
                         },
-                        'priceAlteration': [{}]
+                        'priceAlteration': [{
+                            'name': rate.typePriceName ? rate.typePriceName : '',
+                            'priceType': 'cuota',
+                            'applicationDuration': rate.applicationDuration,
+                            'price': {
+                                'dutyFreeAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePricePromotional
+                                },
+                                'taxIncludedAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePriceTaxIncludedPromotional
+                                },
+                                taxRate: rate.taxRate,
+                                ospTaxRateName: rate.taxRateName
+                            }
+                        }]
                     }
                 ],
                 'productOffering': {
@@ -502,7 +518,23 @@ module OrangeFeSARQ.Services {
                             taxRate: rate.taxRate,
                             ospTaxRateName: rate.taxRateName
                         },
-                        'priceAlteration': [{}]
+                        'priceAlteration': [{
+                            'name': rate.typePriceName ? rate.typePriceName : '',
+                            'priceType': 'cuota',
+                            'applicationDuration': rate.applicationDuration,
+                            'price': {
+                                'dutyFreeAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePricePromotional
+                                },
+                                'taxIncludedAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePriceTaxIncludedPromotional
+                                },
+                                taxRate: rate.taxRate,
+                                ospTaxRateName: rate.taxRateName
+                            }
+                        }]
                     }
                 ],
                 'productOffering': {
@@ -656,7 +688,23 @@ module OrangeFeSARQ.Services {
                             'taxRate': rate.taxRate,
                             'ospTaxRateName': rate.taxRateName
                         },
-                        'priceAlteration': [{}]
+                        'priceAlteration': [{
+                            'name': rate.typePriceName ? rate.typePriceName : '',
+                            'priceType': 'cuota',
+                            'applicationDuration': rate.applicationDuration,
+                            'price': {
+                                'dutyFreeAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePricePromotional
+                                },
+                                'taxIncludedAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePriceTaxIncludedPromotional
+                                },
+                                taxRate: rate.taxRate,
+                                ospTaxRateName: rate.taxRateName
+                            }
+                        }]
                     }
                 ],
                 'productOffering': {
