@@ -348,7 +348,7 @@ module OrangeFeSARQ.Services {
             let rateForSession = _.pick(rate, ['rateId', 'otherSvaInfoList', 'siebelId',
                 'name', 'description', 'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName',
                 'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack',
-                'taxRate', 'taxRateName',
+                'taxRate', 'taxRateName', 'applicationDuration',
                 'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology', 'type' , 'associatedLine']);
 
             return rateForSession;

@@ -412,7 +412,23 @@ module OrangeFeSARQ.Services {
                             taxRate: rate.taxRate,
                             ospTaxRateName: rate.taxRateName
                         },
-                        'priceAlteration': [{}]
+                        'priceAlteration': [{
+                            'name': rate.typePriceName ? rate.typePriceName : '',
+                            'priceType': 'cuota',
+                            'applicationDuration': rate.applicationDuration,
+                            'price': {
+                                'dutyFreeAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePricePromotional
+                                },
+                                'taxIncludedAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePriceTaxIncludedPromotional
+                                },
+                                taxRate: rate.taxRate,
+                                ospTaxRateName: rate.taxRateName
+                            }
+                        }]
                     }
                 ],
                 'productOffering': {
@@ -502,7 +518,23 @@ module OrangeFeSARQ.Services {
                             taxRate: rate.taxRate,
                             ospTaxRateName: rate.taxRateName
                         },
-                        'priceAlteration': [{}]
+                        'priceAlteration': [{
+                            'name': rate.typePriceName ? rate.typePriceName : '',
+                            'priceType': 'cuota',
+                            'applicationDuration': rate.applicationDuration,
+                            'price': {
+                                'dutyFreeAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePricePromotional
+                                },
+                                'taxIncludedAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePriceTaxIncludedPromotional
+                                },
+                                taxRate: rate.taxRate,
+                                ospTaxRateName: rate.taxRateName
+                            }
+                        }]
                     }
                 ],
                 'productOffering': {
@@ -656,7 +688,23 @@ module OrangeFeSARQ.Services {
                             'taxRate': rate.taxRate,
                             'ospTaxRateName': rate.taxRateName
                         },
-                        'priceAlteration': [{}]
+                        'priceAlteration': [{
+                            'name': rate.typePriceName ? rate.typePriceName : '',
+                            'priceType': 'cuota',
+                            'applicationDuration': rate.applicationDuration,
+                            'price': {
+                                'dutyFreeAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePricePromotional
+                                },
+                                'taxIncludedAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePriceTaxIncludedPromotional
+                                },
+                                taxRate: rate.taxRate,
+                                ospTaxRateName: rate.taxRateName
+                            }
+                        }]
                     }
                 ],
                 'productOffering': {
@@ -802,7 +850,12 @@ module OrangeFeSARQ.Services {
                     }
 
                     // Obtenemos el segmento
+<<<<<<< HEAD
                     if (!clientData || clientData === null || clientData === undefined || clientData.ospCustomerSegment === undefined) {
+=======
+                    if (!clientData || clientData === null || clientData === undefined
+                    || !clientData.ospCustomerSegment || clientData.ospCustomerSegment === '') {
+>>>>>>> 3ab7dfc01f834b212d3fd11ae981495f2143e2d8
                         params.segment = defaultData.ospCustomerSegment;
                     } else  {
                         params.segment = clientData.ospCustomerSegment;
@@ -1152,7 +1205,7 @@ module OrangeFeSARQ.Services {
                 };
             } else {
                 productItem = {
-                    'name': sva.name,
+                    'name': sva.ospTitulo,
                     'description': sva.description,
                     'href': sva.href,
                     'productRelationship': [{

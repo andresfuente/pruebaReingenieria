@@ -511,8 +511,10 @@ module OrangeFeSARQ.Services {
                                     let rateComData;
                                     // Se busca la tarifa en los actos comerciales para obtener sus datos
                                     if (comData) {
-                                        let index = Math.floor(selectedOptions[i].id) - 1;
-                                        rateComData = _.find(comData[index].rates, (rateData: any) => {
+                                        let index = Math.floor(selectedOptions[i].id);
+                                        let currentCommData: any = _.find(comData, {'id': index });
+
+                                        rateComData = _.find(currentCommData.rates, (rateData: any) => {
                                             return rateData.siebelId === rate.id;
                                         });
                                         // Agrupacion tarifa
