@@ -850,12 +850,8 @@ module OrangeFeSARQ.Services {
                     }
 
                     // Obtenemos el segmento
-<<<<<<< HEAD
-                    if (!clientData || clientData === null || clientData === undefined || clientData.ospCustomerSegment === undefined) {
-=======
                     if (!clientData || clientData === null || clientData === undefined
                     || !clientData.ospCustomerSegment || clientData.ospCustomerSegment === '') {
->>>>>>> 3ab7dfc01f834b212d3fd11ae981495f2143e2d8
                         params.segment = defaultData.ospCustomerSegment;
                     } else  {
                         params.segment = clientData.ospCustomerSegment;
