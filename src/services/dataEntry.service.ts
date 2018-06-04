@@ -512,7 +512,7 @@ module OrangeFeSARQ.Services {
                                     // Se busca la tarifa en los actos comerciales para obtener sus datos
                                     if (comData) {
                                         let index = Math.floor(selectedOptions[i].id);
-                                        let currentCommData: any = _.find(comData, {'id': index});
+                                        let currentCommData: any = _.find(comData, {'id': index });
 
                                         rateComData = _.find(currentCommData.rates, (rateData: any) => {
                                             return rateData.siebelId === rate.id;
