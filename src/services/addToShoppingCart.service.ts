@@ -802,9 +802,9 @@ module OrangeFeSARQ.Services {
                     }
 
                     // Obtenemos el segmento
-                    if (!clientData || clientData === null || clientData === undefined) {
+                    if (!clientData || clientData === null || clientData === undefined || clientData.ospCustomerSegment === undefined) {
                         params.segment = defaultData.ospCustomerSegment;
-                    } else {
+                    } else  {
                         params.segment = clientData.ospCustomerSegment;
                     }
 
