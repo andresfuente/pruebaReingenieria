@@ -16,6 +16,7 @@ module OrangeFeSARQ.Constant {
         .service('cookieStoreSrv', OrangeFeSARQ.Services.CookieStoreService)
         .service('changeOfferSrv', OrangeFeSARQ.Services.ChangeOfferSrv)
         .service('changeRateFixedSrv', OrangeFeSARQ.Services.ChangeRateFixedOWCSSrv)
+        .service('clientJazztelSrv', OrangeFeSARQ.Services.ClientJazztelSrv)
         .service('contactFormSrv', OrangeFeSARQ.Services.ContactFormSrv)
         .service('contractsSrv', OrangeFeSARQ.Services.ContractsSrv)
         .service('commercialDataSrv', OrangeFeSARQ.Services.CommercialDataSrv)
