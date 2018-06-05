@@ -64,6 +64,8 @@ module ratesParent.Models {
         public taxRateName: string;
         public typePriceName: string;
         public relatedSVAList: string = ''; // Lista de Id's de los SVA de la tarifa separados por coma
+        public implicitSVAList: string = ''; // Lista de los Id's de los SVA implícitos separados por coma
+
         public svaInfoList: Array<ratesParent.Models.RateSVA> = []; // Array con la información de los SVA's asociados
         public isTVSvaList = false; // Variable para saber si existen SVA's de TV
         public allSVAChildrenList: Array<ratesParent.Models.RateSVA> = []; // Lista con todos los SVA hijos. 
@@ -130,6 +132,11 @@ module ratesParent.Models {
                     if (element.type.toLowerCase() === 'sva' && element.id !== '') {
                         this.relatedSVAList === '' ? this.relatedSVAList = this.relatedSVAList.concat(element.id) :
                             this.relatedSVAList = this.relatedSVAList.concat(',' + element.id);
+                    }
+
+                    if (element.type.toLowerCase() === 'implicitSva' && element.id !== '') {
+                        this.implicitSVAList === '' ? this.implicitSVAList = this.implicitSVAList.concat(element.id) :
+                        this.implicitSVAList = this.implicitSVAList.concat(',' + element.id);
                     }
                 });
             }
