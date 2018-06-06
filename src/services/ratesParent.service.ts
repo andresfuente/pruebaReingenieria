@@ -609,7 +609,7 @@ module OrangeFeSARQ.Services {
                         // Se recorre el array de tarifas disponibles para realizar el cambio
                         productSpecification.forEach((element, index) => {
                             // Se genera un string con cada uno de los siebelId de las tarifas, separados por coma
-                            if(element.if !== 'NO TARIF?') {
+                            if(element.id !== 'NO TARIF?') {
                                 ratesIdListString += (index === (productSpecification.length - 1)) ?
                                 element.id : element.id + ',';
                             }
