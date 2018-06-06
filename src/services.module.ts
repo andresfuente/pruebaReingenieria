@@ -73,7 +73,10 @@ module OrangeFeSARQ.Constant {
         .service('directionPopupSrv', OrangeFeSARQ.Services.DirectionPopupSrv)
         .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)
         .service('linkComercialClientSrv', linkComercialClient.Services.LinkComercialClientSrv)
-
+        .service('localStorageManager', OrangeFeSARQ.Services.LocalStorageManager)
+        .service('customerViewStore', OrangeFeSARQ.Services.CustomerViewStore)
+        
+        
 
 
         // Product Catalog

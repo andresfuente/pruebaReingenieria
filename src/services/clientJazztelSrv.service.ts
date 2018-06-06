@@ -5,8 +5,10 @@ module OrangeFeSARQ.Services {
       public genericConstant;
   
       public clientData;
-      public localStorageManager: OrangeFeSARQ.Services.LocalStorageManager;
-      public customerViewStore;
+      public localStorageManager :  OrangeFeSARQ.Services.LocalStorageManager;
+      public customerViewStore : OrangeFeSARQ.Services.CustomerViewStore;
+      ;
+      ;
       public utils;
 
       constructor($injector) {
@@ -18,10 +20,15 @@ module OrangeFeSARQ.Services {
       setInjections($injector) {
         let vm = this;
         vm.utils = $injector.get('utils');
+        vm.localStorageManager =  $injector.get('localStorageManager');
+        vm.customerViewStore =  $injector.get('customerViewStore');
+        
       }
 
       clientInfo(data) {
         let vm = this;
+
+        vm.customerViewStore.info = data.customer;
 
         // Numero de lineas movil
         let contratosMovil = _.filter(data.customer.product, function (o: any) {
@@ -55,9 +62,8 @@ module OrangeFeSARQ.Services {
                     }
                     if (data.customer.product !== null && data.customer.product.length > 0) {
                         // vm.msisdnStore.msisdn = null;
-                        vm.customerViewStore = {
-                            info: data.customer
-                        }
+                        vm.customerViewStore.info = data.customer;
+                        
                         // vm.lastValue = '1';
 
                         // Aqui entro cuando busco un usuario y la respuesta es correcta
@@ -260,25 +266,7 @@ module OrangeFeSARQ.Services {
                                 }
                             });
                         } */
-                        // Una vez inicializado el customer view, quiero que entre la lógica preguntando si tiene 
-                        /// recomendaciones pendientes
-                        /* vm.adviceOrdersSrv.getAdviceOrdersDataByDoc(vm.clientData.docNumber, 'actualCualificationClient')
-                            .then(
-                                (data) => {
-                                    vm.spinnerBlockSrv.show = false;
-                                    if (data) {
-                                        vm.saveData();
-                                        vm.typeDoc = vm.document;
-                                        vm.docNumber = value;
-                                        vm.showPopUpSave();
-                                    }
-                                })
-                            .catch(
-                                (error) => {
-                                    vm.spinnerBlockSrv.show = false;
-                                    vm.saveData();
-                                    vm.$rootRouter.navigateByUrl('/dashboardClient/' + vm.document + '/' + value);
-                                }); */
+                        
                     } else {
                         vm.customerViewStore.info = null;
                         return -2;
@@ -529,7 +517,6 @@ module OrangeFeSARQ.Services {
 
             vm.localStorageManager.setEntry('searchval', vm.clientData.docNumber);
         }
-
 
         /**
          * @ngdoc method
