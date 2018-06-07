@@ -240,6 +240,9 @@ module OrangeFeSARQ.Services {
                         vm.customerViewStore.loginData.document = vm.clientData.docNumber;
                         }
 
+                        // Cliente jazztel con fibra directa
+                        vm.clientData.jazztelFibra = 1;
+
                         vm.saveData();
 
                         // Llamada a getUser para recuperar los datos del cliente y guardarlos para Tealium
