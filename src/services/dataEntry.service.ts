@@ -220,6 +220,9 @@ module OrangeFeSARQ.Services {
                             vm.insertarCampo(dCC, dDE, '', contene, responseObj);
                         } else if (dDE === 'dentidad' && !vm.isValidAccount() && vm.isOtherBank()) {
                             vm.insertarCampo(dCC, dDE, '', contene, responseObj);
+                        } else if (dDE === 'dpisoContacto') {
+                            let parseValue = valueDep ? parseInt( valueDep, 0 ).toFixed() : '';
+                            vm.insertarCampo(dCC, dDE, parseValue, contene, responseObj);
                         } else {
                             vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                         }
