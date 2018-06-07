@@ -479,8 +479,8 @@ module OrangeFeSARQ.Services {
                                     }
                                 });
                                 let insurances: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
-                                    if (data.product && data.product.productRelationship) {
-                                        return _.find(data.product.productRelationship, { 'type': 'seguro' });
+                                    if (data.product && data.product.productRelationship && data.ospSelected && data.ospSelected === true) {
+                                        return _.find(data.product.productRelationship,  { 'type': 'seguro' });
                                     }
                                 });
                                 let insurancePrimaryTerminal: any = _.find(insurances, (insurance: any) => {
