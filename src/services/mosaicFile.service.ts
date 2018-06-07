@@ -758,7 +758,7 @@ module OrangeFeSARQ.Services {
                 }
             }
             if (commercialData[commercialActIndex].ospCartItemType === 'migracion') {
-                dataOT.ospCartItemSubType = 'todos';
+                dataOT.originType = '';
             }
             return dataOT;
         }
