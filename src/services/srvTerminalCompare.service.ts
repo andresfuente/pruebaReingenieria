@@ -534,6 +534,7 @@ module OrangeFeSARQ.Services {
                     currentRate.svaInfoList = rate.svaInfoList;
                 }
             });
+            vm.putRatesInSessionStorage();
         }
 
         /**
