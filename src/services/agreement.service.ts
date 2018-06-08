@@ -9,7 +9,7 @@ module OrangeFeSARQ.Services {
      */
     export class AgreementSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector', '$q'];
-        public agreementServiceUrl: string;
+        public agreementServiceUrl: string; 
 
         constructor(public $injector) {
             super($injector);
