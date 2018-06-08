@@ -109,6 +109,45 @@ module OrangeFeSARQ.Services {
             return promise.promise;
         }
 
+
+        getJazztelUser(param: string, clientId: string, componentName: string = 'prescoring'): any {
+            let vm = this;
+            let promise = vm.$q.defer();
+            let marca;
+            if (param === 'publicKey') {
+                param = 'telephoneNumber';
+            }
+            marca = 'jazztel';
+            let _search: Object = {
+                queryParams: {
+                    'onlyActive': vm.genericConstant.onlyActive,
+                },
+                urlParams: [marca, 'customerView', param, clientId]
+
+            };
+
+            vm.httpCacheGett(vm.clientAPIUrl, _search, componentName)
+                .then(
+                    (response) => {
+                        if (response.data && response.data.customer) {
+                            if (response.data.customer.individual && response.data.customer.individual.id) {
+                                localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
+                            } else {
+                                localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
+                            }
+                        }
+
+                        vm.getMdgUser(param, clientId);
+                        // - response.data.mdg = vm.mdgData;
+                        promise.resolve(response.data);
+                    },
+                    (error) => {
+                        promise.reject(error.data);
+                    });
+            return promise.promise;
+        }
+
+
         /**
          * @ngdoc method
          * @name #getAmenaUser(param:string, clientId:string, componentName:string)
