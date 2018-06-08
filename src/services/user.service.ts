@@ -109,7 +109,15 @@ module OrangeFeSARQ.Services {
             return promise.promise;
         }
 
-
+        /**
+         * @ngdoc method
+         * @name #getJazztelUser(param:string, clientId:string, componentName:string)
+         * @methodOf locator.UserSrv
+         * @param {param}
+         * @param {clientId} Documento de identificacion de cliente
+         * @param {componentName} Nombre del componente
+         * @returns {object} Busca el recurso en el customerView de empresas
+         */
         getJazztelUser(param: string, clientId: string, componentName: string = 'prescoring'): any {
             let vm = this;
             let promise = vm.$q.defer();
