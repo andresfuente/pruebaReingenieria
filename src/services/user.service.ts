@@ -225,5 +225,47 @@ module OrangeFeSARQ.Services {
 
                     });
         }
+
+        getJazztelUser(param: string, clientId: string, componentName: string = 'locatorComp'): any {
+            let vm = this;
+            let promise = vm.$q.defer();
+            if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
+                param = 'residential';
+            } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
+                param = 'business';
+            } else if (param === 'publicKey') {
+                param = 'telephoneNumber';
+            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))) {
+                param = 'residential';
+            }
+
+            let _search: Object = {
+                queryParams: {
+                    'onlyActive': vm.genericConstant.onlyActive,
+                },
+                urlParams: ['jazztel', 'customerView', param, clientId]
+
+            };
+
+            vm.httpCacheGett(vm.clientAPIUrl, _search, componentName)
+                .then(
+                    (response) => {
+                        if (response.data && response.data.customer) {
+                            if (response.data.customer.individual && response.data.customer.individual.id) {
+                                localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
+                            } else {
+                                localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
+                            }
+                        }
+
+                        vm.getMdgUser(param, clientId);
+                        // - response.data.mdg = vm.mdgData;
+                        promise.resolve(response.data);
+                    },
+                    (error) => {
+                        promise.reject(error.data);
+                    });
+            return promise.promise;
+        }
     }
 }
