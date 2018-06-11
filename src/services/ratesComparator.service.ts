@@ -340,6 +340,7 @@ module OrangeFeSARQ.Services {
             // };
             // CABECERA HASHMAP
             vm.setCustomerData();
+            vm.setStoreProvince();
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
             _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
@@ -415,6 +416,7 @@ module OrangeFeSARQ.Services {
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             srv.setCustomerData();
+            srv.setStoreProvince();
             _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
             _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
 
