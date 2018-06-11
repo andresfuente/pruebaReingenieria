@@ -89,6 +89,40 @@ module OFC.Services {
                 });
         }
 
+        /**
+         * @ngdoc method
+         * @name #getAgreement(brand: string, documentType: string, document: string, 
+         *               segment: string, compomentName?, startrownum?, pagesize?)
+         * @methodOf locator.UserSrv
+         * @param {string} msisdn Identificador de linea.
+         * @param {string} documentType Tipo de documento.
+         * @param {string} document valor del documento
+         * @param {string} segment residencial|business
+         * @param {string} compomentName Componente.
+         * @description
+         * Consulta las marcas de consentimiento
+         * @returns {object} Activa/desactiva el CP movil.
+         */
+        getAgreementByNumber(documentType: string, number: string,
+            segment: string, componentName: string = 'agreementSrv', refresh: boolean = false, anotherBrand:string = this.genericConstant.brand): any {
+            let vm = this;
+
+            let _search: Object = {
+                urlParams: ['agreement', anotherBrand, number],
+                queryParams: { 
+                    'onlyActive': vm.genericConstant.onlyActive
+                 }
+            };
+
+            return vm.httpCacheGett(vm.agreementServiceUrl, _search, componentName, refresh)
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (error) {
+                    return error.data;
+                });
+        }
+
                 /**
          * @ngdoc method
          * @name #setAgrrement(data: Object, comp: string)
