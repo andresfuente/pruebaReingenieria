@@ -1,14 +1,15 @@
-module OrangeFeSARQ.Services {
+module OFC.Services {
     'use strict';
+
     /**
      * @ngdoc service
-     * @name locator.UserSrv
+     * @name OFC.Services.AgreementSrv
      * @description
-     * #rest
-     * Servicio que busca un cliente en funcion de distintos parámetros
+     * Servicio que realiza la llamada a la API Agreement.
      */
     export class AgreementSrv extends OrangeFeSARQ.Services.ParentService {
-        static $inject = ['$injector', '$q'];
+        static $inject = ['$injector'];
+
         public agreementServiceUrl: string;
 
         constructor(public $injector) {
@@ -22,6 +23,39 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
             vm.agreementServiceUrl = vm.genericConstant.getAgrement;
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services.AgreementSrv#getPermanencyDataSrv()
+         * @methodOf OFC.Services.AgreementSrv
+         * @param {string} msisdn Identificador de linea.
+         * @param {string} type Tipo de linea [fixed, mobile]
+         * @param {string} compomentName Componente.
+         * @description
+         * Obtiene los datos de permanencia de una linea
+         * @returns {object} Devuelve una promesa con el response.
+         */
+        getPermanencyDataSrv(msisdn: string, type: string, compomentName = 'agreementAndVapComp'): any {
+            let vm = this;
+            let apiAgreementUrl = vm.genericConstant.agreement;
+
+            let _search: Object = {
+                queryParams: {
+                    'type': type,
+                    'onlyActive': vm.genericConstant.onlyActive
+                },
+                urlParams: [vm.genericConstant.brand, msisdn]
+            };
+
+            return vm.httpCacheGett(apiAgreementUrl, _search, compomentName)
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (error) {
+                    throw error;
+                }
+                );
         }
 
         /**
@@ -55,5 +89,40 @@ module OrangeFeSARQ.Services {
                     return error.data;
                 });
         }
+
+                /**
+         * @ngdoc method
+         * @name #setAgrrement(data: Object, comp: string)
+         * @methodOf locator.UserSrv
+         * @param {Object} data Valores de las marcas.
+         * @param {string} comp Componente.
+         * @description
+         * Actualiza las marcas de consentimiento
+         * @returns {object} Activa/desactiva el CP movil.
+         */
+        setAgreement(data: Object, comp: string){
+            let vm = this;
+
+            let _search: Object = {
+                queryParams: data,
+                urlParams: [vm.genericConstant.brand, 'modifyConsent']
+            };
+            let apiUrl = vm.agreementServiceUrl;
+
+            return vm.httpPut(apiUrl, _search, comp)
+                .then(
+                    (response) => {
+                        return response.data;
+                    },
+                    (error) => {
+                        return error.data;
+                    }
+                );
+        }
+
+
     }
+
+    angular.module('agreementSrv', [])
+        .service('agreementSrv', OFC.Services.AgreementSrv);
 }
