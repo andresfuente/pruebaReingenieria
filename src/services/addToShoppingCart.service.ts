@@ -860,7 +860,7 @@ module OrangeFeSARQ.Services {
                     if (params.segment.toUpperCase() === 'RESIDENCIAL') {
                         params.segment = 'Residencial';
                     } else {
-                        params.segment = 'Empresas';
+                        params.segment = 'Empresa';
                     }
 
                     if (!commercialData && commercialData === null || commercialData === undefined) {

@@ -521,16 +521,16 @@ module OrangeFeSARQ.Services {
                                             return rateData.siebelId === rate.id;
                                         });
                                         // Agrupacion tarifa
-                                        let segment = sessionClientData.ospCustomerSegment;
+                                        let segment = sessionClientData.ospCustomerSegment && sessionClientData.ospCustomerSegment !== '' ? sessionClientData.ospCustomerSegment.toLowerCase() : 'residencial';
                                         let type = rateComData.type;
                                         let siebelId = rateComData.siebelId;
                                         if (type === 'Convergente' && segment === 'residencial') {
                                             agrupation = 'Love';
-                                        } else if (type === 'Convergente' && segment === 'empresas') {
+                                        } else if (type === 'Convergente' && segment === 'empresa') {
                                             agrupation = 'Love Negocio';
                                         } else if (type === 'Movil' && segment === 'residencial') {
                                             agrupation = 'Go';
-                                        } else if (type === 'Movil' && segment === 'empresas') {
+                                        } else if (type === 'Movil' && segment === 'empresa') {
                                             agrupation = 'Go Negocio';
                                         } else if (siebelId === '1-OKX2HG') {
                                             agrupation = 'Ardilla';
@@ -541,7 +541,7 @@ module OrangeFeSARQ.Services {
                                             agrupation = 'Mi Fijo Pro';
                                         } else if (type === 'Fijo' && segment === 'residencial') {
                                             agrupation = 'IEW';
-                                        } else if (type === 'Fijo' && sessionClientData.ospCustomerSegment === 'empresas') {
+                                        } else if (type === 'Fijo' && segment === 'empresa') {
                                             agrupation = 'IEW Pro';
                                         } else if (type === 'Mundo') {
                                             agrupation = 'Mundo';

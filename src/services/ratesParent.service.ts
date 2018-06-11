@@ -82,11 +82,6 @@ module OrangeFeSARQ.Services {
                 delete params.idParqueList;
             }
 
-            // CABECERA PANGEA
-            // let _headers = {
-            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
-            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
@@ -154,11 +149,6 @@ module OrangeFeSARQ.Services {
                 delete params.idParqueList;
             }
 
-            // CABECERA PANGEA
-            // let _headers = {
-            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
-            //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
-            // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
@@ -198,11 +188,6 @@ module OrangeFeSARQ.Services {
                 isExistingCustomer: isExistingCustomer
             };
 
-            // CABECERA PANGEA
-            // let _headers = {
-            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
-            //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
-            // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
@@ -242,11 +227,6 @@ module OrangeFeSARQ.Services {
                 isExistingCustomer: isExistingCustomer
             };
 
-            // CABECERA PANGEA
-            // let _headers = {
-            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
-            //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
-            // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
@@ -271,11 +251,6 @@ module OrangeFeSARQ.Services {
                 idSvaList: idList
             };
 
-            // CABECERA PANGEA
-            // let _headers = {
-            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
-            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince.toUpperCase() : 'Madrid');
@@ -290,7 +265,7 @@ module OrangeFeSARQ.Services {
                             return {
                                 responseSpecification: responseSpecification.data,
                                 responseOffering: responseOffering.data
-                            }
+                            };
                         })
                         .catch((error) => {
                             throw error;
@@ -328,7 +303,8 @@ module OrangeFeSARQ.Services {
                 productType: productType, // Tipo de producto (rate)
                 segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
                 idOfertaComercialList: ratesString, // Listado de idBundle 
-                idTecnologiaList: technologyString // Listado de id de tecnologia
+                idTecnologiaList: technologyString, // Listado de id de tecnologia
+                actocomercial: 'renove'
             };
             if (ratesString === '') {
                 delete params.idOfertaComercialList;
@@ -337,11 +313,6 @@ module OrangeFeSARQ.Services {
                 delete params.idTecnologiaList;
             }
 
-            // CABECERA PANGEA
-            // let _headers = {
-            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
-            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
@@ -386,7 +357,8 @@ module OrangeFeSARQ.Services {
                 productType: productType, // Tipo de producto (rate)
                 segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
                 idOfertaComercialList: ratesString, // Listado de id Siebel 
-                idTecnologiaList: technologyString // Listado de id de tecnologia
+                idTecnologiaList: technologyString, // Listado de id de tecnologia
+                actocomercial: 'renove'
             };
             if (ratesString === '') {
                 delete params.idOfertaComercialList;
@@ -395,11 +367,6 @@ module OrangeFeSARQ.Services {
                 delete params.idTecnologiaList;
             }
 
-            // CABECERA PANGEA
-            // let _headers = {
-            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
-            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
-            // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince.toUpperCase());
@@ -427,7 +394,6 @@ module OrangeFeSARQ.Services {
          */
         setCustomerData() {
             let srv = this;
-        //    srv.customerProvince = 'Madrid'; // REMOVER
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             // Si los datos de clientes se encuentran en el session storage
             if (clientData !== null) {
@@ -529,7 +495,7 @@ module OrangeFeSARQ.Services {
 
         generateShoppingCart(rate: ratesParent.Models.Rate, componentName: string, customer?) {
             let vm = this;
-            let rateOtherSva: any = vm.addToShoppingCartSrv.putRateInShoppingCartForSva(rate);
+            let rateOtherSva = vm.addToShoppingCartSrv.putRateInShoppingCartForSva(rate);
 
             let _search = {
                 body: {
@@ -587,21 +553,20 @@ module OrangeFeSARQ.Services {
          * @returns {IPromise<TResult>}
          * @description Realiza la llamada al end point changeRateList de productCatalog
          */
-        changeRateListBusiness(msisdn:string, contractType:string, originRate:string) {
+        changeRateListBusiness(msisdn: string, contractType: string, originRate: string) {
             let srv = this;
             let ratesIdListString = '';
             let productSpecification = [];
             let _headers = new HashMap<string, string>();
 
             let params = {
-                contractType: contractType, // pospago o prepago
-                tmCodeOrigen: originRate, // codigo tarifa origen
+                contractType: contractType, // [pospago/prepago]
+                tmCodeOrigen: originRate, // Codigo tarifa origen
                 isOriginBundle: true,
-                //rateType: rateType, // voz o datos (opcional)
-                //segment: 'business' // business (opcional)
-            }
+            };
 
-            return srv.httpCacheGeth(srv.genericConstant.productCatalog + '/' + srv.genericConstant.brand + srv.genericConstant.changeRateListBusiness + msisdn,
+            return srv.httpCacheGeth(srv.genericConstant.productCatalog + '/' +
+            srv.genericConstant.brand + srv.genericConstant.changeRateListBusiness + msisdn,
                 { queryParams: params }, _headers, 'ratesParent')
                 .then((response) => {
                     if (response && response.data.error === null && response.data.productSpecification) {
@@ -632,7 +597,7 @@ module OrangeFeSARQ.Services {
             let srv = this;
             let ratesIdListString = '';
             let productSpecification = [];
-            let _headers = new HashMap<string, string>()
+            let _headers = new HashMap<string, string>();
             return srv.httpCacheGeth(srv.genericConstant.productCatalog + srv.genericConstant.changeRateList + originRate,
                 {}, _headers)
                 .then((response) => {
