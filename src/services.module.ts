@@ -72,6 +72,7 @@ module OrangeFeSARQ.Constant {
         .service('directionPopupSrv', OrangeFeSARQ.Services.DirectionPopupSrv)
         .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)
         .service('linkComercialClientSrv', linkComercialClient.Services.LinkComercialClientSrv)
+        .service('linesDashboardServ', OrangeFeSARQ.Services.LinesDashboardServ)
 
 
 
