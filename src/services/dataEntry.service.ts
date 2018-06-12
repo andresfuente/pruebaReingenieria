@@ -220,6 +220,9 @@ module OrangeFeSARQ.Services {
                             vm.insertarCampo(dCC, dDE, '', contene, responseObj);
                         } else if (dDE === 'dentidad' && !vm.isValidAccount() && vm.isOtherBank()) {
                             vm.insertarCampo(dCC, dDE, '', contene, responseObj);
+                        } else if (dDE === 'dpisoContacto') {
+                            let parseValue = valueDep ? parseInt( valueDep, 0 ).toFixed() : '';
+                            vm.insertarCampo(dCC, dDE, parseValue, contene, responseObj);
                         } else {
                             vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                         }
@@ -451,45 +454,59 @@ module OrangeFeSARQ.Services {
                                 });
 
                                 let terminals: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
-                                    return _.find(data.product.productRelationship, { 'type': 'terminal' });
+                                    if (data.product && data.product.productRelationship) {
+                                        return _.find(data.product.productRelationship, { 'type': 'terminal' });
+                                    }
                                 });
                                 let primaryTerminal: any = _.find(terminals, (terminal: any) => {
-                                    let terminalType = _.find(terminal.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Primary';
+                                    if (terminal.product && terminal.product.productRelationship) {
+                                        let terminalType = _.find(terminal.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Primary';
+                                        }
                                     }
                                 });
                                 let secundaryTerminal: any = _.find(terminals, (terminal: any) => {
-                                    let terminalType = _.find(terminal.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Secundary';
+                                    if (terminal.product && terminal.product.characteristic) {
+                                        let terminalType = _.find(terminal.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Secundary';
+                                        }
                                     }
                                 });
                                 let insurances: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
-                                    return _.find(data.product.productRelationship, { 'type': 'seguro' });
+                                    if (data.product && data.product.productRelationship && data.ospSelected && data.ospSelected === true) {
+                                        return _.find(data.product.productRelationship,  { 'type': 'seguro' });
+                                    }
                                 });
                                 let insurancePrimaryTerminal: any = _.find(insurances, (insurance: any) => {
-                                    let terminalType = _.find(insurance.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Primary';
+                                    if (insurance.product && insurance.product.characteristic) {
+                                        let terminalType = _.find(insurance.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Primary';
+                                        }
                                     }
                                 });
                                 let insuranceSecundaryTerminal: any = _.find(insurances, (insurance: any) => {
-                                    let terminalType = _.find(insurance.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Secundary';
+                                    if (insurance.product && insurance.product.characteristic) {
+                                        let terminalType = _.find(insurance.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Secundary';
+                                        }
                                     }
                                 });
                                 let rate: any = _.find(selectedOptions[i].cartItem, (data: any) => {
-                                    return _.find(data.product.productRelationship, { 'type': 'tarifa' });
+                                    if (data.product && data.product.productRelationship) {
+                                        return _.find(data.product.productRelationship, { 'type': 'tarifa' });
+                                    }
                                 });
 
                                 if (rate) {
@@ -497,21 +514,23 @@ module OrangeFeSARQ.Services {
                                     let rateComData;
                                     // Se busca la tarifa en los actos comerciales para obtener sus datos
                                     if (comData) {
-                                        let index = Math.floor(selectedOptions[i].id) - 1;
-                                        rateComData = _.find(comData[index].rates, (rateData: any) => {
+                                        let index = Math.floor(selectedOptions[i].id);
+                                        let currentCommData: any = _.find(comData, {'id': index });
+
+                                        rateComData = _.find(currentCommData.rates, (rateData: any) => {
                                             return rateData.siebelId === rate.id;
                                         });
                                         // Agrupacion tarifa
-                                        let segment = sessionClientData.ospCustomerSegment;
+                                        let segment = sessionClientData.ospCustomerSegment && sessionClientData.ospCustomerSegment !== '' ? sessionClientData.ospCustomerSegment.toLowerCase() : 'residencial';
                                         let type = rateComData.type;
                                         let siebelId = rateComData.siebelId;
                                         if (type === 'Convergente' && segment === 'residencial') {
                                             agrupation = 'Love';
-                                        } else if (type === 'Convergente' && segment === 'empresas') {
+                                        } else if (type === 'Convergente' && segment === 'empresa') {
                                             agrupation = 'Love Negocio';
                                         } else if (type === 'Movil' && segment === 'residencial') {
                                             agrupation = 'Go';
-                                        } else if (type === 'Movil' && segment === 'empresas') {
+                                        } else if (type === 'Movil' && segment === 'empresa') {
                                             agrupation = 'Go Negocio';
                                         } else if (siebelId === '1-OKX2HG') {
                                             agrupation = 'Ardilla';
@@ -522,7 +541,7 @@ module OrangeFeSARQ.Services {
                                             agrupation = 'Mi Fijo Pro';
                                         } else if (type === 'Fijo' && segment === 'residencial') {
                                             agrupation = 'IEW';
-                                        } else if (type === 'Fijo' && sessionClientData.ospCustomerSegment === 'empresas') {
+                                        } else if (type === 'Fijo' && segment === 'empresa') {
                                             agrupation = 'IEW Pro';
                                         } else if (type === 'Mundo') {
                                             agrupation = 'Mundo';
@@ -536,12 +555,16 @@ module OrangeFeSARQ.Services {
                                         if (rate && (rate.id === '1-15VD39' || rate.id === '1-1C3JRF' || rate.id === '1-15PLF2')) {
                                             primaryTerminalTypePrice = 'subvencionado';
                                         } else {
-                                            _.find(primaryTerminal, (data: any) => {
-                                                primaryTerminalTypePrice = data.priceType;
-                                            });
-                                            if (primaryTerminalTypePrice === 'aplazado') {
-                                                typePrice = 'pago aplazado';
-                                            } else {
+                                            let priceType = '';
+
+                                            if (primaryTerminal.itemPrice && primaryTerminal.itemPrice.length > 0
+                                            && primaryTerminal.itemPrice[0].priceType) {
+                                                priceType = primaryTerminal.itemPrice[0].priceType;
+                                            }
+
+                                            if (priceType === 'aplazado') {
+                                                primaryTerminalTypePrice = 'pago aplazado';
+                                            } else if (priceType === 'unico') {
                                                 primaryTerminalTypePrice = 'pago unico';
                                             }
                                         }
@@ -624,13 +647,10 @@ module OrangeFeSARQ.Services {
                                 dDE, selectedOptions.length,
                                 contene,
                                 responseObj);
-
                         }
                     }
-
                 });
             }
-
 
             return responseObj;
         }

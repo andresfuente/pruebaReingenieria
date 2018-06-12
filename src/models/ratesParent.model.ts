@@ -64,11 +64,14 @@ module ratesParent.Models {
         public taxRateName: string;
         public typePriceName: string;
         public relatedSVAList: string = ''; // Lista de Id's de los SVA de la tarifa separados por coma
+        public implicitSVAList: string = ''; // Lista de los Id's de los SVA implícitos separados por coma
+
         public svaInfoList: Array<ratesParent.Models.RateSVA> = []; // Array con la información de los SVA's asociados
         public isTVSvaList = false; // Variable para saber si existen SVA's de TV
         public allSVAChildrenList: Array<ratesParent.Models.RateSVA> = []; // Lista con todos los SVA hijos. 
         public otherSvaInfoList: Array<ratesParent.Models.RateSVA> = [];
         public newRateConditions: boolean = false;
+        public associatedLine : Array<Object>;
 
         // Id Tech
 
@@ -130,8 +133,22 @@ module ratesParent.Models {
                         this.relatedSVAList === '' ? this.relatedSVAList = this.relatedSVAList.concat(element.id) :
                             this.relatedSVAList = this.relatedSVAList.concat(',' + element.id);
                     }
+
+                    if (element.type.toLowerCase() === 'implicitsva' && element.id !== '') {
+                        this.implicitSVAList === '' ? this.implicitSVAList = this.implicitSVAList.concat(element.id) :
+                            this.implicitSVAList = this.implicitSVAList.concat(',' + element.id);
+                    }
                 });
             }
+
+            // Buscamos lineas asociadas en productSpecificationRelationship del rate 
+            let  associatedLine = [];
+            associatedLine = _.filter(rateData.productSpecificationRelationship, {type : 'associatedLine'});
+
+            if (associatedLine !== undefined && associatedLine.length !== 0) {
+                this.associatedLine = associatedLine;
+            }
+
             for (let i in priceData) {
                 if (priceData.length > 0) {
                     if (priceData[i].isBundle === true) {
@@ -181,6 +198,7 @@ module ratesParent.Models {
                                     let productOfferingPriceAlteration = priceData[i].productOfferingPrice[j].
                                     productOfferingPriceAlteration;
 
+                                    // Precios tarifa con promociones
                                     if (promotionalPrice) {
                                         this.typePriceName = promotionalPrice.priceType;
                                         this.taxRate = promotionalPrice.taxRate;
@@ -202,6 +220,7 @@ module ratesParent.Models {
                                         this.applicationDuration = productOfferingPriceAlteration.applicationDuration;
                                     }
 
+                                    // Precios tarifas sin promo
                                     if (commercialPrice) {
                                         this.typePriceName = commercialPrice.priceType;
                                         this.taxRate = commercialPrice.taxRate;

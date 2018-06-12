@@ -16,6 +16,7 @@ module OrangeFeSARQ.Constant {
         .service('cookieStoreSrv', OrangeFeSARQ.Services.CookieStoreService)
         .service('changeOfferSrv', OrangeFeSARQ.Services.ChangeOfferSrv)
         .service('changeRateFixedSrv', OrangeFeSARQ.Services.ChangeRateFixedOWCSSrv)
+        .service('clientJazztelSrv', OrangeFeSARQ.Services.ClientJazztelSrv)
         .service('contactFormSrv', OrangeFeSARQ.Services.ContactFormSrv)
         .service('contractsSrv', OrangeFeSARQ.Services.ContractsSrv)
         .service('commercialDataSrv', OrangeFeSARQ.Services.CommercialDataSrv)
@@ -72,9 +73,9 @@ module OrangeFeSARQ.Constant {
         .service('directionPopupSrv', OrangeFeSARQ.Services.DirectionPopupSrv)
         .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)
         .service('linkComercialClientSrv', linkComercialClient.Services.LinkComercialClientSrv)
+        .service('localStorageManager', OrangeFeSARQ.Services.LocalStorageManager)
+        .service('customerViewStore', OrangeFeSARQ.Services.CustomerViewStore)
         .service('linesDashboardServ', OrangeFeSARQ.Services.LinesDashboardServ)
-
-
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,

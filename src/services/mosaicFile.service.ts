@@ -190,10 +190,9 @@ module OrangeFeSARQ.Services {
                 params.channel = '';
                 params.campaignName = campana_txt;
                 // Se seleccionan los parametros necesarios para la llamada a la OT
-                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'primary_renew' ||
-                    commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') { // Renove primario
+                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName']);
-                } else { // Renove secundario
+                } else {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering']);
                 }
@@ -581,8 +580,13 @@ module OrangeFeSARQ.Services {
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
-            defaultData.profile = localStorage.getItem('profile') ? localStorage.getItem('profile') : 'PDV' ;
-
+            if(localStorage.getItem('profile')) {
+                defaultData.profile = localStorage.getItem('profile');
+            } else if (sessionDefaultData && sessionDefaultData.profile !== null) {
+                defaultData.profile = sessionDefaultData.profile; 
+            } else {
+                defaultData.profile = 'PDV' ;
+            }
             // Si el segmento y/o el tipo de acto está en el clientData, lo recogemos
             if (clientData) {
                 if (clientData.ospCustomerSegment) {
@@ -730,6 +734,11 @@ module OrangeFeSARQ.Services {
                     case 'primary_renew':
                         dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
                         dataOT.ospCartItemType = 'renove';
+                        if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
+                            dataOT.relatedRateResidential = commercialData[commercialActIndex].originRate;
+                        } else {
+                            dataOT.relatedRateBusiness = commercialData[commercialActIndex].originRate;
+                        }
                         break;
                     case 'secondary_renew':
                         dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
@@ -753,7 +762,7 @@ module OrangeFeSARQ.Services {
                 }
             }
             if (commercialData[commercialActIndex].ospCartItemType === 'migracion') {
-                dataOT.ospCartItemSubType = 'todos';
+                dataOT.originType = '';
             }
             return dataOT;
         }
