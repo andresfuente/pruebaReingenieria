@@ -51,4 +51,8 @@ module OrangeFeSARQ.Services {
                 );
         }
     }
+    
+// Registration
+angular.module('commercialCampaignsSrv', [])
+.service('commercialCampaignsSrv', OrangeFeSARQ.Services.CommercialCampaignsSrv);
 }
