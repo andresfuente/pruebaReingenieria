@@ -20,9 +20,9 @@ module OrangeFeSARQ.Services {
       vm.utils = $injector.get('utils');
     }
 
-    getServicesContracted(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
+    getServicesContracted(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false, anotherBrand: string = this.genericConstant.brand): any {
       let vm = this;
-      let BRAND = vm.genericConstant.brand;
+      let BRAND = anotherBrand;
       let METHOD = 'services';
       let type = vm.utils.isFixedLine(msisdn) ? 'fixed' : 'mobile';
       let request;
