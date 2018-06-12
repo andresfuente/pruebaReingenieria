@@ -76,7 +76,9 @@ module OrangeFeSARQ.Constant {
         .service('localStorageManager', OrangeFeSARQ.Services.LocalStorageManager)
         .service('customerViewStore', OrangeFeSARQ.Services.CustomerViewStore)
         .service('linesDashboardServ', OrangeFeSARQ.Services.LinesDashboardServ)
+        .service('commercialCampaignsSrv', OrangeFeSARQ.Services.CommercialCampaignsSrv)
 
+        
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
             productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore, $injector) => {
