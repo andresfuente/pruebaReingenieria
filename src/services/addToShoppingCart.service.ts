@@ -382,6 +382,30 @@ module OrangeFeSARQ.Services {
                 });
             }
 
+            let carrito = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            //Aquí
+            if(carrito !== undefined && carrito !== null){
+            for(let i = 0; i<carrito.cartItem.length; i++){
+                //for(let j = 0;i<carrito.cartItem[i].cartItem.length; i++){
+                    if(carrito.cartItem[i].cartItem[0].product.name === rate.name){
+                        rate.ratePrice = 0;
+                        rate.taxFreePrice = 0;
+                        rate.ratePriceTaxIncluded = 0;
+                        rate.taxIncludedPrice = 0;
+                    } else {
+                        rate.ratePrice = rate.ratePrice;
+                        rate.taxFreePrice = rate.taxFreePrice;
+                        rate.ratePriceTaxIncluded = rate.ratePriceTaxIncluded;
+                        rate.taxIncludedPrice = rate.taxIncludedPrice;
+                    } 
+                }
+            //}    
+        } else {
+            rate.ratePrice = rate.ratePrice;
+            rate.taxFreePrice = rate.taxFreePrice;
+            rate.ratePriceTaxIncluded = rate.ratePriceTaxIncluded;
+            rate.taxIncludedPrice = rate.taxIncludedPrice;
+        }            
             productItem = {
                 'href': '',
                 'name': rate.name ? rate.name : '',
