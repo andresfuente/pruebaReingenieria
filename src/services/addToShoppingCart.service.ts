@@ -382,6 +382,7 @@ module OrangeFeSARQ.Services {
                 });
             }
 
+            
             productItem = {
                 'href': '',
                 'name': rate.name ? rate.name : '',
