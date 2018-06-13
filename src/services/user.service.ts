@@ -143,9 +143,8 @@ module OrangeFeSARQ.Services {
                             } else {
                                 localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
                             }
+                            vm.getMdgUser(param, clientId); // Cuando se realiza la llamada al Plan amigo no es necesario esta llamada
                         }
-
-                        vm.getMdgUser(param, clientId);
                         // - response.data.mdg = vm.mdgData;
                         promise.resolve(response.data);
                     },
