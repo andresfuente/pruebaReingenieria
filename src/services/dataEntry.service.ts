@@ -242,7 +242,18 @@ module OrangeFeSARQ.Services {
 
                     // Si no hay ni dependencias ni equivalencias creo un objeto con el dato extraido directamente de session
                     if (flagDep === false && flagEquiv === false) {
-                        vm.insertarCampo(dCC, dDE, sessionClientData[cont] ? sessionClientData[cont] : defaultData, contene, responseObj);
+                        // Si es empresa o autonomo se recupera el formattedName  y no el firstName
+                        if (dDE === 'dname' && sessionClientData.ospCustomerSegment !== undefined
+                            && (sessionClientData.ospCustomerSegment === 'empresa'
+                            || sessionClientData.ospCustomerSegment === 'autonomo')) {
+                            cont = 'formattedName';
+                            vm.insertarCampo(dCC, dDE, sessionClientData[cont]
+                                ? sessionClientData[cont] : defaultData, contene, responseObj);
+                        } else {
+                            // Flujo normal
+                            vm.insertarCampo(dCC, dDE, sessionClientData[cont]
+                                ? sessionClientData[cont] : defaultData, contene, responseObj);
+                        }
                     }
                 });
             }
@@ -522,8 +533,8 @@ module OrangeFeSARQ.Services {
                                         });
                                         // Agrupacion tarifa
                                         let segment = sessionClientData.ospCustomerSegment
-                                        && sessionClientData.ospCustomerSegment !== ''
-                                        ? sessionClientData.ospCustomerSegment.toLowerCase() : 'residencial';
+                                            && sessionClientData.ospCustomerSegment !== ''
+                                            ? sessionClientData.ospCustomerSegment.toLowerCase() : 'residencial';
                                         let type = rateComData.type;
                                         let siebelId = rateComData.siebelId;
                                         if (type === 'Convergente' && segment === 'residencial') {
@@ -583,17 +594,17 @@ module OrangeFeSARQ.Services {
                                             secundaryTerminalTypePrice = 'subvencionado';
                                         } else {
                                             if (secundaryTerminal.itemPrice && secundaryTerminal.itemPrice !== null
-                                            && secundaryTerminal.itemPrice.length > 0){
-                                            _.find(secundaryTerminal.itemPrice, (dataS: any) => {
-                                                secundaryTerminalTypePrice = dataS.priceType;
-                                            });
-                                            if (secundaryTerminalTypePrice === 'aplazado') {
-                                                typePrice = 'pago aplazado';
-                                            } else {
-                                                secundaryTerminalTypePrice = 'pago unico';
+                                                && secundaryTerminal.itemPrice.length > 0) {
+                                                _.find(secundaryTerminal.itemPrice, (dataS: any) => {
+                                                    secundaryTerminalTypePrice = dataS.priceType;
+                                                });
+                                                if (secundaryTerminalTypePrice === 'aplazado') {
+                                                    typePrice = 'pago aplazado';
+                                                } else {
+                                                    secundaryTerminalTypePrice = 'pago unico';
+                                                }
                                             }
                                         }
-                                    }
                                     } else {
                                         secundaryTerminalTypePrice = 'solo sim';
                                     }
