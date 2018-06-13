@@ -43,7 +43,7 @@ module OrangeFeSARQ.Services {
                 },
                 urlParams: ['ospShoppingCart']
             };
-            return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
+            return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, {}, null, _headers)
                 .then(
                     (response) => {
                         return response.data;
@@ -149,7 +149,7 @@ module OrangeFeSARQ.Services {
 
         getParentSfid() {
             let shopInfo;
-            let _headers;
+            let _headers ;
             shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
             if(shopInfo && shopInfo.parentSfid) {
                 _headers = new HashMap<string, string>();
