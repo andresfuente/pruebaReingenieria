@@ -614,7 +614,7 @@ module OrangeFeSARQ.Services {
             if (vm.objectTv && vm.objectTv !== undefined && vm.objectTv !== null) {
                 flagTvItem = {
                     name: 'Flag TV',
-                    value: vm.objectTv.value === 'Y' ? 'true' : 'false'
+                    value: vm.objectTv.value
                 };
                 ospTecnology.product.characteristic.push(flagTvItem);
             }
