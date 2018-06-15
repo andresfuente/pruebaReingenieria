@@ -22,6 +22,7 @@ module ratesComparator.Models {
         public taxRateName : string;
         public terminals: Array<ratesComparator.Models.Terminal>;
         public applicationDuration : number;
+        public ospTecnology: string;
 
         /**
          * @ngdoc method
@@ -50,6 +51,7 @@ module ratesComparator.Models {
             this.taxRate = rate.taxRate;
             this.taxRateName = rate.taxRateName;
             this.terminals = [];
+            this.ospTecnology = rate.ospTecnology;
             this.applicationDuration = rate.applicationDuration;
         }
     }
@@ -242,6 +244,7 @@ module ratesComparator.Models {
         public taxRateName : string;
         public terminals: Array<ratesComparator.Models.Terminal>;
         public applicationDuration : number;
+        public ospTecnology: string;
 
         /**
          * @ngdoc method
@@ -276,6 +279,7 @@ module ratesComparator.Models {
             this.taxRateName = rate.taxRateName;
             this.terminals = [];
             //this.applicationDuration = rate.applicationDuration;
+            this.ospTecnology = rate.ospTecnology;
         }
     }
 }
