@@ -183,7 +183,7 @@ module OrangeFeSARQ.Services {
             let params = {
                 productType: 'sva', // Tipo de producto
                 idSvaList: idSvaList, // Lista de Id´s de SVA
-                commercialAction: commercialAction,
+                commercialAction: commercialAction.toLowerCase(),
                 segment: segment,
                 isExistingCustomer: isExistingCustomer
             };
@@ -222,7 +222,7 @@ module OrangeFeSARQ.Services {
             let params = {
                 productType: 'sva', // Tipo de producto
                 idSvaList: idSvaList, // Lista de Id´s de SVA
-                commercialAction: commercialAction,
+                commercialAction: commercialAction.toLowerCase(),
                 segment: segment,
                 isExistingCustomer: isExistingCustomer
             };
