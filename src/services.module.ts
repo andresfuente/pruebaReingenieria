@@ -77,6 +77,7 @@ module OrangeFeSARQ.Constant {
         .service('customerViewStore', OrangeFeSARQ.Services.CustomerViewStore)
         .service('commercialCampaignsSrv', OrangeFeSARQ.Services.CommercialCampaignsSrv)
         .service('agreementSrv', OFC.Services.AgreementSrv)
+        .service('userDeviceSrv', OrangeFeSARQ.Services.UserDeviceSrv)
 
         // Product Catalog
         .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
