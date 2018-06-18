@@ -566,7 +566,7 @@ module OrangeFeSARQ.Services {
             };
 
             return srv.httpCacheGeth(srv.genericConstant.productCatalog + '/' +
-            srv.genericConstant.brand + srv.genericConstant.changeRateListBusiness + msisdn,
+                srv.genericConstant.brand + srv.genericConstant.changeRateListBusiness + msisdn,
                 { queryParams: params }, _headers, 'ratesParent')
                 .then((response) => {
                     if (response && response.data.error === null && response.data.productSpecification) {
@@ -574,9 +574,9 @@ module OrangeFeSARQ.Services {
                         // Se recorre el array de tarifas disponibles para realizar el cambio
                         productSpecification.forEach((element, index) => {
                             // Se genera un string con cada uno de los siebelId de las tarifas, separados por coma
-                            if(element.id !== 'NO TARIF?') {
+                            if (element.id !== 'NO TARIF?') {
                                 ratesIdListString += (index === (productSpecification.length - 1)) ?
-                                element.id : element.id + ',';
+                                    element.id : element.id + ',';
                             }
                         });
                         return ratesIdListString;
@@ -590,16 +590,29 @@ module OrangeFeSARQ.Services {
         /**
          * llamada que te devuelve el listado de SVAs utilizando la respuesta del servicio de validación
          * @param {string} originRate tarifa de origen 
+         * @param {string} originTechnology tecnologia de la tarifa 
          * @returns {IPromise<TResult>}
          * @description Realiza la llamada al end point changeRateListv2 de productCatalog
          */
-        changeRateListv2(originRate) {
+        changeRateListv2(originRate, originTechnology?) {
             let srv = this;
             let ratesIdListString = '';
             let productSpecification = [];
             let _headers = new HashMap<string, string>();
+            let queryParamsObjet;
+
+            let params = {
+                technologyId: originTechnology
+            };
+
+            if (originTechnology && originTechnology !== '') {
+                queryParamsObjet = { queryParams: params };
+            } else {
+                queryParamsObjet = {};
+            }
+
             return srv.httpCacheGeth(srv.genericConstant.productCatalog + srv.genericConstant.changeRateList + originRate,
-                {}, _headers)
+                queryParamsObjet, _headers)
                 .then((response) => {
                     if (response && response.data.error === null && response.data.productSpecification) {
                         productSpecification = response.data.productSpecification;
