@@ -104,11 +104,31 @@ module OFC.Services {
          * @returns {object} Activa/desactiva el CP movil.
          */
         getAgreementByNumber(documentType: string, number: string,
-            segment: string, componentName: string = 'agreementSrv', refresh: boolean = false, anotherBrand:string = this.genericConstant.brand): any {
+            segment: string, componentName: string = 'agreementSrv', refresh: boolean = false): any {
             let vm = this;
 
             let _search: Object = {
-                urlParams: ['agreement', anotherBrand, number],
+                urlParams: ['agreement', vm.genericConstant.brand, number],
+                queryParams: { 
+                    'onlyActive': vm.genericConstant.onlyActive
+                 }
+            };
+
+            return vm.httpCacheGett(vm.agreementServiceUrl, _search, componentName, refresh)
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (error) {
+                    return error.data;
+                });
+        }
+
+        getAgreementByNumberJazztel(documentType: string, number: string,
+            segment: string, componentName: string = 'agreementSrv', refresh: boolean = false): any {
+            let vm = this;
+
+            let _search: Object = {
+                urlParams: ['agreement', 'jazztel', number],
                 queryParams: { 
                     'onlyActive': vm.genericConstant.onlyActive
                  }
