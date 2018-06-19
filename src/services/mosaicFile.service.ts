@@ -160,8 +160,8 @@ module OrangeFeSARQ.Services {
                 params.channel = 'eShopRES';
                 // Se seleccionan los parametros necesarios para la llamada a la OT 
                 params = _.pick(params, ['channel', 'isExistingCustomer', 'limit', 'segment',
-                    'offset', 'commercialAction', 'deviceOffering.category.name', 'sort', 'ospOpenSearch',
-                    'brand', 'price', 'deviceType', 'purchaseOption', 'relatedProductOffering', 'price.fee',
+                    'offset', 'commercialAction', 'deviceOffering.category.name', 'sort', 'relatedProductOffering',
+                    'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee',
                     'characteristic.OSData.groupData.OStype.value',
                     'characteristic.cameraData.groupData.backCameraResolution.value',
                     'characteristic.screenData.groupData.screenSize.value',
@@ -190,12 +190,24 @@ module OrangeFeSARQ.Services {
                 params.channel = '';
                 params.campaignName = campana_txt;
                 // Se seleccionan los parametros necesarios para la llamada a la OT
-                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'primary_renew' ||
-                    commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') { // Renove primario
-                    params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName']);
-                } else { // Renove secundario
+                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
-                        'relatedProductOffering']);
+                    'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee',
+                    'characteristic.OSData.groupData.OStype.value',
+                    'characteristic.cameraData.groupData.backCameraResolution.value',
+                    'characteristic.screenData.groupData.screenSize.value',
+                    'characteristic.memoryData.groupData.hardDisk.value',
+                    'characteristic.batteryData.groupData.batteryDurationInConversation.value',
+                    'characteristic.color']);
+                } else {
+                    params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
+                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee',
+                        'characteristic.OSData.groupData.OStype.value',
+                        'characteristic.cameraData.groupData.backCameraResolution.value',
+                        'characteristic.screenData.groupData.screenSize.value',
+                        'characteristic.memoryData.groupData.hardDisk.value',
+                        'characteristic.batteryData.groupData.batteryDurationInConversation.value',
+                        'characteristic.color']);
                 }
             }
             // Metodo http nativo por bug en los filtros
@@ -735,6 +747,11 @@ module OrangeFeSARQ.Services {
                     case 'primary_renew':
                         dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
                         dataOT.ospCartItemType = 'renove';
+                        if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
+                            dataOT.relatedRateResidential = commercialData[commercialActIndex].originRate;
+                        } else {
+                            dataOT.relatedRateBusiness = commercialData[commercialActIndex].originRate;
+                        }
                         break;
                     case 'secondary_renew':
                         dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
@@ -758,7 +775,7 @@ module OrangeFeSARQ.Services {
                 }
             }
             if (commercialData[commercialActIndex].ospCartItemType === 'migracion') {
-                dataOT.ospCartItemSubType = 'todos';
+                dataOT.originType = '';
             }
             return dataOT;
         }

@@ -40,6 +40,7 @@ module OrangeFeSARQ.Services {
         getUser(param: string, clientId: string, componentName: string = 'locatorComp'): any {
             let vm = this;
             let promise = vm.$q.defer();
+
             if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
                 param = 'residential';
             } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
@@ -91,15 +92,14 @@ module OrangeFeSARQ.Services {
             vm.httpCacheGett(vm.clientAPIUrl, _search, componentName)
                 .then(
                     (response) => {
-                        if (response.data && response.data.customer) {
+                        if (response.data && response.data.customer && componentName !== 'shopping_cart_resume') {
                             if (response.data.customer.individual && response.data.customer.individual.id) {
                                 localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
                             } else {
                                 localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
                             }
+                            vm.getMdgUser(param, clientId); // Cuando se realiza la llamada al Plan amigo no es necesario esta llamada
                         }
-
-                        vm.getMdgUser(param, clientId);
                         // - response.data.mdg = vm.mdgData;
                         promise.resolve(response.data);
                     },
@@ -109,7 +109,15 @@ module OrangeFeSARQ.Services {
             return promise.promise;
         }
 
-
+        /**
+         * @ngdoc method
+         * @name #getJazztelUser(param:string, clientId:string, componentName:string)
+         * @methodOf locator.UserSrv
+         * @param {param}
+         * @param {clientId} Documento de identificacion de cliente
+         * @param {componentName} Nombre del componente
+         * @returns {object} Busca el recurso en el customerView de empresas
+         */
         getJazztelUser(param: string, clientId: string, componentName: string = 'prescoring'): any {
             let vm = this;
             let promise = vm.$q.defer();
@@ -135,9 +143,8 @@ module OrangeFeSARQ.Services {
                             } else {
                                 localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
                             }
+                            vm.getMdgUser(param, clientId); // Cuando se realiza la llamada al Plan amigo no es necesario esta llamada
                         }
-
-                        vm.getMdgUser(param, clientId);
                         // - response.data.mdg = vm.mdgData;
                         promise.resolve(response.data);
                     },

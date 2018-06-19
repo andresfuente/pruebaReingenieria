@@ -104,23 +104,18 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-        getProductCatalogPrincipalLineV2(channel, contractType, category, segment, commercialAction, productType, componentName) {
+        getProductCatalogPrincipalLineV2(idOfertaComercialList) {
             let vm = this;
 
             let _search = {
                 queryParams: {
-                    channel: channel,
-                    contractType: contractType,
-                    category: category,
-                    segment: segment,
-                    commercialAction: commercialAction,
-                    productType: productType,
-                    componentName: componentName
+                    idOfertaComercialList: idOfertaComercialList,
+                    productType: 'rate'
                 },
                 urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
             };
 
-            return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, componentName)
+            return vm.httpCacheGett(vm.genericConstant.productCatalog, _search)
                 .then((response) => {
                     return response.data;
                 })

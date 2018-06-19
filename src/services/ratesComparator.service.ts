@@ -262,5 +262,198 @@ module OrangeFeSARQ.Services {
 
             return type;
         }
+
+        /**
+         * @ngdoc method
+         * @name ratesComparatorSrv.Services:RatesComparatorSrv#getIdTechnologyString
+         * @methodOf ratesComparatorSrv.Services:RatesComparatorSrv
+         * @param {Array<string>} tecnologyList lista de tecnologias (id)
+         * @description
+         * Devuelve el listado de ids de las tecnologias como string  
+         */
+        getIdTechnologyString(idTechnologyList) {
+            let technologyListString = '';
+            for (let technology in idTechnologyList) {
+                if ((idTechnologyList.length - 1).toString() === technology && idTechnologyList[technology]) {
+                    technologyListString += idTechnologyList[technology];
+                } else if (idTechnologyList[technology]) {
+                    technologyListString += idTechnologyList[technology] + ',';
+                }
+            }
+            return technologyListString;
+        }
+
+        /** @ngdoc method
+         * @name ratesComparatorSrv.Services:RatesComparatorSrv#getSpecificationDataComparator
+         * @methodOf ratesComparatorSrv.Services:RatesComparatorSrv
+         * @param {string} productType tipo de los productos a consultar (rate)
+         * @param {string} clientSegment segmento a consultar (Residencial/Empresas)
+         * @param {string} contractType tipo de contrato (POSPAGO/PREPAGO)
+         * @param {string} commercialAction acción comercial (renove | alta | portabilidad | migracion)
+         * @param {boolean} isExistingCustomer es cliente existente?
+         * @param {Array<string>} tecnologyList lista de tecnologias (id)
+         * @param {string} ratesIdListString lista de tarifas (idBundle) a consultar
+         * @param {string} releatedRatesClient Tarifas para el idParqueList
+         * @description
+         * Consulta al productSpecification del catalogo la información de las tarifas segun los parámetros de entrada
+         */
+        getSpecificationDataComparator(categoryParam: string, productType: string, clientSegment: string,
+            contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string): ng.IPromise<{} | void> {
+            let vm = this;
+            let technologyString = '';
+            let ratesString = '';
+            if (technologyList) {
+                technologyString = vm.getIdTechnologyString(technologyList);
+            }
+            if (ratesIdListString) {
+                ratesString = vm.getRatesString(ratesIdListString);
+            }
+            let params = {
+                category: categoryParam, // Categoría [ Convergente | Fijo | Movil | Mundo | Holiday ]
+                productType: productType, // Tipo de producto (rate)
+                segment: clientSegment, // Segmento del cliente (Residencial/Empresas),
+                contractType: contractType, // POSPAGO/PREPAGO
+                idOfertaComercialList: ratesString, // Listado de Id's de tarifas
+                idTecnologiaList: technologyString, // Listado de id de tecnologia
+                commercialAction: commercialAction, // Tipo de acto comercial
+                isExistingCustomer: isExistingCustomer, // Cliente existente?,
+                idParqueList: releatedRatesClient, // Tarifas del cliente
+                pack: pack, // Pack de las tarifas
+                type: type // [movil/ movilfijo]
+            };
+
+            if (ratesIdListString === '') {
+                delete params.idOfertaComercialList;
+            }
+            if (technologyString === '') {
+                delete params.idTecnologiaList;
+            }
+            if (!releatedRatesClient || releatedRatesClient === '') {
+                delete params.idParqueList;
+            }
+            
+
+            // CABECERA PANGEA
+            // let _headers = {
+            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
+            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            // };
+            // CABECERA HASHMAP
+            vm.setCustomerData();
+            vm.setStoreProvince();
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
+
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+                { queryParams: params }, _headers)
+                .then((response) => {
+                    return {
+                        specificationData: response.data
+                    };
+                })
+                .catch((error) => {
+                    throw error;
+                });
+        }
+
+        /** @ngdoc method
+         * @name ratesComparatorSrv.Services:RatesComparatorSrv#getOfferingDataComparator
+         * @methodOf ratesComparatorSrv.Services:RatesComparatorSrv
+         * @param {string} productType tipo de los productos a consultar (rate)
+         * @param {string} clientSegment segmento a consultar (Residencial/Empresas)
+         * @param {string} contractType tipo de contrato (POSPAGO/PREPAGO)
+         * @param {string} commercialAction acción comercial (renove | alta | portabilidad | migracion)
+         * @param {boolean} isExistingCustomer es cliente existente?
+         * @param {Array<string>} tecnologyList lista de tecnologias (id)
+         * @param {string} ratesIdListString lista de tarifas (idBundle) a consultar
+         * @param {string} releatedRatesClient Tarifas para el idParqueList
+         * @description
+         * Consulta al productOffering del catalogo la información de las tarifas segun los parámetros de entrada
+         */
+        getOfferingDataComparator(categoryParam: string, productType: string, clientSegment: string,
+            contractType: string, commercialAction: string, isExistingCustomer: string, specificationData, technologyList,
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string) {
+            let srv = this;
+            let technologyString = '';
+            let ratesString = '';
+            if (ratesIdListString) {
+                ratesString = srv.getRatesString(ratesIdListString);
+            }
+            if (technologyList) {
+                technologyString = srv.getIdTechnologyString(technologyList);
+            }
+            let params = {
+                category: categoryParam, // Categoría [ Convergente | Fijo | Movil | Mundo | Holiday ]
+                productType: productType, // Tipo de producto (rate)
+                segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
+                contractType: contractType, // POSPAGO/PREPAGO
+                idOfertaComercialList: ratesString, // Listado de Id's de tarifas 
+                idTecnologiaList: technologyString, // Listado de id de tecnologia
+                commercialAction: commercialAction, // Tipo de acto comercial
+                isExistingCustomer: isExistingCustomer, // Cliente existente?
+                idParqueList: releatedRatesClient, // Tarifas del cliente
+                pack: pack,
+                type: type
+            };
+
+
+            if (ratesIdListString === '') {
+                delete params.idOfertaComercialList;
+            }
+            if (technologyString === '') {
+                delete params.idTecnologiaList;
+            }
+            if (!releatedRatesClient || releatedRatesClient === '') {
+                delete params.idParqueList;
+            }
+            
+
+            // CABECERA PANGEA
+            // let _headers = {
+            //     'Geolocation-local': srv.storeProvince.toUpperCase(),
+            //     'Geolocation-client': srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase()
+            // };
+            // CABECERA HASHMAP
+            let _headers = new HashMap<string, string>();
+            srv.setCustomerData();
+            srv.setStoreProvince();
+            _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
+            _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
+
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
+                { queryParams: params }, _headers)
+                .then((response) => {
+                    let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
+                    rates.loadRates(specificationData, response.data);
+                    return rates;
+                })
+                .catch((error) => {
+                    throw error;
+                });
+
+        }
+
+        /**
+         * @ngdoc method
+         * @name ratesComparatorSrv.Services:RatesParentSrv#getRatesString
+         * @methodOf ratesComparatorSrv.Services:RatesComparatorSrv
+         * @param {Array<Object>} ratesList lista de tarifas (idBundle) a transformar
+         * @description
+         * Devuelve el listado de idBundle de las tarifas como string  
+         */
+        getRatesString(ratesList) {
+            let ratesListString = '';
+            for (let rate in ratesList) {
+                if ((ratesList.length - 1).toString() === rate && ratesList[rate].bundleId) {
+                    ratesListString += ratesList[rate].bundleId;
+                } else if (ratesList[rate].bundleId) {
+                    ratesListString += ratesList[rate].bundleId + ',';
+                }
+            }
+            return ratesListString;
+        }
+        
     }
 }

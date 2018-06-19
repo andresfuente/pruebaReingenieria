@@ -44,6 +44,8 @@ module OrangeFeSARQ.Constant {
       address: 'api/address/v1/address',
       customerManagement: 'api/customerManagement/v1',
       loyalty: 'api/loyalty/v1',
+      getAgrement :  'api/agreementManagement/v1',
+      shoppingCart: 'api/shoppingCart/v1',
 
       // Xnet Url
       xnetUrl: 'vpt2/additionalProductsProAction.do?',
