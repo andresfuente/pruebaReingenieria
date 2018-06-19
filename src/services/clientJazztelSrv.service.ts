@@ -28,8 +28,6 @@ module OrangeFeSARQ.Services {
       clientInfo(data) {
         let vm = this;
 
-        vm.customerViewStore.info = data.customer;
-
         // Numero de lineas movil
         let contratosMovil = _.filter(data.customer.product, function (o: any) {
             return (o.ospProductType === 'Contrato Móvil' || o.ospProductType === 'Contrato Movil');
@@ -42,29 +40,24 @@ module OrangeFeSARQ.Services {
         let lineasFijas = contratoFijo.length;
         let lineasTotales = lineasMoviles + lineasFijas;
 
-        
+
         // Se comprueba la respuesta del CustomerView para controlar si el cliente es empresa con mas de 5 lineas
-        if (data.error === null) {
-                if (data.customer !== undefined && data.customer !== null) {
-                    if (data.customer.ospMobileCustomerSegment === 'EMPRESA'
-                        || data.customer.ospFixeCustomerSegment === 'EMPRESA') { // EMPRESA
-                        /* if (vm.lineasTotales > 5) {
-                            // Compruebo si entro con DNI o con MSISDN
-                            if (vm.inputDocument && !vm.inputMsisdn) {
-                                // Error, el cliente tiene mas de 5 lineas
-                                vm.haveError1 = true;
-                                vm.errorMessage = vm.owcs.listLabel.errorMaxLines;
-                            } else {
-                                vm.haveError2 = true;
-                                vm.errorMessage = vm.owcs.listLabel.errorMaxLines;
-                            }
-                        } */
-                    }
+        if (data.error === null) { //aqui
+            if (data.customer !== undefined && data.customer !== null) {
+                let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                if (clientData && (clientData.clientType === 1 || data.customer.individual.id === clientData.docNumber)) {
+                    clientData.jazztelData = {
+                        type: 1
+                    };
+                    sessionStorage.setItem('clientData', JSON.stringify(clientData));
+                } else if (clientData && data.customer.individual.id !== clientData.docNumber) {
+                    clientData.jazztelData = {
+                        type: 2
+                    };
+                    sessionStorage.setItem('clientData', JSON.stringify(clientData));
+                } else {
                     if (data.customer.product !== null && data.customer.product.length > 0) {
-                        // vm.msisdnStore.msisdn = null;
                         vm.customerViewStore.info = data.customer;
-                        
-                        // vm.lastValue = '1';
 
                         // Aqui entro cuando busco un usuario y la respuesta es correcta
                         vm.clientData = {
@@ -241,41 +234,16 @@ module OrangeFeSARQ.Services {
                         }
 
                         // Cliente jazztel con fibra directa
-                        vm.clientData.jazztelFibra = 1;
-
+                        vm.clientData.jazztelData = {
+                            type: 1
+                        };
                         vm.saveData();
-
-                        // Llamada a getUser para recuperar los datos del cliente y guardarlos para Tealium
-                        /* vm.credentialInformationSrv.setClientData(vm.clientData.docNumber, 'actualCualificationClientComp')
-                        let fixedLines = _.filter(data.customer.product, function (o: any) {
-                            return (o.ospProductType === 'Telefonía Fija');
-                        }); */
-                        /* if (fixedLines.length) {
-                            _.forEach(fixedLines, function (line) {
-                                let number = _.find(line.productCharacteristic, function (product: any) {
-                                    return (product.name === 'Número teléfono fijo VoIP');
-                                });
-                                // ÑAPA NUMERO FIJO
-                                if(number) {
-                                    vm.clientData.clientFixedNumber = number.value;
-                                }
-                                if (number) {
-                                    vm.setProductInventoryData(number.value);
-                                } else {
-                                    let credentialInformation = JSON.parse(sessionStorage.getItem('credentialInformation'));
-                                    credentialInformation.orangetv = 'NO';
-                                    credentialInformation.futbol = 'NO';
-                                    sessionStorage.setItem('credentialInformation', JSON.stringify(credentialInformation));
-                                }
-                            });
-                        } */
-                        
                     } else {
                         vm.customerViewStore.info = null;
                         return -2;
                     }
+                }
             }
-        } else { // ERROR
         }
     }
 
