@@ -134,9 +134,9 @@ module ratesParent.Models {
                             this.relatedSVAList = this.relatedSVAList.concat(',' + element.id);
                     }
 
-                    if (element.type.toLowerCase() === 'implicitSva' && element.id !== '') {
+                    if (element.type.toLowerCase() === 'implicitsva' && element.id !== '') {
                         this.implicitSVAList === '' ? this.implicitSVAList = this.implicitSVAList.concat(element.id) :
-                        this.implicitSVAList = this.implicitSVAList.concat(',' + element.id);
+                            this.implicitSVAList = this.implicitSVAList.concat(',' + element.id);
                     }
                 });
             }

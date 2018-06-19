@@ -532,8 +532,11 @@ module OrangeFeSARQ.Services {
             vm.rateContainer.forEach(currentRate => {
                 if (currentRate.siebelId === rate.siebelId) {
                     currentRate.svaInfoList = rate.svaInfoList;
+                    currentRate.otherSvaInfoList = rate.otherSvaInfoList;
+                    currentRate.allSVAChildrenList = rate.allSVAChildrenList;
                 }
             });
+            vm.putRatesInSessionStorage();
         }
 
         /**

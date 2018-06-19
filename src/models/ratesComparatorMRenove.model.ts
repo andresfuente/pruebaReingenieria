@@ -13,6 +13,8 @@ module ratesComparatorMRenove.Models {
         isModificable: boolean;
         terminals: Array<ratesComparator.Models.Terminal>;
         line: string;
+        // ospTecnology: string para flag TV
+
         /**
          * @ngdoc method
          * @name ratesComparator.Models:Rate#constructor
