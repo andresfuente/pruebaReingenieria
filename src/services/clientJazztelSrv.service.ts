@@ -254,14 +254,17 @@ module OrangeFeSARQ.Services {
 
     saveJazztelUserData(clientData, data){
         let vm = this;
-        
+
+        vm.clientData = clientData;
+        if (vm.clientData && !vm.clientData.jazztelData) {
+            vm.clientData.jazztelData = {};
+        }
         let products = data.customer.product;
         let telephoneNumber = vm.obtainTelephoneNumber(products);
 
-        clientData.jazztelData.customer = data.customer;
-        sessionStorage.setItem("clientData", JSON.stringify(clientData));
+        vm.clientData.jazztelData.customer = data.customer;
+        sessionStorage.setItem("clientData", JSON.stringify(vm.clientData));
 
-            
         vm.agreementSrv.getAgreementByNumberJazztel("", telephoneNumber, "",'shoppingCart').then(
             function(response){
                 vm.clientData = JSON.parse(sessionStorage.getItem("clientData"));
