@@ -54,7 +54,7 @@ module OrangeFeSARQ.Services {
                     };
                     vm.saveJazztelUserData(clientData, data);
                     sessionStorage.setItem('clientData', JSON.stringify(clientData));
-                } else if (clientData && data.customer.individual.id !== clientData.docNumber) {
+                } else if (clientData && clientData.docNumber && data.customer.individual.id !== clientData.docNumber) {
                     clientData.jazztelData = {
                         type: 2
                     };
