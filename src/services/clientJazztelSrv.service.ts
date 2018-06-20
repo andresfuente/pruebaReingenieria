@@ -7,6 +7,8 @@ module OrangeFeSARQ.Services {
       public clientData;
       public localStorageManager :  OrangeFeSARQ.Services.LocalStorageManager;
       public customerViewStore : OrangeFeSARQ.Services.CustomerViewStore;
+      public agreementSrv : OFC.Services.AgreementSrv;
+      public productInventorySrv : OrangeFeSARQ.Services.ProductInventoryService;
       ;
       ;
       public utils;
@@ -22,13 +24,12 @@ module OrangeFeSARQ.Services {
         vm.utils = $injector.get('utils');
         vm.localStorageManager =  $injector.get('localStorageManager');
         vm.customerViewStore =  $injector.get('customerViewStore');
-        
+        vm.agreementSrv = $injector.get('agreementSrv');
+        vm.productInventorySrv = $injector.get('productInventorySrv');
       }
 
       clientInfo(data) {
         let vm = this;
-
-        vm.customerViewStore.info = data.customer;
 
         // Numero de lineas movil
         let contratosMovil = _.filter(data.customer.product, function (o: any) {
@@ -42,29 +43,25 @@ module OrangeFeSARQ.Services {
         let lineasFijas = contratoFijo.length;
         let lineasTotales = lineasMoviles + lineasFijas;
 
-        
+
         // Se comprueba la respuesta del CustomerView para controlar si el cliente es empresa con mas de 5 lineas
-        if (data.error === null) {
-                if (data.customer !== undefined && data.customer !== null) {
-                    if (data.customer.ospMobileCustomerSegment === 'EMPRESA'
-                        || data.customer.ospFixeCustomerSegment === 'EMPRESA') { // EMPRESA
-                        /* if (vm.lineasTotales > 5) {
-                            // Compruebo si entro con DNI o con MSISDN
-                            if (vm.inputDocument && !vm.inputMsisdn) {
-                                // Error, el cliente tiene mas de 5 lineas
-                                vm.haveError1 = true;
-                                vm.errorMessage = vm.owcs.listLabel.errorMaxLines;
-                            } else {
-                                vm.haveError2 = true;
-                                vm.errorMessage = vm.owcs.listLabel.errorMaxLines;
-                            }
-                        } */
-                    }
+        if (data.error === null) { //aqui
+            if (data.customer !== undefined && data.customer !== null) {
+                let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                if (clientData && (clientData.clientType === 1 || data.customer.individual.id === clientData.docNumber)) {
+                    clientData.jazztelData = {
+                        type: 1
+                    };
+                    vm.saveJazztelUserData(clientData, data);
+                    sessionStorage.setItem('clientData', JSON.stringify(clientData));
+                } else if (clientData && clientData.docNumber && data.customer.individual.id !== clientData.docNumber) {
+                    clientData.jazztelData = {
+                        type: 2
+                    };
+                    sessionStorage.setItem('clientData', JSON.stringify(clientData));
+                } else {
                     if (data.customer.product !== null && data.customer.product.length > 0) {
-                        // vm.msisdnStore.msisdn = null;
                         vm.customerViewStore.info = data.customer;
-                        
-                        // vm.lastValue = '1';
 
                         // Aqui entro cuando busco un usuario y la respuesta es correcta
                         vm.clientData = {
@@ -241,42 +238,64 @@ module OrangeFeSARQ.Services {
                         }
 
                         // Cliente jazztel con fibra directa
-                        vm.clientData.jazztelFibra = 1;
-
+                        vm.clientData.jazztelData = {
+                            type: 1
+                        };
+                        vm.saveJazztelUserData(vm.clientData, data);
                         vm.saveData();
-
-                        // Llamada a getUser para recuperar los datos del cliente y guardarlos para Tealium
-                        /* vm.credentialInformationSrv.setClientData(vm.clientData.docNumber, 'actualCualificationClientComp')
-                        let fixedLines = _.filter(data.customer.product, function (o: any) {
-                            return (o.ospProductType === 'Telefonía Fija');
-                        }); */
-                        /* if (fixedLines.length) {
-                            _.forEach(fixedLines, function (line) {
-                                let number = _.find(line.productCharacteristic, function (product: any) {
-                                    return (product.name === 'Número teléfono fijo VoIP');
-                                });
-                                // ÑAPA NUMERO FIJO
-                                if(number) {
-                                    vm.clientData.clientFixedNumber = number.value;
-                                }
-                                if (number) {
-                                    vm.setProductInventoryData(number.value);
-                                } else {
-                                    let credentialInformation = JSON.parse(sessionStorage.getItem('credentialInformation'));
-                                    credentialInformation.orangetv = 'NO';
-                                    credentialInformation.futbol = 'NO';
-                                    sessionStorage.setItem('credentialInformation', JSON.stringify(credentialInformation));
-                                }
-                            });
-                        } */
-                        
                     } else {
                         vm.customerViewStore.info = null;
                         return -2;
                     }
+                }
             }
-        } else { // ERROR
         }
+    }
+
+    saveJazztelUserData(clientData, data){
+        let vm = this;
+
+        vm.clientData = clientData;
+        if (vm.clientData && !vm.clientData.jazztelData) {
+            vm.clientData.jazztelData = {};
+        }
+        let products = data.customer.product;
+        let telephoneNumber = vm.obtainTelephoneNumber(products);
+
+        vm.clientData.jazztelData.customer = data.customer;
+        sessionStorage.setItem("clientData", JSON.stringify(vm.clientData));
+
+        vm.agreementSrv.getAgreementByNumberJazztel("", telephoneNumber, "",'shoppingCart').then(
+            function(response){
+                vm.clientData = JSON.parse(sessionStorage.getItem("clientData"));
+
+                vm.clientData.jazztelData.agreement = response.Agreement;
+                vm.saveData();
+            }
+        );
+
+        vm.productInventorySrv.getServicesContractedJazztel(telephoneNumber, 'shoppingCart', false).then(
+            function(response){
+                vm.clientData = JSON.parse(sessionStorage.getItem("clientData"));
+
+                vm.clientData.jazztelData.product = response;
+                vm.saveData();
+            }
+        );
+        
+    }
+
+    private obtainTelephoneNumber(products) {
+        for(let i = 0; i < products.length; i++) {
+            let product = products[i].productCharacteristic;
+
+            for(let j = 0; j < product.length; j++) {
+                if(product[j].name = 'Número fijo Asociado') {
+                    return product[j].value;
+                }
+            }
+        }
+        return null;
     }
 
     /**

@@ -382,7 +382,7 @@ module OrangeFeSARQ.Services {
                 });
             }
 
-            
+
             productItem = {
                 'href': '',
                 'name': rate.name ? rate.name : '',
@@ -852,9 +852,9 @@ module OrangeFeSARQ.Services {
 
                     // Obtenemos el segmento
                     if (!clientData || clientData === null || clientData === undefined
-                    || !clientData.ospCustomerSegment || clientData.ospCustomerSegment === '') {
+                        || !clientData.ospCustomerSegment || clientData.ospCustomerSegment === '') {
                         params.segment = defaultData.ospCustomerSegment;
-                    } else  {
+                    } else {
                         params.segment = clientData.ospCustomerSegment;
                     }
 
@@ -947,21 +947,13 @@ module OrangeFeSARQ.Services {
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
             // Tipo del terminal
-            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar') {
-                device.characteristic = [
-                    {
-                        name: 'CIMATerminalType',
-                        value: 'Secundary'
-                    }
-                ];
-            } else {
-                device.characteristic = [
-                    {
-                        name: 'CIMATerminalType',
-                        value: 'Primary'
-                    }
-                ];
-            }
+
+            device.characteristic = [
+                {
+                    name: 'CIMATerminalType',
+                    value: 'Primary'
+                }
+            ];
 
             let uniqueItemPrice = [];
             let vapCartItems = [];
@@ -1022,7 +1014,7 @@ module OrangeFeSARQ.Services {
                 'cartItemRelationship': [{
                     id: commercialActId
                 }],
-                'ospSelected': true,
+                'ospSelected': false,
                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
             };
@@ -1217,24 +1209,24 @@ module OrangeFeSARQ.Services {
                 let itemPrice;
                 // Si no viene informado expresamente el precio del bono, añadimos 0 por defecto
                 if (isBono) {
-                    itemPrice =  [
-                            {
-                                "price": {
-                                    "dutyFreeAmount": {
-                                        "unit": "EUR",
-                                        "value": 0
-                                    },
-                                    "taxIncludedAmount": {
-                                        "value": 0,
-                                        "unit": "EUR"
-                                    },
-                                    "taxRate": 0.21,
-                                    "ospTaxRateName": ""
+                    itemPrice = [
+                        {
+                            "price": {
+                                "dutyFreeAmount": {
+                                    "unit": "EUR",
+                                    "value": 0
                                 },
-                                "priceType": "siebelPriceSva"
-                            }
-                        ];
-                }else {
+                                "taxIncludedAmount": {
+                                    "value": 0,
+                                    "unit": "EUR"
+                                },
+                                "taxRate": 0.21,
+                                "ospTaxRateName": ""
+                            },
+                            "priceType": "siebelPriceSva"
+                        }
+                    ];
+                } else {
                     itemPrice = sva.itemPrice;
                 }
 

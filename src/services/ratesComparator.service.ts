@@ -284,8 +284,8 @@ module OrangeFeSARQ.Services {
         }
 
         /** @ngdoc method
-         * @name ratesParent.Services:RatesParentSrv#getSpecificationData
-         * @methodOf ratesParent.Services:RatesParentSrv
+         * @name ratesComparatorSrv.Services:RatesComparatorSrv#getSpecificationDataComparator
+         * @methodOf ratesComparatorSrv.Services:RatesComparatorSrv
          * @param {string} productType tipo de los productos a consultar (rate)
          * @param {string} clientSegment segmento a consultar (Residencial/Empresas)
          * @param {string} contractType tipo de contrato (POSPAGO/PREPAGO)
@@ -297,7 +297,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Consulta al productSpecification del catalogo la información de las tarifas segun los parámetros de entrada
          */
-        getSpecificationDataComparator(productType: string, clientSegment: string,
+        getSpecificationDataComparator(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
             ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string): ng.IPromise<{} | void> {
             let vm = this;
@@ -310,6 +310,7 @@ module OrangeFeSARQ.Services {
                 ratesString = vm.getRatesString(ratesIdListString);
             }
             let params = {
+                category: categoryParam, // Categoría [ Convergente | Fijo | Movil | Mundo | Holiday ]
                 productType: productType, // Tipo de producto (rate)
                 segment: clientSegment, // Segmento del cliente (Residencial/Empresas),
                 contractType: contractType, // POSPAGO/PREPAGO
@@ -358,8 +359,8 @@ module OrangeFeSARQ.Services {
         }
 
         /** @ngdoc method
-         * @name ratesParent.Services:RatesParentSrv#getOfferingData
-         * @methodOf ratesParent.Services:RatesParentSrv
+         * @name ratesComparatorSrv.Services:RatesComparatorSrv#getOfferingDataComparator
+         * @methodOf ratesComparatorSrv.Services:RatesComparatorSrv
          * @param {string} productType tipo de los productos a consultar (rate)
          * @param {string} clientSegment segmento a consultar (Residencial/Empresas)
          * @param {string} contractType tipo de contrato (POSPAGO/PREPAGO)
@@ -371,7 +372,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Consulta al productOffering del catalogo la información de las tarifas segun los parámetros de entrada
          */
-        getOfferingDataComparator(productType: string, clientSegment: string,
+        getOfferingDataComparator(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, specificationData, technologyList,
             ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string) {
             let srv = this;
@@ -384,6 +385,7 @@ module OrangeFeSARQ.Services {
                 technologyString = srv.getIdTechnologyString(technologyList);
             }
             let params = {
+                category: categoryParam, // Categoría [ Convergente | Fijo | Movil | Mundo | Holiday ]
                 productType: productType, // Tipo de producto (rate)
                 segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
                 contractType: contractType, // POSPAGO/PREPAGO
@@ -435,8 +437,8 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
-         * @name ratesParent.Services:RatesParentSrv#getRatesString
-         * @methodOf ratesParent.Services:MosaicFileSrv
+         * @name ratesComparatorSrv.Services:RatesParentSrv#getRatesString
+         * @methodOf ratesComparatorSrv.Services:RatesComparatorSrv
          * @param {Array<Object>} ratesList lista de tarifas (idBundle) a transformar
          * @description
          * Devuelve el listado de idBundle de las tarifas como string  

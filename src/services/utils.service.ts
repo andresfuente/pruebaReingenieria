@@ -208,6 +208,16 @@ module OrangeFeSARQ.Services {
             }
         }
 
+        isPassport(passport: string): boolean {
+            passport = passport.toUpperCase();
+            let regexPassport = /^[A-Z0-9<]{9}[0-9]{1}[A-Z]{3}[0-9]{7}[A-Z]{1}[0-9]{7}[A-Z0-9<]{14}[0-9]{2}$/i;
+            if (regexPassport.test(passport)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         getPrepagoLines(products: any): any {
             /* for (let i in products) {
                 if (products[i].productCharacteristic) {

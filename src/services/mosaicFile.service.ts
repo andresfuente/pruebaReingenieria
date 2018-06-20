@@ -160,8 +160,8 @@ module OrangeFeSARQ.Services {
                 params.channel = 'eShopRES';
                 // Se seleccionan los parametros necesarios para la llamada a la OT 
                 params = _.pick(params, ['channel', 'isExistingCustomer', 'limit', 'segment',
-                    'offset', 'commercialAction', 'deviceOffering.category.name', 'sort', 'ospOpenSearch',
-                    'brand', 'price', 'deviceType', 'purchaseOption', 'relatedProductOffering', 'price.fee',
+                    'offset', 'commercialAction', 'deviceOffering.category.name', 'sort', 'relatedProductOffering',
+                    'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee',
                     'characteristic.OSData.groupData.OStype.value',
                     'characteristic.cameraData.groupData.backCameraResolution.value',
                     'characteristic.screenData.groupData.screenSize.value',
@@ -191,10 +191,23 @@ module OrangeFeSARQ.Services {
                 params.campaignName = campana_txt;
                 // Se seleccionan los parametros necesarios para la llamada a la OT
                 if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
-                    params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName']);
+                    params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
+                    'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee',
+                    'characteristic.OSData.groupData.OStype.value',
+                    'characteristic.cameraData.groupData.backCameraResolution.value',
+                    'characteristic.screenData.groupData.screenSize.value',
+                    'characteristic.memoryData.groupData.hardDisk.value',
+                    'characteristic.batteryData.groupData.batteryDurationInConversation.value',
+                    'characteristic.color']);
                 } else {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
-                        'relatedProductOffering']);
+                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee',
+                        'characteristic.OSData.groupData.OStype.value',
+                        'characteristic.cameraData.groupData.backCameraResolution.value',
+                        'characteristic.screenData.groupData.screenSize.value',
+                        'characteristic.memoryData.groupData.hardDisk.value',
+                        'characteristic.batteryData.groupData.batteryDurationInConversation.value',
+                        'characteristic.color']);
                 }
             }
             // Metodo http nativo por bug en los filtros
