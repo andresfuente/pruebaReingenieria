@@ -241,7 +241,7 @@ module OrangeFeSARQ.Services {
                         vm.clientData.jazztelData = {
                             type: 1
                         };
-                        vm.saveJazztelUserData(clientData, data);
+                        vm.saveJazztelUserData(vm.clientData, data);
                         vm.saveData();
                     } else {
                         vm.customerViewStore.info = null;
@@ -255,32 +255,44 @@ module OrangeFeSARQ.Services {
     saveJazztelUserData(clientData, data){
         let vm = this;
         
-        let numbers = data.customer.telephoneNumber;
+        let products = data.customer.product;
+        let telephoneNumber = vm.obtainTelephoneNumber(products);
+
         clientData.jazztelData.customer = data.customer;
         sessionStorage.setItem("clientData", JSON.stringify(clientData));
 
-        for(let i = 0; i < numbers.length; i++) {
-            let telephoneNumber = data.customer.telephoneNumber[i].number;
             
-            vm.agreementSrv.getAgreementByNumberJazztel("", telephoneNumber, "",'shoppingCart').then(
-                function(response){
-                    let clientData = JSON.parse(sessionStorage.getItem("clientData"));
+        vm.agreementSrv.getAgreementByNumberJazztel("", telephoneNumber, "",'shoppingCart').then(
+            function(response){
+                vm.clientData = JSON.parse(sessionStorage.getItem("clientData"));
 
-                    clientData.jazztelData.agreement = response.Agreement;
-                    sessionStorage.setItem("clientData", JSON.stringify(clientData));
-                }
-            );
+                vm.clientData.jazztelData.agreement = response.Agreement;
+                vm.saveData();
+            }
+        );
 
-            vm.productInventorySrv.getServicesContractedJazztel(telephoneNumber, 'shoppingCart', false).then(
-                function(response){
-                    let clientData = JSON.parse(sessionStorage.getItem("clientData"));
+        vm.productInventorySrv.getServicesContractedJazztel(telephoneNumber, 'shoppingCart', false).then(
+            function(response){
+                vm.clientData = JSON.parse(sessionStorage.getItem("clientData"));
 
-                    clientData.jazztelData.product = response;
-                    sessionStorage.setItem("clientData", JSON.stringify(clientData));
-                }
-            );
-        }
+                vm.clientData.jazztelData.product = response;
+                vm.saveData();
+            }
+        );
         
+    }
+
+    private obtainTelephoneNumber(products) {
+        for(let i = 0; i < products.length; i++) {
+            let product = products[i].productCharacteristic;
+
+            for(let j = 0; j < product.length; j++) {
+                if(product[j].name = 'Número fijo Asociado') {
+                    return product[j].value;
+                }
+            }
+        }
+        return null;
     }
 
     /**
