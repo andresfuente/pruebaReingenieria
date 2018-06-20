@@ -71,7 +71,7 @@ module ratesParent.Models {
         public allSVAChildrenList: Array<ratesParent.Models.RateSVA> = []; // Lista con todos los SVA hijos. 
         public otherSvaInfoList: Array<ratesParent.Models.RateSVA> = [];
         public newRateConditions: boolean = false;
-        public associatedLine : Array<Object>;
+        public associatedLine: Array<Object>;
 
         // Id Tech
 
@@ -118,10 +118,10 @@ module ratesParent.Models {
                 rateData.productSpecCharacteristic.forEach(element => {
                     if (element.ospCategory === 'highlight' || element.name === 'CARACTERISTICATECNOLOGIA') {
                         let raProductBundle = new RatesProductBundle(element.attachment ? element.attachment.href : '',
-                                                element.name,
-                                                element.ospCategory,
-                                                element.description,
-                                                element.productSpecSubcharacteristic);
+                            element.name,
+                            element.ospCategory,
+                            element.description,
+                            element.productSpecSubcharacteristic);
                         this.productBundle.push(raProductBundle);
                     }
                 });
@@ -142,8 +142,8 @@ module ratesParent.Models {
             }
 
             // Buscamos lineas asociadas en productSpecificationRelationship del rate 
-            let  associatedLine = [];
-            associatedLine = _.filter(rateData.productSpecificationRelationship, {type : 'associatedLine'});
+            let associatedLine = [];
+            associatedLine = _.filter(rateData.productSpecificationRelationship, { type: 'associatedLine' });
 
             if (associatedLine !== undefined && associatedLine.length !== 0) {
                 this.associatedLine = associatedLine;
@@ -196,7 +196,7 @@ module ratesParent.Models {
                                     });
 
                                     let productOfferingPriceAlteration = priceData[i].productOfferingPrice[j].
-                                    productOfferingPriceAlteration;
+                                        productOfferingPriceAlteration;
 
                                     // Precios tarifa con promociones
                                     if (promotionalPrice) {
@@ -296,7 +296,7 @@ module ratesParent.Models {
             this.subcharacteristic = [];
 
             if (subchar && subchar.length > 0) {
-                let elem : RatesSubcharacteristic;
+                let elem: RatesSubcharacteristic;
 
                 for (let i = 0; i < subchar.length; i++) {
                     this.subcharacteristic.push(
@@ -450,24 +450,35 @@ module ratesParent.Models {
                                     currentSVAOffering.productOfferingPrice.forEach(priceElement => {
                                         svaPriceItem = new RatePriceItem();
                                         if (priceElement.priceType.toLowerCase() === 'pago aplazado') {
-                                            priceElement.price.forEach(currentPrice => {
-                                                // Precio sin iva si es residencial
-                                                if (customerSegment.toLocaleLowerCase() === 'residencial') {
-                                                    sva.price = currentPrice.taxIncludedAmount;
-                                                } else { // Precio con iva si es empresa o autónomo 
-                                                    sva.price = currentPrice.dutyFreeAmount;
-                                                }
-                                                // ItemPrice
+                                            let priceSVA: any = _.find(priceElement.price, { priceType: 'priceSva' });
+                                            let siebelPriceSva: any = _.find(priceElement.price, { priceType: 'siebelPriceSva' });
+
+                                            if (priceSVA) {
                                                 svaPriceItem.priceType = priceElement.priceType;
-                                                svaPriceItem.price.taxRate = currentPrice.taxRate;
-                                                svaPriceItem.price.ospTaxRateName = currentPrice.ospTaxRateName;
-                                                svaPriceItem.price.dutyFreeAmount.unit = currentPrice.currencyCode;
-                                                svaPriceItem.price.dutyFreeAmount.value = currentPrice.dutyFreeAmount;
-                                                svaPriceItem.price.taxIncludedAmount.value = currentPrice.taxIncludedAmount;
-                                                svaPriceItem.price.taxIncludedAmount.unit = currentPrice.currencyCode;
-                                                sva.itemPrice.push(svaPriceItem);
-                                            });
+                                                svaPriceItem.price.taxRate = priceSVA.taxRate;
+                                                svaPriceItem.price.ospTaxRateName = priceSVA.ospTaxRateName;
+                                                svaPriceItem.price.dutyFreeAmount.unit = priceSVA.currencyCode;
+                                                svaPriceItem.price.dutyFreeAmount.value = priceSVA.dutyFreeAmount;
+                                                svaPriceItem.price.taxIncludedAmount.value = priceSVA.taxIncludedAmount;
+                                                svaPriceItem.price.taxIncludedAmount.unit = priceSVA.currencyCode;
+                                            } else if (siebelPriceSva) {
+                                                svaPriceItem.priceType = priceElement.priceType;
+                                                svaPriceItem.price.taxRate = siebelPriceSva.taxRate;
+                                                svaPriceItem.price.ospTaxRateName = siebelPriceSva.ospTaxRateName;
+                                                svaPriceItem.price.dutyFreeAmount.unit = siebelPriceSva.currencyCode;
+                                                svaPriceItem.price.dutyFreeAmount.value = siebelPriceSva.dutyFreeAmount;
+                                                svaPriceItem.price.taxIncludedAmount.value = siebelPriceSva.taxIncludedAmount;
+                                                svaPriceItem.price.taxIncludedAmount.unit = siebelPriceSva.currencyCode;
+                                            }
+
+                                            if (customerSegment.toLocaleLowerCase() === 'residencial') {
+                                                sva.price = svaPriceItem.price.taxIncludedAmount.value;
+                                            } else {
+                                                sva.price = svaPriceItem.price.dutyFreeAmount.value;
+                                            }
+                                            sva.itemPrice.push(svaPriceItem);
                                         }
+                                        // Precio promocionado
                                         if (priceElement.productOfferingPriceAlteration) {
                                             sva.typePriceName = priceElement.productOfferingPriceAlteration.priceType;
                                             sva.taxRate = priceElement.productOfferingPriceAlteration.price.taxRate;
