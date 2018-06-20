@@ -13,6 +13,7 @@ module linkComercialClient.Services {
         public genericConstant;
         private renove: boolean;
         private commercialCampaigns: any;
+        public subperfil;//do not delete
 
         constructor(public $injector) {
             super($injector);
