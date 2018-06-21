@@ -78,7 +78,7 @@ module OrangeFeSARQ.Services {
                 urlParams: [vm.genericConstant.brand, 'getComercialCampaings85205']
             };
 
-            vm.getComercialCampaings85205Response(_search,comp); 
+            return vm.getComercialCampaings85205Response(_search,comp); 
         }
 
         getComercialCampaings85205Response(_search, comp ){
