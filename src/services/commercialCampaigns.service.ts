@@ -61,16 +61,36 @@ module OrangeFeSARQ.Services {
                 urlParams: [vm.genericConstant.brand, 'getComercialCampaings85205']
             };
 
-            // CABECERA HASHMAP
+            return vm.getComercialCampaings85205Response(_search,comp); 
+        }
+
+
+        getComercialCampaings85205FDC(individualPublicId, comp: string, parameters:any) {
+            let vm = this;
+            let _search: Object = {
+                queryParams: {
+                    'individualPublicId': individualPublicId,
+                    'motivoCamp' : parameters.motivoCampana,
+                    'tipologia1' : parameters.tipologia1,
+                    'tipologia2': parameters.tipologia2,
+                    'tipologia3': parameters.tipologia3
+                },
+                urlParams: [vm.genericConstant.brand, 'getComercialCampaings85205']
+            };
+
+            return vm.getComercialCampaings85205Response(_search,comp); 
+        }
+
+        getComercialCampaings85205Response(_search, comp ){
+            let vm = this;
             let _headers = new HashMap<string, string>();
             _headers.set('locationName', _.deburr(vm.storeProvince.toUpperCase()));
-
             return vm.httpCacheGeth(vm.commercialCampaignsAPIUrl, _search, _headers, comp, true)
                 .then((response) => {
-                    return response.data;
-                }, (err) => {
-                    throw err;
-                }
+                        return response.data;
+                    }, (err) => {
+                       throw err;
+                    }
                 );
         }
     }

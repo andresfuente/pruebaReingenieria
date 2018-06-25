@@ -264,24 +264,6 @@ module OrangeFeSARQ.Services {
 
         vm.clientData.jazztelData.customer = data.customer;
         sessionStorage.setItem("clientData", JSON.stringify(vm.clientData));
-
-        vm.agreementSrv.getAgreementByNumberJazztel("", telephoneNumber, "",'shoppingCart').then(
-            function(response){
-                vm.clientData = JSON.parse(sessionStorage.getItem("clientData"));
-
-                vm.clientData.jazztelData.agreement = response.Agreement;
-                vm.saveData();
-            }
-        );
-
-        vm.productInventorySrv.getServicesContractedJazztel(telephoneNumber, 'shoppingCart', false).then(
-            function(response){
-                vm.clientData = JSON.parse(sessionStorage.getItem("clientData"));
-
-                vm.clientData.jazztelData.product = response;
-                vm.saveData();
-            }
-        );
         
     }
 
