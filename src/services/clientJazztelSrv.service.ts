@@ -6,7 +6,6 @@ module OrangeFeSARQ.Services {
   
       public clientData;
       public localStorageManager :  OrangeFeSARQ.Services.LocalStorageManager;
-      public customerViewStore : OrangeFeSARQ.Services.CustomerViewStore;
       public agreementSrv : OFC.Services.AgreementSrv;
       public productInventorySrv : OrangeFeSARQ.Services.ProductInventoryService;
       ;
@@ -23,7 +22,6 @@ module OrangeFeSARQ.Services {
         let vm = this;
         vm.utils = $injector.get('utils');
         vm.localStorageManager =  $injector.get('localStorageManager');
-        vm.customerViewStore =  $injector.get('customerViewStore');
         vm.agreementSrv = $injector.get('agreementSrv');
         vm.productInventorySrv = $injector.get('productInventorySrv');
       }
@@ -44,7 +42,6 @@ module OrangeFeSARQ.Services {
         let lineasTotales = lineasMoviles + lineasFijas;
 
 
-        // Se comprueba la respuesta del CustomerView para controlar si el cliente es empresa con mas de 5 lineas
         if (data.error === null) { //aqui
             if (data.customer !== undefined && data.customer !== null) {
                 let clientData = JSON.parse(sessionStorage.getItem('clientData'));
@@ -61,7 +58,6 @@ module OrangeFeSARQ.Services {
                     sessionStorage.setItem('clientData', JSON.stringify(clientData));
                 } else {
                     if (data.customer.product !== null && data.customer.product.length > 0) {
-                        vm.customerViewStore.info = data.customer;
 
                         // Aqui entro cuando busco un usuario y la respuesta es correcta
                         vm.clientData = {
@@ -111,8 +107,8 @@ module OrangeFeSARQ.Services {
                                     }
                                 }
                             }
-                            if (vm.customerViewStore.info.individual.birthDate) {
-                                let birthDate = vm.customerViewStore.info.individual.birthDate.slice(0, 10);
+                            if (data.customer.individual.birthDate) {
+                                let birthDate = data.customer.individual.birthDate.slice(0, 10);
                                 vm.clientData.birthDay = birthDate.slice(8, 10);
                                 vm.clientData.birthMonth = birthDate.slice(5, 7);
                                 vm.clientData.birthYear = birthDate.slice(0, 4);
@@ -191,24 +187,28 @@ module OrangeFeSARQ.Services {
                         }
 
                         // Calcular tipo de cliente
-                        vm.clientData.clientType = vm.getClientType(vm.clientData.ospCustomerSegment);
+                        vm.clientData.clientType = vm.getClientType(vm.clientData.ospCustomerSegment, data);
 
                         // Recuperar información de contacto
-                        vm.getContactPhone();
+                        vm.getContactPhone(data);
 
                         // Recuperar email
-                        vm.getContactEmail();
+                        vm.getContactEmail(data);
 
                         // Recuperar datos del pagador
-                        vm.getPayerData();
+                        vm.getPayerData(data);
 
                         // Recuperar datos del autorizado
-                        vm.getAuthorizedData();
+                        vm.getAuthorizedData(data);
 
                         // Direccion cliente
-                        vm.clientData.postalContact = data.customer.postalContact[0];
+                        if(clientData.postalContact) {
+                            vm.clientData.postalContact = clientData.postalContact;
+                        } else {
+                            vm.clientData.postalContact = data.customer.postalContact[0];
+                        }
                         // Direccion servicio
-                        let serviceAddress = _.find(vm.customerViewStore.info.product, function (o: any) {
+                        let serviceAddress = _.find(data.customer.product, function (o: any) {
                             return (o.ospProductType === 'Acceso fijo & Internet' && o.status === 'INSTALADO');
                         });
                         if(serviceAddress) {
@@ -217,7 +217,7 @@ module OrangeFeSARQ.Services {
 
                         // Direccion cliente
                         if (lineasMoviles > 0 && lineasFijas === 0) { // Para este caso, dirección de facturación de móvil
-                            let billingAccMovil : any = _.find(vm.customerViewStore.info.billingAccount, (acc: any) => {
+                            let billingAccMovil : any = _.find(data.customer.billingAccount, (acc: any) => {
                                 if (acc.publicKey && acc.publicKey.name === 'BILLING_ACCOUNT_MOVIL') {
                                     return acc;
                                 }
@@ -231,10 +231,10 @@ module OrangeFeSARQ.Services {
                                 vm.clientData.generalAddress = serviceAddress.place[0];
                             }
                         }
-                        if (vm.customerViewStore.loginData){
-                        vm.customerViewStore.loginData.documentType = vm.clientData.ospIDtype;
-                        vm.customerViewStore.loginData.userType = vm.clientData.clientType;
-                        vm.customerViewStore.loginData.document = vm.clientData.docNumber;
+                        if (data.loginData){
+                        data.loginData.documentType = vm.clientData.ospIDtype;
+                        data.loginData.userType = vm.clientData.clientType;
+                        data.loginData.document = vm.clientData.docNumber;
                         }
 
                         // Cliente jazztel con fibra directa
@@ -244,7 +244,7 @@ module OrangeFeSARQ.Services {
                         vm.saveJazztelUserData(vm.clientData, data);
                         vm.saveData();
                     } else {
-                        vm.customerViewStore.info = null;
+                        data.customer = null;
                         return -2;
                     }
                 }
@@ -325,21 +325,21 @@ module OrangeFeSARQ.Services {
          * @description
          * Devuelve el valor de tipo de cliente
          */
-        getClientType(segmento: string) {
+        getClientType(segmento: string, data) {
             let vm = this;
 
             let type = '';
 
-            if (vm.customerViewStore.info === null || vm.customerViewStore.info === undefined) {
+            if (data.customer === null || data.customer === undefined) {
                 type = '2';
             } else {
-                if (vm.customerViewStore.info.product && vm.customerViewStore.info.product.length) {
+                if (data.customer.product && data.customer.product.length) {
                     let startDate = '';
 
                     // Guardamos la fecha más antigua
-                    for (let i = 0; i < vm.customerViewStore.info.product.length; i++) {
-                        if (vm.customerViewStore.info.product[i].startDate) {
-                            startDate = vm.getOlderDate(startDate, vm.customerViewStore.info.product[i].startDate);
+                    for (let i = 0; i < data.customer.product.length; i++) {
+                        if (data.customer.product[i].startDate) {
+                            startDate = vm.getOlderDate(startDate, data.customer.product[i].startDate);
                         }
                     }
 
@@ -356,7 +356,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Rellena la información de contacto telefónico
          */
-        getContactPhone() {
+        getContactPhone(data) {
             let vm = this;
 
             let mobileMobile = ''; // Teléfono de contacto móvil, línea móvil contratada
@@ -364,19 +364,19 @@ module OrangeFeSARQ.Services {
             let fixedMobile = ''; // Teléfono de contacto fijo, línea móvil contratada
             let fixedFixed = ''; // Teléfono de contacto fijo, línea fija contratada
 
-            if (vm.customerViewStore.info.telephoneNumber) {
-                for (let i = 0; i < vm.customerViewStore.info.telephoneNumber.length; i++) {
-                    if (mobileMobile === '' && vm.utils.isMobileLine(vm.customerViewStore.info.telephoneNumber[i].number)) {
-                        if (vm.customerViewStore.info.telephoneNumber[i].ospIDsource.toUpperCase() === "MOVIL") {
-                            mobileMobile = vm.customerViewStore.info.telephoneNumber[i].number;
+            if (data.customer.telephoneNumber) {
+                for (let i = 0; i < data.customer.telephoneNumber.length; i++) {
+                    if (mobileMobile === '' && vm.utils.isMobileLine(data.customer.telephoneNumber[i].number)) {
+                        if (data.customer.telephoneNumber[i].ospIDsource.toUpperCase() === "MOVIL") {
+                            mobileMobile = data.customer.telephoneNumber[i].number;
                         } else {
-                            mobileFixed = vm.customerViewStore.info.telephoneNumber[i].number;
+                            mobileFixed = data.customer.telephoneNumber[i].number;
                         }
-                    } else if (fixedMobile === '' && vm.utils.isFixedLine(vm.customerViewStore.info.telephoneNumber[i].number)) {
-                        if (vm.customerViewStore.info.telephoneNumber[i].ospIDsource.toUpperCase() === "MOVIL") {
-                            fixedMobile = vm.customerViewStore.info.telephoneNumber[i].number;
+                    } else if (fixedMobile === '' && vm.utils.isFixedLine(data.customer.telephoneNumber[i].number)) {
+                        if (data.customer.telephoneNumber[i].ospIDsource.toUpperCase() === "MOVIL") {
+                            fixedMobile = data.customer.telephoneNumber[i].number;
                         } else {
-                            fixedFixed = vm.customerViewStore.info.telephoneNumber[i].number;
+                            fixedFixed = data.customer.telephoneNumber[i].number;
                         }
                     }
                 }
@@ -402,19 +402,19 @@ module OrangeFeSARQ.Services {
          * @description
          * Rellena la dirección de email de contacto
          */
-        getContactEmail() {
+        getContactEmail(data) {
             let vm = this;
 
             let emailMobile = '';
             let emailFixed = '';
 
-            if (vm.customerViewStore.info.emailContact) {
-                for (let i = 0; i < vm.customerViewStore.info.emailContact.length; i++) {
+            if (data.customer.emailContact) {
+                for (let i = 0; i < data.customer.emailContact.length; i++) {
                     if (emailMobile === '') {
-                        if (vm.customerViewStore.info.emailContact[i].ospIDsource.toUpperCase() === "MOVIL") {
-                            emailMobile = vm.customerViewStore.info.emailContact[i].eMailAddress;
+                        if (data.customer.emailContact[i].ospIDsource.toUpperCase() === "MOVIL") {
+                            emailMobile = data.customer.emailContact[i].eMailAddress;
                         } else {
-                            emailFixed = vm.customerViewStore.info.emailContact[i].eMailAddress;
+                            emailFixed = data.customer.emailContact[i].eMailAddress;
                         }
                     }
                 }
@@ -427,12 +427,12 @@ module OrangeFeSARQ.Services {
             }
         }
 
-        getPayerData() {
+        getPayerData(data) {
             let vm = this;
-            if (vm.customerViewStore && vm.customerViewStore.info) {
-                if (vm.customerViewStore.info.billingAccount && vm.customerViewStore.info.billingAccount.length
-                    && vm.customerViewStore.info.billingAccount.publicKey) {
-                    let payerAccount = _.find(vm.customerViewStore.info.billingAccount, function (account: any) {
+            if (data && data.customer) {
+                if (data.customer.billingAccount && data.customer.billingAccount.length
+                    && data.customer.billingAccount.publicKey) {
+                    let payerAccount = _.find(data.customer.billingAccount, function (account: any) {
                         return account.publicKey.name === 'BILLING_ACCOUNT_FIJO';
                     });
                     if (payerAccount && payerAccount.billingAddress && payerAccount.billingAddress.length) {
@@ -477,18 +477,18 @@ module OrangeFeSARQ.Services {
             }
         }
 
-        getAuthorizedData() {
+        getAuthorizedData(data) {
             let vm = this;
 
-            if (vm.customerViewStore && vm.customerViewStore.info) {
+            if (data && data.customer) {
                 let auth = null;
 
-                if (vm.customerViewStore.info.organization && vm.customerViewStore.info.organization.relatedPartyRef
-                && vm.customerViewStore.info.organization.relatedPartyRef.length > 0) {
-                    auth = vm.customerViewStore.info.organization.relatedPartyRef[0];
-                } else if (vm.customerViewStore.info.individual && vm.customerViewStore.info.individual.relatedPartyRef
-                && vm.customerViewStore.info.individual.relatedPartyRef.length > 0) {
-                    auth = vm.customerViewStore.info.individual.relatedPartyRef[0];
+                if (data.customer.organization && data.customer.organization.relatedPartyRef
+                && data.customer.organization.relatedPartyRef.length > 0) {
+                    auth = data.customer.organization.relatedPartyRef[0];
+                } else if (data.customer.individual && data.customer.individual.relatedPartyRef
+                && data.customer.individual.relatedPartyRef.length > 0) {
+                    auth = data.customer.individual.relatedPartyRef[0];
                 }
 
                 if (auth) {
