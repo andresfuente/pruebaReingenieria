@@ -76,7 +76,7 @@ module OrangeFeSARQ.Constant {
         .service('localStorageManager', OrangeFeSARQ.Services.LocalStorageManager)
         .service('customerViewStore', OrangeFeSARQ.Services.CustomerViewStore)
         .service('commercialCampaignsSrv', OrangeFeSARQ.Services.CommercialCampaignsSrv)
-        .service('agreementSrv', OFC.Services.AgreementSrv)
+        /* .service('agreementSrv', OFC.Services.AgreementSrv) */
         .service('userDeviceSrv', OrangeFeSARQ.Services.UserDeviceSrv)
 
         // Product Catalog
