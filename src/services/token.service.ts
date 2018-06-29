@@ -61,12 +61,13 @@ module OrangeFeSARQ.Services {
                     return error.data;
                 });
         }
-/**
- * @ngdoc method
- * @name #getEncryptUrlToken
- * @name getEncryptUrlToken.GetEncryptUrlTokenSrv
- * @returns {object} Devuelve una promesa con el response
- */
+
+        /**
+         * @ngdoc method
+         * @name #getEncryptUrlToken
+         * @name getEncryptUrlToken.GetEncryptUrlTokenSrv
+         * @returns {object} Devuelve una promesa con el response
+         */
         getEncryptURLToken(emailAdress: string, nameFirst: string, nameLast: string, compName: string, refresh: boolean = false) {
             let vm = this;
             let apiUrl: string = vm.genericConstant.token;
@@ -94,6 +95,41 @@ module OrangeFeSARQ.Services {
                     return error;
                 });
         }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services.TokenSrv#getDocument
+         * @memberOf OrangeFeSARQ.Services.TokenSrv
+         * @param {string} docEncrypted El valor de la URL para descargar el documento encriptada
+         * @param {string} compName Nombre del componente que realiza la llamada
+         * @description
+         * Consulta al API Token para obtener los datos del archivo especificado, mediante la entrada de
+         * docEncrypted
+         * @returns {ng.IPromise} Los datos del archivo en Base64, la configuración base y los datos de las
+         * cabeceras de la respuesta 
+         */
+        getDocument(docEncrypted: string, compName: string): ng.IPromise<any>  {
+            let vm = this;
+
+            const apiUrl: string = vm.genericConstant.token;
+            const METHOD: string = 'getDocumentByToken';
+
+            let _search: Object = {
+                urlParams: [METHOD],
+                queryParams: {
+                    encriptedUrl: docEncrypted
+                }
+            }
+
+            return vm.httpCacheGett(apiUrl, _search, compName)
+                .then( (response) => {
+                    return response;
+                })
+                .catch( (error) => {
+                    return error;
+                });
+        }
+
     }
     angular.module('tokenModule', [])
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv);
