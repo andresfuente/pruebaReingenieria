@@ -146,6 +146,9 @@ module OrangeFeSARQ.Services {
                 segment: clientSegment,
                 'deviceOffering.category.name': priceNameBinding
             };
+            if (sortString === 'deviceOfferingPrice1') {
+                params['priceType'] = 'unico';
+            }
             if (filters && filters.length) {
                 filters.forEach((filtersParam, index) => {
                     params[Object.keys(filtersParam)[0]] = filtersParam[Object.keys(filtersParam)[0]];
