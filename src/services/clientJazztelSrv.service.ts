@@ -6,7 +6,7 @@ module OrangeFeSARQ.Services {
   
       public clientData;
       public localStorageManager :  OrangeFeSARQ.Services.LocalStorageManager;
-      public agreementSrv : OFC.Services.AgreementSrv;
+      public customerViewStore : OrangeFeSARQ.Services.CustomerViewStore;
       public productInventorySrv : OrangeFeSARQ.Services.ProductInventoryService;
       ;
       ;
@@ -22,7 +22,7 @@ module OrangeFeSARQ.Services {
         let vm = this;
         vm.utils = $injector.get('utils');
         vm.localStorageManager =  $injector.get('localStorageManager');
-        vm.agreementSrv = $injector.get('agreementSrv');
+        vm.customerViewStore =  $injector.get('customerViewStore');
         vm.productInventorySrv = $injector.get('productInventorySrv');
       }
 
