@@ -99,6 +99,8 @@ module ratesComparator.Models {
         public cpSiebel : string;
         public cpDescription : string;
         public cpDuration : string;
+        public savingPrice: number;
+        public savingPriceFree: number;
 
         public selected = false;
         public plazos = false;
@@ -176,6 +178,10 @@ module ratesComparator.Models {
                             }
                             // Añadiendo el precio al arreglo de precios del terminal
                             this.itemPrice.push(priceItem);
+                            if (price.priceType && price.priceType === 'unico') {
+                                this.uniquePaid = price.Price.taxIncudedAmount;
+                                this.uniquePaidFree = price.Price.dutyFreeAmount;
+                            }
                             if (price.priceType && price.priceType === 'inicial') {
                                 this.initialPrice = price.Price.taxIncudedAmount;
                                 this.initialPriceFree = price.Price.dutyFreeAmount;
@@ -193,10 +199,8 @@ module ratesComparator.Models {
                                     this.totalPriceFree = this.monthlyPriceFree * this.litDeadlines;
                                 }
                             }
-                            if (price.priceType && price.priceType === 'unico') {
-                                this.uniquePaid = price.Price.taxIncudedAmount;
-                                this.uniquePaidFree = price.Price.dutyFreeAmount;
-                            }
+                            this.savingPrice = this.uniquePaid - this.totalPrice;
+                            this.savingPriceFree = this.uniquePaidFree - this.totalPriceFree;
                         });
 
                         // Logica para recoger el seguro de la OT
