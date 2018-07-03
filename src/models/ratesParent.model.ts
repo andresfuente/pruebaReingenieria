@@ -70,6 +70,7 @@ module ratesParent.Models {
         public isTVSvaList = false; // Variable para saber si existen SVA's de TV
         public allSVAChildrenList: Array<ratesParent.Models.RateSVA> = []; // Lista con todos los SVA hijos. 
         public otherSvaInfoList: Array<ratesParent.Models.RateSVA> = [];
+        public selectedSvaList: Array<ratesParent.Models.RateSVA> = [];
         public newRateConditions: boolean = false;
         public associatedLine: Array<Object>;
 
