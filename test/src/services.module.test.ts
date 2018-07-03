@@ -30,6 +30,6 @@ module servicesCommons.Tests.Controllers {
         it('utils Controller should be defined', function () {
             let a = { a: 1, b: 2 };
             expect(a).toBeDefined();
-        });
+        }); 
     });
 }
