@@ -46,6 +46,7 @@ module OrangeFeSARQ.Constant {
         .service('srvTerminalCompare', OrangeFeSARQ.Services.SrvTerminalCompare)
         .service('srvFile', OrangeFeSARQ.Services.SrvFile)
         .service('rateDeviceSelectionPopupSrv', OrangeFeSARQ.Services.RateDeviceSelectionPopupSrv)
+        .service('terminalsComparatorSrv', OrangeFeSARQ.Services.TerminalsComparatorSrv)
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
         .service('userManagementSrv', OrangeFeSARQ.Services.UserManagementSrv)
         .service('userSrv', OrangeFeSARQ.Services.UserSrv)
