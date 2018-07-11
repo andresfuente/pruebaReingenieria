@@ -202,7 +202,7 @@ module OrangeFeSARQ.Services {
                         vm.getAuthorizedData(data);
 
                         // Direccion cliente
-                        if(clientData.postalContact) {
+                        if(clientData && clientData.postalContact) {
                             vm.clientData.postalContact = clientData.postalContact;
                         } else {
                             vm.clientData.postalContact = data.customer.postalContact[0];
