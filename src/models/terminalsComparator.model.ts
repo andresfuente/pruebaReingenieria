@@ -75,7 +75,7 @@ module terminalsComparator.Models {
          * @param {Object} terminal Terminal de la que obtener la informacion para crear la tarifa segun el modelo
          * @param {Object} priceData Datos de los precios (deviceOffering) del terminal
          * @description
-         * Crea un terminal para utilizar el comparador de terminales.
+         * Crea un terminal para utilizar el comparador de terminales
          */
         constructor(terminal, OWCSOptions, responseOptions) {
             this.siebelId = terminal.siebelId;
