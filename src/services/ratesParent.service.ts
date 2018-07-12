@@ -48,7 +48,7 @@ module OrangeFeSARQ.Services {
          */
         getSpecificationData(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
-            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string): ng.IPromise<{} | void> {
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string): ng.IPromise<{} | void> {
             let vm = this;
             let technologyString = '';
             if (technologyList) {
@@ -65,10 +65,11 @@ module OrangeFeSARQ.Services {
                 isExistingCustomer: isExistingCustomer, // Cliente existente?,
                 idParqueList: releatedRatesClient, // Tarifas del cliente
                 pack: pack, // Pack de las tarifas
-                type: type // [movil/ movilfijo]
+                type: type, // [movil/ movilfijo]
+                defaultTechnology: defaultTechnology
             };
             // Si la categoria no es convergente se eliminan los parametros para la tecnologia
-            if (categoryParam !== 'Convergente') {
+            if (categoryParam !== 'Convergente' || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
             }
             // Si alguna de las listas queda vacia no se pasa como parametro en la llamada
@@ -116,7 +117,7 @@ module OrangeFeSARQ.Services {
          */
         getOfferingData(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, specificationData, technologyList,
-            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string) {
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string) {
             let srv = this;
             let technologyString = '';
             if (technologyList) {
@@ -133,10 +134,11 @@ module OrangeFeSARQ.Services {
                 isExistingCustomer: isExistingCustomer, // Cliente existente?
                 idParqueList: releatedRatesClient, // Tarifas del cliente
                 pack: pack,
-                type: type
+                type: type,
+                defaultTechnology: defaultTechnology
             };
             // Si la categoria no es convergente se eliminan los parametros para la tecnologia            
-            if (categoryParam !== 'Convergente') {
+            if (categoryParam !== 'Convergente' || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
             }
             if (ratesIdListString === '') {
