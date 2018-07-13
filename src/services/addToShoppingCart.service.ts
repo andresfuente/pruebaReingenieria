@@ -630,7 +630,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Añade un terminal primario y su tarifa al session storage del carrito
          */
-        putRateAndDeviceInShoppingCart(rate, device, uniquePaid: boolean, preId?: string) {
+        putRateAndDeviceInShoppingCart(rate, device, uniquePaid: boolean, preId?: string, selected?: boolean) {
             let vm = this;
             let rateCartItemElement;
             let deviceCartItemElement;
@@ -804,7 +804,10 @@ module OrangeFeSARQ.Services {
                     'category': []
                 }
             };
-
+            let preselected = true;
+            if(selected!==null && selected!==undefined && selected === false) {
+                preselected = false;
+            }
             cartItemElement = {
                 'id': preId ? preId : cartItemElementId,
                 'cartItem': uniquePaid ? [rateCartItemElement, deviceCartItemElement] :
@@ -815,7 +818,7 @@ module OrangeFeSARQ.Services {
                 }],
                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
-                'ospSelected': true
+                'ospSelected': preselected
             };
 
             // Comprobar SVAs Asociados a la tarifa y al carrito
