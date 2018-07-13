@@ -122,10 +122,10 @@ module OrangeFeSARQ.Services {
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 let commercialActIndex = vm.getSelectedCommercialAct();
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.toLowerCase() === 'renove') {
-                        delete params.isExistingCustomer;
-                        delete params.portabilityOrigin;
-                        delete params.riskLevel;
-                        delete params.profile;
+                    delete params.isExistingCustomer;
+                    delete params.portabilityOrigin;
+                    delete params.riskLevel;
+                    delete params.profile;
                 }
             }
 
@@ -152,7 +152,7 @@ module OrangeFeSARQ.Services {
                 throw error;
             });
         }
-        
+
         /**
         * @ngdoc method
         * @name ratesComparator.Services:RatesComparatorSrv#getSelectedCommercialAct
@@ -161,14 +161,14 @@ module OrangeFeSARQ.Services {
         * @return {boolean} Retorna el indice del commercialData que se esta modificando,
         * en caso contrario retorna -1
         */
-       getSelectedCommercialAct(): number {
-           let commercialData = [];
-           commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+        getSelectedCommercialAct(): number {
+            let commercialData = [];
+            commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
-           return _.findIndex(commercialData, function (currentCommercialAct) {
-               return currentCommercialAct.ospIsSelected === true;
-           });
-       }
+            return _.findIndex(commercialData, function (currentCommercialAct) {
+                return currentCommercialAct.ospIsSelected === true;
+            });
+        }
 
         /**
          * @ngdoc method
@@ -299,7 +299,7 @@ module OrangeFeSARQ.Services {
          */
         getSpecificationDataComparator(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
-            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string): ng.IPromise<{} | void> {
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string): ng.IPromise<{} | void> {
             let vm = this;
             let technologyString = '';
             let ratesString = '';
@@ -320,9 +320,13 @@ module OrangeFeSARQ.Services {
                 isExistingCustomer: isExistingCustomer, // Cliente existente?,
                 idParqueList: releatedRatesClient, // Tarifas del cliente
                 pack: pack, // Pack de las tarifas
-                type: type // [movil/ movilfijo]
+                type: type, // [movil/ movilfijo]
+                defaultTechnology: defaultTechnology
             };
-
+            
+            if (categoryParam !== 'Covergente' || defaultTechnology === 'Y') {
+                delete params.idTecnologiaList;
+            }
             if (ratesIdListString === '') {
                 delete params.idOfertaComercialList;
             }
@@ -332,7 +336,7 @@ module OrangeFeSARQ.Services {
             if (!releatedRatesClient || releatedRatesClient === '') {
                 delete params.idParqueList;
             }
-            
+
 
             // CABECERA PANGEA
             // let _headers = {
@@ -374,7 +378,7 @@ module OrangeFeSARQ.Services {
          */
         getOfferingDataComparator(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, specificationData, technologyList,
-            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string) {
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string) {
             let srv = this;
             let technologyString = '';
             let ratesString = '';
@@ -395,9 +399,13 @@ module OrangeFeSARQ.Services {
                 isExistingCustomer: isExistingCustomer, // Cliente existente?
                 idParqueList: releatedRatesClient, // Tarifas del cliente
                 pack: pack,
-                type: type
+                type: type,
+                defaultTechnology: defaultTechnology
             };
-
+ 
+            if (categoryParam !== 'Covergente' || defaultTechnology === 'Y') {
+                delete params.idTecnologiaList;
+            }
 
             if (ratesIdListString === '') {
                 delete params.idOfertaComercialList;
@@ -408,7 +416,7 @@ module OrangeFeSARQ.Services {
             if (!releatedRatesClient || releatedRatesClient === '') {
                 delete params.idParqueList;
             }
-            
+
 
             // CABECERA PANGEA
             // let _headers = {
@@ -454,6 +462,6 @@ module OrangeFeSARQ.Services {
             }
             return ratesListString;
         }
-        
+
     }
 }

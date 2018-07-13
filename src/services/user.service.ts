@@ -149,7 +149,7 @@ module OrangeFeSARQ.Services {
                         promise.resolve(response.data);
                     },
                     (error) => {
-                        promise.reject(error.data);
+                        promise.reject(error);
                     });
             return promise.promise;
         }
