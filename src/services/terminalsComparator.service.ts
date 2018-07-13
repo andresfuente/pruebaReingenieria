@@ -3,10 +3,10 @@ module OrangeFeSARQ.Services {
 
     /**
      * @ngdoc service
-     * @name ratesComparator.Services:RatesComparatorSrv
-     * @author Isabel Matas
+     * @name terminalsComparator.Services:TerminalsComparatorSrv
+     * @author
      * @description
-     * Servicio del componente comparador de tarifas y terminales
+     * Servicio del componente comparador de terminales
      */
     export class TerminalsComparatorSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
@@ -15,8 +15,8 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
-         * @name ratesComparator.Services:RatesComparatorSrv#constructor
-         * @methodOf ratesComparator.Services:RatesComparatorSrv
+         * @name terminalsComparator.Services:TerminalsComparatorSrv#constructor
+         * @methodOf terminalsComparator.Services:RatesComparatorSrv
          * @param {Object} $injector
          * @description
          * Incluye las dependencias necesarias e inicializa el servicio
@@ -28,9 +28,9 @@ module OrangeFeSARQ.Services {
         }
 
         /** @ngdoc method
-         * @name ratesComparator.Services:RatesComparatorSrvsetInjections
+         * @name terminalsComparator.Services:TerminalsComparatorSrv#setInjections
          * @param {Object} $injector componente que necesita el parent injector.
-         * @methodOf ratesComparator.Services:RatesComparatorSrv
+         * @methodOf terminalsComparator.Services:TerminalsComparatorSrv
          * @description
          * Incluye las dependencias necesarias
          */
@@ -74,4 +74,7 @@ module OrangeFeSARQ.Services {
             });
         }
     }
+    // Registration
+    angular.module('TerminalsComparatorSrv', [])
+        .service('terminalsComparatorSrv', TerminalsComparatorSrv);
 }

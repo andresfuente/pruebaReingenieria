@@ -103,8 +103,12 @@ module terminalsComparator.Models {
                             feature.value = '';
                             responseOptions.forEach(y => {
                                 if (y.ospCharCategory && y.ospCharCategory === owcs.name) {
-                                    if(y.name && y.name === optionLiteral.name) {
-                                       feature.value = y.characteristicValue[0].value;
+                                    if (y.name && y.name === optionLiteral.name) {
+                                        if (y.characteristicValue[0].unitOfMeasure) {
+                                            feature.value = y.characteristicValue[0].value + ' ' + y.characteristicValue[0].unitOfMeasure;
+                                        } else {
+                                            feature.value = y.characteristicValue[0].value;
+                                        }
                                     }
                                 }
                             });
