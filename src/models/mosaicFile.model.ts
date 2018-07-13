@@ -742,6 +742,7 @@ module mosaicFile.Models {
         public stateOrProvince: string;
         public priceName: string;
         public campana_txt: string;
+        public idRateDefault: string;
 
         constructor() {
             this.channel = '';
@@ -760,6 +761,7 @@ module mosaicFile.Models {
             this.numLinesResidential = '';
             this.numLinesBussines = '';
             this.priceName = '';
+            this.idRateDefault = '';
         }
     }
 }
