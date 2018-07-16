@@ -930,6 +930,8 @@ module OrangeFeSARQ.Services {
             let cartItemIndex: number;
             let lastCartItemId: number;
             let commercialActId: number;
+
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
@@ -1026,7 +1028,7 @@ module OrangeFeSARQ.Services {
                 shoppingCart.cartItem.push(cartItemElement);
             } else {
                 shoppingCart = {
-                    'id': '',
+                    'id': (clientData && clientData.docNumber) ? clientData.docNumber : '',
                     'cartItem': [cartItemElement],
                     'customer': {}
                 };
