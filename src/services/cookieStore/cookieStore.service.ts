@@ -9,7 +9,7 @@ module OrangeFeSARQ.Services {
 
         public msisdn: string;
 
-        private productInventorySrv: OrangeFeSARQ.Services.ProductInventoryService;
+        private productContractedTranslateSrv: OrangeFeSARQ.Service.ProductContractedTranslateSrv;
         private productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore;
 
         private hootSrv: OrangeFeSARQ.Services.HootSrv;
@@ -39,7 +39,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.$cookies = $injector.get('$cookies');
             vm.productCatalogStore = $injector.get('productCatalogStore');
-            vm.productInventorySrv = $injector.get('productInventorySrv');
+            vm.productContractedTranslateSrv = $injector.get('productContractedTranslateSrv');
             vm.$scope = $injector.get('$rootScope');
             vm.hootSrv = $injector.get('hootSrv');
         }
@@ -229,7 +229,8 @@ module OrangeFeSARQ.Services {
          */
         setParamsInventory(cvProduct, msisdn, code) {
             let vm = this;
-            vm.productInventorySrv.getServicesContracted(msisdn, vm.compName)
+            let category = vm.utils.isFixedLine(vm.msisdnStore.msisdn) ? 'fixed' : 'mobile';
+            vm.productContractedTranslateSrv.getServicesContracted(msisdn, category, vm.genericConstant.brand, "services", vm.compName)
                 .then((response) => {
                     vm.isServiceActivatedResponse(true, response, cvProduct, msisdn, code);
                 })
@@ -258,8 +259,8 @@ module OrangeFeSARQ.Services {
             cookieObj.t = 0;
             cookieObj.a = 0;
 
-            if (type && response && response.length) {
-                let servicesList = response;
+            if (type && response.product && response.product.length) {
+                let servicesList = response.product;
                 let ORANGETV = 'orange tv'; // Servicio de orange tv
                 let TRANQUILIDAD = 'oc1b'; // Activado servicio de tranquilidad
                 for (let i = 0; i < servicesList.length; i++) {
