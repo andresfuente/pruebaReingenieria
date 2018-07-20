@@ -73,6 +73,7 @@ module ratesParent.Models {
         public selectedSvaList: Array<ratesParent.Models.RateSVA> = [];
         public newRateConditions: boolean = false;
         public associatedLine: Array<Object>;
+        public recurringChargePeriod: string; // Descripcion del cintillo
 
         // Id Tech
 
@@ -106,6 +107,7 @@ module ratesParent.Models {
             this.siebelId = rateData.id;
             this.groupName = rateData.ospGroupName;
             this.typeService = rateData.ospTypeService;
+            this.recurringChargePeriod = rateData.recurringChargePeriod;
 
             // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
             if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
