@@ -403,7 +403,7 @@ module OrangeFeSARQ.Services {
                 defaultTechnology: defaultTechnology
             };
  
-            if (categoryParam !== 'Covergente' || defaultTechnology === 'Y') {
+            if (categoryParam !== 'Convergente' || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
             }
 
