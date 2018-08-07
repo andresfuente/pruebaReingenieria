@@ -103,6 +103,7 @@ module ratesParent.Models {
 
         // Atributos para NAC
         public bucketList = [];
+        public additionalLines = [];
 
         constructor(rateData, priceData) {
             this.rateSubName = rateData.ospTitulo;
@@ -295,17 +296,21 @@ module ratesParent.Models {
                     "siebelBucketId": "1-26OSSL",
                     "shortDescription": null,
                     "largeDescription": null,
-                    "titular": "36 GB de datos compartidos para todas tus líneas Love Negocio"
+                    "titular": "36 GB de datos compartidos para todas tus líneas Love Negocio",
+                    "selected": false
                 },
                 {
                     "image": null,
-                    "name": "Bucket-12GB",
-                    "siebelBucketId": "1-INVENTADO",
+                    "name": "Bucket-10GB",
+                    "siebelBucketId": "1-26OSSL",
                     "shortDescription": null,
                     "largeDescription": null,
-                    "titular": "12 GB de datos compartidos para todas tus líneas Love Negocio"
+                    "titular": "10 GB de datos compartidos para todas tus líneas Love Negocio",
+                    "selected": false
                 }
             ];
+
+            this.additionalLines = ["1-26RHT8","1-26RHT8","1-26RHT8"];
         }
     }
 
