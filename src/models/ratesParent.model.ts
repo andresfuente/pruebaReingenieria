@@ -101,6 +101,9 @@ module ratesParent.Models {
         public applicationDuration;
         public recurringChargePeriodPromotion: string; // Tipo de promoción
 
+        // Atributos para NAC
+        public bucketList = [];
+
         constructor(rateData, priceData) {
             this.rateSubName = rateData.ospTitulo;
             this.rateDescription = rateData.description;
@@ -283,6 +286,26 @@ module ratesParent.Models {
                     }
                 }
             }
+
+            // MOCK PARA NAC
+            this.bucketList = [
+                {
+                    "image": null,
+                    "name": "Bucket-36GB",
+                    "siebelBucketId": "1-26OSSL",
+                    "shortDescription": null,
+                    "largeDescription": null,
+                    "titular": "36 GB de datos compartidos para todas tus líneas Love Negocio"
+                },
+                {
+                    "image": null,
+                    "name": "Bucket-12GB",
+                    "siebelBucketId": "1-INVENTADO",
+                    "shortDescription": null,
+                    "largeDescription": null,
+                    "titular": "12 GB de datos compartidos para todas tus líneas Love Negocio"
+                }
+            ];
         }
     }
 
