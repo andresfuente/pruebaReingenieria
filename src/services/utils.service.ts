@@ -1010,7 +1010,7 @@ module OrangeFeSARQ.Services {
                         pack: ratePC ? ratePC.ospFraseComercial : '',
                         isPack: isPack
                     };
-                    if (info.isPack) {
+                    /* if (info.isPack) {
                         let clientData = JSON.parse(sessionStorage.getItem('clientData'));
                         if (!clientData) {
                             clientData = {};
@@ -1022,7 +1022,7 @@ module OrangeFeSARQ.Services {
                             bundle: info.bundle
                         };
                         sessionStorage.setItem('clientData', JSON.stringify(clientData));
-                    }
+                    } */
                     /* if(info.isPack === true) {
                         lines.push(info);
                     } */

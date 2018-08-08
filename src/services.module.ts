@@ -16,6 +16,7 @@ module OrangeFeSARQ.Constant {
         .service('cookieStoreSrv', OrangeFeSARQ.Services.CookieStoreService)
         .service('changeOfferSrv', OrangeFeSARQ.Services.ChangeOfferSrv)
         .service('changeRateFixedSrv', OrangeFeSARQ.Services.ChangeRateFixedOWCSSrv)
+        .service('clientJazztelSrv', OrangeFeSARQ.Services.ClientJazztelSrv)
         .service('contactFormSrv', OrangeFeSARQ.Services.ContactFormSrv)
         .service('contractsSrv', OrangeFeSARQ.Services.ContractsSrv)
         .service('commercialDataSrv', OrangeFeSARQ.Services.CommercialDataSrv)
@@ -45,6 +46,7 @@ module OrangeFeSARQ.Constant {
         .service('srvTerminalCompare', OrangeFeSARQ.Services.SrvTerminalCompare)
         .service('srvFile', OrangeFeSARQ.Services.SrvFile)
         .service('rateDeviceSelectionPopupSrv', OrangeFeSARQ.Services.RateDeviceSelectionPopupSrv)
+        .service('terminalsComparatorSrv', OrangeFeSARQ.Services.TerminalsComparatorSrv)
         .service('tokenSrv', OrangeFeSARQ.Services.TokenSrv)
         .service('userManagementSrv', OrangeFeSARQ.Services.UserManagementSrv)
         .service('userSrv', OrangeFeSARQ.Services.UserSrv)
@@ -58,7 +60,7 @@ module OrangeFeSARQ.Constant {
         .service('RatesParentSrv', OrangeFeSARQ.Services.RatesParentSrv)
         .service('rateInfoPopupSrv', rateInfoPopup.Services.RateInfoPopupSrv)
         .service('productCatalogV2Srv', OrangeFeSARQ.Services.ProductCatalogV2Srv)
-        .service('ratesComparatorSrv', ratesComparator.Services.RatesComparatorSrv)
+        .service('ratesComparatorSrv', OrangeFeSARQ.Services.RatesComparatorSrv)
         .service('reservePopupSrv', reservePopup.Services.ReservePopupSrv)
         .service('automaticChangesSrv', OrangeFeSARQ.Services.AutomaticChangesSrv)
         .service('deviceCatalogSrv', OrangeFeSARQ.Services.DeviceCatalogSrv)
@@ -72,133 +74,9 @@ module OrangeFeSARQ.Constant {
         .service('directionPopupSrv', OrangeFeSARQ.Services.DirectionPopupSrv)
         .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)
         .service('linkComercialClientSrv', linkComercialClient.Services.LinkComercialClientSrv)
-
-
-
-        // Product Catalog
-        .run((productCatalogSrv: OrangeFeSARQ.Services.ProductCatalogService,
-            productCatalogStore: OrangeFeSARQ.Services.ProductCatalogStore, $injector) => {
-            let genericConstant = $injector.get('genericConstant');
-            if (navigator.userAgent.indexOf('PhantomJS') < 1 && !genericConstant.public) {
-
-                productCatalogSrv.getProductSpecification()
-                    .then((response) => {
-                        productCatalogStore.specification = response;
-                    })
-                    .catch((error) => {
-
-                    });
-                productCatalogSrv.getProductOffering()
-                    .then((response) => {
-                        productCatalogStore.offering = response;
-                    })
-                    .catch((error) => {
-
-                    });
-                productCatalogSrv.getFamilyRates()
-                    .then((response) => {
-                        productCatalogStore.listRates = response;
-                    })
-                    .catch((error) => {
-
-                    });
-            }
-        })
-        // OWCS Images
-        .run((getImagesSrv: OrangeFeSARQ.Services.getImagesSrv) => {
-            if (navigator.userAgent.indexOf('PhantomJS') < 1) {
-                getImagesSrv.getData().then(
-                    (response) => {
-                        // Guardo datos en ParentController
-                        if (OrangeFeSARQ.Controllers.ParentController.shared === undefined) {
-                            OrangeFeSARQ.Controllers.ParentController.shared = {};
-                        }
-                        OrangeFeSARQ.Controllers.ParentController.shared.staticImagesOwcs = response.data.data;
-                    }
-                );
-            }
-        })
-        // Client Data
-        .run((getDataClientSrv: OrangeFeSARQ.Services.GetdataClientSrv) => {
-            if (navigator.userAgent.indexOf('PhantomJS') < 1) {
-                getDataClientSrv.getData().then(
-                    (response) => {
-                        // - console.log('data en servicesmodule', response);
-                    }
-                );
-            }
-        })
-        .run((getHeaderFooterSrv: OrangeFeSARQ.Services.GetHeaderFooter, $injector,
-            getConfigurationSrv: OrangeFeSARQ.Services.GetConfigurationSrv) => {
-            let genericConstant = $injector.get('genericConstant');
-            // Si no es mobile first || Es spa pública || O es Amena
-            if (navigator.userAgent.indexOf('PhantomJS') < 1
-                && (genericConstant.site !== 'eCareResidencial' || genericConstant.public === true)) {
-                getHeaderFooterSrv.getData().then(
-                    (response) => {
-                        // Guardo datos en ParentController
-                        if (OrangeFeSARQ.Controllers.ParentController.shared === undefined) {
-                            OrangeFeSARQ.Controllers.ParentController.shared = {};
-                        }
-                        OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore = response.data.data;
-                        OrangeFeSARQ.Controllers.ParentController.shared.breadCrumbsStore = response.data.breadCrumbs;
-
-                    }
-                );
-            }
-            // Si es mobile first y no es spa publica || O es Amena
-            if (navigator.userAgent.indexOf('PhantomJS') < 1
-                && (genericConstant.site === 'eCareResidencial' && genericConstant.public === false)
-                || (genericConstant.site === 'eCareResidencialAmena')) {
-                getConfigurationSrv.getData().then(
-                    (response) => {
-                        // Guardo datos en ParentController
-                        if (OrangeFeSARQ.Controllers.ParentController.shared === undefined) {
-                            OrangeFeSARQ.Controllers.ParentController.shared = {};
-                        }
-                        //Este if evita que se entre cuando es eCareResidencialAmena
-                        if (genericConstant.site === 'eCareResidencial') {
-                            OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore = response.data.data;
-                        }
-                        // OrangeFeSARQ.Controllers.ParentController.shared.breadCrumbsStore = response.data.breadCrumbs;
-                    }
-                );
-            }
-        })
-
-    /*if (OrangeFeSARQ.Controllers.ParentController.shared
-        && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
-        menuStore.menu = {
-            pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
-            prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
-            fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
-
-        };
-        fillCurrent();
-    } else {
-        $rootScope.$watch(
-            () => OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore,
-            (newValue, oldValue) => {
-                if (OrangeFeSARQ.Controllers.ParentController.shared
-                    && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore) {
-                    menuStore.menu = {
-                        pospaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.pospaidMenu,
-                        prepaid: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.prepaidMenu,
-                        fixed: OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.fixedMenu
-                    };
-                    fillCurrent();
-                }
-            });
-    }
-
-    let prepaid: boolean;
-    let pospaid: boolean;
-    let fixed: boolean;
-
-    $rootScope.$watch(
-        () => msisdnStore.msisdn,
-        (newValue, oldValue) => {
-            fillCurrent();
-        });
-}*/
+        .service('localStorageManager', OrangeFeSARQ.Services.LocalStorageManager)
+        .service('customerViewStore', OrangeFeSARQ.Services.CustomerViewStore)
+        .service('commercialCampaignsSrv', OrangeFeSARQ.Services.CommercialCampaignsSrv)
+        /* .service('agreementSrv', OFC.Services.AgreementSrv) */
+        .service('userDeviceSrv', OrangeFeSARQ.Services.UserDeviceSrv)
 }

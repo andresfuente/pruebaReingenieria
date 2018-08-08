@@ -11,12 +11,14 @@ module OrangeFeSARQ.Services {
     static $inject = ['$injector'];
     public linesUsageAPIUrl: string;
     public genericConstant: any;
+    public subperfil; 
 
     constructor(public $injector) {
       super($injector);
       let vm = this;
       vm.setInjection($injector);
       vm.initService($injector);
+      vm.subperfil = null; 
     }
 
     setInjection($injector) {
@@ -29,6 +31,16 @@ module OrangeFeSARQ.Services {
       vm.linesUsageAPIUrl = vm.genericConstant.linesUsage;
     }
 
+    setSubperfil(subperfil){
+      let vm = this; 
+      vm.subperfil = subperfil; 
+    }
+
+    getSubperfil(){
+      let vm = this; 
+      return vm.subperfil;
+    }
+    
     getLineUsage(typeParam: string, dataUser: string, componentName: string = "lines-list"): any {
       let vm = this;
       let METHOD = 'linesUsage';

@@ -21,6 +21,8 @@ module ratesComparator.Models {
         public taxRate : number;
         public taxRateName : string;
         public terminals: Array<ratesComparator.Models.Terminal>;
+        public applicationDuration : number;
+        public ospTecnology: string;
 
         /**
          * @ngdoc method
@@ -49,6 +51,8 @@ module ratesComparator.Models {
             this.taxRate = rate.taxRate;
             this.taxRateName = rate.taxRateName;
             this.terminals = [];
+            this.ospTecnology = rate.ospTecnology;
+            this.applicationDuration = rate.applicationDuration;
         }
     }
 
@@ -95,6 +99,8 @@ module ratesComparator.Models {
         public cpSiebel : string;
         public cpDescription : string;
         public cpDuration : string;
+        public savingPrice: number;
+        public savingPriceFree: number;
 
         public selected = false;
         public plazos = false;
@@ -172,6 +178,10 @@ module ratesComparator.Models {
                             }
                             // Añadiendo el precio al arreglo de precios del terminal
                             this.itemPrice.push(priceItem);
+                            if (price.priceType && price.priceType === 'unico') {
+                                this.uniquePaid = price.Price.taxIncudedAmount;
+                                this.uniquePaidFree = price.Price.dutyFreeAmount;
+                            }
                             if (price.priceType && price.priceType === 'inicial') {
                                 this.initialPrice = price.Price.taxIncudedAmount;
                                 this.initialPriceFree = price.Price.dutyFreeAmount;
@@ -189,10 +199,8 @@ module ratesComparator.Models {
                                     this.totalPriceFree = this.monthlyPriceFree * this.litDeadlines;
                                 }
                             }
-                            if (price.priceType && price.priceType === 'unico') {
-                                this.uniquePaid = price.Price.taxIncudedAmount;
-                                this.uniquePaidFree = price.Price.dutyFreeAmount;
-                            }
+                            this.savingPrice = this.uniquePaid - this.totalPrice;
+                            this.savingPriceFree = this.uniquePaidFree - this.totalPriceFree;
                         });
 
                         // Logica para recoger el seguro de la OT
@@ -216,6 +224,66 @@ module ratesComparator.Models {
             } else {
                 this.error = true;
             }
+        }
+    }
+
+    /**
+     * @ngdoc model
+     * @name ratesComparator.Models:RatePrimaryRenew
+     * @author 
+     * @description
+     * Modelo para las tarifas renove primario en el comparador
+     */
+    export class RatePrimaryRenew {
+        public name: string;
+        public siebelId: string;
+        public description: string;
+        public ratePrice: number;
+        public ratePriceTaxIncluded: number;
+        public ratePriceTaxIncludedPromotional: number;
+        public ratePricePromotional: number;
+        public paymentsNumber: number;
+        public typeService: string;
+        public taxRate : number;
+        public taxRateName : string;
+        public terminals: Array<ratesComparator.Models.Terminal>;
+        public applicationDuration : number;
+        public ospTecnology: string;
+
+        /**
+         * @ngdoc method
+         * @name ratesComparator.Models:Rate#constructor
+         * @methodOf ratesComparator.Models:Rate
+         * @param {Object} rate Tarifa de la que obtener la informacion para crear la tarifa segun el modelo
+         * @description
+         * Crea una tarifa para utilizar el comparador. 
+         * - siebelId {string} ID siebel
+         * - name {string} nombre
+         * - ratePrice {number} precio sin impuestos
+         * - ratePriceTaxIncluded {number} precio con impuestos
+         * - description {string} descripcion
+         * - terminals {Array<ratesComparator.Models.Terminal>} array de terminales para el cruce
+         */
+        constructor(rate) {
+
+            this.siebelId = rate.siebelId;
+            this.name = rate.rateSubName;
+            this.ratePrice = rate.ratePrice;
+            this.ratePriceTaxIncluded = rate.ratePriceTaxIncluded;
+            //this.ratePriceTaxIncludedPromotional = rate.ratePriceTaxIncludedPromotional;
+            //this.ratePricePromotional = rate.ratePricePromotional;
+            _.forEach(rate.productBundle, (productBundle) => {
+                if (productBundle.title === 'CARACTERISTICATECNOLOGIA') {
+                    this.description = productBundle.description;
+                    return;
+                }
+            });
+            this.typeService = rate.typeService;
+            this.taxRate = rate.taxRate;
+            this.taxRateName = rate.taxRateName;
+            this.terminals = [];
+            //this.applicationDuration = rate.applicationDuration;
+            this.ospTecnology = rate.ospTecnology;
         }
     }
 }

@@ -11,6 +11,7 @@ module OrangeFeSARQ.Services {
 
         public srvTerminalCompare: OrangeFeSARQ.Services.SrvTerminalCompare;
         public objectTv;
+        private productCatalogV2Srv;
 
         /**
          * @ngdoc method
@@ -37,6 +38,7 @@ module OrangeFeSARQ.Services {
         setInjections($injector) {
             let vm = this;
             vm.srvTerminalCompare = $injector.get('srvTerminalCompare');
+            vm.productCatalogV2Srv = $injector.get('productCatalogV2Srv');
         }
 
         /**
@@ -380,6 +382,7 @@ module OrangeFeSARQ.Services {
                 });
             }
 
+
             productItem = {
                 'href': '',
                 'name': rate.name ? rate.name : '',
@@ -410,7 +413,23 @@ module OrangeFeSARQ.Services {
                             taxRate: rate.taxRate,
                             ospTaxRateName: rate.taxRateName
                         },
-                        'priceAlteration': [{}]
+                        'priceAlteration': [{
+                            'name': rate.typePriceName ? rate.typePriceName : '',
+                            'priceType': 'cuota',
+                            'applicationDuration': rate.applicationDuration,
+                            'price': {
+                                'dutyFreeAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePricePromotional
+                                },
+                                'taxIncludedAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePriceTaxIncludedPromotional
+                                },
+                                taxRate: rate.taxRate,
+                                ospTaxRateName: rate.taxRateName
+                            }
+                        }]
                     }
                 ],
                 'productOffering': {
@@ -500,7 +519,23 @@ module OrangeFeSARQ.Services {
                             taxRate: rate.taxRate,
                             ospTaxRateName: rate.taxRateName
                         },
-                        'priceAlteration': [{}]
+                        'priceAlteration': [{
+                            'name': rate.typePriceName ? rate.typePriceName : '',
+                            'priceType': 'cuota',
+                            'applicationDuration': rate.applicationDuration,
+                            'price': {
+                                'dutyFreeAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePricePromotional
+                                },
+                                'taxIncludedAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePriceTaxIncludedPromotional
+                                },
+                                taxRate: rate.taxRate,
+                                ospTaxRateName: rate.taxRateName
+                            }
+                        }]
                     }
                 ],
                 'productOffering': {
@@ -579,7 +614,7 @@ module OrangeFeSARQ.Services {
             if (vm.objectTv && vm.objectTv !== undefined && vm.objectTv !== null) {
                 flagTvItem = {
                     name: 'Flag TV',
-                    value: vm.objectTv.value === 'Y' ? 'true' : 'false'
+                    value: vm.objectTv.value
                 };
                 ospTecnology.product.characteristic.push(flagTvItem);
             }
@@ -595,7 +630,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Añade un terminal primario y su tarifa al session storage del carrito
          */
-        putRateAndDeviceInShoppingCart(rate, device, uniquePaid: boolean, preId?: string) {
+        putRateAndDeviceInShoppingCart(rate, device, uniquePaid: boolean, preId?: string, selected?: boolean) {
             let vm = this;
             let rateCartItemElement;
             let deviceCartItemElement;
@@ -654,7 +689,23 @@ module OrangeFeSARQ.Services {
                             'taxRate': rate.taxRate,
                             'ospTaxRateName': rate.taxRateName
                         },
-                        'priceAlteration': [{}]
+                        'priceAlteration': [{
+                            'name': rate.typePriceName ? rate.typePriceName : '',
+                            'priceType': 'cuota',
+                            'applicationDuration': rate.applicationDuration,
+                            'price': {
+                                'dutyFreeAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePricePromotional
+                                },
+                                'taxIncludedAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePriceTaxIncludedPromotional
+                                },
+                                taxRate: rate.taxRate,
+                                ospTaxRateName: rate.taxRateName
+                            }
+                        }]
                     }
                 ],
                 'productOffering': {
@@ -670,7 +721,13 @@ module OrangeFeSARQ.Services {
 
             // TERMINAL PRIMARIO
             // Tipo del terminal
-            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar' &&
+            device.characteristic = [
+                {
+                    name: 'CIMATerminalType',
+                    value: 'Primary'
+                }
+            ];
+            /* if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar' &&
                 commercialData[commercialActIndex].ospTerminalWorkflow !== 'standard' &&
                 commercialData[commercialActIndex].ospTerminalWorkflow !== 'prepaid_renew' &&
                 commercialData[commercialActIndex].ospTerminalWorkflow !== 'primary_renew') {
@@ -687,7 +744,7 @@ module OrangeFeSARQ.Services {
                         value: 'Primary'
                     }
                 ];
-            }
+            } */
             let deviceReserve = _.find(commercialData[commercialActIndex].terminals, (o: any) => {
                 return (device.siebelId === o.siebelId);
             });
@@ -747,7 +804,10 @@ module OrangeFeSARQ.Services {
                     'category': []
                 }
             };
-
+            let preselected = true;
+            if(selected!==null && selected!==undefined && selected === false) {
+                preselected = false;
+            }
             cartItemElement = {
                 'id': preId ? preId : cartItemElementId,
                 'cartItem': uniquePaid ? [rateCartItemElement, deviceCartItemElement] :
@@ -758,7 +818,7 @@ module OrangeFeSARQ.Services {
                 }],
                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
-                'ospSelected': true
+                'ospSelected': preselected
             };
 
             // Comprobar SVAs Asociados a la tarifa y al carrito
@@ -772,6 +832,61 @@ module OrangeFeSARQ.Services {
                     }
                 }
             }
+
+            for (let i = 0; i < commercialData[commercialActIndex].terminals.length; i++) {
+                if (commercialData[commercialActIndex].terminals[i].bonusId) {
+
+                    let params = {
+                        commercialAction: '',
+                        idSvaList: commercialData[commercialActIndex].terminals[i].bonusId,
+                        isExistingCustomer: false,
+                        segment: ''
+                    };
+                    let cv = JSON.parse(sessionStorage.getItem('cv'));
+                    let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                    let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
+
+                    // Obtenemos si es cliente existente
+                    if (!cv || cv === null || cv === undefined) {
+                        params.isExistingCustomer = false;
+                    } else {
+                        params.isExistingCustomer = true;
+                    }
+
+                    // Obtenemos el segmento
+                    if (!clientData || clientData === null || clientData === undefined
+                        || !clientData.ospCustomerSegment || clientData.ospCustomerSegment === '') {
+                        params.segment = defaultData.ospCustomerSegment;
+                    } else {
+                        params.segment = clientData.ospCustomerSegment;
+                    }
+
+                    if (params.segment.toUpperCase() === 'RESIDENCIAL') {
+                        params.segment = 'Residencial';
+                    } else {
+                        params.segment = 'Empresa';
+                    }
+
+                    if (!commercialData && commercialData === null || commercialData === undefined) {
+                        params.commercialAction = defaultData.ospCartItemType;
+                    } else {
+                        params.commercialAction = commercialData.ospCartItemType;
+                    }
+
+                    vm.productCatalogV2Srv.getSpecificationSVAS(params.idSvaList, params.isExistingCustomer, params.segment,
+                        params.commercialAction)
+                        .then((spec) => {
+                            if (spec) {
+                                // Pasamos true como parámetro opcional porque es un bono de terminal
+                                cartItemElement.cartItem.push(vm.createSVACartItem(spec.productSpecification[0], true));
+                                sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+                            }
+                        })
+                        .catch((error => {
+                        }));
+                }
+            }
+
             // Si viene tecnologia creamos cartItem
             if (rate.ospTecnology) {
                 cartItemElement.cartItem.push(vm.createIdTechnologyCartItem(rate));
@@ -786,12 +901,7 @@ module OrangeFeSARQ.Services {
                 cartItemElement.cartItem.push(insurance);
             }
             if (shoppingCart !== null) {
-                if (preId) {
-                    let index = Number(preId.toString().split('.')[1]) - 1;
-                    shoppingCart.cartItem.splice(index, 0, (cartItemElement));
-                } else {
-                    shoppingCart.cartItem.push(cartItemElement);
-                }
+                shoppingCart.cartItem.push(cartItemElement);
             } else {
                 shoppingCart = {
                     'id': '',
@@ -820,6 +930,7 @@ module OrangeFeSARQ.Services {
             let cartItemIndex: number;
             let lastCartItemId: number;
             let commercialActId: number;
+
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
@@ -840,21 +951,13 @@ module OrangeFeSARQ.Services {
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
             // Tipo del terminal
-            if (commercialData[commercialActIndex].ospTerminalWorkflow !== 'standar') {
-                device.characteristic = [
-                    {
-                        name: 'CIMATerminalType',
-                        value: 'Secundary'
-                    }
-                ];
-            } else {
-                device.characteristic = [
-                    {
-                        name: 'CIMATerminalType',
-                        value: 'Primary'
-                    }
-                ];
-            }
+
+            device.characteristic = [
+                {
+                    name: 'CIMATerminalType',
+                    value: 'Primary'
+                }
+            ];
 
             let uniqueItemPrice = [];
             let vapCartItems = [];
@@ -915,7 +1018,7 @@ module OrangeFeSARQ.Services {
                 'cartItemRelationship': [{
                     id: commercialActId
                 }],
-                'ospSelected': true,
+                'ospSelected': false,
                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
             };
@@ -1073,7 +1176,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Crea el Cart Item de un SVA
          */
-        createSVACartItem(sva) {
+        createSVACartItem(sva, isBono?) {
             let vm = this;
             let productItem;
             let svaCartItemElement, cartItemElement;
@@ -1082,36 +1185,93 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
 
-            productItem = {
-                'name': sva.title,
-                'description': sva.description,
-                'href': sva.href,
-                'productRelationship': [{
-                    'type': 'SVA'
-                }],
-                'place': [],
-                'characteristic': []
-            };
+            if (sva.title) {
+                productItem = {
+                    'name': sva.title,
+                    'description': sva.description,
+                    'href': sva.href,
+                    'productRelationship': [{
+                        'type': 'SVA'
+                    }],
+                    'place': [],
+                    'characteristic': []
+                };
+            } else {
+                productItem = {
+                    'name': sva.ospTitulo,
+                    'description': sva.description,
+                    'href': sva.href,
+                    'productRelationship': [{
+                        'type': 'SVA'
+                    }],
+                    'place': [],
+                    'characteristic': []
+                };
+            }
 
-            svaCartItemElement = {
-                'id': sva.id,
-                'action': 'New',
-                'product': productItem,
-                'itemPrice': sva.itemPrice,
-                'productOffering': {
-                    id: sva.id,
-                    name: sva.title,
-                    category: []
-                },
-                cartItemRelationship: [],
-                'ospSelected': false,
-                'ospSelectable': true,
-                'ospMandatory': true,
-                'ospObjectType': '',
-                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
-                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
-            };
+            if (sva.ospTitulo) {
+                let itemPrice;
+                // Si no viene informado expresamente el precio del bono, añadimos 0 por defecto
+                if (isBono) {
+                    itemPrice = [
+                        {
+                            "price": {
+                                "dutyFreeAmount": {
+                                    "unit": "EUR",
+                                    "value": 0
+                                },
+                                "taxIncludedAmount": {
+                                    "value": 0,
+                                    "unit": "EUR"
+                                },
+                                "taxRate": 0.21,
+                                "ospTaxRateName": ""
+                            },
+                            "priceType": "siebelPriceSva"
+                        }
+                    ];
+                } else {
+                    itemPrice = sva.itemPrice;
+                }
 
+                svaCartItemElement = {
+                    'id': sva.id,
+                    'action': 'New',
+                    'product': productItem,
+                    'itemPrice': itemPrice,
+                    'productOffering': {
+                        id: sva.id,
+                        name: sva.ospTitulo,
+                        category: []
+                    },
+                    cartItemRelationship: [],
+                    'ospSelected': false,
+                    'ospSelectable': true,
+                    'ospMandatory': true,
+                    'ospObjectType': '',
+                    'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                    'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                };
+            } else {
+                svaCartItemElement = {
+                    'id': sva.id,
+                    'action': 'New',
+                    'product': productItem,
+                    'itemPrice': sva.itemPrice,
+                    'productOffering': {
+                        id: sva.id,
+                        name: sva.title,
+                        category: []
+                    },
+                    cartItemRelationship: [],
+                    'ospSelected': false,
+                    'ospSelectable': true,
+                    'ospMandatory': true,
+                    'ospObjectType': '',
+                    'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                    'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                };
+            }
             return svaCartItemElement;
         }
 
@@ -1200,6 +1360,44 @@ module OrangeFeSARQ.Services {
                 });
             }
             return response;
+        }
+
+        createCommercialDataPacks(dato1?, dato2?) {
+            let vm = this;
+
+            let sessionCommercial = sessionStorage.getItem('commercialData');
+
+            let cm: any = {
+                'id': 0,
+                'isCompletedAC': true,
+                'ospIsSelected': false,
+                'terminals': [
+
+                ],
+                'rates': [
+
+                ],
+                'idSgmr': null,
+                'nameSgmr': '3-Altas de clientes ADSL/Fibra',
+                'ospCartItemType': 'cambioTarifa',
+                'renewalType': null,
+                'ospCartItemSubtype': 'Convergente',
+                'originType': 'pospago',
+                'originRate': 'IL1G',
+                'ospTerminalWorkflow': 'change_rate',
+                'actParent': '',   //  En teoria representa el actoCommercialPadre
+                'changeRateInfo': {
+                    'clickedLine': '656004082',
+                    'campaign': 'pasateALove',
+                    'numLine': '',
+                    'type': 'alta',
+                    'rateCode': 'IL1G'
+                },
+                'originRateSiebelId': ''
+            };
+
+            sessionStorage.setItem('commercialData', JSON.stringify(''));
+
         }
     }
 }

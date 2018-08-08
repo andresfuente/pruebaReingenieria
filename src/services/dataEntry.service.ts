@@ -220,6 +220,9 @@ module OrangeFeSARQ.Services {
                             vm.insertarCampo(dCC, dDE, '', contene, responseObj);
                         } else if (dDE === 'dentidad' && !vm.isValidAccount() && vm.isOtherBank()) {
                             vm.insertarCampo(dCC, dDE, '', contene, responseObj);
+                        } else if (dDE === 'dpisoContacto') {
+                            let parseValue = valueDep ? parseInt(valueDep, 0).toFixed() : '';
+                            vm.insertarCampo(dCC, dDE, parseValue, contene, responseObj);
                         } else {
                             vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                         }
@@ -239,7 +242,18 @@ module OrangeFeSARQ.Services {
 
                     // Si no hay ni dependencias ni equivalencias creo un objeto con el dato extraido directamente de session
                     if (flagDep === false && flagEquiv === false) {
-                        vm.insertarCampo(dCC, dDE, sessionClientData[cont] ? sessionClientData[cont] : defaultData, contene, responseObj);
+                        // Si es empresa o autonomo se recupera el formattedName  y no el firstName
+                        if (dDE === 'dname' && sessionClientData.ospCustomerSegment !== undefined
+                            && (sessionClientData.ospCustomerSegment === 'empresa'
+                            || sessionClientData.ospCustomerSegment === 'autonomo')) {
+                            cont = 'formattedName';
+                            vm.insertarCampo(dCC, dDE, sessionClientData[cont]
+                                ? sessionClientData[cont] : defaultData, contene, responseObj);
+                        } else {
+                            // Flujo normal
+                            vm.insertarCampo(dCC, dDE, sessionClientData[cont]
+                                ? sessionClientData[cont] : defaultData, contene, responseObj);
+                        }
                     }
                 });
             }
@@ -444,51 +458,66 @@ module OrangeFeSARQ.Services {
                             for (let i = 0; i < selectedOptions.length; i++) {
 
                                 let multisim: any = _.find(selectedOptions[i].cartItem, (data: any) => {
-                                    if (data.product && data.product.name && data.product.name.toUpperCase() === 'MULTISIM') {
+                                    if (data.product && data.product.name && data.product.name.toUpperCase() === 'MULTISIM'
+                                        && data.action && data.action.toUpperCase() === 'NEW') {
                                         return data;
                                     }
                                 });
 
                                 let terminals: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
-                                    return _.find(data.product.productRelationship, { 'type': 'terminal' });
+                                    if (data.product && data.product.productRelationship) {
+                                        return _.find(data.product.productRelationship, { 'type': 'terminal' });
+                                    }
                                 });
                                 let primaryTerminal: any = _.find(terminals, (terminal: any) => {
-                                    let terminalType = _.find(terminal.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Primary';
+                                    if (terminal.product && terminal.product.productRelationship) {
+                                        let terminalType = _.find(terminal.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Primary';
+                                        }
                                     }
                                 });
                                 let secundaryTerminal: any = _.find(terminals, (terminal: any) => {
-                                    let terminalType = _.find(terminal.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Secundary';
+                                    if (terminal.product && terminal.product.characteristic) {
+                                        let terminalType = _.find(terminal.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Secundary';
+                                        }
                                     }
                                 });
                                 let insurances: any = _.filter(selectedOptions[i].cartItem, (data: any) => {
-                                    return _.find(data.product.productRelationship, { 'type': 'seguro' });
+                                    if (data.product && data.product.productRelationship && data.ospSelected && data.ospSelected === true) {
+                                        return _.find(data.product.productRelationship, { 'type': 'seguro' });
+                                    }
                                 });
                                 let insurancePrimaryTerminal: any = _.find(insurances, (insurance: any) => {
-                                    let terminalType = _.find(insurance.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Primary';
+                                    if (insurance.product && insurance.product.characteristic) {
+                                        let terminalType = _.find(insurance.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Primary';
+                                        }
                                     }
                                 });
                                 let insuranceSecundaryTerminal: any = _.find(insurances, (insurance: any) => {
-                                    let terminalType = _.find(insurance.product.characteristic, (char: any) => {
-                                        return char.name === 'CIMATerminalType';
-                                    });
-                                    if (terminalType) {
-                                        return terminalType.value === 'Secundary';
+                                    if (insurance.product && insurance.product.characteristic) {
+                                        let terminalType = _.find(insurance.product.characteristic, (char: any) => {
+                                            return char.name === 'CIMATerminalType';
+                                        });
+                                        if (terminalType) {
+                                            return terminalType.value === 'Secundary';
+                                        }
                                     }
                                 });
                                 let rate: any = _.find(selectedOptions[i].cartItem, (data: any) => {
-                                    return _.find(data.product.productRelationship, { 'type': 'tarifa' });
+                                    if (data.product && data.product.productRelationship) {
+                                        return _.find(data.product.productRelationship, { 'type': 'tarifa' });
+                                    }
                                 });
 
                                 if (rate) {
@@ -496,21 +525,25 @@ module OrangeFeSARQ.Services {
                                     let rateComData;
                                     // Se busca la tarifa en los actos comerciales para obtener sus datos
                                     if (comData) {
-                                        let index = Math.floor(selectedOptions[i].id) - 1;
-                                        rateComData = _.find(comData[index].rates, (rateData: any) => {
+                                        let index = Math.floor(selectedOptions[i].id);
+                                        let currentCommData: any = _.find(comData, { 'id': index });
+
+                                        rateComData = _.find(currentCommData.rates, (rateData: any) => {
                                             return rateData.siebelId === rate.id;
                                         });
                                         // Agrupacion tarifa
-                                        let segment = sessionClientData.ospCustomerSegment;
+                                        let segment = sessionClientData.ospCustomerSegment
+                                            && sessionClientData.ospCustomerSegment !== ''
+                                            ? sessionClientData.ospCustomerSegment.toLowerCase() : 'residencial';
                                         let type = rateComData.type;
                                         let siebelId = rateComData.siebelId;
                                         if (type === 'Convergente' && segment === 'residencial') {
                                             agrupation = 'Love';
-                                        } else if (type === 'Convergente' && segment === 'empresas') {
+                                        } else if (type === 'Convergente' && segment === 'empresa') {
                                             agrupation = 'Love Negocio';
                                         } else if (type === 'Movil' && segment === 'residencial') {
                                             agrupation = 'Go';
-                                        } else if (type === 'Movil' && segment === 'empresas') {
+                                        } else if (type === 'Movil' && segment === 'empresa') {
                                             agrupation = 'Go Negocio';
                                         } else if (siebelId === '1-OKX2HG') {
                                             agrupation = 'Ardilla';
@@ -521,8 +554,10 @@ module OrangeFeSARQ.Services {
                                             agrupation = 'Mi Fijo Pro';
                                         } else if (type === 'Fijo' && segment === 'residencial') {
                                             agrupation = 'IEW';
-                                        } else if (type === 'Fijo' && sessionClientData.ospCustomerSegment === 'empresas') {
+                                        } else if (type === 'Fijo' && segment === 'empresa') {
                                             agrupation = 'IEW Pro';
+                                        } else if (type === 'Mundo') {
+                                            agrupation = 'Mundo';
                                         }
                                     }
                                 }
@@ -533,12 +568,16 @@ module OrangeFeSARQ.Services {
                                         if (rate && (rate.id === '1-15VD39' || rate.id === '1-1C3JRF' || rate.id === '1-15PLF2')) {
                                             primaryTerminalTypePrice = 'subvencionado';
                                         } else {
-                                            _.find(primaryTerminal, (data: any) => {
-                                                primaryTerminalTypePrice = data.priceType;
-                                            });
-                                            if (primaryTerminalTypePrice === 'aplazado') {
-                                                typePrice = 'pago aplazado';
-                                            } else {
+                                            let priceType = '';
+
+                                            if (primaryTerminal.itemPrice && primaryTerminal.itemPrice.length > 0
+                                                && primaryTerminal.itemPrice[0].priceType) {
+                                                priceType = primaryTerminal.itemPrice[0].priceType;
+                                            }
+
+                                            if (priceType === 'aplazado') {
+                                                primaryTerminalTypePrice = 'pago aplazado';
+                                            } else if (priceType === 'unico') {
                                                 primaryTerminalTypePrice = 'pago unico';
                                             }
                                         }
@@ -550,26 +589,29 @@ module OrangeFeSARQ.Services {
                                         contene,
                                         responseObj);
                                     // Terminal secundario
-                                    /* if (secundaryTerminal) {
+                                    if (secundaryTerminal) {
                                         if (rate && (rate.id === '1-15VD39' || rate.id === '1-1C3JRF' || rate.id === '1-15PLF2')) {
                                             secundaryTerminalTypePrice = 'subvencionado';
                                         } else {
-                                            _.find(secundaryTerminal, (data: any) => {
-                                                secundaryTerminalTypePrice = data.priceType;
-                                            });
-                                            if (secundaryTerminalTypePrice === 'aplazado') {
-                                                typePrice = 'pago aplazado';
-                                            } else {
-                                                secundaryTerminalTypePrice = 'pago unico';
+                                            if (secundaryTerminal.itemPrice && secundaryTerminal.itemPrice !== null
+                                                && secundaryTerminal.itemPrice.length > 0) {
+                                                _.find(secundaryTerminal.itemPrice, (dataS: any) => {
+                                                    secundaryTerminalTypePrice = dataS.priceType;
+                                                });
+                                                if (secundaryTerminalTypePrice === 'aplazado') {
+                                                    typePrice = 'pago aplazado';
+                                                } else {
+                                                    secundaryTerminalTypePrice = 'pago unico';
+                                                }
                                             }
                                         }
                                     } else {
                                         secundaryTerminalTypePrice = 'solo sim';
-                                    } */
-                                    /* vm.insertarCampo(dCC + ' ' + 'secundario' + ' ' + 'oferta' + numOferta,
-                                        dDE + auxSecundary + numOferta, secundayTerminalTypePrice,
+                                    }
+                                    vm.insertarCampo(dCC + ' ' + 'secundario' + ' ' + 'oferta' + numOferta,
+                                        dDE + auxSecundary + numOferta, secundaryTerminalTypePrice,
                                         contene,
-                                        responseObj); */
+                                        responseObj);
                                 } else if (cont === 'seguro') {
                                     // Terminal primario
                                     if (insurancePrimaryTerminal) {
@@ -578,12 +620,12 @@ module OrangeFeSARQ.Services {
                                             contene, responseObj);
                                     }
                                     // Terminal secundario
-                                    /* if(insuranceSecundaryTerminal) {
+                                    if (insuranceSecundaryTerminal) {
                                         vm.insertarCampo(dCC + ' ' + 'secundario oferta' + numOferta,
                                             dDE + numOferta, 'seguro móvil',
                                             contene,
                                             responseObj);
-                                    } */
+                                    }
                                 } else if (cont === 'agrupacion') {
                                     if (rate) {
                                         vm.insertarCampo(dCC + numOferta, dDE + numOferta,
@@ -600,13 +642,22 @@ module OrangeFeSARQ.Services {
                                             '', contene, responseObj);
                                     }
                                 } else if (cont === 'multisim') {
-                                    if (multisim && multisim.action && multisim.action === 'New') {
+                                    if (multisim) {
                                         vm.insertarCampo(dCC, dDE, 'si', contene, responseObj);
                                     }
+                                } else if (cont === 'secundaryTerm' && secundaryTerminal !== undefined) {
+                                    vm.insertarCampo(dCC + ' ' + 'Secundario', dDE + 'Sec' + numOferta, 'si', contene, responseObj);
                                 } else {
                                     if (primaryTerminal) {
                                         vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
                                             dDE + auxPrimary + numOferta, primaryTerminal.product[cont],
+                                            contene,
+                                            responseObj);
+                                    }
+
+                                    if (secundaryTerminal) {
+                                        vm.insertarCampo(dCC + ' ' + 'Secundario oferta' + numOferta,
+                                            dDE + auxSecundary + numOferta, secundaryTerminal.product[cont],
                                             contene,
                                             responseObj);
                                     }
@@ -621,13 +672,10 @@ module OrangeFeSARQ.Services {
                                 dDE, selectedOptions.length,
                                 contene,
                                 responseObj);
-
                         }
                     }
-
                 });
             }
-
 
             return responseObj;
         }

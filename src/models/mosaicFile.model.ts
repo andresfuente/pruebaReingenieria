@@ -64,6 +64,7 @@ module mosaicFile.Models {
             let variants = [];
 
             serviceData.forEach((terminalVariant) => {
+
                 let variant = new OrangeMosaicFileTerminalVariant(terminalVariant, ospCustomerSegment, priceName, mosaicFileCompOWCSStore);
                 variants.push(variant);
             });
@@ -173,6 +174,10 @@ module mosaicFile.Models {
         public virtualStockPeninsula: any;
         public virtualStockCanary: any;
         public insuranceSiebelId: string = '';
+
+        // Bonos
+        public bonusId: string;
+        public bonusDesc: string;
 
         public id: number;
         public litTitle: string;
@@ -529,6 +534,7 @@ module mosaicFile.Models {
                                             for (let k = 0; k < deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering.length; k++) {
                                                 if (deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k]) {
                                                     let cpCategory = null;
+                                                    let bono = null;
                                                     if (deviceOffering[i].deviceOfferingPrice[j].name === 'primario'){
                                                         cpCategory = _.find(deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].category, { 'name': 'CPT-CPC' });
                                                     } else if (deviceOffering[i].deviceOfferingPrice[j].name === 'secundario'){
@@ -538,7 +544,15 @@ module mosaicFile.Models {
                                                         this.cpSiebel = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].id;
                                                         this.cpDuration = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].productOfferingTerm[0].duration;
                                                         this.cpDescription = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].name;
-                                                        break;
+                                                        //break;
+                                                    }
+                                                    bono = _.find(deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].category, { 'name': 'bono' });
+                                                    if(bono !== null && bono !== undefined){
+                                                        this.bonusId = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].id;
+                                                        this.bonusDesc = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].name;
+                                                    }else {
+                                                        delete this.bonusId;
+                                                        delete this.bonusDesc;
                                                     }
                                                 }
                                             }
@@ -728,6 +742,7 @@ module mosaicFile.Models {
         public stateOrProvince: string;
         public priceName: string;
         public campana_txt: string;
+        public idRateDefault: string;
 
         constructor() {
             this.channel = '';
@@ -746,6 +761,7 @@ module mosaicFile.Models {
             this.numLinesResidential = '';
             this.numLinesBussines = '';
             this.priceName = '';
+            this.idRateDefault = '';
         }
     }
 }

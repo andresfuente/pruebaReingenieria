@@ -116,11 +116,13 @@ module OrangeFeSARQ.Services {
             // Se seleccionan las propiedades para session
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                 'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-                'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName', 'tipoPago', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration']);
+                'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName',
+                'tipoPago', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc']);
             if (device.renewRates !== undefined && device.renewRates) {
                 deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                     'description', 'litSubTitle', 'brand', 'priceType', 'insuranceSiebelId', 'srcImage',
-                    'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration']);
+                    'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates', 'eSim',
+                    'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc']);
             }
 
             return deviceForSession;
@@ -345,9 +347,9 @@ module OrangeFeSARQ.Services {
 
             let rateForSession = _.pick(rate, ['rateId', 'otherSvaInfoList', 'siebelId',
                 'name', 'description', 'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName',
-                'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack',
-                'taxRate', 'taxRateName',
-                'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology', 'type']);
+                'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack', 'selectedSvaList',
+                'taxRate', 'taxRateName', 'applicationDuration',
+                'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology', 'type' , 'associatedLine']);
 
             return rateForSession;
         }
@@ -456,6 +458,7 @@ module OrangeFeSARQ.Services {
                 return currentRate.siebelId === rate.siebelId;
             });
             vm.resetRatesId();
+            vm.putRatesInSessionStorage();
         }
 
         /**
@@ -529,8 +532,11 @@ module OrangeFeSARQ.Services {
             vm.rateContainer.forEach(currentRate => {
                 if (currentRate.siebelId === rate.siebelId) {
                     currentRate.svaInfoList = rate.svaInfoList;
+                    currentRate.otherSvaInfoList = rate.otherSvaInfoList;
+                    currentRate.allSVAChildrenList = rate.allSVAChildrenList;
                 }
             });
+            vm.putRatesInSessionStorage();
         }
 
         /**
