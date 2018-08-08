@@ -115,5 +115,37 @@ module OrangeFeSARQ.Services {
       ;
     }
 
+    getRoamingState(msisdn: string, doc: string, compName: string = 'productInventorySrv'): ng.IPromise<any> {
+      let vm = this;
+
+      const METHOD = 'verifyDataRoamLikeAtHomeStatus';
+
+      let _search: Object = {
+        body: {
+          MSISDN: msisdn,
+          documento: doc
+        },
+        queryParams: {},
+        urlParams: [METHOD]
+      }
+
+      return vm.httpPost(vm.contractedServicesAPIUrl, _search, compName)
+        .then( 
+          (response) => { 
+            if(response && response.data) {
+              return response.data;
+            }
+            return response;
+            
+          }, 
+          (error) => { 
+            if(error && error.data) {
+              return error.data;
+            }
+            return error;
+          });
+
+    }
+
   }
 }
