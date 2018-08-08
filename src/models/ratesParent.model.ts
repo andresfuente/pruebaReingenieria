@@ -310,7 +310,18 @@ module ratesParent.Models {
                 }
             ];
 
-            this.additionalLines = ["1-26RHT8","1-26RHT8","1-26RHT8"];
+            this.additionalLines = [
+                {
+                    id: "1-26RHT8",
+                    name: "TARIF1",
+                    info: "SMTH SMTH ABOUT TARIFA 1"
+                },
+                {
+                    id: "1-26RHT8",
+                    name: "TARIF2",
+                    info: "SMTH SMTH ABOUT TARIFA 2"
+                }
+            ];
         }
     }
 
