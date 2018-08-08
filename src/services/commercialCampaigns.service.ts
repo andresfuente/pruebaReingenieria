@@ -4965,9 +4965,69 @@ module OrangeFeSARQ.Services {
                         "campaignNum": [
                           {
                             "desc": null,
-                            "nomCampaign": "Venta a Plazos PDV TV Top Riesgo",
-                            "codCampaign": "1-19829449151",
+                            "nomCampaign": "Renove VAP Canal",
+                            "codCampaign": "1-13095878118",
                             "detalleProductos": [
+                              {
+                                "idProducto": "1-ABOBOTM",
+                                "descripcionComercial": "ALCATEL 2051 PLATA",
+                                "descripcionSAP": "ALCATEL 2051 PLATA",
+                                "codSAP": "3001441",
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHTP",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHTP",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-ABOEA02",
+                                "descripcionComercial": "ALCATEL 2008 PLATA",
+                                "descripcionSAP": "ALCATEL 2008 PLATA",
+                                "codSAP": "3001495",
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHTD",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHTD",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-B78Y9BX",
+                                "descripcionComercial": "ALCATEL 2038 NEGRO",
+                                "descripcionSAP": "ALCATEL 2038 NEGRO",
+                                "codSAP": "3001738",
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHTE",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHTE",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-B2H1M60",
+                                "descripcionComercial": "ORANGE GAMA 203 NEGRO",
+                                "descripcionSAP": "ORANGE GAMA 203 NEGRO",
+                                "codSAP": "3001739",
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHWD",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHWD",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
                               {
                                 "idProducto": "1-6SBTRUM",
                                 "descripcionComercial": "TRIPLESIM 4G MULTISIM",
@@ -4975,1164 +5035,1434 @@ module OrangeFeSARQ.Services {
                                 "codSAP": "3100348",
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCV",
+                                    "codOferta": "1-D72IHWE",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCV",
+                                    "idOfertaCatalogo": "1-D72IHWE",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-7GI98ZC",
+                                "idProducto": "1-94UPABO",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCP",
+                                    "codOferta": "1-D72IHWA",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCP",
+                                    "idOfertaCatalogo": "1-D72IHWA",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-951L5A1",
+                                "idProducto": "1-991T57L",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBJ",
+                                    "codOferta": "1-D72IHWB",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBJ",
+                                    "idOfertaCatalogo": "1-D72IHWB",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-951T82O",
+                                "idProducto": "1-9PQ67NI",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBL",
+                                    "codOferta": "1-D72IHWC",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBL",
+                                    "idOfertaCatalogo": "1-D72IHWC",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-9HFEZGV",
+                                "idProducto": "1-9YZ5PIS",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCO",
+                                    "codOferta": "1-D72IHW9",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCO",
+                                    "idOfertaCatalogo": "1-D72IHW9",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-9HPZX11",
+                                "idProducto": "1-A2UQKRE",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCL",
+                                    "codOferta": "1-D72IHW8",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCL",
+                                    "idOfertaCatalogo": "1-D72IHW8",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-9HPZX5F",
+                                "idProducto": "1-A8IOQ1M",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCM",
+                                    "codOferta": "1-D72IHUA",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCM",
+                                    "idOfertaCatalogo": "1-D72IHUA",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-9HPZX85",
+                                "idProducto": "1-A8IOQ46",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCN",
+                                    "codOferta": "1-D72IHUC",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCN",
+                                    "idOfertaCatalogo": "1-D72IHUC",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-9Z0FTZG",
+                                "idProducto": "1-AEVEKNC",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBO",
+                                    "codOferta": "1-D72IHUB",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBO",
+                                    "idOfertaCatalogo": "1-D72IHUB",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AIKZDAK",
+                                "idProducto": "1-AS86850",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBD",
+                                    "codOferta": "1-D72IHW7",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBD",
+                                    "idOfertaCatalogo": "1-D72IHW7",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AIKZDK0",
+                                "idProducto": "1-AV8QU12",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBI",
+                                    "codOferta": "1-D72IHUR",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBI",
+                                    "idOfertaCatalogo": "1-D72IHUR",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AV47UJ4",
+                                "idProducto": "1-B0KRKIA",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CB0",
+                                    "codOferta": "1-D72IHU7",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CB0",
+                                    "idOfertaCatalogo": "1-D72IHU7",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B3QM0QD",
+                                "idProducto": "1-B0L2TPQ",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCR",
+                                    "codOferta": "1-D72IHVM",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCR",
+                                    "idOfertaCatalogo": "1-D72IHVM",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B3TOQIC",
+                                "idProducto": "1-B0LBGKL",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCS",
+                                    "codOferta": "1-D72IHU8",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCS",
+                                    "idOfertaCatalogo": "1-D72IHU8",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B3U2T7I",
+                                "idProducto": "1-B0LBGLH",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCT",
+                                    "codOferta": "1-D72IHVN",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCT",
+                                    "idOfertaCatalogo": "1-D72IHVN",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B3U2TIC",
+                                "idProducto": "1-B0LBGMN",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCU",
+                                    "codOferta": "1-D72IHVL",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCU",
+                                    "idOfertaCatalogo": "1-D72IHVL",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B46UDN9",
+                                "idProducto": "1-B47G9EG",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCQ",
+                                    "codOferta": "1-D72IHUS",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCQ",
+                                    "idOfertaCatalogo": "1-D72IHUS",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B7ETWCB",
+                                "idProducto": "1-B47G9FW",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CB3",
+                                    "codOferta": "1-D72IHUT",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CB3",
+                                    "idOfertaCatalogo": "1-D72IHUT",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B7EZAX1",
+                                "idProducto": "1-B8MZEEK",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBE",
+                                    "codOferta": "1-D72IHTT",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBE",
+                                    "idOfertaCatalogo": "1-D72IHTT",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B7EZB7X",
+                                "idProducto": "1-BCIHFZ2",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CB4",
+                                    "codOferta": "1-D72IHVC",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CB4",
+                                    "idOfertaCatalogo": "1-D72IHVC",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BGAYTIX",
+                                "idProducto": "1-BCWDLQ4",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CAX",
+                                    "codOferta": "1-D72IHVB",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CAX",
+                                    "idOfertaCatalogo": "1-D72IHVB",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BGBQLHJ",
+                                "idProducto": "1-BCWDLRA",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBA",
+                                    "codOferta": "1-D72IHVA",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBA",
+                                    "idOfertaCatalogo": "1-D72IHVA",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BGCPLEX",
+                                "idProducto": "1-BCWDLS6",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBB",
+                                    "codOferta": "1-D72IHVF",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBB",
+                                    "idOfertaCatalogo": "1-D72IHVF",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BN2LQJX",
+                                "idProducto": "1-BH9E8GU",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBK",
+                                    "codOferta": "1-D72IHUU",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBK",
+                                    "idOfertaCatalogo": "1-D72IHUU",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BPWL7C1",
+                                "idProducto": "1-BNGZL3K",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CB2",
+                                    "codOferta": "1-D72IHUV",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CB2",
+                                    "idOfertaCatalogo": "1-D72IHUV",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BQDD0C1",
+                                "idProducto": "1-BNGZL4G",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CAB",
+                                    "codOferta": "1-D72IHVG",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CAB",
+                                    "idOfertaCatalogo": "1-D72IHVG",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BQDD0IX",
+                                "idProducto": "1-BOITIBO",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CAC",
+                                    "codOferta": "1-D72IHUE",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CAC",
+                                    "idOfertaCatalogo": "1-D72IHUE",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BSFAFAD",
+                                "idProducto": "1-BOJ80CG",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBF",
+                                    "codOferta": "1-D72IHUH",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBF",
+                                    "idOfertaCatalogo": "1-D72IHUH",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BSFAFHF",
+                                "idProducto": "1-BOJ80LE",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CB6",
+                                    "codOferta": "1-D72IHUI",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CB6",
+                                    "idOfertaCatalogo": "1-D72IHUI",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BSI1T7L",
+                                "idProducto": "1-BOJPJMO",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBH",
+                                    "codOferta": "1-D72IHUK",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBH",
+                                    "idOfertaCatalogo": "1-D72IHUK",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BSI1T8H",
+                                "idProducto": "1-BOJPJQC",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBG",
+                                    "codOferta": "1-D72IHUL",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBG",
+                                    "idOfertaCatalogo": "1-D72IHUL",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BSQ0QWR",
+                                "idProducto": "1-BQN6XLO",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CAZ",
+                                    "codOferta": "1-D72IHTS",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CAZ",
+                                    "idOfertaCatalogo": "1-D72IHTS",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BVQS3NN",
+                                "idProducto": "1-BQN6XMU",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CA9",
+                                    "codOferta": "1-D72IHU9",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CA9",
+                                    "idOfertaCatalogo": "1-D72IHU9",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BVRJY0Z",
+                                "idProducto": "1-BQN6XNQ",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CAA",
+                                    "codOferta": "1-D72IHUD",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CAA",
+                                    "idOfertaCatalogo": "1-D72IHUD",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C0Q41HS",
+                                "idProducto": "1-BQN6XOM",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CC0",
+                                    "codOferta": "1-D72IHUG",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CC0",
+                                    "idOfertaCatalogo": "1-D72IHUG",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C0Q7YP6",
+                                "idProducto": "1-BQN6XRK",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBZ",
+                                    "codOferta": "1-D72IHUM",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBZ",
+                                    "idOfertaCatalogo": "1-D72IHUM",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C0Q7YS4",
+                                "idProducto": "1-BQN6XUG",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CAY",
+                                    "codOferta": "1-D72IHVX",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CAY",
+                                    "idOfertaCatalogo": "1-D72IHVX",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C0Q7YUG",
+                                "idProducto": "1-BUVDS1C",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CB7",
+                                    "codOferta": "1-D72IHTV",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CB7",
+                                    "idOfertaCatalogo": "1-D72IHTV",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C0Q7YYK",
+                                "idProducto": "1-BUVDS34",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBC",
+                                    "codOferta": "1-D72IHV4",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBC",
+                                    "idOfertaCatalogo": "1-D72IHV4",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C0SFMUT",
+                                "idProducto": "1-BUVDS40",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CA7",
+                                    "codOferta": "1-D72IHUN",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CA7",
+                                    "idOfertaCatalogo": "1-D72IHUN",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C0SFMWJ",
+                                "idProducto": "1-BUVDS4W",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CA6",
+                                    "codOferta": "1-D72IHUO",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CA6",
+                                    "idOfertaCatalogo": "1-D72IHUO",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C0SFN1R",
+                                "idProducto": "1-BUVDS6C",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CB9",
+                                    "codOferta": "1-D72IHUP",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CB9",
+                                    "idOfertaCatalogo": "1-D72IHUP",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C50A32P",
+                                "idProducto": "1-BUVDS78",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CA8",
+                                    "codOferta": "1-D72IHUQ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CA8",
+                                    "idOfertaCatalogo": "1-D72IHUQ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C50KE1K",
+                                "idProducto": "1-C0UTY7U",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CC2",
+                                    "codOferta": "1-D72IHTU",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CC2",
+                                    "idOfertaCatalogo": "1-D72IHTU",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CEGA5GH",
+                                "idProducto": "1-C0UTY9A",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CB8",
+                                    "codOferta": "1-D72IHV3",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CB8",
+                                    "idOfertaCatalogo": "1-D72IHV3",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CJTWKWR",
+                                "idProducto": "1-CAUK50W",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBW",
+                                    "codOferta": "1-D72IHTW",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBW",
+                                    "idOfertaCatalogo": "1-D72IHTW",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CJTWL0F",
+                                "idProducto": "1-CAUK51Q",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBY",
+                                    "codOferta": "1-D72IHV7",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBY",
+                                    "idOfertaCatalogo": "1-D72IHV7",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CJTWL1V",
+                                "idProducto": "1-CAUK52K",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBX",
+                                    "codOferta": "1-D72IHV8",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBX",
+                                    "idOfertaCatalogo": "1-D72IHV8",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CJTWL4P",
+                                "idProducto": "1-CAUK53E",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBV",
+                                    "codOferta": "1-D72IHV9",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBV",
+                                    "idOfertaCatalogo": "1-D72IHV9",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CJUFJZT",
+                                "idProducto": "1-CAUK54S",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBP",
+                                    "codOferta": "1-D72IHVV",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBP",
+                                    "idOfertaCatalogo": "1-D72IHVV",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CJUFK6T",
+                                "idProducto": "1-CAUK55M",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CB1",
+                                    "codOferta": "1-D72IHVW",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CB1",
+                                    "idOfertaCatalogo": "1-D72IHVW",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CJYHFZ5",
+                                "idProducto": "1-CENYYOI",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CB5",
+                                    "codOferta": "1-D72IHVO",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CB5",
+                                    "idOfertaCatalogo": "1-D72IHVO",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CN0JIMR",
+                                "idProducto": "1-CENYYPC",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CC5",
+                                    "codOferta": "1-D72IHVP",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CC5",
+                                    "idOfertaCatalogo": "1-D72IHVP",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CPHV2A8",
+                                "idProducto": "1-CENYYQ6",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CC4",
+                                    "codOferta": "1-D72IHVQ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CC4",
+                                    "idOfertaCatalogo": "1-D72IHVQ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CPHV2HI",
+                                "idProducto": "1-CENYYR0",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CC3",
+                                    "codOferta": "1-D72IHVR",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CC3",
+                                    "idOfertaCatalogo": "1-D72IHVR",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CPHV2KC",
+                                "idProducto": "1-CENYYRU",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CC1",
+                                    "codOferta": "1-D72IHVS",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CC1",
+                                    "idOfertaCatalogo": "1-D72IHVS",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CPIHPXI",
+                                "idProducto": "1-CENYYTS",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBM",
+                                    "codOferta": "1-D72IHVT",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBM",
+                                    "idOfertaCatalogo": "1-D72IHVT",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CPIHQ2A",
+                                "idProducto": "1-CKBSAA8",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBN",
+                                    "codOferta": "1-D72IHUY",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBN",
+                                    "idOfertaCatalogo": "1-D72IHUY",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CW3Y4AN",
+                                "idProducto": "1-CKBSAB2",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBQ",
+                                    "codOferta": "1-D72IHU1",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBQ",
+                                    "idOfertaCatalogo": "1-D72IHU1",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CW4E7H1",
+                                "idProducto": "1-CKBSABW",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBR",
+                                    "codOferta": "1-D72IHU2",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBR",
+                                    "idOfertaCatalogo": "1-D72IHU2",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CW4TDW9",
+                                "idProducto": "1-CKBSAD0",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBS",
+                                    "codOferta": "1-D72IHTZ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBS",
+                                    "idOfertaCatalogo": "1-D72IHTZ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CW4TDXZ",
+                                "idProducto": "1-CKBSADU",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBT",
+                                    "codOferta": "1-D72IHU0",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBT",
+                                    "idOfertaCatalogo": "1-D72IHU0",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CW4TE2T",
+                                "idProducto": "1-CKBSAEY",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CBU",
+                                    "codOferta": "1-D72IHU4",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CBU",
+                                    "idOfertaCatalogo": "1-D72IHU4",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CYOCVNZ",
+                                "idProducto": "1-CKBSAFS",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCF",
+                                    "codOferta": "1-D72IHU3",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCF",
+                                    "idOfertaCatalogo": "1-D72IHU3",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CZON71E",
+                                "idProducto": "1-CKBSAGM",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CC6",
+                                    "codOferta": "1-D72IHVY",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CC6",
+                                    "idOfertaCatalogo": "1-D72IHVY",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CZON77M",
+                                "idProducto": "1-CQJIQMG",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CC7",
+                                    "codOferta": "1-D72IHUF",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CC7",
+                                    "idOfertaCatalogo": "1-D72IHUF",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D0B5CXM",
+                                "idProducto": "1-CQJIQNK",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCD",
+                                    "codOferta": "1-D72IHUJ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCD",
+                                    "idOfertaCatalogo": "1-D72IHUJ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D0B7ZKY",
+                                "idProducto": "1-CQJIQQ2",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCE",
+                                    "codOferta": "1-D72IHV1",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCE",
+                                    "idOfertaCatalogo": "1-D72IHV1",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D0B802K",
+                                "idProducto": "1-CQJIQQW",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CC9",
+                                    "codOferta": "1-D72IHV2",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CC9",
+                                    "idOfertaCatalogo": "1-D72IHV2",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D0B803Q",
+                                "idProducto": "1-CWADU1G",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCA",
+                                    "codOferta": "1-D72IHTQ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCA",
+                                    "idOfertaCatalogo": "1-D72IHTQ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D0B804M",
+                                "idProducto": "1-CWADU2A",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCB",
+                                    "codOferta": "1-D72IHTR",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCB",
+                                    "idOfertaCatalogo": "1-D72IHTR",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D10UE7X",
+                                "idProducto": "1-CWADU48",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCK",
+                                    "codOferta": "1-D72IHU5",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCK",
+                                    "idOfertaCatalogo": "1-D72IHU5",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D10UEAH",
+                                "idProducto": "1-CWADU66",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCC",
+                                    "codOferta": "1-D72IHU6",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCC",
+                                    "idOfertaCatalogo": "1-D72IHU6",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D10UEBN",
+                                "idProducto": "1-CWADU70",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CC8",
+                                    "codOferta": "1-D72IHUZ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CC8",
+                                    "idOfertaCatalogo": "1-D72IHUZ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D4ZPYV1",
+                                "idProducto": "1-D175AAW",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCG",
+                                    "codOferta": "1-D72IHUW",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCG",
+                                    "idOfertaCatalogo": "1-D72IHUW",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D4ZPZAL",
+                                "idProducto": "1-D175AC0",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCH",
+                                    "codOferta": "1-D72IHUX",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCH",
+                                    "idOfertaCatalogo": "1-D72IHUX",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D506MXL",
+                                "idProducto": "1-D175AD4",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCI",
+                                    "codOferta": "1-D72IHV0",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCI",
+                                    "idOfertaCatalogo": "1-D72IHV0",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-D506MZ1",
+                                "idProducto": "1-D175ADY",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R9CCJ",
+                                    "codOferta": "1-D72IHV5",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R9CCJ",
+                                    "idOfertaCatalogo": "1-D72IHV5",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D175AES",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHV6",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHV6",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D175AFW",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHVD",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHVD",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D175AIE",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHVE",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHVE",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D17PLDS",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHVZ",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHVZ",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D17PLEM",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHW0",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHW0",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D17PLFQ",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHW1",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHW1",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6O3GL8",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHVJ",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHVJ",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6O3GM2",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHVK",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHVK",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6O3GNG",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHVU",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHVU",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6O3GOA",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHTX",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHTX",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6P3PHC",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHTY",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHTY",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6P3PI6",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHVH",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHVH",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6P3PJ0",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHVI",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHVI",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6P3PJU",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHW2",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHW2",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6P3PKO",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHW3",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHW3",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6P3PLS",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHW4",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHW4",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6P3PMM",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHW5",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHW5",
+                                    "valorPuntos": 0,
+                                    "valorEruros": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "idProducto": "1-D6P3PNG",
+                                "descripcionComercial": null,
+                                "descripcionSAP": null,
+                                "codSAP": null,
+                                "offertDetails": [
+                                  {
+                                    "codOferta": "1-D72IHW6",
+                                    "valorRecarga": null,
+                                    "idOfertaCatalogo": "1-D72IHW6",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
@@ -6142,8 +6472,8 @@ module OrangeFeSARQ.Services {
                           },
                           {
                             "desc": null,
-                            "nomCampaign": "Renove al mejor precio con descuento",
-                            "codCampaign": "1-17006978323",
+                            "nomCampaign": "Renove VAP PDV TV y objetos conectados.",
+                            "codCampaign": "1-19975409141",
                             "detalleProductos": [
                               {
                                 "idProducto": "1-6SBTRUM",
@@ -6152,1239 +6482,1059 @@ module OrangeFeSARQ.Services {
                                 "codSAP": "3100348",
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1R00",
+                                    "codOferta": "1-D762IM2",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1R00",
+                                    "idOfertaCatalogo": "1-D762IM2",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-89KAQCQ",
+                                "idProducto": "1-9YYYF4G",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZG",
+                                    "codOferta": "1-D762II6",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZG",
+                                    "idOfertaCatalogo": "1-D762II6",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-95CPZ4J",
+                                "idProducto": "1-B4A1G9A",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYY",
+                                    "codOferta": "1-D762IKC",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYY",
+                                    "idOfertaCatalogo": "1-D762IKC",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-9PDSTO8",
+                                "idProducto": "1-B4A1GAC",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZ2",
+                                    "codOferta": "1-D762ILH",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZ2",
+                                    "idOfertaCatalogo": "1-D762ILH",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-9Z0XJFS",
+                                "idProducto": "1-B4A1GAV",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYU",
+                                    "codOferta": "1-D762ILB",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYU",
+                                    "idOfertaCatalogo": "1-D762ILB",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-A3IO19F",
+                                "idProducto": "1-BCIHG60",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QXV",
+                                    "codOferta": "1-D762IJX",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QXV",
+                                    "idOfertaCatalogo": "1-D762IJX",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-A8BW6TE",
+                                "idProducto": "1-BCIHG7A",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYO",
+                                    "codOferta": "1-D762IJV",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYO",
+                                    "idOfertaCatalogo": "1-D762IJV",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-A8IXS1H",
+                                "idProducto": "1-BH9P31D",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QY9",
+                                    "codOferta": "1-D762ILA",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QY9",
+                                    "idOfertaCatalogo": "1-D762ILA",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-A8J53PX",
+                                "idProducto": "1-BQNTXY9",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QY8",
+                                    "codOferta": "1-D762IK1",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QY8",
+                                    "idOfertaCatalogo": "1-D762IK1",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AA7E4VI",
+                                "idProducto": "1-BUZ04VI",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYA",
+                                    "codOferta": "1-D762IK3",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYA",
+                                    "idOfertaCatalogo": "1-D762IK3",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-ABBHZWG",
+                                "idProducto": "1-BUZG4LM",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZV",
+                                    "codOferta": "1-D762IK6",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZV",
+                                    "idOfertaCatalogo": "1-D762IK6",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-ABQDV1S",
+                                "idProducto": "1-BUZG4NU",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QXR",
+                                    "codOferta": "1-D762IK5",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QXR",
+                                    "idOfertaCatalogo": "1-D762IK5",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-ABQDV3M",
+                                "idProducto": "1-BWDFF9Q",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QXS",
+                                    "codOferta": "1-D762IL9",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QXS",
+                                    "idOfertaCatalogo": "1-D762IL9",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AHE7TF9",
+                                "idProducto": "1-C0VLOAN",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QXW",
+                                    "codOferta": "1-D762IKB",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QXW",
+                                    "idOfertaCatalogo": "1-D762IKB",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-ARAKHCX",
+                                "idProducto": "1-C0VLOBR",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYZ",
+                                    "codOferta": "1-D762IKA",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYZ",
+                                    "idOfertaCatalogo": "1-D762IKA",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AS2F3XD",
+                                "idProducto": "1-C0VLOEJ",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZ1",
+                                    "codOferta": "1-D762IL7",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZ1",
+                                    "idOfertaCatalogo": "1-D762IL7",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AV3NKTY",
+                                "idProducto": "1-C0VLOH1",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYJ",
+                                    "codOferta": "1-D762IL1",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYJ",
+                                    "idOfertaCatalogo": "1-D762IL1",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AV47UBK",
+                                "idProducto": "1-C50VPVX",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QY3",
+                                    "codOferta": "1-D762IJW",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QY3",
+                                    "idOfertaCatalogo": "1-D762IJW",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AV47UDE",
+                                "idProducto": "1-C51CTS8",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QY2",
+                                    "codOferta": "1-D762IK2",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QY2",
+                                    "idOfertaCatalogo": "1-D762IK2",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AZHCYYO",
+                                "idProducto": "1-C51CTWO",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZ7",
+                                    "codOferta": "1-D762ILR",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZ7",
+                                    "idOfertaCatalogo": "1-D762ILR",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AZHCZ1U",
+                                "idProducto": "1-C51CU6O",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZ8",
+                                    "codOferta": "1-D762ILI",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZ8",
+                                    "idOfertaCatalogo": "1-D762ILI",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-AZHN0AU",
+                                "idProducto": "1-C51NKUQ",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYF",
+                                    "codOferta": "1-D762IL6",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYF",
+                                    "idOfertaCatalogo": "1-D762IL6",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B3FITOB",
+                                "idProducto": "1-C51NL14",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYI",
+                                    "codOferta": "1-D762IL5",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYI",
+                                    "idOfertaCatalogo": "1-D762IL5",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B41Z59C",
+                                "idProducto": "1-C51NL50",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYK",
+                                    "codOferta": "1-D762IL4",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYK",
+                                    "idOfertaCatalogo": "1-D762IL4",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B45AQ55",
+                                "idProducto": "1-CENYZ63",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZH",
+                                    "codOferta": "1-D762IL2",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZH",
+                                    "idOfertaCatalogo": "1-D762IL2",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B7ETW5D",
+                                "idProducto": "1-CKBSAHL",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZC",
+                                    "codOferta": "1-D762ILN",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZC",
+                                    "idOfertaCatalogo": "1-D762ILN",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-B8BRL7B",
+                                "idProducto": "1-CKCA4YX",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZD",
+                                    "codOferta": "1-D762IK8",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZD",
+                                    "idOfertaCatalogo": "1-D762IK8",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BBPRDUC",
+                                "idProducto": "1-CKCA51D",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZ4",
+                                    "codOferta": "1-D762IK4",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZ4",
+                                    "idOfertaCatalogo": "1-D762IK4",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BBPRDWU",
+                                "idProducto": "1-CKCA54B",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZ5",
+                                    "codOferta": "1-D762IL8",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZ5",
+                                    "idOfertaCatalogo": "1-D762IL8",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BBPRE06",
+                                "idProducto": "1-CKCA57L",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QY4",
+                                    "codOferta": "1-D762ILL",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QY4",
+                                    "idOfertaCatalogo": "1-D762ILL",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BBWIJ51",
+                                "idProducto": "1-CQJIQS5",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QXZ",
+                                    "codOferta": "1-D762ILQ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QXZ",
+                                    "idOfertaCatalogo": "1-D762ILQ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BBWIJ6P",
+                                "idProducto": "1-CQJUDJN",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QY0",
+                                    "codOferta": "1-D762IJY",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QY0",
+                                    "idOfertaCatalogo": "1-D762IJY",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BGL7GKS",
+                                "idProducto": "1-CQJUDM1",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QY6",
+                                    "codOferta": "1-D762IK0",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QY6",
+                                    "idOfertaCatalogo": "1-D762IK0",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BGL7GNQ",
+                                "idProducto": "1-CQJUDNN",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYL",
+                                    "codOferta": "1-D762IKK",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYL",
+                                    "idOfertaCatalogo": "1-D762IKK",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BGL7GOM",
+                                "idProducto": "1-CQJUDOZ",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZ6",
+                                    "codOferta": "1-D762IKL",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZ6",
+                                    "idOfertaCatalogo": "1-D762IKL",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BGLMNSU",
+                                "idProducto": "1-CQJUDQL",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYQ",
+                                    "codOferta": "1-D762ILJ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYQ",
+                                    "idOfertaCatalogo": "1-D762ILJ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BOJJBF7",
+                                "idProducto": "1-CQJUDRX",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYC",
+                                    "codOferta": "1-D762ILK",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYC",
+                                    "idOfertaCatalogo": "1-D762ILK",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BOJJBI1",
+                                "idProducto": "1-CQJUDUB",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYB",
+                                    "codOferta": "1-D762IL3",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYB",
+                                    "idOfertaCatalogo": "1-D762IL3",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BOJJBLP",
+                                "idProducto": "1-CWB4Y03",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYE",
+                                    "codOferta": "1-D762ILO",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYE",
+                                    "idOfertaCatalogo": "1-D762ILO",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BOJJBQ9",
+                                "idProducto": "1-CWB4Y15",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYD",
+                                    "codOferta": "1-D762ILP",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYD",
+                                    "idOfertaCatalogo": "1-D762ILP",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BPRX7AP",
+                                "idProducto": "1-CWB4Y39",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYR",
+                                    "codOferta": "1-D762IK7",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYR",
+                                    "idOfertaCatalogo": "1-D762IK7",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BPWL7L1",
+                                "idProducto": "1-CWB4Y4B",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QXX",
+                                    "codOferta": "1-D762IK9",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QXX",
+                                    "idOfertaCatalogo": "1-D762IK9",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BQDX6E8",
+                                "idProducto": "1-CWB4Y5D",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYP",
+                                    "codOferta": "1-D762ILG",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYP",
+                                    "idOfertaCatalogo": "1-D762ILG",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BSQ0QTB",
+                                "idProducto": "1-CWB4Y6F",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZ3",
+                                    "codOferta": "1-D762IKN",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZ3",
+                                    "idOfertaCatalogo": "1-D762IKN",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BUPZ4M2",
+                                "idProducto": "1-CWB4Y7R",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYH",
+                                    "codOferta": "1-D762ILC",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYH",
+                                    "idOfertaCatalogo": "1-D762ILC",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BUPZ4QK",
+                                "idProducto": "1-CZPA5M2",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYG",
+                                    "codOferta": "1-D762IKD",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYG",
+                                    "idOfertaCatalogo": "1-D762IKD",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-BVUO2F3",
+                                "idProducto": "1-CZPA5R0",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYW",
+                                    "codOferta": "1-D762IKE",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYW",
+                                    "idOfertaCatalogo": "1-D762IKE",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C0Q7YR8",
+                                "idProducto": "1-CZPA5SC",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYV",
+                                    "codOferta": "1-D762IKF",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYV",
+                                    "idOfertaCatalogo": "1-D762IKF",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C2UNGW8",
+                                "idProducto": "1-D181AEL",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYX",
+                                    "codOferta": "1-D762IKM",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYX",
+                                    "idOfertaCatalogo": "1-D762IKM",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C50A346",
+                                "idProducto": "1-D181AFN",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYN",
+                                    "codOferta": "1-D762ILS",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYN",
+                                    "idOfertaCatalogo": "1-D762ILS",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C50KE3U",
+                                "idProducto": "1-D181AI3",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZB",
+                                    "codOferta": "1-D762ILT",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZB",
+                                    "idOfertaCatalogo": "1-D762ILT",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C5AM2TV",
+                                "idProducto": "1-D181AJ5",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QXY",
+                                    "codOferta": "1-D762ILU",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QXY",
+                                    "idOfertaCatalogo": "1-D762ILU",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C99NFWL",
+                                "idProducto": "1-D18HH4F",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QY1",
+                                    "codOferta": "1-D762ILV",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QY1",
+                                    "idOfertaCatalogo": "1-D762ILV",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C99NG2W",
+                                "idProducto": "1-D18HH61",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZ0",
+                                    "codOferta": "1-D762IKG",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZ0",
+                                    "idOfertaCatalogo": "1-D762IKG",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-C99NGE8",
+                                "idProducto": "1-D18HH7N",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZE",
+                                    "codOferta": "1-D762IKI",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZE",
+                                    "idOfertaCatalogo": "1-D762IKI",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CEFX6Z5",
+                                "idProducto": "1-D18HH99",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZ9",
+                                    "codOferta": "1-D762IKH",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZ9",
+                                    "idOfertaCatalogo": "1-D762IKH",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CEFX73N",
+                                "idProducto": "1-D18HHBZ",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZA",
+                                    "codOferta": "1-D762IKJ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZA",
+                                    "idOfertaCatalogo": "1-D762IKJ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CIC58SN",
+                                "idProducto": "1-D6P3PRF",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZY",
+                                    "codOferta": "1-D762IJZ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZY",
+                                    "idOfertaCatalogo": "1-D762IJZ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CIC58WN",
+                                "idProducto": "1-D6R22ST",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZZ",
+                                    "codOferta": "1-D762IKO",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZZ",
+                                    "idOfertaCatalogo": "1-D762IKO",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CJUFJPN",
+                                "idProducto": "1-D6R22TV",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZF",
+                                    "codOferta": "1-D762IKZ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZF",
+                                    "idOfertaCatalogo": "1-D762IKZ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CJUFJTX",
+                                "idProducto": "1-D6R22UX",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZI",
+                                    "codOferta": "1-D762IL0",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZI",
+                                    "idOfertaCatalogo": "1-D762IL0",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CJZHMPN",
+                                "idProducto": "1-D6R22W9",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYM",
+                                    "codOferta": "1-D762ILD",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYM",
+                                    "idOfertaCatalogo": "1-D762ILD",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CPHPD4F",
+                                "idProducto": "1-D6R22XB",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QXT",
+                                    "codOferta": "1-D762ILE",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QXT",
+                                    "idOfertaCatalogo": "1-D762ILE",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CPHV2TI",
+                                "idProducto": "1-D6R22YD",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYT",
+                                    "codOferta": "1-D762ILF",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYT",
+                                    "idOfertaCatalogo": "1-D762ILF",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CPI8CLU",
+                                "idProducto": "1-D6R22ZU",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZK",
+                                    "codOferta": "1-D762ILM",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZK",
+                                    "idOfertaCatalogo": "1-D762ILM",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CPJ53PK",
+                                "idProducto": "1-D6R237K",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QYS",
+                                    "codOferta": "1-D762ILW",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QYS",
+                                    "idOfertaCatalogo": "1-D762ILW",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CPJ53WA",
+                                "idProducto": "1-D6R238M",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QZJ",
+                                    "codOferta": "1-D762ILX",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZJ",
+                                    "idOfertaCatalogo": "1-D762ILX",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CQ2K80D",
+                                "idProducto": "1-D6R239O",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QXQ",
+                                    "codOferta": "1-D762ILY",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QXQ",
+                                    "idOfertaCatalogo": "1-D762ILY",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CW3Y43D",
+                                "idProducto": "1-D6R23B0",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QXU",
+                                    "codOferta": "1-D762ILZ",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QXU",
+                                    "idOfertaCatalogo": "1-D762ILZ",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CW3Y4IU",
+                                "idProducto": "1-D6R23C2",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QY5",
+                                    "codOferta": "1-D762IM0",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QY5",
+                                    "idOfertaCatalogo": "1-D762IM0",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
                                 ]
                               },
                               {
-                                "idProducto": "1-CW4E7BC",
+                                "idProducto": "1-D6R23D4",
                                 "descripcionComercial": null,
                                 "descripcionSAP": null,
                                 "codSAP": null,
                                 "offertDetails": [
                                   {
-                                    "codOferta": "1-D7R1QY7",
+                                    "codOferta": "1-D762IM1",
                                     "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QY7",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D0B5D0Q",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZL",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZL",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D0B5D64",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZM",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZM",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D0B5DA4",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZN",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZN",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D0B7ZR8",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZO",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZO",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D0B7ZTK",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZP",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZP",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D0B7ZYQ",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZR",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZR",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D0B7ZZM",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZS",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZS",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D0B800I",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZT",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZT",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D0Y63Y7",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZU",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZU",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D0Y63ZD",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZQ",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZQ",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D4ZPYRL",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZW",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZW",
-                                    "valorPuntos": 0,
-                                    "valorEruros": 0
-                                  }
-                                ]
-                              },
-                              {
-                                "idProducto": "1-D6WFDTP",
-                                "descripcionComercial": null,
-                                "descripcionSAP": null,
-                                "codSAP": null,
-                                "offertDetails": [
-                                  {
-                                    "codOferta": "1-D7R1QZX",
-                                    "valorRecarga": null,
-                                    "idOfertaCatalogo": "1-D7R1QZX",
+                                    "idOfertaCatalogo": "1-D762IM1",
                                     "valorPuntos": 0,
                                     "valorEruros": 0
                                   }
@@ -12282,9 +12432,69 @@ module OrangeFeSARQ.Services {
                               "campaignNum": [
                                 {
                                   "desc": null,
-                                  "nomCampaign": "Venta a Plazos PDV TV Top Riesgo",
-                                  "codCampaign": "1-20848897119",
+                                  "nomCampaign": "Renove VAP Canal",
+                                  "codCampaign": "1-13095878118",
                                   "detalleProductos": [
+                                    {
+                                      "idProducto": "1-ABOBOTM",
+                                      "descripcionComercial": "ALCATEL 2051 PLATA",
+                                      "descripcionSAP": "ALCATEL 2051 PLATA",
+                                      "codSAP": "3001441",
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHTP",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHTP",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-ABOEA02",
+                                      "descripcionComercial": "ALCATEL 2008 PLATA",
+                                      "descripcionSAP": "ALCATEL 2008 PLATA",
+                                      "codSAP": "3001495",
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHTD",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHTD",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-B78Y9BX",
+                                      "descripcionComercial": "ALCATEL 2038 NEGRO",
+                                      "descripcionSAP": "ALCATEL 2038 NEGRO",
+                                      "codSAP": "3001738",
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHTE",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHTE",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-B2H1M60",
+                                      "descripcionComercial": "ORANGE GAMA 203 NEGRO",
+                                      "descripcionSAP": "ORANGE GAMA 203 NEGRO",
+                                      "codSAP": "3001739",
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHWD",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHWD",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
                                     {
                                       "idProducto": "1-6SBTRUM",
                                       "descripcionComercial": "TRIPLESIM 4G MULTISIM",
@@ -12292,1164 +12502,1434 @@ module OrangeFeSARQ.Services {
                                       "codSAP": "3100348",
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCV",
+                                          "codOferta": "1-D72IHWE",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCV",
+                                          "idOfertaCatalogo": "1-D72IHWE",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-7GI98ZC",
+                                      "idProducto": "1-94UPABO",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCP",
+                                          "codOferta": "1-D72IHWA",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCP",
+                                          "idOfertaCatalogo": "1-D72IHWA",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-951L5A1",
+                                      "idProducto": "1-991T57L",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBJ",
+                                          "codOferta": "1-D72IHWB",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBJ",
+                                          "idOfertaCatalogo": "1-D72IHWB",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-951T82O",
+                                      "idProducto": "1-9PQ67NI",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBL",
+                                          "codOferta": "1-D72IHWC",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBL",
+                                          "idOfertaCatalogo": "1-D72IHWC",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-9HFEZGV",
+                                      "idProducto": "1-9YZ5PIS",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCO",
+                                          "codOferta": "1-D72IHW9",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCO",
+                                          "idOfertaCatalogo": "1-D72IHW9",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-9HPZX11",
+                                      "idProducto": "1-A2UQKRE",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCL",
+                                          "codOferta": "1-D72IHW8",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCL",
+                                          "idOfertaCatalogo": "1-D72IHW8",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-9HPZX5F",
+                                      "idProducto": "1-A8IOQ1M",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCM",
+                                          "codOferta": "1-D72IHUA",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCM",
+                                          "idOfertaCatalogo": "1-D72IHUA",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-9HPZX85",
+                                      "idProducto": "1-A8IOQ46",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCN",
+                                          "codOferta": "1-D72IHUC",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCN",
+                                          "idOfertaCatalogo": "1-D72IHUC",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-9Z0FTZG",
+                                      "idProducto": "1-AEVEKNC",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBO",
+                                          "codOferta": "1-D72IHUB",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBO",
+                                          "idOfertaCatalogo": "1-D72IHUB",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AIKZDAK",
+                                      "idProducto": "1-AS86850",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBD",
+                                          "codOferta": "1-D72IHW7",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBD",
+                                          "idOfertaCatalogo": "1-D72IHW7",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AIKZDK0",
+                                      "idProducto": "1-AV8QU12",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBI",
+                                          "codOferta": "1-D72IHUR",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBI",
+                                          "idOfertaCatalogo": "1-D72IHUR",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AV47UJ4",
+                                      "idProducto": "1-B0KRKIA",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CB0",
+                                          "codOferta": "1-D72IHU7",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CB0",
+                                          "idOfertaCatalogo": "1-D72IHU7",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B3QM0QD",
+                                      "idProducto": "1-B0L2TPQ",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCR",
+                                          "codOferta": "1-D72IHVM",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCR",
+                                          "idOfertaCatalogo": "1-D72IHVM",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B3TOQIC",
+                                      "idProducto": "1-B0LBGKL",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCS",
+                                          "codOferta": "1-D72IHU8",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCS",
+                                          "idOfertaCatalogo": "1-D72IHU8",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B3U2T7I",
+                                      "idProducto": "1-B0LBGLH",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCT",
+                                          "codOferta": "1-D72IHVN",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCT",
+                                          "idOfertaCatalogo": "1-D72IHVN",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B3U2TIC",
+                                      "idProducto": "1-B0LBGMN",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCU",
+                                          "codOferta": "1-D72IHVL",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCU",
+                                          "idOfertaCatalogo": "1-D72IHVL",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B46UDN9",
+                                      "idProducto": "1-B47G9EG",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCQ",
+                                          "codOferta": "1-D72IHUS",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCQ",
+                                          "idOfertaCatalogo": "1-D72IHUS",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B7ETWCB",
+                                      "idProducto": "1-B47G9FW",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CB3",
+                                          "codOferta": "1-D72IHUT",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CB3",
+                                          "idOfertaCatalogo": "1-D72IHUT",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B7EZAX1",
+                                      "idProducto": "1-B8MZEEK",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBE",
+                                          "codOferta": "1-D72IHTT",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBE",
+                                          "idOfertaCatalogo": "1-D72IHTT",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B7EZB7X",
+                                      "idProducto": "1-BCIHFZ2",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CB4",
+                                          "codOferta": "1-D72IHVC",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CB4",
+                                          "idOfertaCatalogo": "1-D72IHVC",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BGAYTIX",
+                                      "idProducto": "1-BCWDLQ4",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CAX",
+                                          "codOferta": "1-D72IHVB",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CAX",
+                                          "idOfertaCatalogo": "1-D72IHVB",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BGBQLHJ",
+                                      "idProducto": "1-BCWDLRA",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBA",
+                                          "codOferta": "1-D72IHVA",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBA",
+                                          "idOfertaCatalogo": "1-D72IHVA",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BGCPLEX",
+                                      "idProducto": "1-BCWDLS6",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBB",
+                                          "codOferta": "1-D72IHVF",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBB",
+                                          "idOfertaCatalogo": "1-D72IHVF",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BN2LQJX",
+                                      "idProducto": "1-BH9E8GU",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBK",
+                                          "codOferta": "1-D72IHUU",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBK",
+                                          "idOfertaCatalogo": "1-D72IHUU",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BPWL7C1",
+                                      "idProducto": "1-BNGZL3K",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CB2",
+                                          "codOferta": "1-D72IHUV",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CB2",
+                                          "idOfertaCatalogo": "1-D72IHUV",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BQDD0C1",
+                                      "idProducto": "1-BNGZL4G",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CAB",
+                                          "codOferta": "1-D72IHVG",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CAB",
+                                          "idOfertaCatalogo": "1-D72IHVG",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BQDD0IX",
+                                      "idProducto": "1-BOITIBO",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CAC",
+                                          "codOferta": "1-D72IHUE",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CAC",
+                                          "idOfertaCatalogo": "1-D72IHUE",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BSFAFAD",
+                                      "idProducto": "1-BOJ80CG",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBF",
+                                          "codOferta": "1-D72IHUH",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBF",
+                                          "idOfertaCatalogo": "1-D72IHUH",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BSFAFHF",
+                                      "idProducto": "1-BOJ80LE",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CB6",
+                                          "codOferta": "1-D72IHUI",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CB6",
+                                          "idOfertaCatalogo": "1-D72IHUI",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BSI1T7L",
+                                      "idProducto": "1-BOJPJMO",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBH",
+                                          "codOferta": "1-D72IHUK",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBH",
+                                          "idOfertaCatalogo": "1-D72IHUK",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BSI1T8H",
+                                      "idProducto": "1-BOJPJQC",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBG",
+                                          "codOferta": "1-D72IHUL",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBG",
+                                          "idOfertaCatalogo": "1-D72IHUL",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BSQ0QWR",
+                                      "idProducto": "1-BQN6XLO",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CAZ",
+                                          "codOferta": "1-D72IHTS",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CAZ",
+                                          "idOfertaCatalogo": "1-D72IHTS",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BVQS3NN",
+                                      "idProducto": "1-BQN6XMU",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CA9",
+                                          "codOferta": "1-D72IHU9",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CA9",
+                                          "idOfertaCatalogo": "1-D72IHU9",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BVRJY0Z",
+                                      "idProducto": "1-BQN6XNQ",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CAA",
+                                          "codOferta": "1-D72IHUD",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CAA",
+                                          "idOfertaCatalogo": "1-D72IHUD",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C0Q41HS",
+                                      "idProducto": "1-BQN6XOM",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CC0",
+                                          "codOferta": "1-D72IHUG",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CC0",
+                                          "idOfertaCatalogo": "1-D72IHUG",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C0Q7YP6",
+                                      "idProducto": "1-BQN6XRK",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBZ",
+                                          "codOferta": "1-D72IHUM",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBZ",
+                                          "idOfertaCatalogo": "1-D72IHUM",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C0Q7YS4",
+                                      "idProducto": "1-BQN6XUG",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CAY",
+                                          "codOferta": "1-D72IHVX",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CAY",
+                                          "idOfertaCatalogo": "1-D72IHVX",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C0Q7YUG",
+                                      "idProducto": "1-BUVDS1C",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CB7",
+                                          "codOferta": "1-D72IHTV",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CB7",
+                                          "idOfertaCatalogo": "1-D72IHTV",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C0Q7YYK",
+                                      "idProducto": "1-BUVDS34",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBC",
+                                          "codOferta": "1-D72IHV4",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBC",
+                                          "idOfertaCatalogo": "1-D72IHV4",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C0SFMUT",
+                                      "idProducto": "1-BUVDS40",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CA7",
+                                          "codOferta": "1-D72IHUN",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CA7",
+                                          "idOfertaCatalogo": "1-D72IHUN",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C0SFMWJ",
+                                      "idProducto": "1-BUVDS4W",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CA6",
+                                          "codOferta": "1-D72IHUO",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CA6",
+                                          "idOfertaCatalogo": "1-D72IHUO",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C0SFN1R",
+                                      "idProducto": "1-BUVDS6C",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CB9",
+                                          "codOferta": "1-D72IHUP",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CB9",
+                                          "idOfertaCatalogo": "1-D72IHUP",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C50A32P",
+                                      "idProducto": "1-BUVDS78",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CA8",
+                                          "codOferta": "1-D72IHUQ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CA8",
+                                          "idOfertaCatalogo": "1-D72IHUQ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C50KE1K",
+                                      "idProducto": "1-C0UTY7U",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CC2",
+                                          "codOferta": "1-D72IHTU",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CC2",
+                                          "idOfertaCatalogo": "1-D72IHTU",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CEGA5GH",
+                                      "idProducto": "1-C0UTY9A",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CB8",
+                                          "codOferta": "1-D72IHV3",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CB8",
+                                          "idOfertaCatalogo": "1-D72IHV3",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CJTWKWR",
+                                      "idProducto": "1-CAUK50W",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBW",
+                                          "codOferta": "1-D72IHTW",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBW",
+                                          "idOfertaCatalogo": "1-D72IHTW",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CJTWL0F",
+                                      "idProducto": "1-CAUK51Q",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBY",
+                                          "codOferta": "1-D72IHV7",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBY",
+                                          "idOfertaCatalogo": "1-D72IHV7",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CJTWL1V",
+                                      "idProducto": "1-CAUK52K",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBX",
+                                          "codOferta": "1-D72IHV8",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBX",
+                                          "idOfertaCatalogo": "1-D72IHV8",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CJTWL4P",
+                                      "idProducto": "1-CAUK53E",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBV",
+                                          "codOferta": "1-D72IHV9",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBV",
+                                          "idOfertaCatalogo": "1-D72IHV9",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CJUFJZT",
+                                      "idProducto": "1-CAUK54S",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBP",
+                                          "codOferta": "1-D72IHVV",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBP",
+                                          "idOfertaCatalogo": "1-D72IHVV",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CJUFK6T",
+                                      "idProducto": "1-CAUK55M",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CB1",
+                                          "codOferta": "1-D72IHVW",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CB1",
+                                          "idOfertaCatalogo": "1-D72IHVW",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CJYHFZ5",
+                                      "idProducto": "1-CENYYOI",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CB5",
+                                          "codOferta": "1-D72IHVO",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CB5",
+                                          "idOfertaCatalogo": "1-D72IHVO",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CN0JIMR",
+                                      "idProducto": "1-CENYYPC",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CC5",
+                                          "codOferta": "1-D72IHVP",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CC5",
+                                          "idOfertaCatalogo": "1-D72IHVP",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CPHV2A8",
+                                      "idProducto": "1-CENYYQ6",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CC4",
+                                          "codOferta": "1-D72IHVQ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CC4",
+                                          "idOfertaCatalogo": "1-D72IHVQ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CPHV2HI",
+                                      "idProducto": "1-CENYYR0",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CC3",
+                                          "codOferta": "1-D72IHVR",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CC3",
+                                          "idOfertaCatalogo": "1-D72IHVR",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CPHV2KC",
+                                      "idProducto": "1-CENYYRU",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CC1",
+                                          "codOferta": "1-D72IHVS",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CC1",
+                                          "idOfertaCatalogo": "1-D72IHVS",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CPIHPXI",
+                                      "idProducto": "1-CENYYTS",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBM",
+                                          "codOferta": "1-D72IHVT",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBM",
+                                          "idOfertaCatalogo": "1-D72IHVT",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CPIHQ2A",
+                                      "idProducto": "1-CKBSAA8",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBN",
+                                          "codOferta": "1-D72IHUY",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBN",
+                                          "idOfertaCatalogo": "1-D72IHUY",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CW3Y4AN",
+                                      "idProducto": "1-CKBSAB2",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBQ",
+                                          "codOferta": "1-D72IHU1",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBQ",
+                                          "idOfertaCatalogo": "1-D72IHU1",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CW4E7H1",
+                                      "idProducto": "1-CKBSABW",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBR",
+                                          "codOferta": "1-D72IHU2",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBR",
+                                          "idOfertaCatalogo": "1-D72IHU2",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CW4TDW9",
+                                      "idProducto": "1-CKBSAD0",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBS",
+                                          "codOferta": "1-D72IHTZ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBS",
+                                          "idOfertaCatalogo": "1-D72IHTZ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CW4TDXZ",
+                                      "idProducto": "1-CKBSADU",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBT",
+                                          "codOferta": "1-D72IHU0",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBT",
+                                          "idOfertaCatalogo": "1-D72IHU0",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CW4TE2T",
+                                      "idProducto": "1-CKBSAEY",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CBU",
+                                          "codOferta": "1-D72IHU4",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CBU",
+                                          "idOfertaCatalogo": "1-D72IHU4",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CYOCVNZ",
+                                      "idProducto": "1-CKBSAFS",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCF",
+                                          "codOferta": "1-D72IHU3",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCF",
+                                          "idOfertaCatalogo": "1-D72IHU3",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CZON71E",
+                                      "idProducto": "1-CKBSAGM",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CC6",
+                                          "codOferta": "1-D72IHVY",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CC6",
+                                          "idOfertaCatalogo": "1-D72IHVY",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CZON77M",
+                                      "idProducto": "1-CQJIQMG",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CC7",
+                                          "codOferta": "1-D72IHUF",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CC7",
+                                          "idOfertaCatalogo": "1-D72IHUF",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D0B5CXM",
+                                      "idProducto": "1-CQJIQNK",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCD",
+                                          "codOferta": "1-D72IHUJ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCD",
+                                          "idOfertaCatalogo": "1-D72IHUJ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D0B7ZKY",
+                                      "idProducto": "1-CQJIQQ2",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCE",
+                                          "codOferta": "1-D72IHV1",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCE",
+                                          "idOfertaCatalogo": "1-D72IHV1",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D0B802K",
+                                      "idProducto": "1-CQJIQQW",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CC9",
+                                          "codOferta": "1-D72IHV2",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CC9",
+                                          "idOfertaCatalogo": "1-D72IHV2",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D0B803Q",
+                                      "idProducto": "1-CWADU1G",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCA",
+                                          "codOferta": "1-D72IHTQ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCA",
+                                          "idOfertaCatalogo": "1-D72IHTQ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D0B804M",
+                                      "idProducto": "1-CWADU2A",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCB",
+                                          "codOferta": "1-D72IHTR",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCB",
+                                          "idOfertaCatalogo": "1-D72IHTR",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D10UE7X",
+                                      "idProducto": "1-CWADU48",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCK",
+                                          "codOferta": "1-D72IHU5",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCK",
+                                          "idOfertaCatalogo": "1-D72IHU5",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D10UEAH",
+                                      "idProducto": "1-CWADU66",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCC",
+                                          "codOferta": "1-D72IHU6",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCC",
+                                          "idOfertaCatalogo": "1-D72IHU6",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D10UEBN",
+                                      "idProducto": "1-CWADU70",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CC8",
+                                          "codOferta": "1-D72IHUZ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CC8",
+                                          "idOfertaCatalogo": "1-D72IHUZ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D4ZPYV1",
+                                      "idProducto": "1-D175AAW",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCG",
+                                          "codOferta": "1-D72IHUW",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCG",
+                                          "idOfertaCatalogo": "1-D72IHUW",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D4ZPZAL",
+                                      "idProducto": "1-D175AC0",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCH",
+                                          "codOferta": "1-D72IHUX",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCH",
+                                          "idOfertaCatalogo": "1-D72IHUX",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D506MXL",
+                                      "idProducto": "1-D175AD4",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCI",
+                                          "codOferta": "1-D72IHV0",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCI",
+                                          "idOfertaCatalogo": "1-D72IHV0",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-D506MZ1",
+                                      "idProducto": "1-D175ADY",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R9CCJ",
+                                          "codOferta": "1-D72IHV5",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R9CCJ",
+                                          "idOfertaCatalogo": "1-D72IHV5",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D175AES",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHV6",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHV6",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D175AFW",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHVD",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHVD",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D175AIE",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHVE",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHVE",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D17PLDS",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHVZ",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHVZ",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D17PLEM",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHW0",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHW0",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D17PLFQ",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHW1",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHW1",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6O3GL8",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHVJ",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHVJ",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6O3GM2",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHVK",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHVK",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6O3GNG",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHVU",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHVU",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6O3GOA",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHTX",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHTX",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6P3PHC",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHTY",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHTY",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6P3PI6",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHVH",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHVH",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6P3PJ0",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHVI",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHVI",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6P3PJU",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHW2",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHW2",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6P3PKO",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHW3",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHW3",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6P3PLS",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHW4",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHW4",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6P3PMM",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHW5",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHW5",
+                                          "valorPuntos": 0,
+                                          "valorEruros": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "idProducto": "1-D6P3PNG",
+                                      "descripcionComercial": null,
+                                      "descripcionSAP": null,
+                                      "codSAP": null,
+                                      "offertDetails": [
+                                        {
+                                          "codOferta": "1-D72IHW6",
+                                          "valorRecarga": null,
+                                          "idOfertaCatalogo": "1-D72IHW6",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
@@ -13459,8 +13939,8 @@ module OrangeFeSARQ.Services {
                                 },
                                 {
                                   "desc": null,
-                                  "nomCampaign": "Renove al mejor precio con descuento",
-                                  "codCampaign": "1-17006978323",
+                                  "nomCampaign": "Renove VAP PDV TV y objetos conectados.",
+                                  "codCampaign": "1-19975409141",
                                   "detalleProductos": [
                                     {
                                       "idProducto": "1-6SBTRUM",
@@ -13469,1239 +13949,1059 @@ module OrangeFeSARQ.Services {
                                       "codSAP": "3100348",
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1R00",
+                                          "codOferta": "1-D762IM2",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1R00",
+                                          "idOfertaCatalogo": "1-D762IM2",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-89KAQCQ",
+                                      "idProducto": "1-9YYYF4G",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZG",
+                                          "codOferta": "1-D762II6",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZG",
+                                          "idOfertaCatalogo": "1-D762II6",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-95CPZ4J",
+                                      "idProducto": "1-B4A1G9A",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYY",
+                                          "codOferta": "1-D762IKC",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYY",
+                                          "idOfertaCatalogo": "1-D762IKC",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-9PDSTO8",
+                                      "idProducto": "1-B4A1GAC",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZ2",
+                                          "codOferta": "1-D762ILH",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZ2",
+                                          "idOfertaCatalogo": "1-D762ILH",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-9Z0XJFS",
+                                      "idProducto": "1-B4A1GAV",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYU",
+                                          "codOferta": "1-D762ILB",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYU",
+                                          "idOfertaCatalogo": "1-D762ILB",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-A3IO19F",
+                                      "idProducto": "1-BCIHG60",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QXV",
+                                          "codOferta": "1-D762IJX",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QXV",
+                                          "idOfertaCatalogo": "1-D762IJX",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-A8BW6TE",
+                                      "idProducto": "1-BCIHG7A",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYO",
+                                          "codOferta": "1-D762IJV",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYO",
+                                          "idOfertaCatalogo": "1-D762IJV",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-A8IXS1H",
+                                      "idProducto": "1-BH9P31D",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QY9",
+                                          "codOferta": "1-D762ILA",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QY9",
+                                          "idOfertaCatalogo": "1-D762ILA",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-A8J53PX",
+                                      "idProducto": "1-BQNTXY9",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QY8",
+                                          "codOferta": "1-D762IK1",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QY8",
+                                          "idOfertaCatalogo": "1-D762IK1",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AA7E4VI",
+                                      "idProducto": "1-BUZ04VI",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYA",
+                                          "codOferta": "1-D762IK3",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYA",
+                                          "idOfertaCatalogo": "1-D762IK3",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-ABBHZWG",
+                                      "idProducto": "1-BUZG4LM",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZV",
+                                          "codOferta": "1-D762IK6",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZV",
+                                          "idOfertaCatalogo": "1-D762IK6",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-ABQDV1S",
+                                      "idProducto": "1-BUZG4NU",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QXR",
+                                          "codOferta": "1-D762IK5",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QXR",
+                                          "idOfertaCatalogo": "1-D762IK5",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-ABQDV3M",
+                                      "idProducto": "1-BWDFF9Q",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QXS",
+                                          "codOferta": "1-D762IL9",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QXS",
+                                          "idOfertaCatalogo": "1-D762IL9",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AHE7TF9",
+                                      "idProducto": "1-C0VLOAN",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QXW",
+                                          "codOferta": "1-D762IKB",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QXW",
+                                          "idOfertaCatalogo": "1-D762IKB",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-ARAKHCX",
+                                      "idProducto": "1-C0VLOBR",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYZ",
+                                          "codOferta": "1-D762IKA",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYZ",
+                                          "idOfertaCatalogo": "1-D762IKA",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AS2F3XD",
+                                      "idProducto": "1-C0VLOEJ",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZ1",
+                                          "codOferta": "1-D762IL7",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZ1",
+                                          "idOfertaCatalogo": "1-D762IL7",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AV3NKTY",
+                                      "idProducto": "1-C0VLOH1",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYJ",
+                                          "codOferta": "1-D762IL1",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYJ",
+                                          "idOfertaCatalogo": "1-D762IL1",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AV47UBK",
+                                      "idProducto": "1-C50VPVX",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QY3",
+                                          "codOferta": "1-D762IJW",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QY3",
+                                          "idOfertaCatalogo": "1-D762IJW",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AV47UDE",
+                                      "idProducto": "1-C51CTS8",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QY2",
+                                          "codOferta": "1-D762IK2",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QY2",
+                                          "idOfertaCatalogo": "1-D762IK2",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AZHCYYO",
+                                      "idProducto": "1-C51CTWO",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZ7",
+                                          "codOferta": "1-D762ILR",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZ7",
+                                          "idOfertaCatalogo": "1-D762ILR",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AZHCZ1U",
+                                      "idProducto": "1-C51CU6O",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZ8",
+                                          "codOferta": "1-D762ILI",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZ8",
+                                          "idOfertaCatalogo": "1-D762ILI",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-AZHN0AU",
+                                      "idProducto": "1-C51NKUQ",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYF",
+                                          "codOferta": "1-D762IL6",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYF",
+                                          "idOfertaCatalogo": "1-D762IL6",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B3FITOB",
+                                      "idProducto": "1-C51NL14",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYI",
+                                          "codOferta": "1-D762IL5",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYI",
+                                          "idOfertaCatalogo": "1-D762IL5",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B41Z59C",
+                                      "idProducto": "1-C51NL50",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYK",
+                                          "codOferta": "1-D762IL4",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYK",
+                                          "idOfertaCatalogo": "1-D762IL4",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B45AQ55",
+                                      "idProducto": "1-CENYZ63",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZH",
+                                          "codOferta": "1-D762IL2",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZH",
+                                          "idOfertaCatalogo": "1-D762IL2",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B7ETW5D",
+                                      "idProducto": "1-CKBSAHL",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZC",
+                                          "codOferta": "1-D762ILN",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZC",
+                                          "idOfertaCatalogo": "1-D762ILN",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-B8BRL7B",
+                                      "idProducto": "1-CKCA4YX",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZD",
+                                          "codOferta": "1-D762IK8",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZD",
+                                          "idOfertaCatalogo": "1-D762IK8",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BBPRDUC",
+                                      "idProducto": "1-CKCA51D",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZ4",
+                                          "codOferta": "1-D762IK4",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZ4",
+                                          "idOfertaCatalogo": "1-D762IK4",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BBPRDWU",
+                                      "idProducto": "1-CKCA54B",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZ5",
+                                          "codOferta": "1-D762IL8",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZ5",
+                                          "idOfertaCatalogo": "1-D762IL8",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BBPRE06",
+                                      "idProducto": "1-CKCA57L",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QY4",
+                                          "codOferta": "1-D762ILL",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QY4",
+                                          "idOfertaCatalogo": "1-D762ILL",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BBWIJ51",
+                                      "idProducto": "1-CQJIQS5",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QXZ",
+                                          "codOferta": "1-D762ILQ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QXZ",
+                                          "idOfertaCatalogo": "1-D762ILQ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BBWIJ6P",
+                                      "idProducto": "1-CQJUDJN",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QY0",
+                                          "codOferta": "1-D762IJY",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QY0",
+                                          "idOfertaCatalogo": "1-D762IJY",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BGL7GKS",
+                                      "idProducto": "1-CQJUDM1",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QY6",
+                                          "codOferta": "1-D762IK0",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QY6",
+                                          "idOfertaCatalogo": "1-D762IK0",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BGL7GNQ",
+                                      "idProducto": "1-CQJUDNN",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYL",
+                                          "codOferta": "1-D762IKK",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYL",
+                                          "idOfertaCatalogo": "1-D762IKK",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BGL7GOM",
+                                      "idProducto": "1-CQJUDOZ",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZ6",
+                                          "codOferta": "1-D762IKL",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZ6",
+                                          "idOfertaCatalogo": "1-D762IKL",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BGLMNSU",
+                                      "idProducto": "1-CQJUDQL",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYQ",
+                                          "codOferta": "1-D762ILJ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYQ",
+                                          "idOfertaCatalogo": "1-D762ILJ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BOJJBF7",
+                                      "idProducto": "1-CQJUDRX",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYC",
+                                          "codOferta": "1-D762ILK",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYC",
+                                          "idOfertaCatalogo": "1-D762ILK",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BOJJBI1",
+                                      "idProducto": "1-CQJUDUB",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYB",
+                                          "codOferta": "1-D762IL3",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYB",
+                                          "idOfertaCatalogo": "1-D762IL3",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BOJJBLP",
+                                      "idProducto": "1-CWB4Y03",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYE",
+                                          "codOferta": "1-D762ILO",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYE",
+                                          "idOfertaCatalogo": "1-D762ILO",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BOJJBQ9",
+                                      "idProducto": "1-CWB4Y15",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYD",
+                                          "codOferta": "1-D762ILP",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYD",
+                                          "idOfertaCatalogo": "1-D762ILP",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BPRX7AP",
+                                      "idProducto": "1-CWB4Y39",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYR",
+                                          "codOferta": "1-D762IK7",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYR",
+                                          "idOfertaCatalogo": "1-D762IK7",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BPWL7L1",
+                                      "idProducto": "1-CWB4Y4B",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QXX",
+                                          "codOferta": "1-D762IK9",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QXX",
+                                          "idOfertaCatalogo": "1-D762IK9",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BQDX6E8",
+                                      "idProducto": "1-CWB4Y5D",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYP",
+                                          "codOferta": "1-D762ILG",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYP",
+                                          "idOfertaCatalogo": "1-D762ILG",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BSQ0QTB",
+                                      "idProducto": "1-CWB4Y6F",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZ3",
+                                          "codOferta": "1-D762IKN",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZ3",
+                                          "idOfertaCatalogo": "1-D762IKN",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BUPZ4M2",
+                                      "idProducto": "1-CWB4Y7R",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYH",
+                                          "codOferta": "1-D762ILC",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYH",
+                                          "idOfertaCatalogo": "1-D762ILC",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BUPZ4QK",
+                                      "idProducto": "1-CZPA5M2",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYG",
+                                          "codOferta": "1-D762IKD",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYG",
+                                          "idOfertaCatalogo": "1-D762IKD",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-BVUO2F3",
+                                      "idProducto": "1-CZPA5R0",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYW",
+                                          "codOferta": "1-D762IKE",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYW",
+                                          "idOfertaCatalogo": "1-D762IKE",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C0Q7YR8",
+                                      "idProducto": "1-CZPA5SC",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYV",
+                                          "codOferta": "1-D762IKF",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYV",
+                                          "idOfertaCatalogo": "1-D762IKF",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C2UNGW8",
+                                      "idProducto": "1-D181AEL",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYX",
+                                          "codOferta": "1-D762IKM",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYX",
+                                          "idOfertaCatalogo": "1-D762IKM",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C50A346",
+                                      "idProducto": "1-D181AFN",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYN",
+                                          "codOferta": "1-D762ILS",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYN",
+                                          "idOfertaCatalogo": "1-D762ILS",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C50KE3U",
+                                      "idProducto": "1-D181AI3",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZB",
+                                          "codOferta": "1-D762ILT",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZB",
+                                          "idOfertaCatalogo": "1-D762ILT",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C5AM2TV",
+                                      "idProducto": "1-D181AJ5",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QXY",
+                                          "codOferta": "1-D762ILU",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QXY",
+                                          "idOfertaCatalogo": "1-D762ILU",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C99NFWL",
+                                      "idProducto": "1-D18HH4F",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QY1",
+                                          "codOferta": "1-D762ILV",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QY1",
+                                          "idOfertaCatalogo": "1-D762ILV",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C99NG2W",
+                                      "idProducto": "1-D18HH61",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZ0",
+                                          "codOferta": "1-D762IKG",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZ0",
+                                          "idOfertaCatalogo": "1-D762IKG",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-C99NGE8",
+                                      "idProducto": "1-D18HH7N",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZE",
+                                          "codOferta": "1-D762IKI",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZE",
+                                          "idOfertaCatalogo": "1-D762IKI",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CEFX6Z5",
+                                      "idProducto": "1-D18HH99",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZ9",
+                                          "codOferta": "1-D762IKH",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZ9",
+                                          "idOfertaCatalogo": "1-D762IKH",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CEFX73N",
+                                      "idProducto": "1-D18HHBZ",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZA",
+                                          "codOferta": "1-D762IKJ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZA",
+                                          "idOfertaCatalogo": "1-D762IKJ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CIC58SN",
+                                      "idProducto": "1-D6P3PRF",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZY",
+                                          "codOferta": "1-D762IJZ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZY",
+                                          "idOfertaCatalogo": "1-D762IJZ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CIC58WN",
+                                      "idProducto": "1-D6R22ST",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZZ",
+                                          "codOferta": "1-D762IKO",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZZ",
+                                          "idOfertaCatalogo": "1-D762IKO",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CJUFJPN",
+                                      "idProducto": "1-D6R22TV",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZF",
+                                          "codOferta": "1-D762IKZ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZF",
+                                          "idOfertaCatalogo": "1-D762IKZ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CJUFJTX",
+                                      "idProducto": "1-D6R22UX",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZI",
+                                          "codOferta": "1-D762IL0",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZI",
+                                          "idOfertaCatalogo": "1-D762IL0",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CJZHMPN",
+                                      "idProducto": "1-D6R22W9",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYM",
+                                          "codOferta": "1-D762ILD",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYM",
+                                          "idOfertaCatalogo": "1-D762ILD",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CPHPD4F",
+                                      "idProducto": "1-D6R22XB",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QXT",
+                                          "codOferta": "1-D762ILE",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QXT",
+                                          "idOfertaCatalogo": "1-D762ILE",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CPHV2TI",
+                                      "idProducto": "1-D6R22YD",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYT",
+                                          "codOferta": "1-D762ILF",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYT",
+                                          "idOfertaCatalogo": "1-D762ILF",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CPI8CLU",
+                                      "idProducto": "1-D6R22ZU",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZK",
+                                          "codOferta": "1-D762ILM",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZK",
+                                          "idOfertaCatalogo": "1-D762ILM",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CPJ53PK",
+                                      "idProducto": "1-D6R237K",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QYS",
+                                          "codOferta": "1-D762ILW",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QYS",
+                                          "idOfertaCatalogo": "1-D762ILW",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CPJ53WA",
+                                      "idProducto": "1-D6R238M",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QZJ",
+                                          "codOferta": "1-D762ILX",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZJ",
+                                          "idOfertaCatalogo": "1-D762ILX",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CQ2K80D",
+                                      "idProducto": "1-D6R239O",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QXQ",
+                                          "codOferta": "1-D762ILY",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QXQ",
+                                          "idOfertaCatalogo": "1-D762ILY",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CW3Y43D",
+                                      "idProducto": "1-D6R23B0",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QXU",
+                                          "codOferta": "1-D762ILZ",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QXU",
+                                          "idOfertaCatalogo": "1-D762ILZ",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CW3Y4IU",
+                                      "idProducto": "1-D6R23C2",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QY5",
+                                          "codOferta": "1-D762IM0",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QY5",
+                                          "idOfertaCatalogo": "1-D762IM0",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
                                       ]
                                     },
                                     {
-                                      "idProducto": "1-CW4E7BC",
+                                      "idProducto": "1-D6R23D4",
                                       "descripcionComercial": null,
                                       "descripcionSAP": null,
                                       "codSAP": null,
                                       "offertDetails": [
                                         {
-                                          "codOferta": "1-D7R1QY7",
+                                          "codOferta": "1-D762IM1",
                                           "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QY7",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D0B5D0Q",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZL",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZL",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D0B5D64",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZM",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZM",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D0B5DA4",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZN",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZN",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D0B7ZR8",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZO",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZO",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D0B7ZTK",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZP",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZP",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D0B7ZYQ",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZR",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZR",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D0B7ZZM",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZS",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZS",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D0B800I",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZT",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZT",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D0Y63Y7",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZU",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZU",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D0Y63ZD",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZQ",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZQ",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D4ZPYRL",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZW",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZW",
-                                          "valorPuntos": 0,
-                                          "valorEruros": 0
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "idProducto": "1-D6WFDTP",
-                                      "descripcionComercial": null,
-                                      "descripcionSAP": null,
-                                      "codSAP": null,
-                                      "offertDetails": [
-                                        {
-                                          "codOferta": "1-D7R1QZX",
-                                          "valorRecarga": null,
-                                          "idOfertaCatalogo": "1-D7R1QZX",
+                                          "idOfertaCatalogo": "1-D762IM1",
                                           "valorPuntos": 0,
                                           "valorEruros": 0
                                         }
