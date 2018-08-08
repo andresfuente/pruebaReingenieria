@@ -3,7 +3,7 @@ module OrangeFeSARQ.Services {
 
     /**
      * @ngdoc service
-     * @name OFC.Services.CommunicationsSrv
+     * @name OrangeFeSARQ.Services.CommunicationsSrv
      * @description
      * Servicio que realiza la llamada a la API Communications
      */
@@ -16,26 +16,20 @@ module OrangeFeSARQ.Services {
             super($injector);
             let vm = this;
 
-            vm.setInjections($injector);
-        }
-
-        setInjections($injector) {
-            let vm = this;
-
             vm.communicationListAPIUrl = vm.genericConstant.communications;
         }
 
         /**
          * @ngdoc method
-         * @name OFC.Services.CommunicationsSrv#postCommunicationList()
-         * @methodOf OFC.Services.CommunicationsSrv
+         * @name OrangeFeSARQ.Services.CommunicationsSrv#postCommunicationList()
+         * @methodOf OrangeFeSARQ.Services.CommunicationsSrv
          * @param {object} body cuerpo de la llamada
          * @param {string} componentName Componente.
          * @description
          * Envía una comunicación
          * @returns {object} Devuelve una promesa con el response.
          */
-        postCommunicationList(body: any, componentName: string): any {
+        postCommunicationList(body: OrangeFeSARQ.Models.IBody, componentName) {
             let vm = this;
 
             let _search: Object = {
@@ -66,7 +60,7 @@ module OrangeFeSARQ.Services {
          * Envía una comunicación con un template
          * @returns {object} Devuelve una promesa con el response.
          */
-        postTemplate(body: any, componentName: string) : any {
+        postTemplate(body: OrangeFeSARQ.Models.ITemplateBody2, componentName) {
             let vm = this;
 
             let _search: Object = {
@@ -107,8 +101,51 @@ module OrangeFeSARQ.Services {
                     }
                 );
         }
-    }
 
+        getCommunicationList(body: OrangeFeSARQ.Models.IBody2, componentName) {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams: body,
+                urlParams: ['communicationMessage']
+            };
+
+            return vm.httpCacheGett(vm.genericConstant.communication, _search, componentName)
+                .then(
+                    (response) => {
+                        return response.data;
+                    }
+                )
+                .catch(
+                    (error) => {
+                        return error.data;
+                    }
+                );
+        }
+
+        getTemplate(body: OrangeFeSARQ.Models.ITemplateBody2, componentName) {
+            let vm = this;
+
+            const customBody = {}
+
+            let _search: Object = {
+                queryParams: body,
+                urlParams: ['communicationMessage']
+            };
+
+            return vm.httpCacheGett(vm.genericConstant.communication, _search, componentName)
+                .then(
+                    (response) => {
+                        return response.data;
+                    }
+                )
+                .catch(
+                    (error) => {
+                        return error.data;
+                    }
+                );
+        }
+    }
     angular.module('communicationsSrv', [])
-        .service('communicationsSrv', CommunicationsSrv);
+        .service('communicationsSrv', OrangeFeSARQ.Services.CommunicationsSrv);
 }
