@@ -52,12 +52,24 @@ module OrangeFeSARQ.Services {
          * @description Obtiene los datos de las campañas comerciales de un cliente
          * @returns {object} Devuelve una promesa con el response.
          */
-        getComercialCampaings85205(individualPublicId, comp: string) {
+        getComercialCampaings85205(individualPublicId, comp: string, tipoAccionDL) {
             let vm = this;
+
+            let queryParams;
+
+            if (tipoAccionDL) {
+                queryParams = {
+                    individualPublicId : individualPublicId,
+                    tipoAccionDL : tipoAccionDL
+                }
+            } else {
+                queryParams = {
+                    individualPublicId : individualPublicId
+                }
+            }
+
             let _search: Object = {
-                queryParams: {
-                    'individualPublicId': individualPublicId
-                },
+                queryParams: queryParams,
                 urlParams: [vm.genericConstant.brand, 'getComercialCampaings85205']
             };
 
