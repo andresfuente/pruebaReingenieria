@@ -34,6 +34,28 @@ module OrangeFeSARQ.Services {
         generateShoppingCart(body, componentName: string, customer?) {
             let vm = this;
             let _headers = vm.getParentSfid();
+
+            let body2 = JSON.stringify(body);
+            body2 = body2.replace(/á/g,"a");
+            body2 = body2.replace(/é/g,"e");
+            body2 = body2.replace(/í/g,"i");
+            body2 = body2.replace(/ó/g,"o");
+            body2 = body2.replace(/ú/g,"u");
+            body2 = body2.replace(/ñ/g,"n");
+            body2 = body2.replace(/€/g,"e");
+            body = JSON.parse(body2);
+
+            if (customer) {
+                let customer2: string = JSON.stringify(customer);
+                customer2 = customer2.replace(/á/g,"a");
+                customer2 = customer2.replace(/é/g,"e");
+                customer2 = customer2.replace(/í/g,"i");
+                customer2 = customer2.replace(/ó/g,"o");
+                customer2 = customer2.replace(/ú/g,"u");
+                customer2 = customer2.replace(/ñ/g,"n");
+                customer = JSON.parse(customer2);
+            }
+
             let _search = {
                 body: {
                     ospCartItemReqPost: [
