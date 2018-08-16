@@ -82,6 +82,31 @@ module OrangeFeSARQ.Services {
             });
         }
 
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:CommercialDataSrv#getSelectedCommercialAct
+         * @methodOf OFC.Services:CommercialDataSrv
+         * @description Obtiene el indice del array del acto comercial activo
+         * @return {number} Retorna el indice del commercialData que se esta modificando,
+         * en caso contrario retorna -1
+         */
+        getSelectedMulticomparatorCommercialAct(typeCommercialAct){
+            let commercialData = [];
+            commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            return _.findIndex(commercialData, function(currentCommercialAct){
+                if(currentCommercialAct.ospCartItemType === 'portabilidad' ){
+                    if(currentCommercialAct.originType === 'pospago'){
+                        return true;
+                    }else if (currentCommercialAct.originType === 'prepago'){
+                        return true;
+                    }
+                } else if (currentCommercialAct.ospCartItemType === typeCommercialAct){ 
+                    return true;
+                }
+            });
+        }
+
         /**
          * @ngdoc method
          * @name OFC.Services:CommercialDataSrv#setSelectedRatePack
