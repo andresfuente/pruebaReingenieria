@@ -95,10 +95,10 @@ module OrangeFeSARQ.Services {
             let commercialData = [];
             commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             return _.findIndex(commercialData, function(currentCommercialAct){
-                if(currentCommercialAct.ospCartItemType === 'portabilidad' ){
-                    if(currentCommercialAct.originType === 'pospago'){
+                if(currentCommercialAct.ospCartItemType === "portabilidad" ){
+                    if(currentCommercialAct.originType === "pospago"){
                         return true;
-                    }else if (currentCommercialAct.originType === 'prepago'){
+                    }else if (currentCommercialAct.originType === "prepago"){
                         return true;
                     }
                 } else if (currentCommercialAct.ospCartItemType === typeCommercialAct){ 
