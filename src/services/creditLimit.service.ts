@@ -66,11 +66,19 @@ module OrangeFeSARQ.Services {
          */
         setCreditRisk(search: string, response) {
             let vm = this;
+
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
             if (clientData) {
-                clientData.creditLimit = vm.getCreditRisk(search, response);
-                sessionStorage.setItem('clientData', JSON.stringify(clientData));
+                if (search === 'CV') {
+                    clientData.creditLimit = vm.getCreditRisk(search, response);
+                } else if (search === 'prescoring') {
+                    clientData.creditLimit = vm.getCreditRisk(search, response);
+                } else {
+                    clientData.creditLimitRenove = vm.getCreditRisk(search, response);
+                }
             }
+            sessionStorage.setItem('clientData', JSON.stringify(clientData));
         }
 
         /**
@@ -100,7 +108,10 @@ module OrangeFeSARQ.Services {
                         limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
                     }
                 } else if (search === 'renove') {
-
+                    // if (response && response[0] && response[0].saldoDisponible) {
+                    //     limit = parseInt(response[0].saldoDisponible, 10);
+                    // }
+                    limit = 300;
                 }
             }
             return limit;

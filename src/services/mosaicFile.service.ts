@@ -663,6 +663,8 @@ module OrangeFeSARQ.Services {
             let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
             let commercialActIndex;
 
+            commercialActIndex = vm.getSelectedCommercialAct();
+
             // Se obtienen los datos por defecto           
             dataOT = _.cloneDeep(defaultDataOT);
             dataOT.stateOrProvince = (shopInfo && shopInfo.province) ? shopInfo.province : 'Madrid';
@@ -684,11 +686,12 @@ module OrangeFeSARQ.Services {
                     dataOT.stateOrProvince = clientData.postalContact.stateOrProvince;
                 }
                 // CreditLimit, cliente existente perteneciente al programa de puntos
-                if (clientData && clientData.creditLimit !== null) {
+                if (clientData && clientData.creditLimit !== null && clientData.creditLimitRenove !== null) {
                     dataOT.creditLimit = clientData.creditLimit;
+                    dataOT.creditLimitRenove = clientData.creditLimitRenove;
                 }
             }
-            commercialActIndex = vm.getSelectedCommercialAct();
+
             // Si los datos del acto comercial se encuentran en el session storage
             if (commercialData && commercialActIndex !== -1) {
                 // Tipo de Contrato
