@@ -912,6 +912,10 @@ module OrangeFeSARQ.Services {
                     'customer': {}
                 };
             }
+            
+            if(commercialData[commercialActIndex].multicomparador){
+                shoppingCart.isMulticomparador = true; 
+            }
 
             // Set session
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
