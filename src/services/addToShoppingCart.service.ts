@@ -879,6 +879,9 @@ module OrangeFeSARQ.Services {
                             if (spec) {
                                 // Pasamos true como parámetro opcional porque es un bono de terminal
                                 cartItemElement.cartItem.push(vm.createSVACartItem(spec.productSpecification[0], true));
+                                if(commercialData[commercialActIndex].multicomparador){
+                                    shoppingCart.isMulticomparador = true; 
+                                }
                                 sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
                             }
                         })
