@@ -72,10 +72,13 @@ module OrangeFeSARQ.Services {
             if (clientData) {
                 if (search === 'CV') {
                     clientData.creditLimit = vm.getCreditRisk(search, response);
+                    clientData.staticCreditLimitBase = clientData.creditLimit;
                 } else if (search === 'prescoring') {
                     clientData.creditLimit = vm.getCreditRisk(search, response);
+                    clientData.staticCreditLimitBase = clientData.creditLimit;
                 } else {
                     clientData.creditLimitRenove = vm.getCreditRisk(search, response);
+                    clientData.staticCreditLimitRenoveBase = clientData.creditLimitRenove;
                 }
             }
             sessionStorage.setItem('clientData', JSON.stringify(clientData));
