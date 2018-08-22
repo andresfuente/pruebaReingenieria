@@ -41,6 +41,41 @@ module OrangeFeSARQ.Services {
             vm.productCatalogV2Srv = $injector.get('productCatalogV2Srv');
         }
 
+        getBundle(){
+            let vm = this;
+            let cv = JSON.parse(sessionStorage.getItem('cv'));
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let active = _.findIndex(commercialData, {'ospIsSelected': true});
+            
+            let bundleId = '';
+
+            if(cv && cv.product) {
+                for (let i = 0; i < cv.product.length; i++) {
+                    if (cv.product[i].productCharacteristic) {
+                        let charMSISDN : any = _.find(cv.product[i].productCharacteristic, (char: any) => {
+                            if (char.name === 'MSISDN' && commercialData[active].serviceNumber === char.value) {
+                                return char;
+                            }
+                        });
+
+                        if (charMSISDN) {
+                            let bundle : any = _.find(cv.product[i].productCharacteristic, (char: any) => {
+                                if (char.name === 'Product Bundle Siebel') {
+                                    return char;
+                                }
+                            });
+
+                            if (bundle && bundle.value) {
+                                bundleId = bundle.value;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return bundleId;
+        }
+
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putDeviceInShoppingCart
@@ -51,15 +86,14 @@ module OrangeFeSARQ.Services {
         putDeviceInShoppingCart(device) {
             let vm = this;
             let productItem;
-            let peachRate;
             let deviceCartItemElement, rateCartItemElement;
             let cartItemElement;
             let cartItemElementId: number;
-            let cartItemIndex: number;
             let lastCartItemId: number;
             let commercialActId: number;
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
 
             // Se obtiene el ID del acto comercial que se esta modificando
@@ -115,41 +149,86 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': ''
             };
 
-            rateCartItemElement = {
-                'id': '1-CWOOG9',
-                'action': 'New',
-                'product': {
-                    'name': 'peach',
-                    'description': '',
-                    'productRelationship': [{
-                        'type': 'tarifa'
-                    }]
-                },
-                'productOffering': {
-                    'id': '1-CWOOG9',
-                    'name': 'peach',
-                    'isBundle': true
-                },
-                'cartItemRelationship': [],
-                'itemPrice': [{
-                    'priceType': '',
-                    'price': {
-                        'dutyFreeAmount': {
-                            'unit': '',
-                            'value': 0
-                        },
-                        'taxIncludedAmount': {
-                            'unit': '',
-                            value: 0
-                        },
-                        taxRate: 0,
-                        ospTaxRateName: ''
+            if (commercialData && commercialData[commercialActIndex]
+                && commercialData[commercialActIndex].ospTerminalWorkflow === 'secondary_renew'
+                && commercialData[commercialActIndex].ospCartItemType
+                && commercialData[commercialActIndex].ospCartItemSubtype
+                && commercialData[commercialActIndex].originRate) {
+
+                let idBundle = vm.getBundle();
+
+                rateCartItemElement = {
+                    'id': idBundle,
+                    'action': 'New',
+                    'product': {
+                        'name': 'RENOVE_SECUNDARIO',
+                        'description': '',
+                        'productRelationship': [{
+                            'type': 'tarifa'
+                        }]
                     },
-                }],
-                'ospSelected': true,
-                'ospCartItemType': 'alta',
-                'ospCartItemSubtype': ''
-            };
+                    'productOffering': {
+                        'id': idBundle,
+                        'name': 'RENOVE_SECUNDARIO',
+                        'isBundle': true
+                    },
+                    'cartItemRelationship': [],
+                    'itemPrice': [{
+                        'priceType': '',
+                        'price': {
+                            'dutyFreeAmount': {
+                                'unit': '',
+                                'value': 0
+                            },
+                            'taxIncludedAmount': {
+                                'unit': '',
+                                value: 0
+                            },
+                            taxRate: 0,
+                            ospTaxRateName: ''
+                        },
+                    }],
+                    'ospSelected': true,
+                    'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                    'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                };
+            } else {
+                rateCartItemElement = {
+                    'id': '1-CWOOG9',
+                    'action': 'New',
+                    'product': {
+                        'name': 'peach',
+                        'description': '',
+                        'productRelationship': [{
+                            'type': 'tarifa'
+                        }]
+                    },
+                    'productOffering': {
+                        'id': '1-CWOOG9',
+                        'name': 'peach',
+                        'isBundle': true
+                    },
+                    'cartItemRelationship': [],
+                    'itemPrice': [{
+                        'priceType': '',
+                        'price': {
+                            'dutyFreeAmount': {
+                                'unit': '',
+                                'value': 0
+                            },
+                            'taxIncludedAmount': {
+                                'unit': '',
+                                value: 0
+                            },
+                            taxRate: 0,
+                            ospTaxRateName: ''
+                        },
+                    }],
+                    'ospSelected': true,
+                    'ospCartItemType': 'alta',
+                    'ospCartItemSubtype': ''
+                };
+            }
 
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
 
