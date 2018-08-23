@@ -382,7 +382,6 @@ module OrangeFeSARQ.Services {
                 });
             }
 
-
             productItem = {
                 'href': '',
                 'name': rate.name ? rate.name : '',
@@ -459,6 +458,53 @@ module OrangeFeSARQ.Services {
                 cartItemElement.cartItem.push(vm.createIdTechnologyCartItem(rate));
             }
 
+            // Cambio de marca
+
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            if(clientData && clientData.jazztelData && clientData.jazztelData.customer) {
+                let router = _.find(clientData.jazztelData.customer.product, (item:any) => {
+                    return item.ospProductType  === 'Equipo' && item.name.toLowerCase().indexOf("fibra") !== -1;
+                });
+                if (router) {
+                    let routerCartItemElement = {
+                        'id': router.id ? router.id : '',
+                        'action': 'Existing',
+                        'product': {
+                            'name': router.name ?  router.name : '',
+                        }
+                    };
+                    cartItemElement.cartItem.push(routerCartItemElement);
+                }
+
+                let ONT = _.find(clientData.jazztelData.customer.product, (item:any) => {
+                    return item.ospProductType  === 'Equipo' && item.name.toLowerCase().indexOf("ont") !== -1;
+                });
+                if(ONT) {
+                    let ONTCartItemElement = {
+                        'id': ONT.id ? ONT.id : '',
+                        'action': 'Existing',
+                        'product': {
+                            'name': ONT.name ?  ONT.name : '',
+                        }
+                    };
+                    cartItemElement.cartItem.push(ONTCartItemElement);
+                }
+
+                let deco = _.find(clientData.jazztelData.customer.product, (item:any) => {
+                    return item.ospProductType  === 'Equipo' && item.name.toLowerCase().indexOf("decodificador") !== -1;
+                });
+                if (deco) {
+                    let decoCartItemElement = {
+                        'id': deco.id ? deco.id : '',
+                        'action': 'Existing',
+                        'product': {
+                            'name': deco.name ?  deco.name : '',
+                        }
+                    };
+                    cartItemElement.cartItem.push(decoCartItemElement);
+                }
+            }
+
             if (shoppingCart !== null) {
                 shoppingCart.cartItem.push(cartItemElement);
             } else {
@@ -468,9 +514,10 @@ module OrangeFeSARQ.Services {
                     'customer': {}
                 };
             }
+
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
-
+        
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
@@ -617,6 +664,23 @@ module OrangeFeSARQ.Services {
                     value: vm.objectTv.value
                 };
                 ospTecnology.product.characteristic.push(flagTvItem);
+            }
+
+            let characteristicCDM;
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let CDM = true; // mock, cambiar y quitar
+            if(clientData && clientData.jazztelData && clientData.jazztelData.customer) {
+            // Recuperar si hay CDM, falta parametro para comprobar cambio de marca
+                if(CDM) {
+                    characteristicCDM = {
+                        name: 'Aplicable Cambio Marca',
+                        value: 'Yes'
+                    },
+                    {
+                        name: 'TVOrigen',
+                        value: 'No'
+                    }
+                }
             }
 
             return ospTecnology;
