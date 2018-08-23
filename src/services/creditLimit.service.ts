@@ -96,7 +96,7 @@ module OrangeFeSARQ.Services {
             let limit;
             if (search && response) {
                 if (search === 'CV') {
-                    if (response.customer && response.customer.individual && response.customer.individual.characteristic) {
+                    if (response.customer && response.customer.individual && response.customer.individual.characteristic !== null) {
                         let existLimitCredit: any = _.find(response.customer.individual.characteristic, { 'name': 'limiteCredito' });
                         if (existLimitCredit) {
                             limit = parseInt(existLimitCredit.value, 10);
@@ -106,11 +106,11 @@ module OrangeFeSARQ.Services {
                     if (response.customer && response.customer.ospCustomerSalesProfile && response.customer.ospCustomerSalesProfile[0]
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0]
-                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount) {
+                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount !== null) {
                         limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
                     }
                 } else if (search === 'renove') {
-                    if (response && response[0] && response[0].saldoDisponible) {
+                    if (response && response[0] && response[0].saldoDisponible !== null) {
                         limit = parseInt(response[0].saldoDisponible, 10);
                     }
                 }
