@@ -94,8 +94,8 @@ module OrangeFeSARQ.Services {
             ospCustomerSegmentBinding: string,
             stateOrProvinceBinding: string,
             workflow: string,
-            creditLimit: number,
-            campana_txt?: string
+            campana_txt?: string,
+            creditLimit?: number
         ): ng.IPromise<{} | void> {
             let srv = this;
             let params;
@@ -148,6 +148,7 @@ module OrangeFeSARQ.Services {
                 'deviceOffering.category.name': priceNameBinding,
                 creditLimit: creditLimit
             };
+
             if (filters && filters.length) {
                 filters.forEach((filtersParam, index) => {
                     params[Object.keys(filtersParam)[0]] = filtersParam[Object.keys(filtersParam)[0]];
@@ -157,6 +158,7 @@ module OrangeFeSARQ.Services {
                     }
                 });
             }
+
             // Parametros para Terminal Libre sin Servicio    
             if (workflow === 'libre') {
                 params.channel = 'eShopRES';
@@ -193,8 +195,8 @@ module OrangeFeSARQ.Services {
                 params.campaignName = campana_txt;
                 // Se seleccionan los parametros necesarios para la llamada a la OT
                 if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
-                    params = _.pick(params, ['channel', 'offset', 'limit', 'creditLimit', 'sort', 'commercialAction', 'campaignName',
-                        'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee', 'totalPaymentRange',
+                    params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
+                        'ospOpenSearch', 'brand', 'price', 'deviceType', 'creditLimit', 'purchaseOption', 'price.fee', 'totalPaymentRange',
                         'characteristic.OSData.groupData.OStype.value',
                         'characteristic.cameraData.groupData.backCameraResolution.value',
                         'characteristic.screenData.groupData.screenSize.value',
@@ -202,9 +204,9 @@ module OrangeFeSARQ.Services {
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
                         'characteristic.color']);
                 } else {
-                    params = _.pick(params, ['channel', 'offset', 'limit', 'creditLimit', 'sort', 'commercialAction', 'campaignName',
-                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee',
-                        'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
+                    params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
+                        'relatedProductOffering', 'ospOpenSearch', 'brand', , 'creditLimit', 'price', 'deviceType',
+                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
                         'characteristic.cameraData.groupData.backCameraResolution.value',
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
@@ -686,7 +688,8 @@ module OrangeFeSARQ.Services {
                     dataOT.stateOrProvince = clientData.postalContact.stateOrProvince;
                 }
                 // CreditLimit, cliente existente perteneciente al programa de puntos
-                if (clientData && clientData.creditLimit !== null && clientData.creditLimitRenove !== null) {
+                if (clientData && clientData.creditLimit !== null && clientData.creditLimit !== undefined
+                    && clientData.creditLimitRenove !== null && clientData.creditLimitRenove !== undefined) {
                     dataOT.creditLimit = clientData.creditLimit;
                     dataOT.creditLimitRenove = clientData.creditLimitRenove;
                 }

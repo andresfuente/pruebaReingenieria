@@ -100,8 +100,6 @@ module OrangeFeSARQ.Services {
                         let existLimitCredit: any = _.find(response.customer.individual.characteristic, { 'name': 'limiteCredito' });
                         if (existLimitCredit) {
                             limit = parseInt(existLimitCredit.value, 10);
-                        } else {
-                            limit = 500;
                         }
                     }
                 } else if (search === 'prescoring') {
@@ -110,14 +108,10 @@ module OrangeFeSARQ.Services {
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0]
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount) {
                         limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
-                    } else {
-                        limit = 1500;
                     }
                 } else if (search === 'renove') {
                     if (response && response[0] && response[0].saldoDisponible) {
                         limit = parseInt(response[0].saldoDisponible, 10);
-                    } else {
-                        limit = 900;
                     }
                 }
             }
