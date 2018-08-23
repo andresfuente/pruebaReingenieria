@@ -461,44 +461,44 @@ module OrangeFeSARQ.Services {
             // Cambio de marca
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            if(clientData && clientData.jazztelData && clientData.jazztelData.customer) {
-                let router = _.find(clientData.jazztelData.customer.product, (item:any) => {
-                    return item.ospProductType  === 'Equipo' && item.name.toLowerCase().indexOf("fibra") !== -1;
+            if (clientData && clientData.jazztelData && clientData.jazztelData.customer) {
+                let router = _.find(clientData.jazztelData.customer.product, (item: any) => {
+                    return item.ospProductType === 'Equipo' && item.name.toLowerCase().indexOf("fibra") !== -1;
                 });
                 if (router) {
                     let routerCartItemElement = {
                         'id': router.id ? router.id : '',
                         'action': 'Existing',
                         'product': {
-                            'name': router.name ?  router.name : '',
+                            'name': router.name ? router.name : '',
                         }
                     };
                     cartItemElement.cartItem.push(routerCartItemElement);
                 }
 
-                let ONT = _.find(clientData.jazztelData.customer.product, (item:any) => {
-                    return item.ospProductType  === 'Equipo' && item.name.toLowerCase().indexOf("ont") !== -1;
+                let ONT = _.find(clientData.jazztelData.customer.product, (item: any) => {
+                    return item.ospProductType === 'Equipo' && item.name.toLowerCase().indexOf("ont") !== -1;
                 });
-                if(ONT) {
+                if (ONT) {
                     let ONTCartItemElement = {
                         'id': ONT.id ? ONT.id : '',
                         'action': 'Existing',
                         'product': {
-                            'name': ONT.name ?  ONT.name : '',
+                            'name': ONT.name ? ONT.name : '',
                         }
                     };
                     cartItemElement.cartItem.push(ONTCartItemElement);
                 }
 
-                let deco = _.find(clientData.jazztelData.customer.product, (item:any) => {
-                    return item.ospProductType  === 'Equipo' && item.name.toLowerCase().indexOf("decodificador") !== -1;
+                let deco = _.find(clientData.jazztelData.customer.product, (item: any) => {
+                    return item.ospProductType === 'Equipo' && item.name.toLowerCase().indexOf("decodificador") !== -1;
                 });
                 if (deco) {
                     let decoCartItemElement = {
                         'id': deco.id ? deco.id : '',
                         'action': 'Existing',
                         'product': {
-                            'name': deco.name ?  deco.name : '',
+                            'name': deco.name ? deco.name : '',
                         }
                     };
                     cartItemElement.cartItem.push(decoCartItemElement);
@@ -517,7 +517,7 @@ module OrangeFeSARQ.Services {
 
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
-        
+
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
@@ -620,7 +620,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Crea el item de ospTecnology cuando existe
          */
-        createIdTechnologyCartItem(rate) {
+        createIdTechnologyCartItem(rate, TVOrigen?) {
             let vm = this;
             let ospTecnology;
             let flagTvItem = {};
@@ -668,23 +668,26 @@ module OrangeFeSARQ.Services {
 
             let characteristicCDM;
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let CDM = true; // mock, cambiar y quitar
-            if(clientData && clientData.jazztelData && clientData.jazztelData.customer) {
-            // Recuperar si hay CDM, falta parametro para comprobar cambio de marca
-                if(CDM) {
-                    characteristicCDM = {
+            if (clientData && clientData.jazztelData && clientData.jazztelData.customer) {
+                // Recuperar si hay CDM, falta parametro para comprobar cambio de marca
+                if (clientData.jazztelData.CDM) {
+                    let CDMItem = {
                         name: 'Aplicable Cambio Marca',
                         value: 'Yes'
-                    },
-                    {
+                    };
+                    ospTecnology.product.characteristic.push(CDMItem);
+                    // TV Origen
+                    let TVItem = {
                         name: 'TVOrigen',
-                        value: 'No'
-                    }
+                        value: ''
+                    };
+                    // Añadir con el CV de Jazztel
                 }
             }
 
             return ospTecnology;
         }
+
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateAndDeviceInShoppingCart
@@ -869,7 +872,7 @@ module OrangeFeSARQ.Services {
                 }
             };
             let preselected = true;
-            if(selected!==null && selected!==undefined && selected === false) {
+            if (selected !== null && selected !== undefined && selected === false) {
                 preselected = false;
             }
             cartItemElement = {
