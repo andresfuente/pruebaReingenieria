@@ -688,8 +688,8 @@ module OrangeFeSARQ.Services {
                     dataOT.stateOrProvince = clientData.postalContact.stateOrProvince;
                 }
                 // CreditLimit, cliente existente perteneciente al programa de puntos
-                if (clientData && clientData.creditLimit !== null && clientData.creditLimit !== undefined
-                    && clientData.creditLimitRenove !== null && clientData.creditLimitRenove !== undefined) {
+                if (clientData && ((clientData.creditLimit !== null && clientData.creditLimit !== undefined)
+                    || (clientData.creditLimitRenove !== null && clientData.creditLimitRenove !== undefined))) {
                     dataOT.creditLimit = clientData.creditLimit;
                     dataOT.creditLimitRenove = clientData.creditLimitRenove;
                 }
