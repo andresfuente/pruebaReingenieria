@@ -12,6 +12,9 @@ module OrangeFeSARQ.Services {
         public srvTerminalCompare: OrangeFeSARQ.Services.SrvTerminalCompare;
         public objectTv;
         private productCatalogV2Srv;
+        public clientJazztelSrv : OrangeFeSARQ.Services.ClientJazztelSrv;
+        public userSrv : OrangeFeSARQ.Services.UserSrv;
+        public data;
 
         /**
          * @ngdoc method
@@ -39,6 +42,8 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.srvTerminalCompare = $injector.get('srvTerminalCompare');
             vm.productCatalogV2Srv = $injector.get('productCatalogV2Srv');
+            vm.clientJazztelSrv = $injector.get('clientJazztelSrv');
+            vm.userSrv = $injector.get('userSrv');
         }
 
         /**
@@ -453,15 +458,10 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
-            // Si viene tecnologia creamos cartItem
-            if (rate.ospTecnology) {
-                cartItemElement.cartItem.push(vm.createIdTechnologyCartItem(rate));
-            }
-
             // Cambio de marca
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            if(clientData && clientData.jazztelData && clientData.jazztelData.customer) {
+            if(clientData && clientData.jazztelData && clientData.jazztelData.customer && clientData.jazztelData.type === 1) {
                 let router = _.find(clientData.jazztelData.customer.product, (item:any) => {
                     return item.ospProductType  === 'Equipo' && item.name.toLowerCase().indexOf("fibra") !== -1;
                 });
@@ -505,6 +505,11 @@ module OrangeFeSARQ.Services {
                 }
             }
 
+            // Si viene tecnologia creamos cartItem
+            if (rate.ospTecnology) {
+                cartItemElement.cartItem.push(vm.createIdTechnologyCartItem(rate));
+            }
+
             if (shoppingCart !== null) {
                 shoppingCart.cartItem.push(cartItemElement);
             } else {
@@ -517,7 +522,7 @@ module OrangeFeSARQ.Services {
 
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
-        
+
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
@@ -666,23 +671,19 @@ module OrangeFeSARQ.Services {
                 ospTecnology.product.characteristic.push(flagTvItem);
             }
 
-            let characteristicCDM;
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let CDM = true; // mock, cambiar y quitar
-            if(clientData && clientData.jazztelData && clientData.jazztelData.customer) {
-            // Recuperar si hay CDM, falta parametro para comprobar cambio de marca
-                if(CDM) {
-                    characteristicCDM = {
-                        name: 'Aplicable Cambio Marca',
-                        value: 'Yes'
-                    },
-                    {
-                        name: 'TVOrigen',
-                        value: 'No'
-                    }
-                }
+            if(clientData && clientData.jazztelData && clientData.jazztelData.customer && clientData.jazztelData.CDM) {
+                let characteristicCDM = {
+                    name: 'Aplicable Cambio Marca',
+                    value: 'Yes'
+                };
+                ospTecnology.product.characteristic.push(characteristicCDM);
+                let flagTv = {
+                    name: 'TVOrigen',
+                    value: clientData.jazztelData.tv
+                };
+                ospTecnology.product.characteristic.push(flagTv);
             }
-
             return ospTecnology;
         }
         /**
