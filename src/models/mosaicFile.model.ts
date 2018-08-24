@@ -743,6 +743,8 @@ module mosaicFile.Models {
         public priceName: string;
         public campana_txt: string;
         public idRateDefault: string;
+        public creditLimit: number;
+        public creditLimitRenove: number;
 
         constructor() {
             this.channel = '';
@@ -762,6 +764,8 @@ module mosaicFile.Models {
             this.numLinesBussines = '';
             this.priceName = '';
             this.idRateDefault = '';
+            this.creditLimit = 0;
+            this.creditLimitRenove = 0;
         }
     }
 }

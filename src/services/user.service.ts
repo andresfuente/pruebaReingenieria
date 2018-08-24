@@ -154,7 +154,6 @@ module OrangeFeSARQ.Services {
             return promise.promise;
         }
 
-
         /**
          * @ngdoc method
          * @name #getAmenaUser(param:string, clientId:string, componentName:string)
