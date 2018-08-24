@@ -101,6 +101,9 @@ module ratesParent.Models {
         public applicationDuration;
         public recurringChargePeriodPromotion: string; // Tipo de promoción
 
+        // Atributos para NAC
+        public siebelBucketId;
+
         constructor(rateData, priceData) {
             this.rateSubName = rateData.ospTitulo;
             this.rateDescription = rateData.description;
