@@ -101,7 +101,38 @@ module OrangeFeSARQ.Services {
                     }
                 );
         }
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services.CommunicationsSrv#sendEmailPost()
+         * @methodOf OrangeFeSARQ.Services.CommunicationsSrv
+         * @param {object} body cuerpo de la llamada
+         * @param {string} componentName Componente.
+         * @description
+         * Enviar correo.
+         * @returns {object} Devuelve una promesa con el response o error.
+         */
+        sendEmailPost(body: any, componentName) {
+            let vm = this;
 
+            let _search: Object = {
+                queryParams: body,
+                urlParams: ['communicationMessage']
+            };
+
+            vm.communicationListAPIUrl = 'api/communication/v2';
+
+            return vm.httpPost(vm.communicationListAPIUrl, _search, componentName)
+                .then(
+                    (response) => {
+                        return response.data;
+                    }
+                )
+                .catch(
+                    (error) => {
+                        return error.data;
+                    }
+                );
+        }
         getCommunicationList(body: OrangeFeSARQ.Models.IBody2, componentName) {
             let vm = this;
 
