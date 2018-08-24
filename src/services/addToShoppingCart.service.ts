@@ -540,15 +540,9 @@ module OrangeFeSARQ.Services {
             // Cambio de marca
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-<<<<<<< HEAD
-            if(clientData && clientData.jazztelData && clientData.jazztelData.customer && clientData.jazztelData.type === 1) {
-                let router = _.find(clientData.jazztelData.customer.product, (item:any) => {
-                    return item.ospProductType  === 'Equipo' && item.name.toLowerCase().indexOf("fibra") !== -1;
-=======
             if (clientData && clientData.jazztelData && clientData.jazztelData.customer) {
                 let router = _.find(clientData.jazztelData.customer.product, (item: any) => {
                     return item.ospProductType === 'Equipo' && item.name.toLowerCase().indexOf("fibra") !== -1;
->>>>>>> 699a43c5a7b488c71e66a9ffae1c06a0f83c32d5
                 });
                 if (router) {
                     let routerCartItemElement = {
@@ -757,7 +751,6 @@ module OrangeFeSARQ.Services {
             }
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-<<<<<<< HEAD
             if(clientData && clientData.jazztelData && clientData.jazztelData.customer && clientData.jazztelData.CDM) {
                 let characteristicCDM = {
                     name: 'Aplicable Cambio Marca',
@@ -769,23 +762,6 @@ module OrangeFeSARQ.Services {
                     value: clientData.jazztelData.tv
                 };
                 ospTecnology.product.characteristic.push(flagTv);
-=======
-            if (clientData && clientData.jazztelData && clientData.jazztelData.customer) {
-                // Recuperar si hay CDM, falta parametro para comprobar cambio de marca
-                if (clientData.jazztelData.CDM) {
-                    let CDMItem = {
-                        name: 'Aplicable Cambio Marca',
-                        value: 'Yes'
-                    };
-                    ospTecnology.product.characteristic.push(CDMItem);
-                    // TV Origen
-                    let TVItem = {
-                        name: 'TVOrigen',
-                        value: ''
-                    };
-                    // Añadir con el CV de Jazztel
-                }
->>>>>>> 699a43c5a7b488c71e66a9ffae1c06a0f83c32d5
             }
             return ospTecnology;
         }
