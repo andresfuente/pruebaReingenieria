@@ -565,13 +565,8 @@ module mosaicFile.Models {
                             // Seguro movil.
                             if (deviceOff.recommendedProductOffering && deviceOff.recommendedProductOffering.length) {
                                 if (deviceOff.recommendedProductOffering[0].name === 'Seguro movil') {
-                                    if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
-                                        this.litInsurancePaid =
-                                            deviceOff.recommendedProductOffering[0].productOfferingPrice[0].price.taxIncudedAmount;
-                                    } else {
-                                        this.litInsurancePaid =
+                                     this.litInsurancePaid =
                                             deviceOff.recommendedProductOffering[0].productOfferingPrice[0].price.dutyFreeAmount;
-                                    }
                                     this.insuranceSiebelId = deviceOff.recommendedProductOffering[0].id;
                                 }
                             }
