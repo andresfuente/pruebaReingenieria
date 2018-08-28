@@ -11,12 +11,16 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
 
         public communicationListAPIUrl: string;
+        private brand: string;
+        private commercialBillsAPI: string;
 
         constructor(public $injector) {
             super($injector);
             let vm = this;
 
             vm.communicationListAPIUrl = vm.genericConstant.communications;
+            vm.brand = vm.genericConstant.brand;
+            vm.commercialBillsAPI = vm.genericConstant.commercialBills;
         }
 
         /**
@@ -176,6 +180,38 @@ module OrangeFeSARQ.Services {
                     }
                 );
         }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services.CommunicationsSrv#sendAttachedEmail()
+         * @methodOf OrangeFeSARQ.Services.CommunicationsSrv
+         * @param {object} body Cuerpo de la llamada
+         * @param {string} componentName Componente
+         * @description
+         * Enviar correo con archivo adjunto
+         * @returns {object} Devuelve una promesa con el response o error
+         */
+        sendAttachedEmail(body: any, componentName) {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams: body,
+                urlParams: [vm.brand, 'sendDocument']
+            };
+
+            return vm.httpPost(vm.commercialBillsAPI, _search, componentName)
+                .then(
+                    (response) => {
+                        return response;
+                    }
+                )
+                .catch(
+                    (error) => {
+                        return error;
+                    }
+                );
+        }
+
     }
     angular.module('communicationsSrv', [])
         .service('communicationsSrv', OrangeFeSARQ.Services.CommunicationsSrv);
