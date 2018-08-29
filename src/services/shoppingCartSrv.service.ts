@@ -157,6 +157,52 @@ module OrangeFeSARQ.Services {
             }
             return _headers;
         }
+
+        /**
+        * @ngdoc method
+        * @name shoppingCartSrv.Services.ShoppingCartSrv#getTypologiesPrices
+        * @param {string} componentName nombre del componente
+        * @param {string} postalCode código postal
+        * @methodOf shoppingCartSrv.Services.ShoppingCartSrv
+        * @description
+        * Obtiene los precios de las tipologías de entrega
+        * @returns Devuelve un objeto con el siguiente formato, la longitud del array devulevo es variable:
+        *  "deliveryCosts": [
+           {
+               "name": "CORREOS ESTAFETA",
+               "value": "2.95"
+           },
+           {
+               "name": "PUNTO DE VENTA ORANGE",
+               "value": "2.95"
+           },
+           {
+               "name": "MENSAJERIA10",
+               "value": "2.95"
+           }
+       ]
+        */
+        getTypologiesPrices(componentName: string, postalCode: string) {
+            let vm = this;
+
+            let queryParams = {
+                'postalCode': postalCode,
+            };
+            let _search = {
+                queryParams
+            };
+            let _api = vm.genericConstant.shoppingCart;
+            _api = _api + '/getDeliveryCost'
+            return vm.httpCacheGett(_api, _search, componentName)
+                .then(
+                    (response) => {
+                        return response.data;
+                    },
+                    (error) => {
+                        throw error.data;
+                    }
+                );
+        }
     }
 
     angular.module('shoppingCartSrv', [])
