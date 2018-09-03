@@ -82,6 +82,7 @@ module OrangeFeSARQ.Services {
             });
         }
 
+
         /**
          * @ngdoc method
          * @name OFC.Services:CommercialDataSrv#setSelectedRatePack

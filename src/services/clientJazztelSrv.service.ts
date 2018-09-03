@@ -3,13 +3,11 @@ module OrangeFeSARQ.Services {
     export class ClientJazztelSrv extends OrangeFeSARQ.Services.ParentService {
       static $inject = ['$injector'];
       public genericConstant;
-  
+
       public clientData;
       public localStorageManager :  OrangeFeSARQ.Services.LocalStorageManager;
       public customerViewStore : OrangeFeSARQ.Services.CustomerViewStore;
       public productInventorySrv : OrangeFeSARQ.Services.ProductInventoryService;
-      ;
-      ;
       public utils;
 
       constructor($injector) {

@@ -48,7 +48,8 @@ module OrangeFeSARQ.Services {
          */
         getSpecificationData(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
-            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string): ng.IPromise<{} | void> {
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string,
+            bucketId?: string): ng.IPromise<{} | void> {
             let vm = this;
             let technologyString = '';
             if (technologyList) {
@@ -66,7 +67,8 @@ module OrangeFeSARQ.Services {
                 idParqueList: releatedRatesClient, // Tarifas del cliente
                 pack: pack, // Pack de las tarifas
                 type: type, // [movil/ movilfijo]
-                defaultTechnology: defaultTechnology
+                defaultTechnology: defaultTechnology,
+                bucketId: bucketId
             };
             // Si la categoria no es convergente se eliminan los parametros para la tecnologia
             if (categoryParam !== 'Convergente' || defaultTechnology === 'Y') {
@@ -117,7 +119,8 @@ module OrangeFeSARQ.Services {
          */
         getOfferingData(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, specificationData, technologyList,
-            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string) {
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string,
+            bucketId?: string) {
             let srv = this;
             let technologyString = '';
             if (technologyList) {
@@ -135,7 +138,8 @@ module OrangeFeSARQ.Services {
                 idParqueList: releatedRatesClient, // Tarifas del cliente
                 pack: pack,
                 type: type,
-                defaultTechnology: defaultTechnology
+                defaultTechnology: defaultTechnology,
+                bucketId: bucketId
             };
             // Si la categoria no es convergente se eliminan los parametros para la tecnologia            
             if (categoryParam !== 'Convergente' || defaultTechnology === 'Y') {
@@ -180,14 +184,15 @@ module OrangeFeSARQ.Services {
          * Consulta al productSpecification de la lista de SVA's de la tarifa
          */
         getSVASpecificationData(idSvaList: string, commercialAction: string, segment: string,
-            isExistingCustomer: boolean): ng.IPromise<{} | void> {
+            isExistingCustomer: boolean, idBundle: string): ng.IPromise<{} | void> {
             let srv = this;
             let params = {
                 productType: 'sva', // Tipo de producto
                 idSvaList: idSvaList, // Lista de Id´s de SVA
                 commercialAction: commercialAction.toLowerCase(),
                 segment: segment,
-                isExistingCustomer: isExistingCustomer
+                isExistingCustomer: isExistingCustomer,
+                bundleId : idBundle
             };
 
             // CABECERA HASHMAP
@@ -218,7 +223,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Consulta al productOffering de la lista de SVA's de la tarifa
          */
-        getSVAOfferingData(idSvaList: string, specificationData, commercialAction: string, segment: string, isExistingCustomer: boolean) {
+        getSVAOfferingData(idSvaList: string, specificationData, commercialAction: string, segment: string, isExistingCustomer: boolean, idBundle: string) {
             let srv = this;
             let customerSegment = srv.getCustomerSegment();
             let params = {
@@ -226,7 +231,8 @@ module OrangeFeSARQ.Services {
                 idSvaList: idSvaList, // Lista de Id´s de SVA
                 commercialAction: commercialAction.toLowerCase(),
                 segment: segment,
-                isExistingCustomer: isExistingCustomer
+                isExistingCustomer: isExistingCustomer,
+                bundleId : idBundle
             };
 
             // CABECERA HASHMAP

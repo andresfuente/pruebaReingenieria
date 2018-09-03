@@ -565,13 +565,8 @@ module mosaicFile.Models {
                             // Seguro movil.
                             if (deviceOff.recommendedProductOffering && deviceOff.recommendedProductOffering.length) {
                                 if (deviceOff.recommendedProductOffering[0].name === 'Seguro movil') {
-                                    if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
-                                        this.litInsurancePaid =
-                                            deviceOff.recommendedProductOffering[0].productOfferingPrice[0].price.taxIncudedAmount;
-                                    } else {
-                                        this.litInsurancePaid =
+                                     this.litInsurancePaid =
                                             deviceOff.recommendedProductOffering[0].productOfferingPrice[0].price.dutyFreeAmount;
-                                    }
                                     this.insuranceSiebelId = deviceOff.recommendedProductOffering[0].id;
                                 }
                             }
@@ -743,6 +738,8 @@ module mosaicFile.Models {
         public priceName: string;
         public campana_txt: string;
         public idRateDefault: string;
+        public creditLimit: number;
+        public creditLimitRenove: number;
 
         constructor() {
             this.channel = '';
@@ -762,6 +759,8 @@ module mosaicFile.Models {
             this.numLinesBussines = '';
             this.priceName = '';
             this.idRateDefault = '';
+            this.creditLimit = 0;
+            this.creditLimitRenove = 0;
         }
     }
 }

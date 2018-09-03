@@ -17,7 +17,7 @@ module OrangeFeSARQ.Services {
         public customerSegment;
         public customerProvince;
         public storeProvince;
-
+        private typeMulticomparatorRenove : boolean = true; 
         /**
          * @ngdoc method
          * @name ratesComparator.Services:RatesComparatorSrv#constructor
@@ -43,7 +43,28 @@ module OrangeFeSARQ.Services {
             let srv = this;
             srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
         }
-
+        getTerminalDataMulticomparator(
+            rate: ratesComparator.Models.Rate,
+            terminal,
+            isExistingCustomer: number,
+            commercialAction: string,
+            portabilityOrigin: string,
+            riskLevel: string,
+            channel: string,
+            profile: string,
+            nameSgmr: string, 
+            typeMulticomparator: string
+        ){
+            let vm = this; 
+            switch(typeMulticomparator){
+                case "renove": 
+                    vm.typeMulticomparatorRenove = true 
+                break; 
+                default: 
+                vm.typeMulticomparatorRenove = false; 
+            }
+            return vm.getTerminalData(rate, terminal, isExistingCustomer, commercialAction, portabilityOrigin, riskLevel, channel, profile, nameSgmr)
+        }
         /** @ngdoc method
          * @name ratesComparator.Services:RatesComparatorSrv#getTerminalData
          * @methodOf ratesComparator.Services:RatesComparatorSrv
@@ -70,7 +91,6 @@ module OrangeFeSARQ.Services {
             channel: string,
             profile: string,
             nameSgmr: string
-
         ) {
             let vm = this;
             if (riskLevel === 'bajo' || riskLevel === 'medio') {
@@ -118,10 +138,10 @@ module OrangeFeSARQ.Services {
                 }
             }
             // Cliente existente para Renove   
-            if (sessionStorage.getItem('commercialData')) {
+            if (sessionStorage.getItem('commercialData') ) {
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 let commercialActIndex = vm.getSelectedCommercialAct();
-                if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.toLowerCase() === 'renove') {
+                if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.toLowerCase() === 'renove' && vm.typeMulticomparatorRenove) {
                     delete params.isExistingCustomer;
                     delete params.portabilityOrigin;
                     delete params.riskLevel;

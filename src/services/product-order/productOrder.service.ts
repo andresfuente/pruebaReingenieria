@@ -245,7 +245,10 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          return error;
+          if (error && error.data)
+            return error.data;
+          else
+            return error;
         });
     }
 
@@ -285,7 +288,10 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          return error.data;
+          if (error && error.data)
+            return error.data;
+          else
+            return error;
         });
     }
 
@@ -319,7 +325,10 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          return error.data;
+          if (error && error.data)
+            return error.data;
+          else
+            return error;
         });
     }
 
@@ -345,7 +354,10 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          return error.data;
+          if (error && error.data)
+            return error.data;
+          else
+            return error;
         });
     }
 
@@ -390,7 +402,10 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          return error.data;
+          if (error && error.data)
+            return error.data;
+          else
+            return error;
         });
     }
     getChangeFee(msisdn: string, componentName: string, id: string) {
@@ -450,7 +465,10 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          return error.data;
+          if (error && error.data)
+            return error.data;
+          else
+            return error;
         });
     }
   }
