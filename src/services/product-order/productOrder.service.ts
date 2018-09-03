@@ -34,13 +34,13 @@ module OrangeFeSARQ.Services {
 
       return vm.httpCacheGett(vm.urlProductOrder, _search, componentName)
         .then(
-        (successData) => {
-          return successData;
-        },
-        (errorData) => {
-          return errorData;
-        })
-        .catch(function(error) {
+          (successData) => {
+            return successData;
+          },
+          (errorData) => {
+            return errorData;
+          })
+        .catch(function (error) {
           return error;
         });
     }
@@ -78,24 +78,24 @@ module OrangeFeSARQ.Services {
 
       return vm.httpPost(vm.urlProductOrder, _search, componentName)
         .then(
-        (successData) => {
-          return successData;
-        },
-        (errorData) => {
-          return errorData;
-        })
-        .catch(function(error) {
+          (successData) => {
+            return successData;
+          },
+          (errorData) => {
+            return errorData;
+          })
+        .catch(function (error) {
           return error;
         });
     }
-	
-  // Se añade el parametro segment para contratar los servicios con este método en PAE
-  changeStatetProduct(msisdn: string, productId: string, action: string, imei: string = '',
-  componentName: string = 'generic_bonus', bonosApilados? : number, segment = ''): ng.IPromise<any> {
+
+    // Se añade el parametro segment para contratar los servicios con este método en PAE
+    changeStatetProduct(msisdn: string, productId: string, action: string, imei: string = '',
+      componentName: string = 'generic_bonus', bonosApilados?: number, segment = ''): ng.IPromise<any> {
       let vm = this;
       let queryParams = {};
       if (imei !== '') {
-        if(bonosApilados){
+        if (bonosApilados) {
           queryParams = {
             imei: imei,
             msisdn: msisdn,
@@ -108,8 +108,8 @@ module OrangeFeSARQ.Services {
                 value: bonosApilados.toString()
               }
             ]
-            };
-        }else {
+          };
+        } else {
           queryParams = {
             imei: imei,
             msisdn: msisdn,
@@ -119,7 +119,7 @@ module OrangeFeSARQ.Services {
           };
         }
       } else {
-        if(bonosApilados) {
+        if (bonosApilados) {
           queryParams = {
             msisdn: msisdn,
             action: action,
@@ -132,7 +132,7 @@ module OrangeFeSARQ.Services {
               }
             ]
           };
-        }else {
+        } else {
           queryParams = {
             msisdn: msisdn,
             action: action,
@@ -140,7 +140,7 @@ module OrangeFeSARQ.Services {
             segment: segment
           };
         }
-        
+
       }
       // No necesita brand porque esta llamada es solo parte de Orange
       let _search: Object = {
@@ -150,12 +150,12 @@ module OrangeFeSARQ.Services {
 
       return vm.httpPost(vm.urlProductOrder, _search, componentName)
         .then(
-        (successData) => {
-          return successData;
-        },
-        (errorData) => {
-          return errorData;
-        })
+          (successData) => {
+            return successData;
+          },
+          (errorData) => {
+            return errorData;
+          })
         .catch(function (error) {
           return error;
         });
@@ -170,13 +170,19 @@ module OrangeFeSARQ.Services {
       };
 
       return vm.httpPost(vm.urlProductOrder, _search, componentName)
-        .then(function(success) {
-          return success.data;
+        .then(function (success) {
+          if (success.status == 202) {
+            return success;
+          }
+          else {
+            return success.data;
+          }
+
         })
-        .catch(function(error) {
+        .catch(function (error) {
           return error.data;
         })
-      ;
+        ;
     }
 
     moreMegasAmena(msisdnMegas: string, componentName: string) {
@@ -190,13 +196,13 @@ module OrangeFeSARQ.Services {
 
       return vm.httpPost(vm.urlProductOrder, _search, componentName)
         .then(
-        (successData) => {
-          return successData;
-        },
-        (errorData) => {
-          return errorData;
-        })
-        .catch(function(error) {
+          (successData) => {
+            return successData;
+          },
+          (errorData) => {
+            return errorData;
+          })
+        .catch(function (error) {
           return error;
         });
     }
@@ -205,26 +211,26 @@ module OrangeFeSARQ.Services {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'getSummary';
-	  let request;
-	  if(segment) {
-		request = {
-			msisdn: msisdn,
-			customerId: customerId,
-			tmCodeDestino: tmCodeDestino,
-			tmCodeOrigen: tmCodeOrigen,
-			tipoLinea: tipoLinea,
-			segment: segment
-		  }
-	  } else {
-		 request = {
-			msisdn: msisdn,
-			customerId: customerId,
-			tmCodeDestino: tmCodeDestino,
-			tmCodeOrigen: tmCodeOrigen,
-			tipoLinea: tipoLinea
-		  }
-	  }
-     
+      let request;
+      if (segment) {
+        request = {
+          msisdn: msisdn,
+          customerId: customerId,
+          tmCodeDestino: tmCodeDestino,
+          tmCodeOrigen: tmCodeOrigen,
+          tipoLinea: tipoLinea,
+          segment: segment
+        }
+      } else {
+        request = {
+          msisdn: msisdn,
+          customerId: customerId,
+          tmCodeDestino: tmCodeDestino,
+          tmCodeOrigen: tmCodeOrigen,
+          tipoLinea: tipoLinea
+        }
+      }
+
       let _search: Object = {
         queryParams: request,
         urlParams: [BRAND, METHOD]
@@ -238,8 +244,8 @@ module OrangeFeSARQ.Services {
           }
           return _resp.productOrder;
         })
-        .catch(function(error) {
-          return error.data;
+        .catch(function (error) {
+          return error;
         });
     }
 
@@ -269,12 +275,16 @@ module OrangeFeSARQ.Services {
       return vm.httpPost(vm.urlProductOrder, _search, componentName)
         .then((response) => {
           let _resp = response.data;
+          let status = response.status;
           if (_resp.error) {
             throw _resp.error;
           }
+          if (status == 202) {
+            return response;
+          }
           return _resp.productOrder;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           return error.data;
         });
     }
@@ -308,12 +318,12 @@ module OrangeFeSARQ.Services {
           }
           return _resp.productOrder;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           return error.data;
         });
     }
 
-    getProductBonusIncompatibility(msisdn: string, products:any, componentName: string): ng.IPromise<any> {
+    getProductBonusIncompatibility(msisdn: string, products: any, componentName: string): ng.IPromise<any> {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'productBonusIncompatibility';
@@ -321,7 +331,7 @@ module OrangeFeSARQ.Services {
         msisdn,
         products
       }
-      
+
       let _search: Object = {
         urlParams: [BRAND, METHOD],
         queryParams: qParams
@@ -334,7 +344,7 @@ module OrangeFeSARQ.Services {
           }
           return _resp.productOrder;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           return error.data;
         });
     }
@@ -383,7 +393,7 @@ module OrangeFeSARQ.Services {
           return error.data;
         });
     }
-    getChangeFee(msisdn: string, componentName: string, id : string) {
+    getChangeFee(msisdn: string, componentName: string, id: string) {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'getChangeFee';
@@ -395,12 +405,12 @@ module OrangeFeSARQ.Services {
         }
       };
       return vm.httpCacheGett(vm.urlProductOrder, _search, componentName)
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        return error;
-      });
+        .then((response) => {
+          return response;
+        })
+        .catch((error) => {
+          return error;
+        });
     }
 
     /**
