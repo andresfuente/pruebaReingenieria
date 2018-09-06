@@ -102,7 +102,7 @@ module ratesParent.Models {
         public recurringChargePeriodPromotion: string; // Tipo de promoción
 
         // Atributos para NAC
-        public siebelBucketId;
+        public bucket: RateBucket;
 
         constructor(rateData, priceData) {
             this.rateSubName = rateData.ospTitulo;
@@ -129,6 +129,10 @@ module ratesParent.Models {
                             element.productSpecSubcharacteristic);
                         this.productBundle.push(raProductBundle);
                     }
+
+                    if (element.ospCategory === 'BUCKET') {
+                        this.bucket = new RateBucket(element.name, element.ospId, element.description, element.ospLargeDescription, element.ospOrden, element.ospImagen);
+                    }
                 });
             }
             // Se obtienen los Id's de los SVA de la tarifa
@@ -152,7 +156,7 @@ module ratesParent.Models {
 
             if (associatedLine !== undefined && associatedLine.length !== 0) {
                 this.associatedLine = associatedLine;
-            }
+            }            
 
             for (let i in priceData) {
                 if (priceData.length > 0) {
@@ -278,7 +282,7 @@ module ratesParent.Models {
                             }
                         }
                     } else {
-                        if (priceData[i].bundledProductOffering[0].id === rateData.id) {
+                        if (priceData[i].bundledProductOffering && _.find(priceData[i].bundledProductOffering, {'id': rateData.id})) {
                             // Recoger info
                             let info: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
                             this.pupupInfo.push(info);
@@ -531,4 +535,21 @@ module ratesParent.Models {
         public value: number;
     }
 
+    export class RateBucket {
+        public name: string;
+        public id: string;
+        public shortDescription: string;
+        public largeDescription: string;
+        public quantity: string
+        public img: string;
+
+        constructor(name: string, id: string, shortDesc: string, largeDesc: string, quantity: string, img: string) {
+            this.name = name;
+            this.id = id;
+            this.shortDescription = shortDesc;
+            this.largeDescription = largeDesc;
+            this.quantity = quantity;
+            this.img = img;
+        }
+    }
 }
