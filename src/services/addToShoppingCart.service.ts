@@ -471,6 +471,100 @@ module OrangeFeSARQ.Services {
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
+        putAdditionalRateInShoppingCart(commIndex, rate) {
+            let vm = this;
+
+            let productItem = {
+                'href': '',
+                'name': rate.name ? rate.name : '',
+                'description': rate.description ? rate.description : '',
+                'productRelationship': [{
+                    'type': 'tarifa'
+                }],
+                'place': [],
+                'characteristic': []
+            };
+
+            let rateCartItemElement = {
+                'id': rate.siebelId ? rate.siebelId : '',
+                'action': 'New',
+                'product': productItem,
+                'itemPrice': [
+                    {
+                        'name': rate.typePriceName ? rate.typePriceName : '',
+                        'priceType': 'cuota',
+                        'price': {
+                            'dutyFreeAmount': {
+                                'unit': 'EUR',
+                                'value': rate.ratePrice ? rate.ratePrice : rate.taxFreePrice
+                            },
+                            'taxIncludedAmount': {
+                                'unit': 'EUR',
+                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
+                            },
+                            taxRate: rate.taxRate,
+                            ospTaxRateName: rate.taxRateName
+                        },
+                        'priceAlteration': [{
+                            'name': rate.typePriceName ? rate.typePriceName : '',
+                            'priceType': 'cuota',
+                            'applicationDuration': rate.applicationDuration,
+                            'price': {
+                                'dutyFreeAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePricePromotional
+                                },
+                                'taxIncludedAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePriceTaxIncludedPromotional
+                                },
+                                taxRate: rate.taxRate,
+                                ospTaxRateName: rate.taxRateName
+                            }
+                        }]
+                    }
+                ],
+                'productOffering': {
+                    'id': rate.siebelId ? rate.siebelId : '',
+                    'name': rate.name ? rate.name : '',
+                    'category': [],
+                    'isBundle': true
+                }
+            };
+
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+
+            let cartItemElementId = 0;
+
+            if (commercialData && commercialData[commIndex]) {
+                cartItemElementId = commercialData[commIndex].id;
+            }
+
+            let cartItemElement = {
+                'id': cartItemElementId + 0.1,
+                'cartItem': [rateCartItemElement],
+                'action': 'New',
+                'cartItemRelationship': [{
+                    id: cartItemElementId
+                }],
+                'ospCartItemType': commercialData[commIndex].ospCartItemType,
+                'ospCartItemSubtype': commercialData[commIndex].ospCartItemSubtype.toLowerCase(),
+                'ospSelected': true
+            };
+
+            if (shoppingCart !== null) {
+                shoppingCart.cartItem.push(cartItemElement);
+            } else {
+                shoppingCart = {
+                    'id': '',
+                    'cartItem': [cartItemElement],
+                    'customer': {}
+                };
+            }
+            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        }
+
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
