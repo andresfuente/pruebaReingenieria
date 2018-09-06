@@ -358,7 +358,7 @@ module OrangeFeSARQ.Services {
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
-                if (rate.groupName === 'Convergente' && rate.family === 'love') {
+                if ((rate.groupName === 'Convergente' || rate.groupName === 'Convergente_NAC') && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 }
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
@@ -746,7 +746,7 @@ module OrangeFeSARQ.Services {
             // Se obtiene el ID del acto comercial que se esta creando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
-                if (rate.groupName === 'Convergente' && rate.family === 'love') {
+                if ((rate.groupName === 'Convergente' || rate.groupName === 'Convergente_NAC') && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 }
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));

@@ -488,7 +488,7 @@ module OrangeFeSARQ.Services {
         isConvergentRateContainer() {
             let vm = this;
             return _.some(vm.rateContainer, function (currentRate) {
-                return (currentRate.groupName === 'Convergente' && currentRate.typeService === 'movil_fijo');
+                return ((currentRate.groupName === 'Convergente' || currentRate.groupName === 'Convergente_NAC') && currentRate.typeService === 'movil_fijo');
             });
         }
 
