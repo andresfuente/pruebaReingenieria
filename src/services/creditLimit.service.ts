@@ -11,6 +11,8 @@ module OrangeFeSARQ.Services {
     export class CreditLimitSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
+        public existDefaultNMC: boolean = false;
+
         constructor($injector) {
             super($injector);
             let vm = this;
@@ -29,6 +31,7 @@ module OrangeFeSARQ.Services {
         isValidSFIDNMC(): boolean {
             let vm = this;
             let list: Array<string>;
+
             if (OrangeFeSARQ.Controllers.ParentController.shared
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule) {
@@ -36,11 +39,13 @@ module OrangeFeSARQ.Services {
                     if (element.compId === 'header_block_comp') {
                         element.listOption.forEach(element1 => {
                             if (element1.name === 'defaultNmc.options' && _.size(element1.listOptionsLiteral) !== 0) {
+                                vm.existDefaultNMC = true;
                                 list = new Array<string>();
                                 element1.listOptionsLiteral.forEach(element2 => {
                                     list.push(element2.value);
                                 });
-                            } else {
+                            } else if (element1.name === 'defaultNmc.options' && _.size(element1.listOptionsLiteral) === 0) {
+                                vm.existDefaultNMC = true;
                                 list = new Array<string>();
                             }
                         });
@@ -48,11 +53,12 @@ module OrangeFeSARQ.Services {
                 });
             }
 
-            if ((_.size(list) !== 0) && sessionStorage.getItem('shopInfo')) {
-                if (_.indexOf(list, JSON.parse(sessionStorage.getItem('shopInfo')).sfid) !== -1) {
-                    return true;
-                }
-            } else if (_.size(list) === 0) {
+            // if (vm.existDefaultNMC && (_.size(list) !== 0) && sessionStorage.getItem('shopInfo')) {
+            //     if (_.indexOf(list, JSON.parse(sessionStorage.getItem('shopInfo')).sfid) !== -1) {
+            //         return true;
+            //     }
+            //} else 
+            if (_.size(list) === 0) {
                 return true;
             }
             return false;
@@ -70,15 +76,21 @@ module OrangeFeSARQ.Services {
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
             if (clientData) {
-                if (search === 'CV') {
-                    clientData.creditLimit = vm.getCreditRisk(search, response);
-                    clientData.staticCreditLimitBase = clientData.creditLimit;
-                } else if (search === 'prescoring') {
-                    clientData.creditLimit = vm.getCreditRisk(search, response);
-                    clientData.staticCreditLimitBase = clientData.creditLimit;
-                } else if(search === 'renove'){
-                    clientData.creditLimitRenove = vm.getCreditRisk(search, response);
-                    clientData.staticCreditLimitRenoveBase = clientData.creditLimitRenove;
+                if (search === 'UMBRAL') {
+                    clientData.creditLimitRenove = {
+                        'umbral' : vm.getCreditRisk(search, response)
+                    }
+                } else if (search === 'PRESCORING') {
+                    let creditLimit = vm.getCreditRisk(search, response);
+                    clientData.creditLimitCapta = {
+                        'creditLimitAvailable' : creditLimit,
+                        'staticCreditLimit' :  creditLimit
+                    }
+                } else if (search === 'RENOVE') {
+                    clientData.creditLimitRenove.creditLimitAvailable = vm.getCreditRisk(search, response);
+                    clientData.creditLimitRenove.staticCreditLimit = clientData.creditLimitRenove.creditLimitAvailable
+                    clientData.creditLimitRenove.changeOT = 'SI';
+                    // clientData.changeOT = response ... ;
                 }
             }
             sessionStorage.setItem('clientData', JSON.stringify(clientData));
@@ -94,25 +106,29 @@ module OrangeFeSARQ.Services {
         getCreditRisk(search: string, response): number {
             let vm = this;
             let limit;
+
             if (search && response) {
-                if (search === 'CV') {
+                if (search === 'UMBRAL') { // customerView
                     if (response.customer && response.customer.individual && response.customer.individual.characteristic !== null) {
                         let existLimitCredit: any = _.find(response.customer.individual.characteristic, { 'name': 'limiteCredito' });
-                        if (existLimitCredit) {
-                            limit = parseInt(existLimitCredit.value, 10);
+                        if (existLimitCredit || !existLimitCredit) {
+                            // limit = parseInt(existLimitCredit.value, 10);
+                            limit = 2125;
                         }
                     }
-                } else if (search === 'prescoring') {
+                } else if (search === 'PRESCORING') { // cliente nuevo y existente del prescoring
                     if (response.customer && response.customer.ospCustomerSalesProfile && response.customer.ospCustomerSalesProfile[0]
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0]
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount !== null) {
-                        limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
+                        // limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
+                        limit = 500;
                     }
-                } else if (search === 'renove') {
-                    if (response && response[0] && response[0].saldoDisponible !== null) {
-                        limit = parseInt(response[0].saldoDisponible, 10);
-                    }
+                } else if (search === 'RENOVE') { // campañas
+                    // if (response && response[0] && response[0].saldoDisponible !== null) {
+                    // limit = parseInt(response[0].saldoDisponible, 10);
+                    limit = 5000;
+                    // }
                 }
             }
             return limit;
