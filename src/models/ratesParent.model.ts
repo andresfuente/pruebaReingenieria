@@ -103,6 +103,7 @@ module ratesParent.Models {
 
         // Atributos para NAC
         public bucket: RateBucket;
+        public NACLines: Rate[] = [];
 
         constructor(rateData, priceData) {
             this.rateSubName = rateData.ospTitulo;
