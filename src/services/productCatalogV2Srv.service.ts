@@ -134,7 +134,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Obtiene los datos de los SVAS recomendados de una tarifa
          */
-        getProductCatalogSVAS(svasList, isExistingCustomer, segment, commercialAction, componentName) {
+        getProductCatalogSVAS(svasList, isExistingCustomer, segment, commercialAction, idBundle, componentName) {
             let vm = this;
 
             let _search = {
@@ -143,7 +143,8 @@ module OrangeFeSARQ.Services {
                     productType: 'sva',
                     idSvaList: svasList,
                     segment: segment,
-                    isExistingCustomer: isExistingCustomer
+                    isExistingCustomer: isExistingCustomer,
+                    bundleId: idBundle
                 },
                 urlParams: [vm.genericConstant.brand, 'productOfferingv2View/OSP']
             };
@@ -167,7 +168,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Obtiene los datos de los SVAS recomendados de una tarifa
          */
-        getSpecificationSVAS(svasList, isExistingCustomer, segment, commercialAction, componentName) {
+        getSpecificationSVAS(svasList, isExistingCustomer, segment, commercialAction, idBundle, componentName) {
             let vm = this;
 
             let _search = {
@@ -176,7 +177,8 @@ module OrangeFeSARQ.Services {
                     productType: 'sva',
                     idSvaList: svasList,
                     segment: segment,
-                    isExistingCustomer: isExistingCustomer
+                    isExistingCustomer: isExistingCustomer,
+                    bundleId: idBundle
                 },
                 urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
             };
