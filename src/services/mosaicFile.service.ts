@@ -94,7 +94,8 @@ module OrangeFeSARQ.Services {
             ospCustomerSegmentBinding: string,
             stateOrProvinceBinding: string,
             workflow: string,
-            campana_txt?: string
+            campana_txt?: string,
+            creditLimit?: number
         ): ng.IPromise<{} | void> {
             let srv = this;
             let params;
@@ -144,8 +145,10 @@ module OrangeFeSARQ.Services {
                 ospOpenSearch: search,
                 profile: profileBinding,
                 segment: clientSegment,
-                'deviceOffering.category.name': priceNameBinding
+                'deviceOffering.category.name': priceNameBinding,
+                creditLimit: creditLimit
             };
+
             if (filters && filters.length) {
                 filters.forEach((filtersParam, index) => {
                     params[Object.keys(filtersParam)[0]] = filtersParam[Object.keys(filtersParam)[0]];
@@ -155,6 +158,7 @@ module OrangeFeSARQ.Services {
                     }
                 });
             }
+
             // Parametros para Terminal Libre sin Servicio    
             if (workflow === 'libre') {
                 params.channel = 'eShopRES';
@@ -192,17 +196,17 @@ module OrangeFeSARQ.Services {
                 // Se seleccionan los parametros necesarios para la llamada a la OT
                 if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
-                    'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee', 'totalPaymentRange',
-                    'characteristic.OSData.groupData.OStype.value',
-                    'characteristic.cameraData.groupData.backCameraResolution.value',
-                    'characteristic.screenData.groupData.screenSize.value',
-                    'characteristic.memoryData.groupData.hardDisk.value',
-                    'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                    'characteristic.color']);
+                        'ospOpenSearch', 'brand', 'price', 'deviceType', 'creditLimit', 'purchaseOption', 'price.fee', 'totalPaymentRange',
+                        'characteristic.OSData.groupData.OStype.value',
+                        'characteristic.cameraData.groupData.backCameraResolution.value',
+                        'characteristic.screenData.groupData.screenSize.value',
+                        'characteristic.memoryData.groupData.hardDisk.value',
+                        'characteristic.batteryData.groupData.batteryDurationInConversation.value',
+                        'characteristic.color']);
                 } else {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
-                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee', 'totalPaymentRange',
-                        'characteristic.OSData.groupData.OStype.value',
+                        'relatedProductOffering', 'ospOpenSearch', 'brand', , 'creditLimit', 'price', 'deviceType',
+                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
                         'characteristic.cameraData.groupData.backCameraResolution.value',
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
@@ -346,7 +350,6 @@ module OrangeFeSARQ.Services {
             stateOrProvinceBinding: string,
             priceType: string,
             campana_txt?: string
-
         ) {
             let srv = this;
             let params;
@@ -361,7 +364,6 @@ module OrangeFeSARQ.Services {
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
             _headers.set('Geolocation-client', stateOrProvinceBinding.toUpperCase());
-
 
             params = {
                 channel: channel,
@@ -513,7 +515,7 @@ module OrangeFeSARQ.Services {
                 srv.httpPost('api/APIStockData/v1', _search, 'mosaicFile.service')
                     .then((response) => {
                         terminal.loadStockData(response.data);
-                     //   this.cache[terminal.variants[0].name] = terminal;
+                        //   this.cache[terminal.variants[0].name] = terminal;
                         srv.spinnerBlockSrv.show = false;
                     }).catch((error) => {
                         // This line marks the terminal promise as resolved despite the stock service error
@@ -593,12 +595,12 @@ module OrangeFeSARQ.Services {
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
-            if(localStorage.getItem('profile')) {
+            if (localStorage.getItem('profile')) {
                 defaultData.profile = localStorage.getItem('profile');
             } else if (sessionDefaultData && sessionDefaultData.profile !== null) {
-                defaultData.profile = sessionDefaultData.profile; 
+                defaultData.profile = sessionDefaultData.profile;
             } else {
-                defaultData.profile = 'PDV' ;
+                defaultData.profile = 'PDV';
             }
             // Si el segmento y/o el tipo de acto está en el clientData, lo recogemos
             if (clientData) {
@@ -609,7 +611,7 @@ module OrangeFeSARQ.Services {
                 }
 
                 if (commercialData) {
-                    let comm : any = _.find(commercialData, {'ospIsSelected': true});
+                    let comm: any = _.find(commercialData, { 'ospIsSelected': true });
 
                     if (comm && comm.ospCartItemSubtype) {
                         cartItemSubType = comm.ospCartItemSubtype;
@@ -663,6 +665,8 @@ module OrangeFeSARQ.Services {
             let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
             let commercialActIndex;
 
+            commercialActIndex = vm.getSelectedCommercialAct();
+
             // Se obtienen los datos por defecto           
             dataOT = _.cloneDeep(defaultDataOT);
             dataOT.stateOrProvince = (shopInfo && shopInfo.province) ? shopInfo.province : 'Madrid';
@@ -674,7 +678,6 @@ module OrangeFeSARQ.Services {
                 if (sessionStorage.getItem('cv') && clientData.clientType) { // Existente
                     dataOT.isExistingCustomer = clientData.clientType;
                 }
-
                 // Segmento
                 if (clientData.ospCustomerSegment && clientData.ospCustomerSegment.length > 0) {
                     dataOT.ospCustomerSegment = clientData.ospCustomerSegment;
@@ -684,8 +687,14 @@ module OrangeFeSARQ.Services {
                     clientData.postalContact.stateOrProvince.length > 0) {
                     dataOT.stateOrProvince = clientData.postalContact.stateOrProvince;
                 }
+                // CreditLimit, cliente existente perteneciente al programa de puntos
+                if (clientData && ((clientData.creditLimit !== null && clientData.creditLimit !== undefined)
+                    || (clientData.creditLimitRenove !== null && clientData.creditLimitRenove !== undefined))) {
+                    dataOT.creditLimit = clientData.creditLimit;
+                    dataOT.creditLimitRenove = clientData.creditLimitRenove;
+                }
             }
-            commercialActIndex = vm.getSelectedCommercialAct();
+
             // Si los datos del acto comercial se encuentran en el session storage
             if (commercialData && commercialActIndex !== -1) {
                 // Tipo de Contrato
@@ -704,8 +713,8 @@ module OrangeFeSARQ.Services {
                         rates = _.sortBy(commercialData[commercialActIndex].rates, ['taxIncludedPrice']);
                         rates.reverse();
                         // Obtenemos la tarifa con mayor valor
-                        if(commercialData[commercialActIndex].ospCartItemSubtype &&
-                        commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
+                        if (commercialData[commercialActIndex].ospCartItemSubtype &&
+                            commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
                             dataOT.relatedRatePrepaid = rates[0].siebelId;
                             dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRatePrepaid);
                         } else {
@@ -721,7 +730,7 @@ module OrangeFeSARQ.Services {
                     }
                 }
             }
-            
+
             // Si los datos de prescoring se encuentran en el session storage
             if (prescoring) {
                 // Riesgo de Credito
@@ -915,17 +924,17 @@ module OrangeFeSARQ.Services {
 
                 // Buscamos el tipo de esta tarifa en commercial data
                 if (commercialData && commercialData.length > 0) {
-                    let currentAct : any = _.find(commercialData, {'ospIsSelected': true});
+                    let currentAct: any = _.find(commercialData, { 'ospIsSelected': true });
 
                     if (currentAct !== null && currentAct.rates && currentAct.rates.length > 0) {
-                        let movilFijoRate : any = _.find(currentAct.rates, function (rate : any) {
+                        let movilFijoRate: any = _.find(currentAct.rates, function (rate: any) {
                             if (rate.siebelId === siebelId && rate.typeService.toUpperCase() === 'MOVIL_FIJO') {
                                 return rate;
                             }
                         });
 
                         // Todas las tarifas que no sean movil_fijo van con un 0
-                        let movilRate : any = _.find(currentAct.rates, function (rate : any) {
+                        let movilRate: any = _.find(currentAct.rates, function (rate: any) {
                             if (rate.siebelId === siebelId && rate.typeService.toUpperCase() !== 'MOVIL_FIJO') {
                                 return rate;
                             }

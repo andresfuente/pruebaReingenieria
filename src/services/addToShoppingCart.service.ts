@@ -12,6 +12,9 @@ module OrangeFeSARQ.Services {
         public srvTerminalCompare: OrangeFeSARQ.Services.SrvTerminalCompare;
         public objectTv;
         private productCatalogV2Srv;
+        public clientJazztelSrv : OrangeFeSARQ.Services.ClientJazztelSrv;
+        public userSrv : OrangeFeSARQ.Services.UserSrv;
+        public data;
 
         /**
          * @ngdoc method
@@ -39,6 +42,43 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.srvTerminalCompare = $injector.get('srvTerminalCompare');
             vm.productCatalogV2Srv = $injector.get('productCatalogV2Srv');
+            vm.clientJazztelSrv = $injector.get('clientJazztelSrv');
+            vm.userSrv = $injector.get('userSrv');
+        }
+
+        getBundle(){
+            let vm = this;
+            let cv = JSON.parse(sessionStorage.getItem('cv'));
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let active = _.findIndex(commercialData, {'ospIsSelected': true});
+            
+            let bundleId = '';
+
+            if(cv && cv.product) {
+                for (let i = 0; i < cv.product.length; i++) {
+                    if (cv.product[i].productCharacteristic) {
+                        let charMSISDN : any = _.find(cv.product[i].productCharacteristic, (char: any) => {
+                            if (char.name === 'MSISDN' && commercialData[active].serviceNumber === char.value) {
+                                return char;
+                            }
+                        });
+
+                        if (charMSISDN) {
+                            let bundle : any = _.find(cv.product[i].productCharacteristic, (char: any) => {
+                                if (char.name === 'Product Bundle Siebel') {
+                                    return char;
+                                }
+                            });
+
+                            if (bundle && bundle.value) {
+                                bundleId = bundle.value;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return bundleId;
         }
 
         /**
@@ -51,15 +91,14 @@ module OrangeFeSARQ.Services {
         putDeviceInShoppingCart(device) {
             let vm = this;
             let productItem;
-            let peachRate;
             let deviceCartItemElement, rateCartItemElement;
             let cartItemElement;
             let cartItemElementId: number;
-            let cartItemIndex: number;
             let lastCartItemId: number;
             let commercialActId: number;
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
 
             // Se obtiene el ID del acto comercial que se esta modificando
@@ -115,41 +154,86 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': ''
             };
 
-            rateCartItemElement = {
-                'id': '1-CWOOG9',
-                'action': 'New',
-                'product': {
-                    'name': 'peach',
-                    'description': '',
-                    'productRelationship': [{
-                        'type': 'tarifa'
-                    }]
-                },
-                'productOffering': {
-                    'id': '1-CWOOG9',
-                    'name': 'peach',
-                    'isBundle': true
-                },
-                'cartItemRelationship': [],
-                'itemPrice': [{
-                    'priceType': '',
-                    'price': {
-                        'dutyFreeAmount': {
-                            'unit': '',
-                            'value': 0
-                        },
-                        'taxIncludedAmount': {
-                            'unit': '',
-                            value: 0
-                        },
-                        taxRate: 0,
-                        ospTaxRateName: ''
+            if (commercialData && commercialData[commercialActIndex]
+                && commercialData[commercialActIndex].ospTerminalWorkflow === 'secondary_renew'
+                && commercialData[commercialActIndex].ospCartItemType
+                && commercialData[commercialActIndex].ospCartItemSubtype
+                && commercialData[commercialActIndex].originRate) {
+
+                let idBundle = vm.getBundle();
+
+                rateCartItemElement = {
+                    'id': idBundle,
+                    'action': 'New',
+                    'product': {
+                        'name': 'RENOVE_SECUNDARIO',
+                        'description': '',
+                        'productRelationship': [{
+                            'type': 'tarifa'
+                        }]
                     },
-                }],
-                'ospSelected': true,
-                'ospCartItemType': 'alta',
-                'ospCartItemSubtype': ''
-            };
+                    'productOffering': {
+                        'id': idBundle,
+                        'name': 'RENOVE_SECUNDARIO',
+                        'isBundle': true
+                    },
+                    'cartItemRelationship': [],
+                    'itemPrice': [{
+                        'priceType': '',
+                        'price': {
+                            'dutyFreeAmount': {
+                                'unit': '',
+                                'value': 0
+                            },
+                            'taxIncludedAmount': {
+                                'unit': '',
+                                value: 0
+                            },
+                            taxRate: 0,
+                            ospTaxRateName: ''
+                        },
+                    }],
+                    'ospSelected': true,
+                    'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                    'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
+                };
+            } else {
+                rateCartItemElement = {
+                    'id': '1-CWOOG9',
+                    'action': 'New',
+                    'product': {
+                        'name': 'peach',
+                        'description': '',
+                        'productRelationship': [{
+                            'type': 'tarifa'
+                        }]
+                    },
+                    'productOffering': {
+                        'id': '1-CWOOG9',
+                        'name': 'peach',
+                        'isBundle': true
+                    },
+                    'cartItemRelationship': [],
+                    'itemPrice': [{
+                        'priceType': '',
+                        'price': {
+                            'dutyFreeAmount': {
+                                'unit': '',
+                                'value': 0
+                            },
+                            'taxIncludedAmount': {
+                                'unit': '',
+                                value: 0
+                            },
+                            taxRate: 0,
+                            ospTaxRateName: ''
+                        },
+                    }],
+                    'ospSelected': true,
+                    'ospCartItemType': 'alta',
+                    'ospCartItemSubtype': ''
+                };
+            }
 
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
 
@@ -382,7 +466,6 @@ module OrangeFeSARQ.Services {
                 });
             }
 
-
             productItem = {
                 'href': '',
                 'name': rate.name ? rate.name : '',
@@ -454,6 +537,53 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
+            // Cambio de marca
+
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            if (clientData && clientData.jazztelData && clientData.jazztelData.customer) {
+                let router = _.find(clientData.jazztelData.customer.product, (item: any) => {
+                    return item.ospProductType === 'Equipo' && item.name.toLowerCase().indexOf("fibra") !== -1;
+                });
+                if (router) {
+                    let routerCartItemElement = {
+                        'id': router.id ? router.id : '',
+                        'action': 'Existing',
+                        'product': {
+                            'name': router.name ? router.name : '',
+                        }
+                    };
+                    cartItemElement.cartItem.push(routerCartItemElement);
+                }
+
+                let ONT = _.find(clientData.jazztelData.customer.product, (item: any) => {
+                    return item.ospProductType === 'Equipo' && item.name.toLowerCase().indexOf("ont") !== -1;
+                });
+                if (ONT) {
+                    let ONTCartItemElement = {
+                        'id': ONT.id ? ONT.id : '',
+                        'action': 'Existing',
+                        'product': {
+                            'name': ONT.name ? ONT.name : '',
+                        }
+                    };
+                    cartItemElement.cartItem.push(ONTCartItemElement);
+                }
+
+                let deco = _.find(clientData.jazztelData.customer.product, (item: any) => {
+                    return item.ospProductType === 'Equipo' && item.name.toLowerCase().indexOf("decodificador") !== -1;
+                });
+                if (deco) {
+                    let decoCartItemElement = {
+                        'id': deco.id ? deco.id : '',
+                        'action': 'Existing',
+                        'product': {
+                            'name': deco.name ? deco.name : '',
+                        }
+                    };
+                    cartItemElement.cartItem.push(decoCartItemElement);
+                }
+            }
+
             // Si viene tecnologia creamos cartItem
             if (rate.ospTecnology) {
                 cartItemElement.cartItem.push(vm.createIdTechnologyCartItem(rate));
@@ -468,6 +598,7 @@ module OrangeFeSARQ.Services {
                     'customer': {}
                 };
             }
+
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
@@ -667,7 +798,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Crea el item de ospTecnology cuando existe
          */
-        createIdTechnologyCartItem(rate) {
+        createIdTechnologyCartItem(rate, TVOrigen?) {
             let vm = this;
             let ospTecnology;
             let flagTvItem = {};
@@ -713,8 +844,22 @@ module OrangeFeSARQ.Services {
                 ospTecnology.product.characteristic.push(flagTvItem);
             }
 
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            if(clientData && clientData.jazztelData && clientData.jazztelData.customer && clientData.jazztelData.CDM) {
+                let characteristicCDM = {
+                    name: 'Aplicable Cambio Marca',
+                    value: 'Yes'
+                };
+                ospTecnology.product.characteristic.push(characteristicCDM);
+                let flagTv = {
+                    name: 'TVOrigen',
+                    value: clientData.jazztelData.tv
+                };
+                ospTecnology.product.characteristic.push(flagTv);
+            }
             return ospTecnology;
         }
+
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateAndDeviceInShoppingCart
@@ -899,7 +1044,7 @@ module OrangeFeSARQ.Services {
                 }
             };
             let preselected = true;
-            if(selected!==null && selected!==undefined && selected === false) {
+            if (selected !== null && selected !== undefined && selected === false) {
                 preselected = false;
             }
             cartItemElement = {
@@ -973,6 +1118,9 @@ module OrangeFeSARQ.Services {
                             if (spec) {
                                 // Pasamos true como parámetro opcional porque es un bono de terminal
                                 cartItemElement.cartItem.push(vm.createSVACartItem(spec.productSpecification[0], true));
+                                if(commercialData[commercialActIndex].multicomparador){
+                                    shoppingCart.isMulticomparador = true; 
+                                }
                                 sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
                             }
                         })
@@ -1002,6 +1150,10 @@ module OrangeFeSARQ.Services {
                     'cartItem': [cartItemElement],
                     'customer': {}
                 };
+            }
+            
+            if(commercialData[commercialActIndex].multicomparador){
+                shoppingCart.isMulticomparador = true; 
             }
 
             // Set session

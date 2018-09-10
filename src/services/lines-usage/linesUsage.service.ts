@@ -11,14 +11,14 @@ module OrangeFeSARQ.Services {
     static $inject = ['$injector'];
     public linesUsageAPIUrl: string;
     public genericConstant: any;
-    public subperfil; 
+    public subperfil;
 
     constructor(public $injector) {
       super($injector);
       let vm = this;
       vm.setInjection($injector);
       vm.initService($injector);
-      vm.subperfil = null; 
+      vm.subperfil = null;
     }
 
     setInjection($injector) {
@@ -31,16 +31,21 @@ module OrangeFeSARQ.Services {
       vm.linesUsageAPIUrl = vm.genericConstant.linesUsage;
     }
 
-    setSubperfil(subperfil){
-      let vm = this; 
-      vm.subperfil = subperfil; 
+    setSubperfil(subperfil) {
+      let vm = this;
+      vm.subperfil = subperfil;
     }
 
-    getSubperfil(){
-      let vm = this; 
+    getSubperfil() {
+      let vm = this;
       return vm.subperfil;
     }
-    
+
+    resetSubperfil() {
+      let vm = this;
+      vm.subperfil = null;
+    }
+
     getLineUsage(typeParam: string, dataUser: string, componentName: string = "lines-list"): any {
       let vm = this;
       let METHOD = 'linesUsage';
@@ -54,14 +59,14 @@ module OrangeFeSARQ.Services {
 
 
       return vm.httpCacheGett(vm.linesUsageAPIUrl, _search, componentName)
-        .then(function(response) {
+        .then(function (response) {
           let _resp = response.data;
           if (_resp.error) {
             throw _resp.error;
           }
           return _resp.LinesUsage;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           throw error;
         });
     }
@@ -79,14 +84,14 @@ module OrangeFeSARQ.Services {
 
 
       return vm.httpCacheGett(vm.linesUsageAPIUrl, _search, componentName)
-        .then(function(response) {
+        .then(function (response) {
           let _resp = response.data;
           if (_resp.error) {
             throw _resp.error;
           }
           return _resp.LinesUsage;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           throw error;
         });
     }
@@ -103,14 +108,14 @@ module OrangeFeSARQ.Services {
       _search.queryParams[typeParam] = dataUser;
 
       return vm.httpCacheGett(vm.linesUsageAPIUrl, _search, componentName)
-        .then(function(response) {
+        .then(function (response) {
           let _resp = response.data;
           if (_resp.error) {
             throw _resp.error;
           }
           return _resp.linesUsageGrouped;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           throw error;
         });
     }

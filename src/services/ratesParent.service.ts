@@ -193,14 +193,15 @@ module OrangeFeSARQ.Services {
          * Consulta al productSpecification de la lista de SVA's de la tarifa
          */
         getSVASpecificationData(idSvaList: string, commercialAction: string, segment: string,
-            isExistingCustomer: boolean): ng.IPromise<{} | void> {
+            isExistingCustomer: boolean, idBundle: string): ng.IPromise<{} | void> {
             let srv = this;
             let params = {
                 productType: 'sva', // Tipo de producto
                 idSvaList: idSvaList, // Lista de Id´s de SVA
                 commercialAction: commercialAction.toLowerCase(),
                 segment: segment,
-                isExistingCustomer: isExistingCustomer
+                isExistingCustomer: isExistingCustomer,
+                bundleId : idBundle
             };
 
             // CABECERA HASHMAP
@@ -231,7 +232,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Consulta al productOffering de la lista de SVA's de la tarifa
          */
-        getSVAOfferingData(idSvaList: string, specificationData, commercialAction: string, segment: string, isExistingCustomer: boolean) {
+        getSVAOfferingData(idSvaList: string, specificationData, commercialAction: string, segment: string, isExistingCustomer: boolean, idBundle: string) {
             let srv = this;
             let customerSegment = srv.getCustomerSegment();
             let params = {
@@ -239,7 +240,8 @@ module OrangeFeSARQ.Services {
                 idSvaList: idSvaList, // Lista de Id´s de SVA
                 commercialAction: commercialAction.toLowerCase(),
                 segment: segment,
-                isExistingCustomer: isExistingCustomer
+                isExistingCustomer: isExistingCustomer,
+                bundleId : idBundle
             };
 
             // CABECERA HASHMAP
