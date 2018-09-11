@@ -189,7 +189,11 @@ module OrangeFeSARQ.Services {
             // Parametros para Renove
             if (params.commercialAction === 'renove') {
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = srv.getSelectedCommercialAct();
+                let commercialActIndex = srv.getSelectedCommercialAct();let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.changeOT) {
+                    params.priceType = 'unico';
+                }
 
                 params.channel = '';
                 params.campaignName = campana_txt;
@@ -207,7 +211,7 @@ module OrangeFeSARQ.Services {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
                         'purchaseOption', 'price.fee', 'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
-                        'characteristic.cameraData.groupData.backCameraResolution.value',
+                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
