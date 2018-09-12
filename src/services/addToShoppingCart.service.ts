@@ -12,8 +12,8 @@ module OrangeFeSARQ.Services {
         public srvTerminalCompare: OrangeFeSARQ.Services.SrvTerminalCompare;
         public objectTv;
         private productCatalogV2Srv;
-        public clientJazztelSrv : OrangeFeSARQ.Services.ClientJazztelSrv;
-        public userSrv : OrangeFeSARQ.Services.UserSrv;
+        public clientJazztelSrv: OrangeFeSARQ.Services.ClientJazztelSrv;
+        public userSrv: OrangeFeSARQ.Services.UserSrv;
         public data;
 
         /**
@@ -46,25 +46,25 @@ module OrangeFeSARQ.Services {
             vm.userSrv = $injector.get('userSrv');
         }
 
-        getBundle(){
+        getBundle() {
             let vm = this;
             let cv = JSON.parse(sessionStorage.getItem('cv'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            let active = _.findIndex(commercialData, {'ospIsSelected': true});
-            
+            let active = _.findIndex(commercialData, { 'ospIsSelected': true });
+
             let bundleId = '';
 
-            if(cv && cv.product) {
+            if (cv && cv.product) {
                 for (let i = 0; i < cv.product.length; i++) {
                     if (cv.product[i].productCharacteristic) {
-                        let charMSISDN : any = _.find(cv.product[i].productCharacteristic, (char: any) => {
+                        let charMSISDN: any = _.find(cv.product[i].productCharacteristic, (char: any) => {
                             if (char.name === 'MSISDN' && commercialData[active].serviceNumber === char.value) {
                                 return char;
                             }
                         });
 
                         if (charMSISDN) {
-                            let bundle : any = _.find(cv.product[i].productCharacteristic, (char: any) => {
+                            let bundle: any = _.find(cv.product[i].productCharacteristic, (char: any) => {
                                 if (char.name === 'Product Bundle Siebel') {
                                     return char;
                                 }
@@ -476,6 +476,28 @@ module OrangeFeSARQ.Services {
                 'place': [],
                 'characteristic': []
             };
+
+            if (rate.ratePricePromotional || rate.ratePriceTaxIncludedPromotional) {
+                let priceAlteration =[{
+                    'name': rate.typePriceName ? rate.typePriceName : '',
+                    'priceType': rate.priceType,
+                    'applicationDuration': rate.applicationDuration,
+                    'price': {
+                        'dutyFreeAmount': {
+                            'unit': 'EUR',
+                            'value': rate.ratePricePromotional
+                        },
+                        'taxIncludedAmount': {
+                            'unit': 'EUR',
+                            'value': rate.ratePriceTaxIncludedPromotional
+                        },
+                        taxRate: rate.taxRate,
+                        ospTaxRateName: rate.taxRateName
+                    }
+                }];
+                rate.itemPrice[commercialActIndex].priceAlteration = priceAlteration;
+            }
+
             rateCartItemElement = {
                 'id': rate.siebelId ? rate.siebelId : '',
                 'action': 'New',
@@ -495,24 +517,7 @@ module OrangeFeSARQ.Services {
                             },
                             taxRate: rate.taxRate,
                             ospTaxRateName: rate.taxRateName
-                        },
-                        'priceAlteration': [{
-                            'name': rate.typePriceName ? rate.typePriceName : '',
-                            'priceType': 'cuota',
-                            'applicationDuration': rate.applicationDuration,
-                            'price': {
-                                'dutyFreeAmount': {
-                                    'unit': 'EUR',
-                                    'value': rate.ratePricePromotional
-                                },
-                                'taxIncludedAmount': {
-                                    'unit': 'EUR',
-                                    'value': rate.ratePriceTaxIncludedPromotional
-                                },
-                                taxRate: rate.taxRate,
-                                ospTaxRateName: rate.taxRateName
-                            }
-                        }]
+                        }
                     }
                 ],
                 'productOffering': {
@@ -630,6 +635,27 @@ module OrangeFeSARQ.Services {
                 'characteristic': []
             };
 
+            if (rate.ratePricePromotional || rate.ratePriceTaxIncludedPromotional) {
+                let priceAlteration =[{
+                    'name': rate.typePriceName ? rate.typePriceName : '',
+                    'priceType': rate.priceType,
+                    'applicationDuration': rate.applicationDuration,
+                    'price': {
+                        'dutyFreeAmount': {
+                            'unit': 'EUR',
+                            'value': rate.ratePricePromotional
+                        },
+                        'taxIncludedAmount': {
+                            'unit': 'EUR',
+                            'value': rate.ratePriceTaxIncludedPromotional
+                        },
+                        taxRate: rate.taxRate,
+                        ospTaxRateName: rate.taxRateName
+                    }
+                }];
+                rate.itemPrice[commercialActIndex].priceAlteration = priceAlteration;
+            }
+
             rateCartItemElement = {
                 'id': rate.siebelId ? rate.siebelId : '',
                 'action': 'New',
@@ -649,24 +675,7 @@ module OrangeFeSARQ.Services {
                             },
                             taxRate: rate.taxRate,
                             ospTaxRateName: rate.taxRateName
-                        },
-                        'priceAlteration': [{
-                            'name': rate.typePriceName ? rate.typePriceName : '',
-                            'priceType': 'cuota',
-                            'applicationDuration': rate.applicationDuration,
-                            'price': {
-                                'dutyFreeAmount': {
-                                    'unit': 'EUR',
-                                    'value': rate.ratePricePromotional
-                                },
-                                'taxIncludedAmount': {
-                                    'unit': 'EUR',
-                                    'value': rate.ratePriceTaxIncludedPromotional
-                                },
-                                taxRate: rate.taxRate,
-                                ospTaxRateName: rate.taxRateName
-                            }
-                        }]
+                        }
                     }
                 ],
                 'productOffering': {
@@ -751,7 +760,7 @@ module OrangeFeSARQ.Services {
             }
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            if(clientData && clientData.jazztelData && clientData.jazztelData.customer && clientData.jazztelData.CDM) {
+            if (clientData && clientData.jazztelData && clientData.jazztelData.customer && clientData.jazztelData.CDM) {
                 let characteristicCDM = {
                     name: 'Aplicable Cambio Marca',
                     value: 'Yes'
@@ -805,6 +814,27 @@ module OrangeFeSARQ.Services {
             // Se obtiene el id del ultimo elemento del cart item del shopping cart
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
+            if (rate.ratePricePromotional || rate.ratePriceTaxIncludedPromotional) {
+                let priceAlteration =[{
+                    'name': rate.typePriceName ? rate.typePriceName : '',
+                    'priceType': rate.priceType,
+                    'applicationDuration': rate.applicationDuration,
+                    'price': {
+                        'dutyFreeAmount': {
+                            'unit': 'EUR',
+                            'value': rate.ratePricePromotional
+                        },
+                        'taxIncludedAmount': {
+                            'unit': 'EUR',
+                            'value': rate.ratePriceTaxIncludedPromotional
+                        },
+                        taxRate: rate.taxRate,
+                        ospTaxRateName: rate.taxRateName
+                    }
+                }];
+                rate.itemPrice[commercialActIndex].priceAlteration = priceAlteration;
+            }
+
             // TARIFA
             rateCartItemElement = {
                 'id': rate.siebelId ? rate.siebelId : '',
@@ -833,24 +863,7 @@ module OrangeFeSARQ.Services {
                             },
                             'taxRate': rate.taxRate,
                             'ospTaxRateName': rate.taxRateName
-                        },
-                        'priceAlteration': [{
-                            'name': rate.typePriceName ? rate.typePriceName : '',
-                            'priceType': 'cuota',
-                            'applicationDuration': rate.applicationDuration,
-                            'price': {
-                                'dutyFreeAmount': {
-                                    'unit': 'EUR',
-                                    'value': rate.ratePricePromotional
-                                },
-                                'taxIncludedAmount': {
-                                    'unit': 'EUR',
-                                    'value': rate.ratePriceTaxIncludedPromotional
-                                },
-                                taxRate: rate.taxRate,
-                                ospTaxRateName: rate.taxRateName
-                            }
-                        }]
+                        }
                     }
                 ],
                 'productOffering': {
@@ -1024,8 +1037,8 @@ module OrangeFeSARQ.Services {
                             if (spec) {
                                 // Pasamos true como parámetro opcional porque es un bono de terminal
                                 cartItemElement.cartItem.push(vm.createSVACartItem(spec.productSpecification[0], true));
-                                if(commercialData[commercialActIndex].multicomparador){
-                                    shoppingCart.isMulticomparador = true; 
+                                if (commercialData[commercialActIndex].multicomparador) {
+                                    shoppingCart.isMulticomparador = true;
                                 }
                                 sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
                             }
@@ -1057,9 +1070,9 @@ module OrangeFeSARQ.Services {
                     'customer': {}
                 };
             }
-            
-            if(commercialData[commercialActIndex].multicomparador){
-                shoppingCart.isMulticomparador = true; 
+
+            if (commercialData[commercialActIndex].multicomparador) {
+                shoppingCart.isMulticomparador = true;
             }
 
             // Set session
@@ -1405,6 +1418,26 @@ module OrangeFeSARQ.Services {
                     'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
                 };
             } else {
+                if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
+                    let priceAlteration =[{
+                        'name': sva.typePriceName ? sva.typePriceName : '',
+                        'priceType': sva.priceType,
+                        'applicationDuration': sva.applicationDuration,
+                        'price': {
+                            'dutyFreeAmount': {
+                                'unit': 'EUR',
+                                'value': sva.ratePricePromotional
+                            },
+                            'taxIncludedAmount': {
+                                'unit': 'EUR',
+                                'value': sva.ratePriceTaxIncludedPromotional
+                            },
+                            taxRate: sva.taxRate,
+                            ospTaxRateName: sva.taxRateName
+                        }
+                    }];
+                    sva.itemPrice[commercialActIndex].priceAlteration = priceAlteration;
+                }
                 svaCartItemElement = {
                     'id': sva.id,
                     'action': 'New',
