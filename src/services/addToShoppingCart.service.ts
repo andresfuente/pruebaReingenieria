@@ -495,7 +495,12 @@ module OrangeFeSARQ.Services {
                         ospTaxRateName: rate.taxRateName
                     }
                 }];
-                rate.itemPrice[commercialActIndex].priceAlteration = priceAlteration;
+                
+                if (!rate.itemPrice) {
+                    rate.itemPrice = []
+                }
+
+                rate.itemPrice.push(priceAlteration);
             }
 
             rateCartItemElement = {
@@ -653,7 +658,12 @@ module OrangeFeSARQ.Services {
                         ospTaxRateName: rate.taxRateName
                     }
                 }];
-                rate.itemPrice[commercialActIndex].priceAlteration = priceAlteration;
+
+                if (!rate.itemPrice) {
+                    rate.itemPrice = []
+                }
+
+                rate.itemPrice.push(priceAlteration);
             }
 
             rateCartItemElement = {
@@ -832,7 +842,12 @@ module OrangeFeSARQ.Services {
                         ospTaxRateName: rate.taxRateName
                     }
                 }];
-                rate.itemPrice[commercialActIndex].priceAlteration = priceAlteration;
+                
+                if (!rate.itemPrice) {
+                    rate.itemPrice = []
+                }
+
+                rate.itemPrice.push(priceAlteration);
             }
 
             // TARIFA
@@ -1436,7 +1451,12 @@ module OrangeFeSARQ.Services {
                             ospTaxRateName: sva.taxRateName
                         }
                     }];
-                    sva.itemPrice[commercialActIndex].priceAlteration = priceAlteration;
+
+                    if (!sva.itemPrice) {
+                        sva.itemPrice = []
+                    }
+    
+                    sva.itemPrice.push(priceAlteration);
                 }
                 svaCartItemElement = {
                     'id': sva.id,
