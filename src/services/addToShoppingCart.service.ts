@@ -477,8 +477,10 @@ module OrangeFeSARQ.Services {
                 'characteristic': []
             };
 
+            let priceAlteration = [];
+
             if (rate.ratePricePromotional || rate.ratePriceTaxIncludedPromotional) {
-                let priceAlteration =[{
+                priceAlteration =[{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
                     'applicationDuration': rate.applicationDuration,
@@ -495,12 +497,6 @@ module OrangeFeSARQ.Services {
                         ospTaxRateName: rate.taxRateName
                     }
                 }];
-                
-                if (!rate.itemPrice) {
-                    rate.itemPrice = []
-                }
-
-                rate.itemPrice.push(priceAlteration);
             }
 
             rateCartItemElement = {
@@ -522,7 +518,8 @@ module OrangeFeSARQ.Services {
                             },
                             taxRate: rate.taxRate,
                             ospTaxRateName: rate.taxRateName
-                        }
+                        },
+                        'priceAlteration': priceAlteration
                     }
                 ],
                 'productOffering': {
@@ -640,8 +637,10 @@ module OrangeFeSARQ.Services {
                 'characteristic': []
             };
 
+            let priceAlteration = []
+
             if (rate.ratePricePromotional || rate.ratePriceTaxIncludedPromotional) {
-                let priceAlteration =[{
+                priceAlteration =[{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
                     'applicationDuration': rate.applicationDuration,
@@ -658,12 +657,6 @@ module OrangeFeSARQ.Services {
                         ospTaxRateName: rate.taxRateName
                     }
                 }];
-
-                if (!rate.itemPrice) {
-                    rate.itemPrice = []
-                }
-
-                rate.itemPrice.push(priceAlteration);
             }
 
             rateCartItemElement = {
@@ -685,7 +678,8 @@ module OrangeFeSARQ.Services {
                             },
                             taxRate: rate.taxRate,
                             ospTaxRateName: rate.taxRateName
-                        }
+                        },
+                        'priceAlteration': priceAlteration
                     }
                 ],
                 'productOffering': {
@@ -824,8 +818,10 @@ module OrangeFeSARQ.Services {
             // Se obtiene el id del ultimo elemento del cart item del shopping cart
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
+            let priceAlteration = [];
+
             if (rate.ratePricePromotional || rate.ratePriceTaxIncludedPromotional) {
-                let priceAlteration =[{
+                priceAlteration =[{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
                     'applicationDuration': rate.applicationDuration,
@@ -842,12 +838,6 @@ module OrangeFeSARQ.Services {
                         ospTaxRateName: rate.taxRateName
                     }
                 }];
-                
-                if (!rate.itemPrice) {
-                    rate.itemPrice = []
-                }
-
-                rate.itemPrice.push(priceAlteration);
             }
 
             // TARIFA
@@ -878,7 +868,8 @@ module OrangeFeSARQ.Services {
                             },
                             'taxRate': rate.taxRate,
                             'ospTaxRateName': rate.taxRateName
-                        }
+                        },
+                        'priceAlteration': priceAlteration
                     }
                 ],
                 'productOffering': {
@@ -1389,6 +1380,28 @@ module OrangeFeSARQ.Services {
                 };
             }
 
+            let priceAlteration = [];
+
+            if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
+                priceAlteration =[{
+                    'name': sva.typePriceName ? sva.typePriceName : '',
+                    'priceType': sva.priceType,
+                    'applicationDuration': sva.applicationDuration,
+                    'price': {
+                        'dutyFreeAmount': {
+                            'unit': 'EUR',
+                            'value': sva.ratePricePromotional
+                        },
+                        'taxIncludedAmount': {
+                            'unit': 'EUR',
+                            'value': sva.ratePriceTaxIncludedPromotional
+                        },
+                        taxRate: sva.taxRate,
+                        ospTaxRateName: sva.taxRateName
+                    }
+                }];
+            }
+
             if (sva.ospTitulo) {
                 let itemPrice;
                 // Si no viene informado expresamente el precio del bono, añadimos 0 por defecto
@@ -1433,31 +1446,6 @@ module OrangeFeSARQ.Services {
                     'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
                 };
             } else {
-                if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
-                    let priceAlteration =[{
-                        'name': sva.typePriceName ? sva.typePriceName : '',
-                        'priceType': sva.priceType,
-                        'applicationDuration': sva.applicationDuration,
-                        'price': {
-                            'dutyFreeAmount': {
-                                'unit': 'EUR',
-                                'value': sva.ratePricePromotional
-                            },
-                            'taxIncludedAmount': {
-                                'unit': 'EUR',
-                                'value': sva.ratePriceTaxIncludedPromotional
-                            },
-                            taxRate: sva.taxRate,
-                            ospTaxRateName: sva.taxRateName
-                        }
-                    }];
-
-                    if (!sva.itemPrice) {
-                        sva.itemPrice = []
-                    }
-    
-                    sva.itemPrice.push(priceAlteration);
-                }
                 svaCartItemElement = {
                     'id': sva.id,
                     'action': 'New',
@@ -1476,6 +1464,12 @@ module OrangeFeSARQ.Services {
                     'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                     'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
                 };
+
+                if (svaCartItemElement.itemPrice[0] && !svaCartItemElement.itemPrice[0].priceAlteration) {
+                    svaCartItemElement.itemPrice[0].priceAlteration = [];
+                }
+
+                svaCartItemElement.itemPrice[0].priceAlteration = priceAlteration;
             }
             return svaCartItemElement;
         }
