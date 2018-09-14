@@ -1440,7 +1440,7 @@ module OrangeFeSARQ.Services {
                     cartItemRelationship: [],
                     'ospSelected': false,
                     'ospSelectable': true,
-                    'ospMandatory': true,
+                    'ospMandatory': false,
                     'ospObjectType': '',
                     'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                     'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
@@ -1459,7 +1459,7 @@ module OrangeFeSARQ.Services {
                     cartItemRelationship: [],
                     'ospSelected': false,
                     'ospSelectable': true,
-                    'ospMandatory': true,
+                    'ospMandatory': false,
                     'ospObjectType': '',
                     'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                     'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
