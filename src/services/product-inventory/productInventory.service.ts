@@ -37,13 +37,13 @@ module OrangeFeSARQ.Services {
         urlParams: [BRAND, METHOD, msisdn]
       };
       return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
-        .then(function(response) {
+        .then(function (response) {
           if (response.data && response.data.product) {
             return response.data.product;
           }
           throw response.data.error;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           return error.data;
         });
     }
@@ -65,13 +65,13 @@ module OrangeFeSARQ.Services {
         urlParams: [BRAND, METHOD, msisdn]
       };
       return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
-        .then(function(response) {
+        .then(function (response) {
           if (response.data && response.data.product) {
             return response.data.product;
           }
           throw response.data.error;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           return error.data;
         });
     }
@@ -87,13 +87,13 @@ module OrangeFeSARQ.Services {
         urlParams: [BRAND, METHOD]
       };
       return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
-        .then(function(response) {
+        .then(function (response) {
           if (response.data) {
             return response.data;
           }
           throw response.data.error;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           return error.data;
         });
     }
@@ -112,7 +112,7 @@ module OrangeFeSARQ.Services {
             throw error.data;
           }
         )
-      ;
+        ;
     }
 
     getRoamingState(msisdn: string, doc: string, compName: string = 'productInventorySrv'): ng.IPromise<any> {
@@ -121,25 +121,24 @@ module OrangeFeSARQ.Services {
       const METHOD = 'verifyDataRoamLikeAtHomeStatus';
 
       let _search: Object = {
-        body: {
-          MSISDN: msisdn,
-          documento: doc
+        queryParams: {
+          publicKey: msisdn,
+          publicId: doc
         },
-        queryParams: {},
-        urlParams: [METHOD]
+        urlParams: ['product', METHOD]
       }
 
-      return vm.httpPost(vm.contractedServicesAPIUrl, _search, compName)
-        .then( 
-          (response) => { 
-            if(response && response.data) {
+      return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, compName)
+        .then(
+          (response) => {
+            if (response && response.data) {
               return response.data;
             }
             return response;
-            
-          }, 
-          (error) => { 
-            if(error && error.data) {
+
+          },
+          (error) => {
+            if (error && error.data) {
               return error.data;
             }
             return error;

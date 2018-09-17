@@ -171,7 +171,13 @@ module OrangeFeSARQ.Services {
 
       return vm.httpPost(vm.urlProductOrder, _search, componentName)
         .then(function (success) {
-          return success.data;
+          if (success.status == 202) {
+            return success;
+          }
+          else {
+            return success.data;
+          }
+
         })
         .catch(function (error) {
           return error.data;
@@ -272,8 +278,12 @@ module OrangeFeSARQ.Services {
       return vm.httpPost(vm.urlProductOrder, _search, componentName)
         .then((response) => {
           let _resp = response.data;
+          let status = response.status;
           if (_resp.error) {
             throw _resp.error;
+          }
+          if (status == 202) {
+            return response;
           }
           return _resp.productOrder;
         })

@@ -4,16 +4,17 @@ module OrangeFeSARQ.Services {
     /**
      * @ngdoc service
      * @name OrangeFeSARQ.Services:CreditLimitSrv
-     * @author Isabel Matas
+     * @author Isabel Matas & Jaime Alain
      * @description
      * Servicio para guardar y recuperar el limite de credito NMC
      */
     export class CreditLimitSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
-        constructor($injector) {
+        constructor(public $injector) {
             super($injector);
             let vm = this;
+
             vm.setInjections($injector);
         }
 
@@ -28,33 +29,37 @@ module OrangeFeSARQ.Services {
          */
         isValidSFIDNMC(): boolean {
             let vm = this;
+
             let list: Array<string>;
+            let validAll: boolean = false;
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
+
             if (OrangeFeSARQ.Controllers.ParentController.shared
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule) {
                 OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule.forEach(element => {
                     if (element.compId === 'header_block_comp') {
-                        element.listOption.forEach(element1 => {
-                            if (element1.name === 'defaultNmc.options' && _.size(element1.listOptionsLiteral) !== 0) {
-                                list = new Array<string>();
-                                element1.listOptionsLiteral.forEach(element2 => {
-                                    list.push(element2.value);
-                                });
-                            } else {
-                                list = new Array<string>();
+                        element.listOption.forEach(option => {
+                            if (option.name === 'defaultNmc.options' && option.listOptionsLiteral) {
+                                if (_.size(option.listOptionsLiteral) !== 0) {
+                                    option.listOptionsLiteral.forEach(literal => {
+                                        list.push(literal.value);
+                                    });
+                                } else {
+                                    validAll = true;
+                                }
                             }
                         });
                     }
                 });
             }
 
-            if ((_.size(list) !== 0) && sessionStorage.getItem('shopInfo')) {
-                if (_.indexOf(list, JSON.parse(sessionStorage.getItem('shopInfo')).sfid) !== -1) {
+            if (shopInfo && shopInfo.sfid) {
+                if (validAll || ((_.size(list) !== 0) && _.indexOf(list, shopInfo.sfid) !== -1)) {
                     return true;
                 }
-            } else if (_.size(list) === 0) {
-                return true;
             }
+
             return false;
         }
 
@@ -67,21 +72,28 @@ module OrangeFeSARQ.Services {
         setCreditRisk(search: string, response) {
             let vm = this;
 
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let sessionClientData = JSON.parse(sessionStorage.getItem('clientData'));
 
-            if (clientData) {
-                if (search === 'CV') {
-                    clientData.creditLimit = vm.getCreditRisk(search, response);
-                    clientData.staticCreditLimitBase = clientData.creditLimit;
-                } else if (search === 'prescoring') {
-                    clientData.creditLimit = vm.getCreditRisk(search, response);
-                    clientData.staticCreditLimitBase = clientData.creditLimit;
-                } else {
-                    clientData.creditLimitRenove = vm.getCreditRisk(search, response);
-                    clientData.staticCreditLimitRenoveBase = clientData.creditLimitRenove;
+            if (sessionClientData) {
+                if (search === 'UMBRAL') {
+                    sessionClientData.creditLimitRenove = {
+                        'umbral': vm.getCreditRisk(search, response)
+                    }
+                } else if (search === 'PRESCORING') {
+                    let creditLimit = vm.getCreditRisk(search, response);
+                    sessionClientData.creditLimitCapta = {
+                        'creditLimitAvailable': 500,
+                        'staticCreditLimit': 500,
+                        'upperCreditLimit': false
+                    }
+                } else if (search === 'RENOVE' && sessionClientData.creditLimitRenove) {
+                    sessionClientData.creditLimitRenove.creditLimitAvailable = vm.getCreditRisk(search, response);
+                    sessionClientData.creditLimitRenove.staticCreditLimit = sessionClientData.creditLimitRenove.creditLimitAvailable;
+                    sessionClientData.creditLimitRenove.changeOT = false;
+                    // sessionClientData.changeOT = response ... ;
                 }
             }
-            sessionStorage.setItem('clientData', JSON.stringify(clientData));
+            sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
         }
 
         /**
@@ -94,28 +106,144 @@ module OrangeFeSARQ.Services {
         getCreditRisk(search: string, response): number {
             let vm = this;
             let limit;
+
             if (search && response) {
-                if (search === 'CV') {
+                if (search === 'UMBRAL') { // customerView
                     if (response.customer && response.customer.individual && response.customer.individual.characteristic !== null) {
                         let existLimitCredit: any = _.find(response.customer.individual.characteristic, { 'name': 'limiteCredito' });
-                        if (existLimitCredit) {
+                        if (existLimitCredit || !existLimitCredit) {
                             limit = parseInt(existLimitCredit.value, 10);
                         }
                     }
-                } else if (search === 'prescoring') {
+                } else if (search === 'PRESCORING') { // cliente nuevo y existente del prescoring
                     if (response.customer && response.customer.ospCustomerSalesProfile && response.customer.ospCustomerSalesProfile[0]
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0]
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount !== null) {
                         limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
                     }
-                } else if (search === 'renove') {
+                } else if (search === 'RENOVE') { // campañas
                     if (response && response[0] && response[0].saldoDisponible !== null) {
                         limit = parseInt(response[0].saldoDisponible, 10);
                     }
                 }
             }
             return limit;
+        }
+
+
+        /**
+         * @ngdoc method checkCreditLimit
+         * @name shoppingCartOptions.Controllers:ShoppingCartOptionsCtrl#checkCreditLimit
+         * @methodOf shoppingCartOptions.Controllers:ShoppingCartOptionsCtrl
+         * @description comprueba los AC 
+         * Calcula el precio actual del carrito y lo comprueba con el creditLimit
+         */
+        checkCreditLimit(sessionClientData, sessionShopingCart) {
+            let vm = this;
+
+            let priceVapsCapta: number = 0;
+            let priceVapsRenove: number = 0;
+
+            sessionShopingCart.cartItem.forEach(option => {
+                if (option.ospSelected && option.ospCartItemType !== 'renove') {
+                    option.cartItem.forEach(element => {
+                        if (_.find(element.product.productRelationship, { 'type': 'VAP' })) {
+                            element.itemPrice.forEach(item => {
+                                if (item.priceType === 'cuota') {
+                                    priceVapsCapta += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
+                                }
+                            });
+                        }
+                    });
+                } else if (option.ospSelected && option.ospCartItemType === 'renove') {
+                    option.cartItem.forEach(element => {
+                        if (_.find(element.product.productRelationship, { 'type': 'VAP' })) {
+                            element.itemPrice.forEach(item => {
+                                if (item.priceType === 'cuota') {
+                                    priceVapsRenove += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            vm.calculateCreditLimitForActs(sessionClientData, priceVapsCapta, priceVapsRenove);
+        }
+
+        /**
+         * @ngdoc method
+         * @name shoppingCartOptions.Controllers:ShoppingCartOptionsCtrl#calculateLDC
+         * @methodOf shoppingCartOptions.Controllers:ShoppingCartOptionsCtrl
+         * @description
+         * Calcula el precio del limite de credito para captacion y renove
+         */
+        calculateCreditLimitForActs(sessionClientData, priceVapsCapta, priceVapsRenove) {
+            let vm = this;
+
+            let totalPriceVaps: number = 0;
+
+            totalPriceVaps = priceVapsCapta + priceVapsRenove;
+
+            if (sessionClientData.creditLimitCapta && priceVapsCapta) {
+                vm.calculateCreditLimitCapta(sessionClientData, priceVapsCapta, priceVapsRenove, totalPriceVaps);
+            } else if (sessionClientData.creditLimitRenove && priceVapsRenove) {
+                vm.calculateCreditLimitRenove(sessionClientData, priceVapsRenove, totalPriceVaps);
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name shoppingCartOptions.Controllers:ShoppingCartOptionsCtrl#calculateCreditLimitCapta
+         * @methodOf shoppingCartOptions.Controllers:ShoppingCartOptionsCtrl
+         * @description
+         * Calcula el precio del limite de credito de captacion
+         */
+        calculateCreditLimitCapta(sessionClientData, priceVapsCapta, priceVapsRenove, totalPriceVaps) {
+            let vm = this;
+
+            if (sessionClientData.creditLimitCapta && sessionClientData.creditLimitCapta.creditLimitAvailable) {
+                sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit - priceVapsCapta;
+            }
+
+            if (sessionClientData.creditLimitRenove && priceVapsRenove) {
+                vm.calculateCreditLimitRenove(sessionClientData, priceVapsRenove, totalPriceVaps);
+            }
+
+            if (priceVapsCapta > sessionClientData.creditLimitCapta.staticCreditLimit) {
+                sessionClientData.creditLimitCapta.upperCreditLimit = true;
+            } else {
+                sessionClientData.creditLimitCapta.upperCreditLimit = false;
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name shoppingCartOptions.Controllers:ShoppingCartOptionsCtrl#calculateCreditLimitRenove
+         * @methodOf shoppingCartOptions.Controllers:ShoppingCartOptionsCtrl
+         * @description
+         * Calcula el precio del limite de credito renove
+         */
+        calculateCreditLimitRenove(sessionClientData, priceVapsRenove, totalPriceVaps) {
+            let vm = this;
+
+            if (sessionClientData.creditLimitCapta) {
+                sessionClientData.creditLimitRenove.creditLimitAvailable =
+                    sessionClientData.creditLimitRenove.staticCreditLimit - totalPriceVaps;
+            } else {
+                sessionClientData.creditLimitRenove.creditLimitAvailable =
+                    sessionClientData.creditLimitRenove.staticCreditLimit - priceVapsRenove;
+            }
+
+            if (sessionClientData.creditLimitRenove.creditLimitAvailable > sessionClientData.creditLimitRenove.umbral) {
+                // Continuo
+                sessionClientData.creditLimitRenove.upperUmbral = false;
+            } else {
+                // Bloqueo y popUppor ahora
+                sessionClientData.creditLimitRenove.upperUmbral = true;
+            }
+
         }
 
     }

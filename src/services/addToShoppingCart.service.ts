@@ -1446,6 +1446,26 @@ module OrangeFeSARQ.Services {
                     'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
                 };
             } else {
+                if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
+                    let priceAlteration =[{
+                        'name': sva.typePriceName ? sva.typePriceName : '',
+                        'priceType': sva.priceType,
+                        'applicationDuration': sva.applicationDuration,
+                        'price': {
+                            'dutyFreeAmount': {
+                                'unit': 'EUR',
+                                'value': sva.ratePricePromotional
+                            },
+                            'taxIncludedAmount': {
+                                'unit': 'EUR',
+                                'value': sva.ratePriceTaxIncludedPromotional
+                            },
+                            taxRate: sva.taxRate,
+                            ospTaxRateName: sva.taxRateName
+                        }
+                    }];
+                    sva.itemPrice[commercialActIndex].priceAlteration = priceAlteration;
+                }
                 svaCartItemElement = {
                     'id': sva.id,
                     'action': 'New',
