@@ -82,8 +82,8 @@ module OrangeFeSARQ.Services {
                 } else if (search === 'PRESCORING') {
                     let creditLimit = vm.getCreditRisk(search, response);
                     sessionClientData.creditLimitCapta = {
-                        'creditLimitAvailable': 500,
-                        'staticCreditLimit': 500,
+                        'creditLimitAvailable': creditLimit,
+                        'staticCreditLimit': creditLimit,
                         'upperCreditLimit': false
                     }
                 } else if (search === 'RENOVE' && sessionClientData.creditLimitRenove) {
