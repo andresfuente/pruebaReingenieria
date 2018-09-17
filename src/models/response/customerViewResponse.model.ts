@@ -212,10 +212,10 @@ module OrangeFeSARQ.Models {
 
         getId() {
             let vm = this;
-            if (vm.individual && vm.individual.id) {
-                return vm.individual.id;
-            } else {
+            if (vm.organization && vm.organization.id) {
                 return vm.organization.id;
+            } else if (vm.individual && vm.individual.id) {
+                return vm.individual.id;
             }
         }
 

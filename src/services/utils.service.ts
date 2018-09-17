@@ -1103,12 +1103,12 @@ module OrangeFeSARQ.Services {
                 docType: "",
                 docNum: ""
             }
-            if (customerViewStore && customerViewStore.info && customerViewStore.info.individual) {
-                _data.docType = customerViewStore.info.individual.ospIDtype;
-                _data.docNum = customerViewStore.info.individual.id
-            } else {
+            if (customerViewStore && customerViewStore.info && customerViewStore.info.organization) {
                 _data.docType = customerViewStore.info.organization.ospIDtype;
                 _data.docNum = customerViewStore.info.organization.id
+            } else if (customerViewStore && customerViewStore.info && customerViewStore.info.individual) {
+                _data.docType = customerViewStore.info.individual.ospIDtype;
+                _data.docNum = customerViewStore.info.individual.id
             }
             return _data;
 
