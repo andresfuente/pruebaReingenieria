@@ -252,6 +252,7 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
+        
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:MosaicFileSrv#getMosaicData
