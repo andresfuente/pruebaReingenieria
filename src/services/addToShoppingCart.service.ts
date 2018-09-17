@@ -438,6 +438,7 @@ module OrangeFeSARQ.Services {
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
+            let bucket;
 
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
@@ -537,6 +538,14 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
+            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+                bucket = vm.createBucketCartItem(rate.bucket);
+
+                if (bucket) {
+                    cartItemElement.cartItem.push(bucket);
+                }
+            }
+
             // Cambio de marca
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
@@ -604,6 +613,8 @@ module OrangeFeSARQ.Services {
 
         putAdditionalRateInShoppingCart(commIndex, rate) {
             let vm = this;
+
+            let bucket;
 
             let productItem = {
                 'href': '',
@@ -684,6 +695,14 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
+            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+                bucket = vm.createBucketCartItem(rate.bucket);
+
+                if (bucket) {
+                    cartItemElement.cartItem.push(bucket);
+                }
+            }
+
             if (shoppingCart !== null) {
                 shoppingCart.cartItem.push(cartItemElement);
             } else {
@@ -712,6 +731,7 @@ module OrangeFeSARQ.Services {
             let svaCartItemList = [];
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
+            let bucket;
 
             productItem = {
                 'href': '',
@@ -782,6 +802,14 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': true
             };
+
+            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+                bucket = vm.createBucketCartItem(rate.bucket);
+
+                if (bucket) {
+                    cartItemElement.cartItem.push(bucket);
+                }
+            }
 
             let shoppingCart = {
                 'id': '',
@@ -882,6 +910,7 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
             let insurance;
+            let bucket;
 
             // Eliminar cuando es sustituir elemento 
             if (preId && preId !== undefined && preId !== null) {
@@ -1059,6 +1088,14 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': preselected
             };
+
+            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+                bucket = vm.createBucketCartItem(rate.bucket);
+
+                if (bucket) {
+                    cartItemElement.cartItem.push(bucket);
+                }
+            }
 
             // Comprobar SVAs Asociados a la tarifa y al carrito
             for (let i = 0; i < commercialData[commercialActIndex].rates.length; i++) {
@@ -1644,6 +1681,36 @@ module OrangeFeSARQ.Services {
 
             sessionStorage.setItem('commercialData', JSON.stringify(''));
 
+        }
+
+        createBucketCartItem(bucket) {
+            let vm = this;
+
+            let bucketCartItem = {
+                "id": bucket.id,
+                "action": "New",
+                "product": {
+                    "productRelationship": [
+                        {
+                            "type": "bucket"
+                        }
+                    ],
+                    "place": [],
+                    "characteristic": [
+                        {
+                            "name": bucket.name,
+                            "shortDescription": bucket.shortDescription
+                        }
+                    ],
+                    "relatedParty": [],
+                    "productSpecification": []
+                },
+                "productOffering": {
+                    "id": bucket.id
+                }
+            };
+
+            return bucketCartItem;
         }
     }
 }
