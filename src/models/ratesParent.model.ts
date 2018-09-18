@@ -163,16 +163,15 @@ module ratesParent.Models {
                 if (priceData.length > 0) {
                     if (priceData[i].isBundle === true) {
                         // Buscamos si afecta el revamp de tarifas Love 
-                        if (priceData[i].bundledProductOffering[0].id === rateData.id) {
+                        if (priceData[i].bundledProductOffering && priceData[i].bundledProductOffering[0] && priceData[i].bundledProductOffering[0].id === rateData.id) {
                             // Comprobamos la fecha 
-                            let fechaServicio = priceData[i].validFor.endDateTime;
+                            let fechaServicio = priceData[i].validFor && priceData[i].validFor.endDateTime ? priceData[i].validFor.endDateTime : null;
                             let fechaLocal: any = new Date();
                             let fechaServicioTransf = new Date(fechaServicio);
                             let fechaLocalTransf = new Date(fechaLocal);
-                            let urlNewConditions = priceData[i].attachment[0].url;
+                            let urlNewConditions = priceData[i].attachment && priceData[i].attachment[0] && priceData[i].attachment[0].url ? priceData[i].attachment[0].url : '';
                             // Si el string no es una fecha o si fechaSrv es null, undefined o vacio y fechaSrv es posterios a fecha local
-                            if (fechaServicioTransf && fechaServicioTransf !== undefined &&
-                                fechaServicioTransf > fechaLocalTransf && urlNewConditions && urlNewConditions !== undefined) {
+                            if (fechaServicioTransf && fechaServicioTransf > fechaLocalTransf && urlNewConditions) {
                                 // Recogemos la info de fecha y url 
                                 let infoNewConditions: RatePopupInfoDate =
                                     new RatePopupInfoDate(priceData[i].validFor.endDateTime, priceData[i].attachment[0].url);
