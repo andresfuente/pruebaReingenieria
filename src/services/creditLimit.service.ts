@@ -109,9 +109,9 @@ module OrangeFeSARQ.Services {
 
             if (search && response) {
                 if (search === 'UMBRAL') { // customerView
-                    if (response.customer && response.customer.individual && response.customer.individual.characteristic !== null) {
+                    if (response.customer && response.customer.individual && _.size(response.customer.individual.characteristic) !== 0) {
                         let existLimitCredit: any = _.find(response.customer.individual.characteristic, { 'name': 'limiteCredito' });
-                        if (existLimitCredit || !existLimitCredit) {
+                        if (existLimitCredit) {
                             limit = parseInt(existLimitCredit.value, 10);
                         }
                     }
