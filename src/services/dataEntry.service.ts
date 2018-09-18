@@ -212,9 +212,9 @@ module OrangeFeSARQ.Services {
                                     } else {
                                         valueDep.value = '';
                                     }
-                                }
-                            }
-                        }
+                                }                          
+                           }
+                        }  
 
                         if ((dDE === 'dsucursal' || dDE === 'ddc' || dDE === 'dcuenta') && !vm.isValidAccount()) {
                             vm.insertarCampo(dCC, dDE, '', contene, responseObj);
@@ -223,7 +223,13 @@ module OrangeFeSARQ.Services {
                         } else if (dDE === 'dpisoContacto') {
                             let parseValue = valueDep ? parseInt(valueDep, 0).toFixed() : '';
                             vm.insertarCampo(dCC, dDE, parseValue, contene, responseObj);
-                        } else {
+                        } else if (dDE === 'dtratApo' && sessionClientData[cont].treatmentAttonery) {
+                            vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentAttonery, contene, responseObj);        
+                        } else if (dDE === 'dtratpag' && sessionClientData[cont].treatmentPayer) {
+                            vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentPayer, contene, responseObj);  
+                        }   else if (dDE === 'dtratAuto' && sessionClientData[cont].treatmentAuthorized) {
+                            vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentAuthorized, contene, responseObj);  
+                        }  else {
                             vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                         }
                     }
