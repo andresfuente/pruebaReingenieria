@@ -157,6 +157,32 @@ module OrangeFeSARQ.Services {
             }
             return _headers;
         }
+
+        changeRate(body, componentName: string) {
+            let vm = this;
+
+            let _headers = vm.getParentSfid();
+            let _search = {
+                body: body,
+                urlParams: [vm.genericConstant.brand, 'changeRate'],
+                queryParams: {
+                    onlyActive: false // mostrar solamente productos activados?
+                },
+            };
+
+            return vm.httpPut(vm.genericConstant.changeRate, _search, componentName, null, null, _headers)
+                .then(
+                    (response) => {
+                        return response.data;
+                    }
+                )
+                .catch(
+                    (error) => {
+                        throw error.data;
+                    }
+                );
+        }
+
     }
 
     angular.module('shoppingCartSrv', [])
