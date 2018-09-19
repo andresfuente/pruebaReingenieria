@@ -76,23 +76,42 @@ module OrangeFeSARQ.Services {
 
             if (sessionClientData) {
                 if (search === 'UMBRAL') {
-                    sessionClientData.creditLimitRenove = {
-                        'umbral': vm.getCreditRisk(search, response)
+                    let umbral = vm.getCreditRisk(search, response);
+                    if (umbral !== undefined && umbral !== null) {
+                        sessionClientData.creditLimitRenove = {
+                            'umbral': umbral
+                        }
                     }
                 } else if (search === 'PRESCORING') {
                     let creditLimit = vm.getCreditRisk(search, response);
-                    sessionClientData.creditLimitCapta = {
-                        'creditLimitAvailable': creditLimit,
-                        'staticCreditLimit': creditLimit,
-                        'upperCreditLimit': false
+                    if (creditLimit !== undefined && creditLimit !== null) {
+                        sessionClientData.creditLimitCapta = {
+                            'creditLimitAvailable': creditLimit,
+                            'staticCreditLimit': creditLimit,
+                            'upperCreditLimit': false
+                        }
                     }
                 } else if (search === 'RENOVE' && sessionClientData.creditLimitRenove) {
                     sessionClientData.creditLimitRenove.creditLimitAvailable = vm.getCreditRisk(search, response);
                     sessionClientData.creditLimitRenove.staticCreditLimit = sessionClientData.creditLimitRenove.creditLimitAvailable;
-                    sessionClientData.creditLimitRenove.changeOT = false;
-                    // sessionClientData.changeOT = response ... ;
                 }
             }
+            sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
+        }
+
+        /**
+         * @name OrangeFeSARQ.Services:CreditLimitSrv#checkCampaignVAP
+         * @description Comprueba si se tiene que cambiar el tipo de precio de la OT para renove 
+         */
+        checkCampaignVAP(campaign) {
+            let vm = this;
+
+            let sessionClientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+            if (sessionClientData && sessionClientData.creditLimitRenove && campaign && campaign.ventaAPlazos) {
+                sessionClientData.creditLimitRenove.ventaAPlazos = campaign.ventaAPlazos;
+            }
+
             sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
         }
 
