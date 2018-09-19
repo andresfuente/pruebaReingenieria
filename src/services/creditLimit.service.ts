@@ -130,7 +130,7 @@ module OrangeFeSARQ.Services {
                 if (search === 'UMBRAL') { // customerView
                     if (response.customer && response.customer.individual && _.size(response.customer.individual.characteristic) !== 0) {
                         let existLimitCredit: any = _.find(response.customer.individual.characteristic, { 'name': 'limiteCredito' });
-                        if (existLimitCredit) {
+                        if (existLimitCredit && existLimitCredit.value) {
                             limit = parseInt(existLimitCredit.value, 10);
                         }
                     }
@@ -138,11 +138,11 @@ module OrangeFeSARQ.Services {
                     if (response.customer && response.customer.ospCustomerSalesProfile && response.customer.ospCustomerSalesProfile[0]
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0]
-                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount !== null) {
+                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount) {
                         limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
                     }
                 } else if (search === 'RENOVE') { // campañas
-                    if (response && response[0] && response[0].saldoDisponible !== null) {
+                    if (response && response[0] && response[0].saldoDisponible) {
                         limit = parseInt(response[0].saldoDisponible, 10);
                     }
                 }
