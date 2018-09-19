@@ -438,11 +438,12 @@ module OrangeFeSARQ.Services {
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
+            let bucket;
 
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
-                if (rate.groupName === 'Convergente' && rate.family === 'love') {
+                if ((rate.groupName === 'Convergente' || rate.groupName === 'Convergente_NAC') && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 }
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
@@ -544,6 +545,14 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
+            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+                bucket = vm.createBucketCartItem(rate.bucket);
+
+                if (bucket) {
+                    cartItemElement.cartItem.push(bucket);
+                }
+            }
+
             // Cambio de marca
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
@@ -609,6 +618,110 @@ module OrangeFeSARQ.Services {
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
+        putAdditionalRateInShoppingCart(commIndex, rate) {
+            let vm = this;
+
+            let bucket;
+
+            let productItem = {
+                'href': '',
+                'name': rate.name ? rate.name : '',
+                'description': rate.description ? rate.description : '',
+                'productRelationship': [{
+                    'type': 'tarifa'
+                }],
+                'place': [],
+                'characteristic': []
+            };
+
+            let rateCartItemElement = {
+                'id': rate.siebelId ? rate.siebelId : '',
+                'action': 'New',
+                'product': productItem,
+                'itemPrice': [
+                    {
+                        'name': rate.typePriceName ? rate.typePriceName : '',
+                        'priceType': 'cuota',
+                        'price': {
+                            'dutyFreeAmount': {
+                                'unit': 'EUR',
+                                'value': rate.ratePrice ? rate.ratePrice : rate.taxFreePrice
+                            },
+                            'taxIncludedAmount': {
+                                'unit': 'EUR',
+                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
+                            },
+                            taxRate: rate.taxRate,
+                            ospTaxRateName: rate.taxRateName
+                        },
+                        'priceAlteration': [{
+                            'name': rate.typePriceName ? rate.typePriceName : '',
+                            'priceType': 'cuota',
+                            'applicationDuration': rate.applicationDuration,
+                            'price': {
+                                'dutyFreeAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePricePromotional
+                                },
+                                'taxIncludedAmount': {
+                                    'unit': 'EUR',
+                                    'value': rate.ratePriceTaxIncludedPromotional
+                                },
+                                taxRate: rate.taxRate,
+                                ospTaxRateName: rate.taxRateName
+                            }
+                        }]
+                    }
+                ],
+                'productOffering': {
+                    'id': rate.siebelId ? rate.siebelId : '',
+                    'name': rate.name ? rate.name : '',
+                    'category': [],
+                    'isBundle': true
+                }
+            };
+
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+
+            let cartItemElementId = 0;
+
+            if (commercialData && commercialData[commIndex]) {
+                cartItemElementId = commercialData[commIndex].id;
+            }
+
+            let cartItemElement = {
+                'id': cartItemElementId + 0.1,
+                'cartItem': [rateCartItemElement],
+                'action': 'New',
+                'cartItemRelationship': [{
+                    id: cartItemElementId
+                }],
+                'ospCartItemType': commercialData[commIndex].ospCartItemType,
+                'ospCartItemSubtype': commercialData[commIndex].ospCartItemSubtype.toLowerCase(),
+                'ospSelected': true
+            };
+
+            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+                bucket = vm.createBucketCartItem(rate.bucket);
+
+                if (bucket) {
+                    cartItemElement.cartItem.push(bucket);
+                }
+            }
+
+            if (shoppingCart !== null) {
+                shoppingCart.cartItem.push(cartItemElement);
+            } else {
+                shoppingCart = {
+                    'id': '',
+                    'cartItem': [cartItemElement],
+                    'customer': {}
+                };
+            }
+            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        }
+
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
@@ -625,6 +738,7 @@ module OrangeFeSARQ.Services {
             let svaCartItemList = [];
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
+            let bucket;
 
             productItem = {
                 'href': '',
@@ -701,6 +815,14 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': true
             };
+
+            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+                bucket = vm.createBucketCartItem(rate.bucket);
+
+                if (bucket) {
+                    cartItemElement.cartItem.push(bucket);
+                }
+            }
 
             let shoppingCart = {
                 'id': '',
@@ -801,6 +923,7 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
             let insurance;
+            let bucket;
 
             // Eliminar cuando es sustituir elemento 
             if (preId && preId !== undefined && preId !== null) {
@@ -810,7 +933,7 @@ module OrangeFeSARQ.Services {
             // Se obtiene el ID del acto comercial que se esta creando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
-                if (rate.groupName === 'Convergente' && rate.family === 'love') {
+                if ((rate.groupName === 'Convergente' || rate.groupName === 'Convergente_NAC') && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 }
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
@@ -984,6 +1107,14 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
                 'ospSelected': preselected
             };
+
+            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+                bucket = vm.createBucketCartItem(rate.bucket);
+
+                if (bucket) {
+                    cartItemElement.cartItem.push(bucket);
+                }
+            }
 
             // Comprobar SVAs Asociados a la tarifa y al carrito
             for (let i = 0; i < commercialData[commercialActIndex].rates.length; i++) {
@@ -1617,6 +1748,36 @@ module OrangeFeSARQ.Services {
 
             sessionStorage.setItem('commercialData', JSON.stringify(''));
 
+        }
+
+        createBucketCartItem(bucket) {
+            let vm = this;
+
+            let bucketCartItem = {
+                "id": bucket.id,
+                "action": "New",
+                "product": {
+                    "productRelationship": [
+                        {
+                            "type": "bucket"
+                        }
+                    ],
+                    "place": [],
+                    "characteristic": [
+                        {
+                            "name": bucket.name,
+                            "shortDescription": bucket.shortDescription
+                        }
+                    ],
+                    "relatedParty": [],
+                    "productSpecification": []
+                },
+                "productOffering": {
+                    "id": bucket.id
+                }
+            };
+
+            return bucketCartItem;
         }
     }
 }

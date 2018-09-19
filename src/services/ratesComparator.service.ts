@@ -330,7 +330,7 @@ module OrangeFeSARQ.Services {
                 ratesString = vm.getRatesString(ratesIdListString);
             }
             let params = {
-                category: categoryParam, // Categoría [ Convergente | Fijo | Movil | Mundo | Holiday ]
+                category: categoryParam, // Categoría [ Convergente | Convergente_NAC | Fijo | Movil | Mundo | Holiday ]
                 productType: productType, // Tipo de producto (rate)
                 segment: clientSegment, // Segmento del cliente (Residencial/Empresas),
                 contractType: contractType, // POSPAGO/PREPAGO
@@ -344,7 +344,7 @@ module OrangeFeSARQ.Services {
                 defaultTechnology: defaultTechnology
             };
             
-            if (categoryParam !== 'Convergente' || defaultTechnology === 'Y') {
+            if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC')|| defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
             }
             if (ratesIdListString === '') {
@@ -409,7 +409,7 @@ module OrangeFeSARQ.Services {
                 technologyString = srv.getIdTechnologyString(technologyList);
             }
             let params = {
-                category: categoryParam, // Categoría [ Convergente | Fijo | Movil | Mundo | Holiday ]
+                category: categoryParam, // Categoría [ Convergente | Convergente_NAC | Fijo | Movil | Mundo | Holiday ]
                 productType: productType, // Tipo de producto (rate)
                 segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
                 contractType: contractType, // POSPAGO/PREPAGO
@@ -423,7 +423,7 @@ module OrangeFeSARQ.Services {
                 defaultTechnology: defaultTechnology
             };
  
-            if (categoryParam !== 'Convergente' || defaultTechnology === 'Y') {
+            if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC') || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
             }
 

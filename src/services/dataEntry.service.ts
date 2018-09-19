@@ -543,9 +543,9 @@ module OrangeFeSARQ.Services {
                                             ? sessionClientData.ospCustomerSegment.toLowerCase() : 'residencial';
                                         let type = rateComData.type;
                                         let siebelId = rateComData.siebelId;
-                                        if (type === 'Convergente' && segment === 'residencial') {
+                                        if ((type === 'Convergente'|| type === 'Convergente_NAC') && segment === 'residencial') {
                                             agrupation = 'Love';
-                                        } else if (type === 'Convergente' && segment === 'empresa') {
+                                        } else if ((type === 'Convergente' || type === 'Convergente_NAC') && segment === 'empresa') {
                                             agrupation = 'Love Negocio';
                                         } else if (type === 'Movil' && segment === 'residencial') {
                                             agrupation = 'Go';

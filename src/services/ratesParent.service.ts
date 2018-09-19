@@ -80,7 +80,7 @@ module OrangeFeSARQ.Services {
             }
 
             // Si la categoria no es convergente se eliminan los parametros para la tecnologia
-            if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC')|| defaultTechnology === 'Y') {
+            if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC') || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
             }
             // Si alguna de las listas queda vacia no se pasa como parametro en la llamada

@@ -349,7 +349,7 @@ module OrangeFeSARQ.Services {
                 'name', 'description', 'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName',
                 'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack', 'selectedSvaList',
                 'taxRate', 'taxRateName', 'applicationDuration',
-                'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology', 'type' , 'associatedLine']);
+                'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology', 'type' , 'associatedLine', 'bucket', 'NACLines']);
 
             return rateForSession;
         }
@@ -488,7 +488,7 @@ module OrangeFeSARQ.Services {
         isConvergentRateContainer() {
             let vm = this;
             return _.some(vm.rateContainer, function (currentRate) {
-                return (currentRate.groupName === 'Convergente' && currentRate.typeService === 'movil_fijo');
+                return ((currentRate.groupName === 'Convergente' || currentRate.groupName === 'Convergente_NAC') && currentRate.typeService === 'movil_fijo');
             });
         }
 
