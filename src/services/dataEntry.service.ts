@@ -208,10 +208,12 @@ module OrangeFeSARQ.Services {
                                     if (valueDep.value === 'Ama de Casa') {
                                         valueDep.value = 'AMA_DE_CASA';
                                     } else if (valueDep.value === 'Otros') {
-                                        valueDep.value = 'OTROS';
-                                    } else {
-                                        valueDep.value = '';
+                                        valueDep.value = 'OTROS'
                                     }
+                                        // ;
+                                    // } else {
+                                    //     valueDep.value = '';
+                                    // }
                                 }                          
                            }
                         }  
