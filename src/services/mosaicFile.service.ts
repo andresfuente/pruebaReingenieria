@@ -159,6 +159,12 @@ module OrangeFeSARQ.Services {
                 });
             }
 
+            if (creditLimit && creditLimit > 0) {
+                params['priceType'] = 'aplazado';
+            } else if (creditLimit && creditLimit <= 0) {
+                params['priceType'] = 'unico';
+            }
+
             // Parametros para Terminal Libre sin Servicio    
             if (workflow === 'libre') {
                 params.channel = 'eShopRES';
@@ -189,14 +195,15 @@ module OrangeFeSARQ.Services {
             // Parametros para Renove
             if (params.commercialAction === 'renove') {
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = srv.getSelectedCommercialAct();let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                let commercialActIndex = srv.getSelectedCommercialAct(); let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
-                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.changeOT) {
+                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.ventaAPlazos && clientData.creditLimitRenove.ventaAPlazos === 'N') {
                     params.priceType = 'unico';
                 }
 
                 params.channel = '';
                 params.campaignName = campana_txt;
+
                 // Se seleccionan los parametros necesarios para la llamada a la OT
                 if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
@@ -244,7 +251,8 @@ module OrangeFeSARQ.Services {
                             ospCustomerSegmentBinding,
                             stateOrProvinceBinding,
                             priceType,
-                            campana_txt
+                            campana_txt,
+                            creditLimit
                         )
                     };
                 })
@@ -252,7 +260,7 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
-        
+
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:MosaicFileSrv#getMosaicData
@@ -290,7 +298,8 @@ module OrangeFeSARQ.Services {
             ospCustomerSegmentBinding: string,
             stateOrProvinceBinding: string,
             priceType: string,
-            campana_txt?: string
+            campana_txt?: string,
+            creditLimit?: number
         ) {
             let srv = this;
 
@@ -312,7 +321,8 @@ module OrangeFeSARQ.Services {
                     ospCustomerSegmentBinding,
                     stateOrProvinceBinding,
                     priceType,
-                    campana_txt
+                    campana_txt,
+                    creditLimit
                 );
             });
         }
@@ -354,7 +364,8 @@ module OrangeFeSARQ.Services {
             ospCustomerSegmentBinding: string,
             stateOrProvinceBinding: string,
             priceType: string,
-            campana_txt?: string
+            campana_txt?: string,
+            creditLimit?: number
         ) {
             let srv = this;
             let params;
@@ -380,8 +391,15 @@ module OrangeFeSARQ.Services {
                 relatedProductOffering: relatedProductOffering,
                 profile: profileBinding,
                 'deviceOffering.category.name': priceNameBinding,
-                priceType: priceType
+                priceType: priceType,
+                creditLimit: creditLimit
             };
+
+            if (creditLimit && creditLimit > 0) {
+                params.priceType = 'aplazado';
+            } else if (creditLimit && creditLimit <= 0) {
+                params.priceType = 'unico';
+            }
 
             // Parametros para Terminal Libre sin Servicio 
             if (relatedProductOffering === '1-CWOOG9') {
@@ -408,6 +426,7 @@ module OrangeFeSARQ.Services {
                 // Se seleccionan los parametros necesarios para la llamada a la OT
                 params.channel = '';
                 params.campaignName = campana_txt;
+                let clientData = JSON.parse(sessionStorage.getItem('clientData'));
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 let commercialActIndex = srv.getSelectedCommercialAct();
                 // Renove pimaraio
@@ -420,6 +439,9 @@ module OrangeFeSARQ.Services {
                 if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
                     priceNameBinding = 'secundario';
                     params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                }
+                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.ventaAPlazos && clientData.creditLimitRenove.ventaAPlazos === 'N') {
+                    params.priceType = 'unico';
                 }
             }
             if (riskLevel === 'bajo' || riskLevel === 'medio') {
