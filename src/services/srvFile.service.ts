@@ -43,22 +43,42 @@ module OrangeFeSARQ.Services {
             // vm.MosaicFileSrv = $injector.get('srvMosaic'); //Using common component
         }
 
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:MosaicFileSrv#getSelectedCommercialAct
+         * @methodOf OrangeFeSARQ.Services:MosaicFileSrv
+         * @description
+         * @return {boolean} Retorna el indice del commercialData que se esta modificando,
+         * en caso contrario retorna -1
+         */
+        getSelectedCommercialAct(): number {
+            let commercialData = [];
+            commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+
+            return _.findIndex(commercialData, function (currentCommercialAct) {
+                return currentCommercialAct.ospIsSelected === true;
+            });
+        }
+
         /* Datos del terminal */
         getData(str_id, sfid, fileTerminalCompOWCSStore) {
             let srv = this;
             let relatedProductOffering;
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let commercialActIndex = srv.getSelectedCommercialAct();
 
-            if(srv.cachedTerminalName && srv.cachedTerminalName === str_id) {
+            if (srv.cachedTerminalName && srv.cachedTerminalName === str_id) {
                 return srv.cachedTerminalPromise;
             } else {
                 let dataOT = srv.MosaicFileSrv.getDataOT();
-                if(localStorage.getItem('profile')) {
+                if (localStorage.getItem('profile')) {
                     dataOT.profile = localStorage.getItem('profile').toLocaleUpperCase();
-                }else {
+                } else {
                     dataOT.profile = localStorage.getItem('rol').toLocaleUpperCase();
                 }
                 // Se define el tipo de tarifa dependiendo del segmento del cliente
-                if(dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
+                if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
                     relatedProductOffering = dataOT.relatedRateResidential;
                 } else {
                     relatedProductOffering = dataOT.relatedRateBusiness;
@@ -68,12 +88,23 @@ module OrangeFeSARQ.Services {
                     dataOT.creditRiskRating += ',alto';
                 }
 
+                // CreditLimit, cliente existente perteneciente al programa de puntos
+                if (clientData && clientData.creditLimitCapta !== null && clientData.creditLimitCapta !== undefined) {
+                    dataOT.creditLimit = clientData.creditLimitCapta.creditLimitAvailable;
+                }
+
+                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'primary_renew' ||
+                    commercialData[commercialActIndex].ospTerminalWorkflow === 'secondary_renew' ||
+                    commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
+                    dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
+                }
+
                 srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
                     str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
                     dataOT.ospCartItemSubType, dataOT.creditRiskRating,
-                    dataOT.channel, sfid , relatedProductOffering,
+                    dataOT.channel, sfid, relatedProductOffering,
                     fileTerminalCompOWCSStore, dataOT.profile, dataOT.priceName,
-                    dataOT.ospCustomerSegment, dataOT.stateOrProvince
+                    dataOT.ospCustomerSegment, dataOT.stateOrProvince, dataOT.campana_txt, dataOT.creditLimit
                 ).then((terminal) => {
                     srv.viewState.selectedVariant = terminal.variants[0];
                     return terminal;
@@ -134,7 +165,7 @@ module OrangeFeSARQ.Services {
 
     }
 
-   // Registration
-   angular.module('srvFile', [])
-   .service('srvFile', OrangeFeSARQ.Services.SrvFile);
+    // Registration
+    angular.module('srvFile', [])
+        .service('srvFile', OrangeFeSARQ.Services.SrvFile);
 }
