@@ -17,7 +17,7 @@ module OrangeFeSARQ.Services {
         public customerSegment;
         public customerProvince;
         public storeProvince;
-        private typeMulticomparatorRenove : boolean = true; 
+        private typeMulticomparatorRenove: boolean = true;
         /**
          * @ngdoc method
          * @name ratesComparator.Services:RatesComparatorSrv#constructor
@@ -52,16 +52,16 @@ module OrangeFeSARQ.Services {
             riskLevel: string,
             channel: string,
             profile: string,
-            nameSgmr: string, 
+            nameSgmr: string,
             typeMulticomparator: string
-        ){
-            let vm = this; 
-            switch(typeMulticomparator){
-                case "renove": 
-                    vm.typeMulticomparatorRenove = true 
-                break; 
-                default: 
-                vm.typeMulticomparatorRenove = false; 
+        ) {
+            let vm = this;
+            switch (typeMulticomparator) {
+                case "renove":
+                    vm.typeMulticomparatorRenove = true
+                    break;
+                default:
+                    vm.typeMulticomparatorRenove = false;
             }
             return vm.getTerminalData(rate, terminal, isExistingCustomer, commercialAction, portabilityOrigin, riskLevel, channel, profile, nameSgmr)
         }
@@ -90,7 +90,8 @@ module OrangeFeSARQ.Services {
             riskLevel: string,
             channel: string,
             profile: string,
-            nameSgmr: string
+            nameSgmr: string,
+            creditLimit?: number
         ) {
             let vm = this;
             if (riskLevel === 'bajo' || riskLevel === 'medio') {
@@ -125,8 +126,14 @@ module OrangeFeSARQ.Services {
                 profile: profile,
                 'deviceOffering.category.name': 'primario',
                 campaignName: nameSgmr,
-                fields: 'deviceOffering'
-            };
+                fields: 'deviceOffering',
+                creditLimit: creditLimit
+            }; 
+
+            if (creditLimit === undefined || creditLimit === null) {
+                delete params.creditLimit;
+            }
+
             // Prepago   
             if (sessionStorage.getItem('commercialData')) {
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
@@ -138,7 +145,7 @@ module OrangeFeSARQ.Services {
                 }
             }
             // Cliente existente para Renove   
-            if (sessionStorage.getItem('commercialData') ) {
+            if (sessionStorage.getItem('commercialData')) {
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 let commercialActIndex = vm.getSelectedCommercialAct();
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.toLowerCase() === 'renove' && vm.typeMulticomparatorRenove) {
@@ -343,8 +350,8 @@ module OrangeFeSARQ.Services {
                 type: type, // [movil/ movilfijo]
                 defaultTechnology: defaultTechnology
             };
-            
-            if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC')|| defaultTechnology === 'Y') {
+
+            if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC') || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
             }
             if (ratesIdListString === '') {
@@ -422,7 +429,7 @@ module OrangeFeSARQ.Services {
                 type: type,
                 defaultTechnology: defaultTechnology
             };
- 
+
             if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC') || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
             }
