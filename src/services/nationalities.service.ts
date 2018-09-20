@@ -50,6 +50,42 @@ module OrangeFeSARQ.Services {
                 });
         }
 
+        getNationalitiesEU(componentName: string) {
+            let vm = this;
+            vm.nationalitiesAPIUrl = vm.genericConstant.getNacionalidades;
+            let _search: Object = {
+                queryParams: {
+                },
+                urlParams: ['getListValue', 'listName', 'nacionalidadesUE']
+            };
+
+            return vm.httpCacheGett(vm.nationalitiesAPIUrl, _search, componentName)
+                .then(function (response) {
+                    return response.data.response;
+                })
+                .catch(function (error) {
+                    throw error.data;
+                });
+        }
+
+        getNationalitiesNoEU(componentName: string) {
+            let vm = this;
+            vm.nationalitiesAPIUrl = vm.genericConstant.getNacionalidades;
+            let _search: Object = {
+                queryParams: {
+                },
+                urlParams: ['getListValue', 'listName', 'nacionalidadesRestoUE']
+            };
+
+            return vm.httpCacheGett(vm.nationalitiesAPIUrl, _search, componentName)
+                .then(function (response) {
+                    return response.data.response;
+                })
+                .catch(function (error) {
+                    throw error.data;
+                });
+        }
+
         setOffer(msisdn: string, ospIDtype: string, ospId: string, origin: string, dest: string, compName: string) {
             let vm = this;
             let apiUrl: string = vm.genericConstant.changeOffer;
