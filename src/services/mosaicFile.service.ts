@@ -159,12 +159,6 @@ module OrangeFeSARQ.Services {
                 });
             }
 
-            if (creditLimit && creditLimit > 0) {
-                params['priceType'] = 'aplazado';
-            } else if (creditLimit && creditLimit <= 0) {
-                params['priceType'] = 'unico';
-            }
-
             // Parametros para Terminal Libre sin Servicio    
             if (workflow === 'libre') {
                 params.channel = 'eShopRES';
@@ -395,12 +389,6 @@ module OrangeFeSARQ.Services {
                 creditLimit: creditLimit
             };
 
-            if (creditLimit && creditLimit > 0) {
-                params.priceType = 'aplazado';
-            } else if (creditLimit && creditLimit <= 0) {
-                params.priceType = 'unico';
-            }
-
             // Parametros para Terminal Libre sin Servicio 
             if (relatedProductOffering === '1-CWOOG9') {
                 params.channel = 'eShopRES';
@@ -568,7 +556,9 @@ module OrangeFeSARQ.Services {
             profileBinding: string,
             priceNameBinding: string,
             ospCustomerSegmentBinding?: string,
-            stateOrProvinceBinding?: string
+            stateOrProvinceBinding?: string,
+            campana_txt?: string,
+            creditLimit?: number
         ) {
             return this.getTerminalData(
                 terminalName,
@@ -584,7 +574,7 @@ module OrangeFeSARQ.Services {
                 priceNameBinding,
                 ospCustomerSegmentBinding,
                 stateOrProvinceBinding,
-                '').promise;
+                '', campana_txt, creditLimit).promise;
         }
 
         handleCacheVersion(
