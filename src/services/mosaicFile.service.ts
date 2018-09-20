@@ -146,8 +146,7 @@ module OrangeFeSARQ.Services {
                 ospOpenSearch: search,
                 profile: profileBinding,
                 segment: clientSegment,
-                'deviceOffering.category.name': priceNameBinding,
-                creditLimit: creditLimit
+                'deviceOffering.category.name': priceNameBinding
             };
 
             if (filters && filters.length) {
@@ -220,6 +219,11 @@ module OrangeFeSARQ.Services {
                         'characteristic.color']);
                 }
             }
+
+            if (creditLimit !== null) {
+                params.creditLimit = creditLimit;
+            }
+            
             // Metodo http nativo por bug en los filtros
             return srv.httpService({
                 method: 'GET',
@@ -386,8 +390,7 @@ module OrangeFeSARQ.Services {
                 relatedProductOffering: relatedProductOffering,
                 profile: profileBinding,
                 'deviceOffering.category.name': priceNameBinding,
-                priceType: priceType,
-                creditLimit: creditLimit
+                priceType: priceType
             };
 
             // Parametros para Terminal Libre sin Servicio 
@@ -433,6 +436,11 @@ module OrangeFeSARQ.Services {
                     params.priceType = 'unico';
                 }
             }
+
+            if (creditLimit !== null) {
+                params.creditLimit = creditLimit;
+            }
+
             if (riskLevel === 'bajo' || riskLevel === 'medio') {
                 riskLevel += ',alto';
             }
