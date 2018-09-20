@@ -101,6 +101,7 @@ module OrangeFeSARQ.Services {
             let params;
             let deferred = srv.$q.defer();
             let priceType = '';
+            
             // Cabeceras
             let headers = {
                 'Geolocation-local': srv.storeProvince.toUpperCase(),
