@@ -165,24 +165,20 @@ module OrangeFeSARQ.Services {
             let priceVapsRenove: number = 0;
 
             sessionShopingCart.cartItem.forEach(option => {
-                if (option.ospSelected && option.ospCartItemType !== 'renove') {
+                if (option.ospSelected) {
                     option.cartItem.forEach(element => {
                         if (_.find(element.product.productRelationship, { 'type': 'VAP' })) {
                             element.itemPrice.forEach(item => {
-                                if (item.priceType === 'cuota') {
+                                if (item.priceType === 'cuota' && option.ospCartItemType !== 'renove') {
                                     priceVapsCapta += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
-                                }
-                            });
-                        }
-                    });
-                } else if (option.ospSelected && option.ospCartItemType === 'renove') {
-                    option.cartItem.forEach(element => {
-                        if (_.find(element.product.productRelationship, { 'type': 'VAP' })) {
-                            element.itemPrice.forEach(item => {
-                                if (item.priceType === 'cuota') {
+                                }else if (item.priceType === 'cuota' && option.ospCartItemType === 'renove') {
                                     priceVapsRenove += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
                                 }
                             });
+                        } else if (_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType !== 'renove') {
+                            sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit;
+                        } else if(_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType === 'renove') {
+                            sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
                         }
                     });
                 }
