@@ -225,11 +225,11 @@ module OrangeFeSARQ.Services {
                         } else if (dDE === 'dpisoContacto') {
                             let parseValue = valueDep ? parseInt(valueDep, 0).toFixed() : '';
                             vm.insertarCampo(dCC, dDE, parseValue, contene, responseObj);
-                        } else if (dDE === 'dtratApo' && sessionClientData[cont].treatmentAttonery) {
+                        } else if (dDE === 'dtratApo' && sessionClientData[cont] && sessionClientData[cont].treatmentAttonery) {
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentAttonery, contene, responseObj);        
-                        } else if (dDE === 'dtratpag' && sessionClientData[cont].treatmentPayer) {
+                        } else if (dDE === 'dtratpag' && sessionClientData[cont] && sessionClientData[cont].treatmentPayer) {
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentPayer, contene, responseObj);  
-                        }   else if (dDE === 'dtratAuto' && sessionClientData[cont].treatmentAuthorized) {
+                        }   else if (dDE === 'dtratAuto' && sessionClientData[cont] && sessionClientData[cont].treatmentAuthorized) {
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentAuthorized, contene, responseObj);  
                         }  else {
                             vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
