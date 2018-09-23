@@ -30,7 +30,7 @@ module OrangeFeSARQ.Services {
         isValidSFIDNMC(): boolean {
             let vm = this;
 
-            let list: Array<string>;
+            let list: any = [];
             let validAll: boolean = false;
             let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
 
@@ -55,7 +55,7 @@ module OrangeFeSARQ.Services {
             }
 
             if (shopInfo && shopInfo.sfid) {
-                if (validAll || ((_.size(list) !== 0) && _.indexOf(list, shopInfo.sfid) !== -1)) {
+                if (validAll || list && ((_.size(list) !== 0) && _.indexOf(list, shopInfo.sfid) !== -1)) {
                     return true;
                 }
             }
