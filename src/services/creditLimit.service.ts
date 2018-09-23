@@ -167,18 +167,20 @@ module OrangeFeSARQ.Services {
             sessionShopingCart.cartItem.forEach(option => {
                 if (option.ospSelected) {
                     option.cartItem.forEach(element => {
-                        if (_.find(element.product.productRelationship, { 'type': 'VAP' })) {
-                            element.itemPrice.forEach(item => {
-                                if (item.priceType === 'cuota' && option.ospCartItemType !== 'renove') {
-                                    priceVapsCapta += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
-                                }else if (item.priceType === 'cuota' && option.ospCartItemType === 'renove') {
+                        if (element.product) {
+                            if (_.find(element.product.productRelationship, { 'type': 'VAP' })) {
+                                element.itemPrice.forEach(item => {
+                                    if (item.priceType === 'cuota' && option.ospCartItemType !== 'renove') {
+                                        priceVapsCapta += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
+                                    }else if (item.priceType === 'cuota' && option.ospCartItemType === 'renove') {
                                     priceVapsRenove += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
                                 }
                             });
-                        } else if (_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType !== 'renove') {
-                            sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit;
-                        } else if(_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType === 'renove') {
-                            sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
+                            } else if (_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType !== 'renove') {
+                                sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit;
+                            } else if(_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType === 'renove') {
+                                sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
+                            }
                         }
                     });
                 }
