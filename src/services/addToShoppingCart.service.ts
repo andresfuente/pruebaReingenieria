@@ -17,6 +17,7 @@ module OrangeFeSARQ.Services {
         public data;
         public bucketId : string;
         public pressRateModifyButton : boolean;
+        public shoppingCartAux;
 
         /**
          * @ngdoc method
