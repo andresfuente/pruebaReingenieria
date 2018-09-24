@@ -15,6 +15,7 @@ module OrangeFeSARQ.Services {
         public clientJazztelSrv: OrangeFeSARQ.Services.ClientJazztelSrv;
         public userSrv: OrangeFeSARQ.Services.UserSrv;
         public data;
+        public shoppingCartAux;
 
         /**
          * @ngdoc method
