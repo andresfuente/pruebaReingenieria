@@ -30,7 +30,7 @@ module OrangeFeSARQ.Services {
         isValidSFIDNMC(): boolean {
             let vm = this;
 
-            let list: any = [];
+            let list: any = [];
             let validAll: boolean = false;
             let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
 
@@ -164,6 +164,9 @@ module OrangeFeSARQ.Services {
             let priceVapsCapta: number = 0;
             let priceVapsRenove: number = 0;
 
+            sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit;
+            sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
+
             sessionShopingCart.cartItem.forEach(option => {
                 if (option.ospSelected) {
                     option.cartItem.forEach(element => {
@@ -172,13 +175,13 @@ module OrangeFeSARQ.Services {
                                 element.itemPrice.forEach(item => {
                                     if (item.priceType === 'cuota' && option.ospCartItemType !== 'renove') {
                                         priceVapsCapta += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
-                                    }else if (item.priceType === 'cuota' && option.ospCartItemType === 'renove') {
-                                    priceVapsRenove += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
-                                }
-                            });
+                                    } else if (item.priceType === 'cuota' && option.ospCartItemType === 'renove') {
+                                        priceVapsRenove += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
+                                    }
+                                });
                             } else if (_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType !== 'renove') {
                                 sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit;
-                            } else if(_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType === 'renove') {
+                            } else if (_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType === 'renove') {
                                 sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
                             }
                         }
@@ -187,6 +190,7 @@ module OrangeFeSARQ.Services {
             });
 
             vm.calculateCreditLimitForActs(sessionClientData, priceVapsCapta, priceVapsRenove);
+            sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
         }
 
         /**
@@ -203,9 +207,11 @@ module OrangeFeSARQ.Services {
 
             totalPriceVaps = priceVapsCapta + priceVapsRenove;
 
-            if (sessionClientData.creditLimitCapta && priceVapsCapta) {
+            if (sessionClientData.creditLimitCapta && priceVapsCapta !== null) {
                 vm.calculateCreditLimitCapta(sessionClientData, priceVapsCapta, priceVapsRenove, totalPriceVaps);
-            } else if (sessionClientData.creditLimitRenove && priceVapsRenove) {
+            } 
+
+            if (sessionClientData.creditLimitRenove && priceVapsRenove !== null) {
                 vm.calculateCreditLimitRenove(sessionClientData, priceVapsRenove, totalPriceVaps);
             }
         }
@@ -224,11 +230,7 @@ module OrangeFeSARQ.Services {
                 sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit - priceVapsCapta;
             }
 
-            if (sessionClientData.creditLimitRenove && priceVapsRenove) {
-                vm.calculateCreditLimitRenove(sessionClientData, priceVapsRenove, totalPriceVaps);
-            }
-
-            if (priceVapsCapta > sessionClientData.creditLimitCapta.staticCreditLimit) {
+            if (totalPriceVaps > sessionClientData.creditLimitCapta.staticCreditLimit) {
                 sessionClientData.creditLimitCapta.upperCreditLimit = true;
             } else {
                 sessionClientData.creditLimitCapta.upperCreditLimit = false;
@@ -246,18 +248,18 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
             if (sessionClientData.creditLimitCapta) {
-                sessionClientData.creditLimitRenove.creditLimitAvailable =
-                    sessionClientData.creditLimitRenove.staticCreditLimit - totalPriceVaps;
-            } else {
+                sessionClientData.creditLimitCapta.creditLimitAvailable =
+                    sessionClientData.creditLimitCapta.staticCreditLimit - totalPriceVaps;
+            }
+
+            if (sessionClientData.creditLimitRenove) {
                 sessionClientData.creditLimitRenove.creditLimitAvailable =
                     sessionClientData.creditLimitRenove.staticCreditLimit - priceVapsRenove;
             }
 
             if (sessionClientData.creditLimitRenove.creditLimitAvailable > sessionClientData.creditLimitRenove.umbral) {
-                // Continuo
                 sessionClientData.creditLimitRenove.upperUmbral = false;
             } else {
-                // Bloqueo y popUppor ahora
                 sessionClientData.creditLimitRenove.upperUmbral = true;
             }
 

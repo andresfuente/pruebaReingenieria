@@ -12,6 +12,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
 
         private spinnerBlockSrv;
+        private creditLimitSrv: OrangeFeSARQ.Services.CreditLimitSrv;
 
         private $q;
         private injections = {};
@@ -47,6 +48,8 @@ module OrangeFeSARQ.Services {
             srv.$q = $injector.get('$q');
             srv.httpService = $injector.get('$http');
             srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
+            srv.creditLimitSrv = $injector.get('creditLimitSrv');
+
         }
 
         /**
@@ -159,6 +162,10 @@ module OrangeFeSARQ.Services {
                 });
             }
 
+            if (creditLimit !== null) {
+                params.creditLimit = Math.round(creditLimit);
+            }
+
             // Parametros para Terminal Libre sin Servicio    
             if (workflow === 'libre') {
                 params.channel = 'eShopRES';
@@ -185,7 +192,7 @@ module OrangeFeSARQ.Services {
                     }
                 }
             }
-
+            
             // Parametros para Renove
             if (params.commercialAction === 'renove') {
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
@@ -218,10 +225,6 @@ module OrangeFeSARQ.Services {
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
                         'characteristic.color']);
                 }
-            }
-
-            if (creditLimit !== null) {
-                params.creditLimit = creditLimit;
             }
             
             // Metodo http nativo por bug en los filtros
@@ -348,6 +351,7 @@ module OrangeFeSARQ.Services {
          * @return {ng.IPromise<{}|void>}
          * @description Metodo para obtener los datos de un terminal
          */
+        
         private getTerminalData(
             terminalName,
             isExistingCustomer: number,
@@ -413,6 +417,10 @@ module OrangeFeSARQ.Services {
                 }
             }
 
+            if (creditLimit !== null) {
+                params.creditLimit = Math.round(creditLimit);
+            }
+
             // Parametros para Renove   
             if (params.commercialAction === 'renove') {
                 // Se seleccionan los parametros necesarios para la llamada a la OT
@@ -435,10 +443,6 @@ module OrangeFeSARQ.Services {
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.ventaAPlazos && clientData.creditLimitRenove.ventaAPlazos === 'N') {
                     params.priceType = 'unico';
                 }
-            }
-
-            if (creditLimit !== null) {
-                params.creditLimit = creditLimit;
             }
 
             if (riskLevel === 'bajo' || riskLevel === 'medio') {
@@ -686,6 +690,7 @@ module OrangeFeSARQ.Services {
             let dataOT: mosaicFile.Models.DataOT = new mosaicFile.Models.DataOT();
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let prescoring = JSON.parse(sessionStorage.getItem('prescoring'));
             let defaultDataOT: mosaicFile.Models.DataOT = vm.getDefaultDataOT();
             let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
@@ -713,9 +718,13 @@ module OrangeFeSARQ.Services {
                     clientData.postalContact.stateOrProvince.length > 0) {
                     dataOT.stateOrProvince = clientData.postalContact.stateOrProvince;
                 }
-                // CreditLimit, cliente existente perteneciente al programa de puntos
-                if (clientData && clientData.creditLimitCapta !== null && clientData.creditLimitCapta !== undefined) {
-                    dataOT.creditLimit = clientData.creditLimitCapta.creditLimitAvailable;
+                
+                if (clientData && clientData.creditLimitCapta && clientData.creditLimitCapta.creditLimitAvailable !== null) {
+                    if(shoppingCart && _.size(shoppingCart.cartItem) !== 0){
+                        vm.creditLimitSrv.checkCreditLimit(clientData, shoppingCart);
+                    }else {
+                        dataOT.creditLimit = clientData.creditLimitCapta.staticCreditLimit;
+                    }
                 }
             }
 
