@@ -88,8 +88,7 @@ module OrangeFeSARQ.Services {
                     dataOT.creditRiskRating += ',alto';
                 }
 
-                // CreditLimit, cliente existente perteneciente al programa de puntos
-                if (clientData && clientData.creditLimitCapta !== null && clientData.creditLimitCapta !== undefined) {
+                if (clientData && clientData.creditLimitCapta && clientData.creditLimitCapta.creditLimitAvailable !== null) {
                     dataOT.creditLimit = clientData.creditLimitCapta.creditLimitAvailable;
                 }
 
@@ -97,6 +96,9 @@ module OrangeFeSARQ.Services {
                     commercialData[commercialActIndex].ospTerminalWorkflow === 'secondary_renew' ||
                     commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
                     dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
+                    if (dataOT.creditLimit && dataOT.creditLimit !== null){
+                        delete dataOT.creditLimit;
+                    }
                 }
 
                 srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(

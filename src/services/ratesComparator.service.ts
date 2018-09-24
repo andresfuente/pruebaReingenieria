@@ -153,6 +153,7 @@ module OrangeFeSARQ.Services {
                     delete params.portabilityOrigin;
                     delete params.riskLevel;
                     delete params.profile;
+                    delete params.creditLimit;
                 }
             }
 
