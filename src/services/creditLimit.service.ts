@@ -100,22 +100,6 @@ module OrangeFeSARQ.Services {
         }
 
         /**
-         * @name OrangeFeSARQ.Services:CreditLimitSrv#checkCampaignVAP
-         * @description Comprueba si se tiene que cambiar el tipo de precio de la OT para renove 
-         */
-        checkCampaignVAP(campaign) {
-            let vm = this;
-
-            let sessionClientData = JSON.parse(sessionStorage.getItem('clientData'));
-
-            if (sessionClientData && sessionClientData.creditLimitRenove && campaign && campaign.ventaAPlazos) {
-                sessionClientData.creditLimitRenove.ventaAPlazos = campaign.ventaAPlazos;
-            }
-
-            sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
-        }
-
-        /**
          * @name OrangeFeSARQ.Services:CreditLimitSrv#getCreditRisk
          * @param {string} search Donde se debe buscar el limite de credito [CV, prescoring, renove]
          * @param {object} response Respuesta del microservicio donde se debe buscar el limite de credito
@@ -150,6 +134,40 @@ module OrangeFeSARQ.Services {
             return limit;
         }
 
+        /**
+         * @name OrangeFeSARQ.Services:CreditLimitSrv#checkCampaignVAP
+         * @description Comprueba si se tiene que cambiar el tipo de precio de la OT para renove 
+         */
+        checkCampaignVAP(campaigns) {
+            let vm = this;
+
+            let sessionClientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let owcsCampaign: string = _.camelCase('Renove primario');
+
+            sessionClientData.creditLimitRenove.linesWithVAP = [];
+
+            if (sessionClientData && sessionClientData.creditLimitRenove && campaigns) {
+                campaigns.forEach(line => {
+                    let linesWithVAP: any = {};
+                    if (line.campaignNum && _.size(line.campaignNum) !== 0) {
+                        line.campaignNum.forEach(campaign => {
+                            if (campaign.wcs && _.camelCase(campaign.wcs.typeRenove) === owcsCampaign) {
+                                linesWithVAP = {
+                                    'line': line.idUser,
+                                    'ventaAPlazos': campaign.ventaAPlazos
+                                }
+                                sessionClientData.creditLimitRenove.linesWithVAP.push(linesWithVAP);
+                            }
+                        });
+                    }
+                });
+            }
+
+            if (sessionClientData.creditLimitRenove.linesWithVAP && _.size(sessionClientData.creditLimitRenove.linesWithVAP) !== 0) {
+                sessionClientData.creditLimitRenove.linesWithVAP = _.uniqBy(sessionClientData.creditLimitRenove.linesWithVAP, 'line');
+                sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
+            }
+        }
 
         /**
          * @ngdoc method checkCreditLimit
@@ -164,9 +182,12 @@ module OrangeFeSARQ.Services {
             let priceVapsCapta: number = 0;
             let priceVapsRenove: number = 0;
 
-            sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit;
-            sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
-
+            if (sessionClientData && sessionClientData.creditLimitCapta && sessionClientData.creditLimitCapta.creditLimitAvailable !== null) {
+                sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit;
+            }
+            if (sessionClientData && sessionClientData.creditLimitRenove && sessionClientData.creditLimitRenove.creditLimitAvailable !== null) {
+                sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
+            }
             sessionShopingCart.cartItem.forEach(option => {
                 if (option.ospSelected) {
                     option.cartItem.forEach(element => {
@@ -180,9 +201,13 @@ module OrangeFeSARQ.Services {
                                     }
                                 });
                             } else if (_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType !== 'renove') {
-                                sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit;
+                                if (sessionClientData && sessionClientData.creditLimitCapta && sessionClientData.creditLimitCapta.creditLimitAvailable !== null) {
+                                    sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit;
+                                }
                             } else if (_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType === 'renove') {
-                                sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
+                                if (sessionClientData && sessionClientData.creditLimitRenove && sessionClientData.creditLimitRenove.creditLimitAvailable !== null) {
+                                    sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
+                                }
                             }
                         }
                     });
@@ -209,7 +234,7 @@ module OrangeFeSARQ.Services {
 
             if (sessionClientData.creditLimitCapta && priceVapsCapta !== null) {
                 vm.calculateCreditLimitCapta(sessionClientData, priceVapsCapta, priceVapsRenove, totalPriceVaps);
-            } 
+            }
 
             if (sessionClientData.creditLimitRenove && priceVapsRenove !== null) {
                 vm.calculateCreditLimitRenove(sessionClientData, priceVapsRenove, totalPriceVaps);
