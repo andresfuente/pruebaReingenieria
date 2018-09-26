@@ -32,7 +32,7 @@ module OrangeFeSARQ.Services {
 
             let list: any = [];
             let validAll: boolean = false;
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
+            let loginData = JSON.parse(sessionStorage.getItem('loginData'));
 
             if (OrangeFeSARQ.Controllers.ParentController.shared
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
@@ -54,8 +54,8 @@ module OrangeFeSARQ.Services {
                 });
             }
 
-            if (shopInfo && shopInfo.sfid) {
-                if (validAll || list && ((_.size(list) !== 0) && _.indexOf(list, shopInfo.sfid) !== -1)) {
+            if (loginData && loginData.sfid && loginData.sfid !== null) {
+                if (validAll || list && ((_.size(list) !== 0) && _.indexOf(list, loginData.sfid) !== -1)) {
                     return true;
                 }
             }
