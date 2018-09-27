@@ -157,11 +157,11 @@ module ratesParent.Models {
 
             if (associatedLine !== undefined && associatedLine.length !== 0) {
                 this.associatedLine = associatedLine;
-            }            
+            }
 
             for (let i in priceData) {
                 if (priceData.length > 0) {
-                    if (priceData[i].isBundle === true) {
+                    if (priceData[i].isBundle) {
                         // Buscamos si afecta el revamp de tarifas Love 
                         if (priceData[i].bundledProductOffering && priceData[i].bundledProductOffering[0] && priceData[i].bundledProductOffering[0].id === rateData.id) {
                             // Comprobamos la fecha 
@@ -224,7 +224,7 @@ module ratesParent.Models {
                                         this.descriptionPromotion = productOfferingPriceAlteration.description;
                                         this.applicationDuration = productOfferingPriceAlteration.applicationDuration;
                                         this.recurringChargePeriodPromotion = productOfferingPriceAlteration.recurringChargePeriod;
-                                        if(productOfferingPriceAlteration.price && productOfferingPriceAlteration.price !== null){
+                                        if (productOfferingPriceAlteration.price && productOfferingPriceAlteration.price !== null) {
                                             this.taxRate = productOfferingPriceAlteration.price.taxRate;
                                             this.taxRateName = productOfferingPriceAlteration.price.ospTaxRateName;
                                             this.ratePriceTaxIncludedPromotional = productOfferingPriceAlteration.price.taxIncludedAmount;
@@ -282,11 +282,35 @@ module ratesParent.Models {
                             }
                         }
                     } else {
-                        if (priceData[i].bundledProductOffering && _.find(priceData[i].bundledProductOffering, {'id': rateData.id})) {
+                        if (priceData[i].bundledProductOffering && _.find(priceData[i].bundledProductOffering, { 'id': rateData.id })) {
                             // Recoger info
                             let info: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
                             this.pupupInfo.push(info);
                         }
+                    }
+                }
+            }
+
+            let info: RatePopupInfo = new RatePopupInfo('titulo', rateData.description);
+            this.pupupInfo.push(info);
+            // && rateData.productSpecCharacteristic[i].ospLargeDescription != null 
+            for (let i in rateData.productSpecCharacteristic) {
+                if (rateData.productSpecCharacteristic[i].ospCategory === 'highlight') {
+                    let info: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                    this.pupupInfo.push(info);
+                }
+            }
+            for (let i in rateData.productSpecCharacteristic) {
+                if (rateData.productSpecCharacteristic[i].ospCategory === 'implicit') {
+                    let repetida = false;
+                    for (let j in this.pupupInfo) {
+                        if (rateData.productSpecCharacteristic[i].name === this.pupupInfo[j].name) {
+                            repetida = true;
+                        }
+                    }
+                    if (!repetida) {
+                        let info: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                        this.pupupInfo.push(info);
                     }
                 }
             }
@@ -495,14 +519,14 @@ module ratesParent.Models {
                                             sva.typePriceName = priceElement.productOfferingPriceAlteration.priceType;
                                             sva.descriptionPromotion = priceElement.productOfferingPriceAlteration.description;
                                             sva.applicationDuration = priceElement.productOfferingPriceAlteration.applicationDuration;
-                                            if(priceElement.productOfferingPriceAlteration.price && priceElement.productOfferingPriceAlteration.price !== null ){
+                                            if (priceElement.productOfferingPriceAlteration.price && priceElement.productOfferingPriceAlteration.price !== null) {
                                                 sva.taxRate = priceElement.productOfferingPriceAlteration.price.taxRate;
                                                 sva.taxRateName = priceElement.productOfferingPriceAlteration.
-                                                price.ospTaxRateName;
+                                                    price.ospTaxRateName;
                                                 sva.ratePriceTaxIncludedPromotional = priceElement.productOfferingPriceAlteration.
-                                                price.taxIncludedAmount;
+                                                    price.taxIncludedAmount;
                                                 sva.ratePricePromotional = priceElement.productOfferingPriceAlteration.
-                                                price.dutyFreeAmount;
+                                                    price.dutyFreeAmount;
                                             }
                                         }
                                     });
