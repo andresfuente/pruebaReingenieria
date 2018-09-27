@@ -132,7 +132,7 @@ module ratesParent.Models {
                     }
 
                     if (element.ospCategory === 'BUCKET') {
-                        this.bucket = new RateBucket(element.name, element.ospId, element.description, element.ospLargeDescription, element.ospOrden, element.ospImagen);
+                        this.bucket = new RateBucket(element.name, element.ospId, element.ospOrden, element.ospLargeDescription, element.description, element.ospImagen);
                     }
                 });
             }
