@@ -293,7 +293,7 @@ module ratesParent.Models {
 
             let info: RatePopupInfo = new RatePopupInfo('titulo', rateData.description);
             this.pupupInfo.push(info);
-            // && rateData.productSpecCharacteristic[i].ospLargeDescription != null 
+
             for (let i in rateData.productSpecCharacteristic) {
                 if (rateData.productSpecCharacteristic[i].ospCategory === 'highlight') {
                     let info: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
