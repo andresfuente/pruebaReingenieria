@@ -28,9 +28,33 @@ module ratesParent.Models {
                         }
                     });
                     let rate: Rate = new Rate(specification, productOffering);
+
+                    // Si es una NAC principal, usamos el nombre del cliente si hay
+                    if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
+                        rate.rateSubName = vm.getNameNAC() ? vm.getNameNAC() : rate.rateSubName;
+                    }
+
                     vm.rates.push(rate);
                 });
             }
+        }
+
+        getNameNAC() {
+            let vm = this;
+
+            let name = '';
+
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+            if (clientData && clientData.ospCustomerSegment && clientData.ospCustomerSegment.toUpperCase()  === 'RESIDENCIAL' && clientData.surname) {
+                name += 'Love ' + _.capitalize(clientData.surname);
+
+                if (clientData.secondSurname) {
+                    name += ' ' + _.capitalize(clientData.secondSurname);
+                }
+            }
+
+            return name;
         }
 
         setError(errorMsg) {
