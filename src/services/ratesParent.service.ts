@@ -183,12 +183,56 @@ module OrangeFeSARQ.Services {
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
                     rates.loadRates(specificationData, response.data);
+                    
+                    // Si es tarifa NAC y el cliente ya es NAC o lleva una en la prescripcion mostrar el nombre personalizado
+                    if (srv.isNACClient()) {
+                        _.forEach(rates.rates, (rate) => {
+                            rate.rateSubName = srv.getNameNAC() ? srv.getNameNAC() : rate.rateSubName;
+                        })
+                    }
+
                     return rates;
                 })
                 .catch((error) => {
                     throw error;
                 });
 
+        }
+
+        /** @ngdoc method
+         * @name OrangeFeSARQ.Services:RatesParentSrv#getNameNAC
+         * @methodOf ratesParent.Services:RatesParentSrv
+         * @description
+         * Método auxiliar para cambiar el nombre de las tarifas NAC
+         */
+        getNameNAC() {
+            let srv = this;
+
+            let name = '';
+
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+            if (clientData && clientData.ospCustomerSegment && clientData.ospCustomerSegment.toUpperCase()  === 'RESIDENCIAL' && clientData.surname) {
+                name += 'Love ' + _.capitalize(clientData.surname);
+
+                if (clientData.secondSurname) {
+                    name += ' ' + _.capitalize(clientData.secondSurname);
+                }
+            }
+
+            return name;
+        }
+
+        /** @ngdoc method
+         * @name OrangeFeSARQ.Services:RatesParentSrv#isNACClient
+         * @methodOf ratesParent.Services:RatesParentSrv
+         * @description
+         * Método auxiliar para saber si el cliente es NAC
+         */
+        isNACClient() {
+            let srv = this;
+
+            return false;
         }
 
         /** @ngdoc method
