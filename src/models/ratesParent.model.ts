@@ -314,8 +314,9 @@ module ratesParent.Models {
                     }
                 }
             }
-
-            let info: RatePopupInfo = new RatePopupInfo('titulo', rateData.description);
+            
+            let descripcionCompleta = rateData.description + ((rateData.ospLargeDescription != null) ? ' <br/> ' + rateData.ospLargeDescription : "");
+            let info: RatePopupInfo = new RatePopupInfo('titulo', descripcionCompleta);
             this.pupupInfo.push(info);
 
             for (let i in rateData.productSpecCharacteristic) {
