@@ -499,6 +499,17 @@ module OrangeFeSARQ.Services {
                         ospTaxRateName: rate.taxRateName
                     }
                 }];
+
+                // Si es NAC, añadimos los precios promocionados de las líneas adicionales al pack, si existen
+                if (rate.groupName === 'Convergente_NAC') { 
+                    if (priceAlteration[0].price.dutyFreeAmount.value !== undefined && rate.nacPricePromotional !== undefined) {
+                        priceAlteration[0].price.dutyFreeAmount.value += rate.nacPricePromotional;
+                    }
+                    
+                    if (priceAlteration[0].price.taxIncludedAmount.value !== undefined && rate.nacPriceTaxIncludedPromotional !== undefined) {
+                        priceAlteration[0].price.taxIncludedAmount.value += rate.nacPriceTaxIncludedPromotional;
+                    }
+                }
             }
 
             rateCartItemElement = {
@@ -531,6 +542,17 @@ module OrangeFeSARQ.Services {
                     'isBundle': true
                 }
             };
+
+            // SI es NAC, calculamos el precio total estándar del pack
+            if (rate.groupName === 'Convergente_NAC') {
+                if (rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value !== undefined && rate.nacPrice !== undefined) {
+                    rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value += rate.nacPrice;
+                }
+
+                if (rateCartItemElement.itemPrice[0].price.taxIncludedAmount.value !== undefined && rate.nacPriceTaxIncluded !== undefined) {
+                    rateCartItemElement.itemPrice[0].price.taxIncludedAmount.value += rate.nacPriceTaxIncluded;
+                }
+            }
 
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
 
@@ -646,11 +668,11 @@ module OrangeFeSARQ.Services {
                         'price': {
                             'dutyFreeAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePrice ? rate.ratePrice : rate.taxFreePrice
+                                'value': 0
                             },
                             'taxIncludedAmount': {
                                 'unit': 'EUR',
-                                'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
+                                'value': 0
                             },
                             taxRate: rate.taxRate,
                             ospTaxRateName: rate.taxRateName
@@ -662,11 +684,11 @@ module OrangeFeSARQ.Services {
                             'price': {
                                 'dutyFreeAmount': {
                                     'unit': 'EUR',
-                                    'value': rate.ratePricePromotional
+                                    'value': 0
                                 },
                                 'taxIncludedAmount': {
                                     'unit': 'EUR',
-                                    'value': rate.ratePriceTaxIncludedPromotional
+                                    'value': 0
                                 },
                                 taxRate: rate.taxRate,
                                 ospTaxRateName: rate.taxRateName
@@ -804,6 +826,17 @@ module OrangeFeSARQ.Services {
                     'isBundle': true
                 }
             };
+
+            // SI es NAC, calculamos el precio total estándar del pack
+            if (rate.groupName === 'Convergente_NAC') {
+                if (rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value !== undefined && rate.nacPrice !== undefined) {
+                    rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value += rate.nacPrice;
+                }
+
+                if (rateCartItemElement.itemPrice[0].price.taxIncludedAmount.value !== undefined && rate.nacPriceTaxIncluded !== undefined) {
+                    rateCartItemElement.itemPrice[0].price.taxIncludedAmount.value += rate.nacPriceTaxIncluded;
+                }
+            }
 
             cartItemElement = {
                 'id': 1.1,
@@ -962,6 +995,16 @@ module OrangeFeSARQ.Services {
                         ospTaxRateName: rate.taxRateName
                     }
                 }];
+
+                if (rate.groupName === 'Convergente_NAC') { 
+                    if (priceAlteration[0].price.dutyFreeAmount.value !== undefined && rate.nacPricePromotional !== undefined) {
+                        priceAlteration[0].price.dutyFreeAmount.value += rate.nacPricePromotional;
+                    }
+                    
+                    if (priceAlteration[0].price.taxIncludedAmount.value !== undefined && rate.nacPriceTaxIncludedPromotional !== undefined) {
+                        priceAlteration[0].price.taxIncludedAmount.value += rate.nacPriceTaxIncludedPromotional;
+                    }
+                }
             }
 
             // TARIFA
@@ -1003,6 +1046,17 @@ module OrangeFeSARQ.Services {
                     'isBundle': true
                 }
             };
+
+            // SI es NAC, calculamos el precio total estándar del pack
+            if (rate.groupName === 'Convergente_NAC') {
+                if (rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value !== undefined && rate.nacPrice !== undefined) {
+                    rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value += rate.nacPrice;
+                }
+
+                if (rateCartItemElement.itemPrice[0].price.taxIncludedAmount.value !== undefined && rate.nacPriceTaxIncluded !== undefined) {
+                    rateCartItemElement.itemPrice[0].price.taxIncludedAmount.value += rate.nacPriceTaxIncluded;
+                }
+            }
 
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
             lastCartItemId = cartItemElementId;
