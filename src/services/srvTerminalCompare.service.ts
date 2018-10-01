@@ -336,7 +336,7 @@ module OrangeFeSARQ.Services {
         selectRateProperties(rate) {
             let vm = this;
             // Se crean las caracteristicas necesarias de la tarifa, para el session storage
-            
+
             rate.rateId = (vm.rateContainer.length + 1);
             rate.name = rate.rateSubName;
             rate.siebelId = rate.siebelId;
@@ -346,10 +346,11 @@ module OrangeFeSARQ.Services {
             // Se seleccionan las propiedades para session
 
             let rateForSession = _.pick(rate, ['rateId', 'otherSvaInfoList', 'siebelId',
-                'name', 'description', 'taxFreePrice', 'taxIncludedPrice', 'family', 'groupName',
+                'name', 'description', 'taxFreePrice', 'taxIncludedPrice', 'nacPrice', 'nacPriceTaxIncluded', 'family', 'groupName',
                 'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack', 'selectedSvaList',
                 'taxRate', 'taxRateName', 'applicationDuration',
-                'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'ospTecnology', 'type' , 'associatedLine', 'bucket', 'NACLines']);
+                'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'nacPriceTaxIncludedPromotional', 'nacPricePromotional',
+                'ospTecnology', 'type', 'associatedLine', 'bucket', 'NACLines']);
 
             return rateForSession;
         }
@@ -375,6 +376,47 @@ module OrangeFeSARQ.Services {
                 // Se asigna el array de SVA's seleccionados a la tarifa
                 currentRate.selectedSvaList = svaList;
             });
+        }
+
+        updateNAC(currentRate : any) {
+            let vm = this;
+
+            let rateContainer = vm.getRateContainer();
+            
+            rateContainer.forEach((rate) => {
+                // Reseteamos los precios y calculamos todo el pack
+                rate.nacPrice = 0;
+                rate.nacPriceTaxIncluded = 0;
+                rate.nacPricePromotional = 0;
+                rate.nacPriceTaxIncludedPromotional = 0;
+
+                // Si se pasa tarifa actual, resetear las líneas
+                if (currentRate.siebelId === rate.siebelId) {
+                    rate.NACLines = currentRate.NACLines;
+                }
+
+                if (currentRate.siebelId === rate.siebelId && rate.NACLines) {
+                    rate.NACLines.forEach((line) => {
+                        if (line.ratePrice !== undefined) {
+                            rate.nacPrice += line.ratePrice;
+                        }
+
+                        if (line.ratePriceTaxIncluded !== undefined) {
+                            rate.nacPriceTaxIncluded += line.ratePriceTaxIncluded;
+                        }
+
+                        if (line.ratePricePromotional !== undefined) {
+                            rate.nacPricePromotional += line.ratePricePromotional;
+                        }
+
+                        if (line.ratePriceTaxIncludedPromotional !== undefined) {
+                            rate.nacPriceTaxIncludedPromotional += line.ratePriceTaxIncludedPromotional;
+                        }
+                    });
+                }
+            });
+
+            vm.putRatesInSessionStorage();
         }
 
         /**

@@ -98,6 +98,12 @@ module ratesParent.Models {
         // Promocion
         public ratePriceTaxIncludedPromotional;
         public ratePricePromotional;
+
+        public nacPriceTaxIncluded: number;
+        public nacPrice: number;
+        public nacPriceTaxIncludedPromotional: number;
+        public nacPricePromotional: number;
+
         public descriptionPromotion;
         public applicationDuration;
         public recurringChargePeriodPromotion: string; // Tipo de promoción
@@ -112,6 +118,12 @@ module ratesParent.Models {
             this.siebelId = rateData.id;
             this.groupName = rateData.ospGroupName;
             this.typeService = rateData.ospTypeService;
+
+            // Inicializamos a 0 los precios auxiliares del pack NAC
+            this.nacPrice = 0;
+            this.nacPriceTaxIncluded = 0;
+            this.nacPricePromotional = 0;
+            this.nacPriceTaxIncludedPromotional = 0;
 
             // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
             if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
