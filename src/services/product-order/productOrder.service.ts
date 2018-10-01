@@ -161,6 +161,38 @@ module OrangeFeSARQ.Services {
         });
     }
 
+    fixedOrderCheckConv(brand: string, publicKey: string, lineCategory: string, orderType: string, provisionFlux: number, segment: string, componentName: string) {
+      let vm = this;
+      let _search: Object = {
+        queryParams: {
+          publicKey: publicKey,
+          lineCategory: lineCategory,
+          orderType: orderType,
+          provisionFlux: provisionFlux,
+          segment: segment
+        }, 
+        urlParams: []
+      };
+
+      return vm.httpCacheGett(vm.genericConstant.productOrder + '/' +  vm.genericConstant.brand + '/productOrder', _search, componentName)
+        .then((response) => {
+          if (response && response.data){
+            return response.data;
+          } else {
+            return response;
+          }
+        })
+        .catch(function (error) {
+          if (error && error.data){
+            return error.data;
+           } else {
+            return error;
+           }
+        });
+
+
+    }
+
     setPromotions(body: Models.ProductOrder, componentName: string) {
       let vm = this;
 
