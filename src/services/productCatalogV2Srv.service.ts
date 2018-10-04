@@ -191,6 +191,58 @@ module OrangeFeSARQ.Services {
                     return error;
                 });
         }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ProductCatalogV2Srv#getProductCatalogOffering
+         * @methodOf OrangeFeSARQ.Services:ProductCatalogV2Srv
+         * @param {Array} queryParams Objeto con todos los campos para la consulta
+         * @param {string} componentName nombre del componente
+         * @description
+         * Obtiene el catalog offering de los datos proporcionados
+         */
+        getProductCatalogOffering(queryParams: OrangeFeSARQ.Models.ProductOfferingV2QueryParams, compName: string): ng.IPromise<any> {
+            let vm = this;
+
+            let _search = {
+                queryParams: queryParams,
+                urlParams: [vm.genericConstant.brand, 'productOfferingv2View/OSP']
+            };
+
+            return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, compName)
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((error) => {
+                    return error;
+                });
+        }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:ProductCatalogV2Srv#getProductCatalogSpecification
+         * @methodOf OrangeFeSARQ.Services:ProductCatalogV2Srv
+         * @param {Array} queryParams Objeto con todos los campos para la consulta
+         * @param {string} componentName nombre del componente
+         * @description
+         * Obtiene el catalog specification de los datos proporcionados
+         */
+        getProductCatalogSpecification(queryParams: OrangeFeSARQ.Models.ProductSpecificationV2QueryParams, compName: string): ng.IPromise<any> {
+            let vm = this;
+
+            let _search = {
+                queryParams: queryParams,
+                urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
+            };
+
+            return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, compName)
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((error) => {
+                    return error;
+                });
+        }
     }
 
     angular.module('productCatalogV2Srv', [])
