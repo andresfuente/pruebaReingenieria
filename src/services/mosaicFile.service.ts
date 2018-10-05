@@ -23,6 +23,8 @@ module OrangeFeSARQ.Services {
 
         public isTLV: boolean;
 
+        private billingAddressStore: OrangeFeSARQ.Services.BillingAddressStoreSrv;
+
         /**
          * @name OrangeFeSARQ.Services:MosaicFileSrv
          * @description
@@ -49,7 +51,7 @@ module OrangeFeSARQ.Services {
             srv.httpService = $injector.get('$http');
             srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
             srv.creditLimitSrv = $injector.get('creditLimitSrv');
-
+            srv.billingAddressStore = $injector.get('billingAddressStoreSrv');
         }
 
         /**
@@ -104,10 +106,17 @@ module OrangeFeSARQ.Services {
             let params;
             let deferred = srv.$q.defer();
             let priceType = '';
+
+            let clientGeolocation = 'Madrid'
+            const currentBillingAddress = srv.billingAddressStore.getCurrentBillingAddress()
+            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+                clientGeolocation = currentBillingAddress.stateOrProvince
+            }
+
             // Cabeceras
             let headers = {
                 'Geolocation-local': srv.storeProvince.toUpperCase(),
-                'Geolocation-client': stateOrProvinceBinding ? stateOrProvinceBinding.toUpperCase() : srv.storeProvince.toUpperCase()
+                'Geolocation-client': clientGeolocation.toUpperCase()
             };
             // ELIMINAR cuando se eliminen los select.
             // Establece el codigo de la tarifa segun lo seleccionado
@@ -384,8 +393,15 @@ module OrangeFeSARQ.Services {
 
             //Cabeceras FdC
             let _headers = new HashMap<string, string>();
+
+            let clientGeolocation = 'Madrid'
+            const currentBillingAddress = srv.billingAddressStore.getCurrentBillingAddress()
+            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+                clientGeolocation = currentBillingAddress.stateOrProvince
+            }
+
             _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            _headers.set('Geolocation-client', stateOrProvinceBinding.toUpperCase());
+            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
 
             params = {
                 channel: channel,

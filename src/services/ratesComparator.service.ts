@@ -18,6 +18,9 @@ module OrangeFeSARQ.Services {
         public customerProvince;
         public storeProvince;
         private typeMulticomparatorRenove: boolean = true;
+
+        private billingAddressStore: OrangeFeSARQ.Services.BillingAddressStoreSrv;
+
         /**
          * @ngdoc method
          * @name ratesComparator.Services:RatesComparatorSrv#constructor
@@ -42,6 +45,7 @@ module OrangeFeSARQ.Services {
         setInjections($injector) {
             let srv = this;
             srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
+            srv.billingAddressStore = $injector.get('billingAddressStoreSrv');
         }
         getTerminalDataMulticomparator(
             rate: ratesComparator.Models.Rate,
@@ -105,6 +109,12 @@ module OrangeFeSARQ.Services {
             vm.setCustomerData();
             vm.setStoreProvince();
 
+            let clientGeolocation = 'Madrid'
+            const currentBillingAddress = vm.billingAddressStore.getCurrentBillingAddress()
+            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+                clientGeolocation = currentBillingAddress.stateOrProvince
+            }
+
             // CABECERA PANGEA
             // let _headers = {
             //     'Geolocation-local': vm.storeProvince.toUpperCase(),
@@ -113,7 +123,7 @@ module OrangeFeSARQ.Services {
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
 
             let params = {
                 channel: channel,
@@ -374,9 +384,16 @@ module OrangeFeSARQ.Services {
             // CABECERA HASHMAP
             vm.setCustomerData();
             vm.setStoreProvince();
+
+            let clientGeolocation = 'Madrid'
+            const currentBillingAddress = vm.billingAddressStore.getCurrentBillingAddress()
+            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+                clientGeolocation = currentBillingAddress.stateOrProvince
+            }
+
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set('Geolocation-client', vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -455,8 +472,15 @@ module OrangeFeSARQ.Services {
             let _headers = new HashMap<string, string>();
             srv.setCustomerData();
             srv.setStoreProvince();
+
+            let clientGeolocation = 'Madrid'
+            const currentBillingAddress = srv.billingAddressStore.getCurrentBillingAddress()
+            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+                clientGeolocation = currentBillingAddress.stateOrProvince
+            }
+
             _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set('Geolocation-client', srv.customerProvince ? srv.customerProvince.toUpperCase() : srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
