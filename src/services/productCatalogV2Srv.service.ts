@@ -201,7 +201,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Obtiene el catalog offering de los datos proporcionados
          */
-        getProductCatalogOffering(queryParams: OrangeFeSARQ.Models.ProductOfferingV2QueryParams, compName: string): ng.IPromise<any> {
+        getProductCatalogOffering(queryParams: OrangeFeSARQ.Models.ProductOfferingV2QueryParams, compName: string, refresh: boolean = false): ng.IPromise<any> {
             let vm = this;
 
             let _search = {
@@ -209,7 +209,7 @@ module OrangeFeSARQ.Services {
                 urlParams: [vm.genericConstant.brand, 'productOfferingv2View/OSP']
             };
 
-            return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, compName)
+            return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, compName, refresh)
                 .then((response) => {
                     return response.data;
                 })
@@ -227,7 +227,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Obtiene el catalog specification de los datos proporcionados
          */
-        getProductCatalogSpecification(queryParams: OrangeFeSARQ.Models.ProductSpecificationV2QueryParams, compName: string): ng.IPromise<any> {
+        getProductCatalogSpecification(queryParams: OrangeFeSARQ.Models.ProductSpecificationV2QueryParams, compName: string, refresh: boolean = true): ng.IPromise<any> {
             let vm = this;
 
             let _search = {
@@ -235,7 +235,7 @@ module OrangeFeSARQ.Services {
                 urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
             };
 
-            return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, compName)
+            return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, compName, refresh)
                 .then((response) => {
                     return response.data;
                 })
