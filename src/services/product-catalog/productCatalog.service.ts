@@ -89,13 +89,19 @@ module OrangeFeSARQ.Services {
         }
 
 
-        getProductBonusSpecification(tarifa: string): any {
+        getProductBonusSpecification(tarifa: string, paqueteDatos: string): any {
             let vm = this;
-            let _search: Object = {
+            let _search: any = {
                 queryParams: {
                     tarifa: tarifa
                 },
                 urlParams: [vm.genericConstant.brand, vm.genericConstant.site, 'productBonusSpecification', vm.OSP]
+            };
+            if(paqueteDatos) {
+                _search.queryParams={
+                    tarifa: tarifa,
+                    paqueteDatos : paqueteDatos
+                }
             };
             return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
                 .then(function (response) {
@@ -105,30 +111,30 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
-		
-		getCodeSapProduct(codeSap : string ,productType : string , componentName : string = "vapList" ) : any {
-			let vm = this;
-			let terminalSap = "terminalSap/";
-			let _search: Object = {
-			queryParams: {
-			codeSap : codeSap,
-			productType : productType
-			},
-			urlParams: [vm.genericConstant.brand, terminalSap ]
-			};
-			
-			return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
-			.then(function (response) {
-			if(response !== null) {
-			return response.data;
-			} else {
-			throw response.error;
-			}
-			})
-			.catch(function (error) {
-			throw error.data;
-			}); 
-		}
+
+        getCodeSapProduct(codeSap: string, productType: string, componentName: string = "vapList"): any {
+            let vm = this;
+            let terminalSap = "terminalSap/";
+            let _search: Object = {
+                queryParams: {
+                    codeSap: codeSap,
+                    productType: productType
+                },
+                urlParams: [vm.genericConstant.brand, terminalSap]
+            };
+
+            return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
+                .then(function (response) {
+                    if (response !== null) {
+                        return response.data;
+                    } else {
+                        throw response.error;
+                    }
+                })
+                .catch(function (error) {
+                    throw error.data;
+                });
+        }
 
         getRates(msisdn: string, contractType: string, tmCodeOrigen: string, componentName: string, segment?: string): any {
             let vm = this;
