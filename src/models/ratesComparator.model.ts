@@ -24,6 +24,14 @@ module ratesComparator.Models {
         public applicationDuration : number;
         public ospTecnology: string;
 
+        public groupName: string;
+
+        // Atributos para NAC
+        public nacPrice = 0;
+        public nacPriceTaxIncluded: number;
+        public nacPricePromotional: number;
+        public nacPriceTaxIncludedPromotional: number;
+
         /**
          * @ngdoc method
          * @name ratesComparator.Models:Rate#constructor
@@ -53,6 +61,13 @@ module ratesComparator.Models {
             this.terminals = [];
             this.ospTecnology = rate.ospTecnology;
             this.applicationDuration = rate.applicationDuration;
+
+            this.groupName = rate.groupName;
+
+            this.nacPrice = rate.nacPrice;
+            this.nacPriceTaxIncluded = rate.nacPriceTaxIncluded;
+            this.nacPricePromotional = rate.nacPricePromotional;
+            this.nacPriceTaxIncludedPromotional = rate.nacPriceTaxIncludedPromotional;
         }
     }
 
