@@ -247,7 +247,13 @@ module OrangeFeSARQ.Services {
         isNACClient() {
             let srv = this;
 
-            return false;
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+            if (clientData && clientData.isNACClient) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         /** @ngdoc method
