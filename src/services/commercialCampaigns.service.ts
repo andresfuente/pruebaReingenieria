@@ -12,6 +12,7 @@ module OrangeFeSARQ.Services {
 
         public commercialCampaignsAPIUrl: string;
         private storeProvince: string;
+        private dataSaved: any; 
 
         constructor(public $injector) {
             super($injector);
@@ -99,12 +100,19 @@ module OrangeFeSARQ.Services {
             _headers.set('locationName', _.deburr(vm.storeProvince.toUpperCase()));
             return vm.httpCacheGeth(vm.commercialCampaignsAPIUrl, _search, _headers, comp, true)
                 .then((response) => {
+                        vm.dataSaved = response.data
                         return response.data;
                     }, (err) => {
-                       throw err;
+                        vm.dataSaved = null; 
+                        throw err;
                     }
                 );
         }
+        getComercialCampaingsOnStorage(){
+            let vm = this; 
+            return vm.dataSaved; 
+        }
+
     }
 
     // Registration
