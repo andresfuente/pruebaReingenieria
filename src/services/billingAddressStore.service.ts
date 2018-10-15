@@ -2,7 +2,7 @@ module OrangeFeSARQ.Services {
 
     export class BillingAddressStoreSrv {
         private _store;
-        private _principalMSISDN;
+        private _principalMSISDN: string;
         private _currentPhoneLine: string;
 
         private LAND_PHONE_TYPE = 'Contrato Fijo';
@@ -11,9 +11,9 @@ module OrangeFeSARQ.Services {
         private LAND_PHONE_NAME = 'Número fijo Asociado';
         private MOBILE_PHONE_NAME = 'MSISDN';
 
-        private currentBillingAddress
-
         createStore(customerView: any) {
+            this.cleanStore();
+
             if (customerView) {
                 this._store = customerView.product
                 // Buscamos los fijos y móbiles pospago
@@ -39,10 +39,13 @@ module OrangeFeSARQ.Services {
                     }
                     return store;
                 }, {});
-            } else {
-                // Si no encontramos un customerView, no tenemos store.
-                this._store = {};
             }
+        }
+
+        cleanStore() {
+            this._store = {};
+            this._principalMSISDN = '';
+            this._currentPhoneLine = '';
         }
 
         loadFromSessionStorage() {
