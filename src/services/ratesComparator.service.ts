@@ -337,7 +337,7 @@ module OrangeFeSARQ.Services {
          */
         getSpecificationDataComparator(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
-            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string): ng.IPromise<{} | void> {
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string, bucketId?: string): ng.IPromise<{} | void> {
             let vm = this;
             let technologyString = '';
             let ratesString = '';
@@ -359,8 +359,13 @@ module OrangeFeSARQ.Services {
                 idParqueList: releatedRatesClient, // Tarifas del cliente
                 pack: pack, // Pack de las tarifas
                 type: type, // [movil/ movilfijo]
-                defaultTechnology: defaultTechnology
+                defaultTechnology: defaultTechnology,
+                bucketId: bucketId
             };
+
+            if (!params.bucketId) {
+                delete params.bucketId;
+            }
 
             if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC') || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
@@ -423,7 +428,7 @@ module OrangeFeSARQ.Services {
          */
         getOfferingDataComparator(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, specificationData, technologyList,
-            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string) {
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string, bucketId?: string) {
             let srv = this;
             let technologyString = '';
             let ratesString = '';
@@ -445,8 +450,13 @@ module OrangeFeSARQ.Services {
                 idParqueList: releatedRatesClient, // Tarifas del cliente
                 pack: pack,
                 type: type,
-                defaultTechnology: defaultTechnology
+                defaultTechnology: defaultTechnology,
+                bucketId: bucketId
             };
+
+            if (!params.bucketId) {
+                delete params.bucketId;
+            }
 
             if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC') || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;

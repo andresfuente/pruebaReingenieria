@@ -1820,6 +1820,14 @@ module OrangeFeSARQ.Services {
 
         }
 
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#createBucketCartItem
+         * @param {object} bucket elemento con la información del bono
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Crea un cartItem de tipo bucket
+         */
         createBucketCartItem(bucket) {
             let vm = this;
 
@@ -1848,6 +1856,37 @@ module OrangeFeSARQ.Services {
             };
 
             return bucketCartItem;
+        }
+
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#getBucketInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @return {string} id del bucket seleccionado
+         * @description
+         * Devuelve el id del bucket que hay en carrito (en principio, solo puede haber uno)
+         */
+        getBucketInShoppingCart() {
+            let vm = this;
+            
+            let bucket: string;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+
+            if (shoppingCart && shoppingCart.cartItem) {
+                shoppingCart.cartItem.forEach((option: any) => {
+                    if (option.cartItem) {
+                        option.cartItem.forEach((item) => {
+                            if (item.product && item.product.productRelationship && item.product.productRelationship[0]
+                            && item.product.productRelationship[0].type === 'bucket') {
+                                bucket = item.id;
+                            }
+                        });
+                    }    
+                });
+            }
+
+            return bucket;
         }
     }
 }
