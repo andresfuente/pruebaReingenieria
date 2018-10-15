@@ -443,8 +443,12 @@ module OrangeFeSARQ.Services {
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
-                if ((rate.groupName === 'Convergente' || rate.groupName === 'Convergente_NAC') && rate.family === 'love') {
+                if (rate.groupName === 'Convergente' && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
+                } 
+                
+                if (rate.groupName === 'Convergente_NAC') {
+                    commercialData[commercialActIndex].NACRateInShoppingCart = true;
                 }
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
@@ -966,9 +970,14 @@ module OrangeFeSARQ.Services {
             // Se obtiene el ID del acto comercial que se esta creando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
-                if ((rate.groupName === 'Convergente' || rate.groupName === 'Convergente_NAC') && rate.family === 'love') {
+                if (rate.groupName === 'Convergente' && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 }
+
+                if (rate.groupName === 'Convergente_NAC') {
+                    commercialData[commercialActIndex].NACRateInShoppingCart = true;
+                }
+
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
             // Se obtiene el id del ultimo elemento del cart item del shopping cart
@@ -1763,6 +1772,32 @@ module OrangeFeSARQ.Services {
                     }
                 });
             }
+            return response;
+        }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#NACRateInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @return {boolean} true si se ha llegado al carrito con una tarifa NAC
+         * @description
+         * Devuelve si se ha llegado al carrito con una tarifa NAC
+         */
+        NACRateInShoppingCart(): boolean {
+            let vm = this;
+
+            let response : boolean = false;
+
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+
+            if (commercialData && commercialData.length) {
+                commercialData.forEach((commData) => {
+                    if (commData.NACRateInShoppingCart) {
+                        response = true;
+                    }
+                });
+            }
+
             return response;
         }
 

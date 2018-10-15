@@ -13,6 +13,13 @@ module ratesComparatorMRenove.Models {
         isModificable: boolean;
         terminals: Array<ratesComparator.Models.Terminal>;
         line: string;
+
+        groupName: string;
+
+        nacPrice: number;
+        nacPriceTaxIncluded: number;
+        nacPricePromotional: number;
+        nacPriceTaxIncludedPromotional: number;
         // ospTecnology: string para flag TV
 
         /**
