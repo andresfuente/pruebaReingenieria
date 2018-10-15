@@ -12,7 +12,8 @@ module OrangeFeSARQ.Services {
 
         public commercialCampaignsAPIUrl: string;
         private storeProvince: string;
-        private dataSaved: any; 
+        private cacheOfRequests : HashMap<string, string>; 
+        private linesUsageSrv;
 
         constructor(public $injector) {
             super($injector);
@@ -20,11 +21,17 @@ module OrangeFeSARQ.Services {
 
             vm.setInjections($injector);
             vm.setStoreProvince();
+            vm.buildingCache();             
+        }
+
+        private buildingCache() {
+            let vm = this;
+            vm.cacheOfRequests = new HashMap<string, string>();
         }
 
         setInjections($injector) {
             let vm = this;
-
+            vm.linesUsageSrv = $injector.get('linesUsageSrv');
             vm.commercialCampaignsAPIUrl = vm.genericConstant.commercialCampaigns;
         }
         /**
@@ -100,17 +107,37 @@ module OrangeFeSARQ.Services {
             _headers.set('locationName', _.deburr(vm.storeProvince.toUpperCase()));
             return vm.httpCacheGeth(vm.commercialCampaignsAPIUrl, _search, _headers, comp, true)
                 .then((response) => {
-                        vm.dataSaved = response.data
                         return response.data;
                     }, (err) => {
-                        vm.dataSaved = null; 
                         throw err;
                     }
                 );
         }
-        getComercialCampaingsOnStorage(){
-            let vm = this; 
-            return vm.dataSaved; 
+        /**
+         * spa: ficha de clientet
+         * guarda cualificacion de campanas 
+         * 
+         */
+        blokBestRenove(){
+            let vm = this;    
+            return vm.cacheOfRequests.count() >= 0 && vm.getCache() ===  undefined; 
+        }
+
+        getCache(){
+            let vm = this;    
+            return  vm.cacheOfRequests.get(vm.getStringCache()); 
+        }
+
+        setCache(response : any){
+            let vm = this;
+            vm.cacheOfRequests.set(vm.getStringCache(), response); 
+
+        }
+
+        private getStringCache(){
+            let vm = this;
+            let credentialInformation = JSON.parse(sessionStorage.getItem('credentialInformation'));
+            return credentialInformation.rol + '-' + vm.linesUsageSrv.subperfil; 
         }
 
     }
