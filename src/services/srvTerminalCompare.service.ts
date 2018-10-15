@@ -524,13 +524,29 @@ module OrangeFeSARQ.Services {
          * @name OFC.Services:SrvTerminalCompare#isConvergentRateContainer
          * @methodOf OFC.Services:SrvTerminalCompare
          * @description
-         * Comprueba si existe una tarifa convergente dentro del contenedor de 
+         * Comprueba si existe una tarifa convergente (de cualquier tipo) dentro del contenedor de 
          * tarifas 
          */
         isConvergentRateContainer() {
             let vm = this;
             return _.some(vm.rateContainer, function (currentRate) {
                 return ((currentRate.groupName === 'Convergente' || currentRate.groupName === 'Convergente_NAC') && currentRate.typeService === 'movil_fijo');
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name OFC.Services:SrvTerminalCompare#isConvergentRateContainer
+         * @methodOf OFC.Services:SrvTerminalCompare
+         * @description
+         * Comprueba si existe una tarifa NAC dentro del contenedor de 
+         * tarifas 
+         */
+        isNACRateContainer() {
+            let vm = this;
+
+            return _.some(vm.rateContainer, function (currentRate) {
+                return (currentRate.groupName === 'Convergente_NAC' && currentRate.typeService === 'movil_fijo');
             });
         }
 
