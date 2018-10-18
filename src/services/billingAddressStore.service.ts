@@ -12,8 +12,6 @@ module OrangeFeSARQ.Services {
         private MOBILE_PHONE_NAME = 'MSISDN';
 
         createStore(customerView: any) {
-            this.cleanStore();
-
             if (customerView) {
                 this._store = customerView.product
                 // Buscamos los fijos y móbiles pospago
@@ -52,10 +50,16 @@ module OrangeFeSARQ.Services {
             const principalMsisdn: any = JSON.parse(localStorage.getItem('principalMsisdn'));
             const customerView: any = JSON.parse(sessionStorage.getItem('cv'));
             
+            this.createStore(customerView);
+
             if(principalMsisdn && principalMsisdn.msisdn) {
                 this._principalMSISDN = principalMsisdn.msisdn;
+            } else {
+                const phoneLines = Object.keys(this._store)
+                if(phoneLines.length > 0) {
+                    this._principalMSISDN = phoneLines[0];
+                }
             }
-            this.createStore(customerView);
         }
 
         getCurrentPhoneLine(): string {
