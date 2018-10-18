@@ -93,10 +93,10 @@ module OrangeFeSARQ.Services {
                 .then(
                     (response) => {
                         if (response.data && response.data.customer && componentName !== 'shopping_cart_resume') {
-                            if (response.data.customer.organization && response.data.customer.organization.id) {
-                                localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
-                            } else if (response.data.customer.individual && response.data.customer.individual.id) {
+                            if (response.data.customer.individual && response.data.customer.individual.id) {
                                 localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
+                            } else {
+                                localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
                             }
                             vm.getMdgUser(param, clientId); // Cuando se realiza la llamada al Plan amigo no es necesario esta llamada
                         }
@@ -138,11 +138,11 @@ module OrangeFeSARQ.Services {
                 .then(
                     (response) => {
                         if (response.data && response.data.customer) {
-                            if (response.data.customer.organization && response.data.customer.organization.id) {
-                                localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
-                            } else if (response.data.customer.individual && response.data.customer.individual.id) {
+                            if (response.data.customer.individual && response.data.customer.individual.id) {
                                 localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
-                            } 
+                            } else {
+                                localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
+                            }
                             vm.getMdgUser(param, clientId); // Cuando se realiza la llamada al Plan amigo no es necesario esta llamada
                         }
                         // - response.data.mdg = vm.mdgData;
@@ -180,10 +180,10 @@ module OrangeFeSARQ.Services {
                 .then(
                 (response) => {
                     if (response.data && response.data.customer) {
-                        if (response.data.customer.organization && response.data.customer.organization.id) {
-                            localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
-                        } else if (response.data.customer.individual && response.data.customer.individual.id) {
+                        if (response.data.customer.individual && response.data.customer.individual.id) {
                             localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
+                        } else {
+                            localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
                         }
                     }
 
@@ -233,10 +233,10 @@ module OrangeFeSARQ.Services {
                 .then(
                     (response) => {
                         if (response.data && response.data.customer) {
-                            if (response.data.customer.organization && response.data.customer.organization.id){
-                                localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
-                            } else if (response.data.customer.individual && response.data.customer.individual.id) {
+                            if (response.data.customer.individual && response.data.customer.individual.id) {
                                 localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
+                            } else {
+                                localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
                             }
                         }
 
