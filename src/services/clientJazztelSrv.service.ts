@@ -24,7 +24,7 @@ module OrangeFeSARQ.Services {
         vm.productInventorySrv = $injector.get('productInventorySrv');
       }
 
-      clientInfo(data) {
+      clientInfo(data, number) {
         let vm = this;
 
         // Numero de lineas movil
@@ -47,7 +47,7 @@ module OrangeFeSARQ.Services {
                     clientData.jazztelData = {
                         type: 1
                     };
-                    vm.saveJazztelUserData(clientData, data);
+                    vm.saveJazztelUserData(clientData, data, number);
                     sessionStorage.setItem('clientData', JSON.stringify(clientData));
                 } else if (clientData && clientData.docNumber && data.customer.individual.id !== clientData.docNumber) {
                     clientData.jazztelData = {
@@ -239,7 +239,7 @@ module OrangeFeSARQ.Services {
                         vm.clientData.jazztelData = {
                             type: 1
                         };
-                        vm.saveJazztelUserData(vm.clientData, data);
+                        vm.saveJazztelUserData(vm.clientData, data, number);
                         vm.saveData();
                     } else {
                         data.customer = null;
@@ -250,17 +250,21 @@ module OrangeFeSARQ.Services {
         }
     }
 
-    saveJazztelUserData(clientData, data){
+    saveJazztelUserData(clientData, data, number){
         let vm = this;
 
         vm.clientData = clientData;
+
         if (vm.clientData && !vm.clientData.jazztelData) {
             vm.clientData.jazztelData = {};
         }
+        
         let products = data.customer.product;
         let telephoneNumber = vm.obtainTelephoneNumber(products);
 
+        vm.clientData.jazztelData.numberJazztel = number;
         vm.clientData.jazztelData.customer = data.customer;
+        
         sessionStorage.setItem("clientData", JSON.stringify(vm.clientData));
         
     }
