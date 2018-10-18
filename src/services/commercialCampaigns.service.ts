@@ -12,6 +12,8 @@ module OrangeFeSARQ.Services {
 
         public commercialCampaignsAPIUrl: string;
         private storeProvince: string;
+        private cacheOfRequests : HashMap<string, string>; 
+        private linesUsageSrv;
 
         constructor(public $injector) {
             super($injector);
@@ -19,11 +21,17 @@ module OrangeFeSARQ.Services {
 
             vm.setInjections($injector);
             vm.setStoreProvince();
+            vm.buildingCache();             
+        }
+
+        private buildingCache() {
+            let vm = this;
+            vm.cacheOfRequests = new HashMap<string, string>();
         }
 
         setInjections($injector) {
             let vm = this;
-
+            vm.linesUsageSrv = $injector.get('linesUsageSrv');
             vm.commercialCampaignsAPIUrl = vm.genericConstant.commercialCampaigns;
         }
         /**
@@ -101,10 +109,37 @@ module OrangeFeSARQ.Services {
                 .then((response) => {
                         return response.data;
                     }, (err) => {
-                       throw err;
+                        throw err;
                     }
                 );
         }
+        /**
+         * spa: ficha de clientet
+         * guarda cualificacion de campanas 
+         * 
+         */
+        blokBestRenove(){
+            let vm = this;    
+            return vm.cacheOfRequests.count() >= 0 && vm.getCache() ===  undefined; 
+        }
+
+        getCache(){
+            let vm = this;    
+            return  vm.cacheOfRequests.get(vm.getStringCache()); 
+        }
+
+        setCache(response : any){
+            let vm = this;
+            vm.cacheOfRequests.set(vm.getStringCache(), response); 
+
+        }
+
+        private getStringCache(){
+            let vm = this;
+            let credentialInformation = JSON.parse(sessionStorage.getItem('credentialInformation'));
+            return credentialInformation.rol + '-' + vm.linesUsageSrv.subperfil; 
+        }
+
     }
 
     // Registration

@@ -750,6 +750,47 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
+
+        /**
+         * @ngdoc method
+         * @description
+         * Comprueba si aplica el SFID de NAC
+         */
+        isNACSFID() {
+            let srv = this;
+
+            let list: Array<Object>;
+            let validAll: boolean = false;
+            let validSFID: boolean = false;
+
+            let loginData = JSON.parse(sessionStorage.getItem('loginData'));
+
+            if (OrangeFeSARQ.Controllers.ParentController.shared
+                && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
+                && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule) {
+                OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule.forEach(element => {
+                    if (element.compId === 'header_block_comp' && element.listOption) {
+                        element.listOption.forEach((option) => {
+                            if (option.name === 'defaultNac.options' && option.listOptionsLiteral) {
+                                if (_.size(option.listOptionsLiteral) !== 0) {
+                                    list = option.listOptionsLiteral
+                                } else {
+                                    validAll = true;
+                                }
+                            }
+                        })
+                    }
+                });
+            }
+
+            if (loginData && loginData.sfid) {
+                if (validAll || (list && list.length > 0 && _.find(list, {'value': loginData.sfid}))) {
+                    validSFID = true;
+                }
+            }
+
+            return validSFID;
+        }
     }
     angular.module('RatesParentSrv', [])
         .service('RatesParentSrv', OrangeFeSARQ.Services.RatesParentSrv);
