@@ -11,6 +11,10 @@ module OrangeFeSARQ.Services {
         private LAND_PHONE_NAME = 'Número fijo Asociado';
         private MOBILE_PHONE_NAME = 'MSISDN';
 
+        constructor() {
+            this.cleanStore();
+        }
+
         createStore(customerView: any) {
             if (customerView) {
                 this._store = customerView.product
