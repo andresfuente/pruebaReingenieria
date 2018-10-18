@@ -74,6 +74,7 @@ module ratesParent.Models {
         public selectedSvaList: Array<ratesParent.Models.RateSVA> = [];
         public newRateConditions: boolean = false;
         public associatedLine: Array<Object>;
+        public defaultLines: Array<Object>;
 
         // Id Tech
 
@@ -170,6 +171,14 @@ module ratesParent.Models {
 
             if (associatedLine !== undefined && associatedLine.length !== 0) {
                 this.associatedLine = associatedLine;
+            }
+
+            // Buscamos líneas por defecto para packs
+            let defaultLines = [];
+            defaultLines = _.filter(rateData.productSpecificationRelationship, {type: 'defaultLine'});
+
+            if (defaultLines && defaultLines.length > 0) {
+                this.defaultLines = defaultLines;
             }
 
             for (let i in priceData) {
