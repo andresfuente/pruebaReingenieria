@@ -161,11 +161,11 @@ module OrangeFeSARQ.Services {
         });
     }
 
-    fixedOrderCheckConv(brand: string, publicKey: string, lineCategory: string, orderType: string, provisionFlux: number, segment: string, componentName: string) {
+    fixedOrderCheckConv(brand: string, lineCategory: string, orderType: string, provisionFlux: number, segment: string, componentName: string) {
       let vm = this;
       let _search: Object = {
         queryParams: {
-          publicKey: publicKey,
+          publicKey: 'publicKey',
           lineCategory: lineCategory,
           orderType: orderType,
           provisionFlux: provisionFlux,
