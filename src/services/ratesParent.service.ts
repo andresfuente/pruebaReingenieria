@@ -200,11 +200,15 @@ module OrangeFeSARQ.Services {
                     rates.loadRates(specificationData, response.data);
                     
                     // Si es tarifa NAC y el cliente ya es NAC o lleva una en la prescripcion mostrar el nombre personalizado
+                    /*
                     if (srv.isNACClient()) {
                         _.forEach(rates.rates, (rate) => {
-                            rate.rateSubName = srv.getNameNAC() ? srv.getNameNAC() : rate.rateSubName;
+                            if (rate.groupName === 'Convergente_NAC') {
+                                rate.rateSubName = srv.getNameNAC() ? srv.getNameNAC() : rate.rateSubName;
+                            }
                         })
                     }
+                    */
 
                     return rates;
                 })
