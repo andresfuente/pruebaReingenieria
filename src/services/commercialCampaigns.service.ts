@@ -137,7 +137,7 @@ module OrangeFeSARQ.Services {
         private getStringCache(){
             let vm = this;
             let credentialInformation = JSON.parse(sessionStorage.getItem('credentialInformation'));
-            return credentialInformation.rol + '-' + vm.linesUsageSrv.subperfil; 
+            return credentialInformation.rol + '-' + vm.linesUsageSrv.subperfil +'-' + credentialInformation.document; 
         }
 
     }
