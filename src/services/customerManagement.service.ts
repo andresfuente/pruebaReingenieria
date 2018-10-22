@@ -207,16 +207,16 @@ module OrangeFeSARQ.Services {
             };
 
             return vm.httpCacheGett(vm.genericConstant.customerManagement, _search, componentName)
-            .then(
-                function (response) {
-                    return response.data;
-                }
-            )
-            .catch(
-                function (error) {
-                    throw error;
-                }
-            );
+                .then(
+                    function (response) {
+                        return response.data;
+                    }
+                )
+                .catch(
+                    function (error) {
+                        throw error;
+                    }
+                );
         }
 
         /**
@@ -239,36 +239,50 @@ module OrangeFeSARQ.Services {
             };
 
             return vm.httpPostFull(vm.genericConstant.customerManagement, _search, componentName)
-            .then(
-                function (response) {
-                    return response.data;
-                }
-            )
-            .catch(
-                function (error) {
-                    throw error;
-                }
-            );
-            
+                .then(
+                    function (response) {
+                        return response.data;
+                    }
+                )
+                .catch(
+                    function (error) {
+                        throw error;
+                    }
+                );
+
         }
-        clientSegment (componentName: string, publicKey?, publicId?): any {
+        clientSegment(componentName: string, publicKey?, publicId?): any {
             let vm = this;
-            let _search: Object = {
-                queryParams: {
-                    'brand': vm.genericConstant.brand,
-                    'publicKey': publicKey,
-                    'publicId': publicId,
-                },
-                urlParams: ['customer']
-            };
-            return vm.httpCacheGett(vm.genericConstant.customerManagement,_search,componentName)
+            let _search;
+            if (publicKey) {
+                _search = {
+                    queryParams: {
+                        'brand': vm.genericConstant.brand,
+                        'publicKey': publicKey,
+                    },
+                    urlParams: ['customer']
+                };
+            } else {
+                if (publicId) {
+                    _search = {
+                        queryParams: {
+                            'brand': vm.genericConstant.brand,
+                            'publicId': publicId,
+                        },
+                        urlParams: ['customer']
+                    };
+
+                }
+            }
+
+            return vm.httpCacheGett(vm.genericConstant.customerManagement, _search, componentName)
                 .then(function (response) {
                     return response.data;
                 })
                 .catch(function (error) {
                     throw error;
                 });
-            
+
 
         }
     }
