@@ -249,6 +249,27 @@ module OrangeFeSARQ.Services {
                     throw error;
                 }
             );
+            
+        }
+        clientSegment (componentName: string, publicKey?, publicId?): any {
+            let vm = this;
+            let _search: Object = {
+                queryParams: {
+                    'brand': vm.genericConstant.brand,
+                    'publicKey': publicKey,
+                    'publicId': publicId,
+                },
+                urlParams: ['customer']
+            };
+            return vm.httpCacheGett(vm.genericConstant.customerManagement,_search,componentName)
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (error) {
+                    throw error;
+                });
+            
+
         }
     }
 }
