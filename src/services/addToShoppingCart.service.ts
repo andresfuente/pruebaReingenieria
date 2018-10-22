@@ -1894,7 +1894,7 @@ module OrangeFeSARQ.Services {
 
             if (shoppingCart && shoppingCart.cartItem) {
                 shoppingCart.cartItem.forEach((option: any) => {
-                    if (option.cartItem) {
+                    if (option.ospSelected && option.cartItem) {
                         option.cartItem.forEach((item) => {
                             if (item.product && item.product.productRelationship && item.product.productRelationship[0]
                             && item.product.productRelationship[0].type === 'bucket') {
