@@ -166,34 +166,26 @@ module OrangeFeSARQ.Services {
         * @methodOf shoppingCartSrv.Services.ShoppingCartSrv
         * @description
         * Obtiene los precios de las tipologías de entrega
-        * @returns Devuelve un objeto con el siguiente formato, la longitud del array devulevo es variable:
-        *  "deliveryCosts": [
-           {
-               "name": "CORREOS ESTAFETA",
-               "value": "2.95"
-           },
-           {
-               "name": "PUNTO DE VENTA ORANGE",
-               "value": "2.95"
-           },
-           {
-               "name": "MENSAJERIA10",
-               "value": "2.95"
-           }
-       ]
         */
         getTypologiesPrices(componentName: string, postalCode: string) {
             let vm = this;
 
-            let queryParams = {
-                'postalCode': postalCode,
+            let body = {
+                "contactMedium": [],
+                "cartItem": [],
+                "relatedParty": [],
+                "customer": null
             };
+
             let _search = {
-                queryParams
+                body: body,
+                urlParams: ['ospShoppingCart', 'cartItemProposal'],
+                queryParams: {
+                    'postalCode': postalCode
+                }
             };
-            let _api = vm.genericConstant.shoppingCart;
-            _api = _api + '/getDeliveryCost'
-            return vm.httpCacheGett(_api, _search, componentName)
+
+            return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, null, null)
                 .then(
                     (response) => {
                         return response.data;
