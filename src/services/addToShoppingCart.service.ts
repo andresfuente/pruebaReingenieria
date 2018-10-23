@@ -571,7 +571,7 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
-            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+            if (rate.groupName === 'Convergente_NAC' && rate.bucket) {
                 bucket = vm.createBucketCartItem(rate.bucket);
 
                 if (bucket) {
@@ -728,7 +728,7 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
-            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+            if (rate.groupName === 'Convergente_NAC' && rate.bucket) {
                 bucket = vm.createBucketCartItem(rate.bucket);
 
                 if (bucket) {
@@ -853,7 +853,7 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
-            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+            if (rate.groupName === 'Convergente_NAC' && rate.bucket) {
                 bucket = vm.createBucketCartItem(rate.bucket);
 
                 if (bucket) {
@@ -1171,7 +1171,7 @@ module OrangeFeSARQ.Services {
                 'ospSelected': preselected
             };
 
-            if (rate.type === 'Convergente_NAC' && rate.bucket) {
+            if (rate.groupName === 'Convergente_NAC' && rate.bucket) {
                 bucket = vm.createBucketCartItem(rate.bucket);
 
                 if (bucket) {

@@ -32,6 +32,8 @@ module ratesComparator.Models {
         public nacPricePromotional: number;
         public nacPriceTaxIncludedPromotional: number;
 
+        public bucket: Object;
+
         /**
          * @ngdoc method
          * @name ratesComparator.Models:Rate#constructor
@@ -68,6 +70,8 @@ module ratesComparator.Models {
             this.nacPriceTaxIncluded = rate.nacPriceTaxIncluded;
             this.nacPricePromotional = rate.nacPricePromotional;
             this.nacPriceTaxIncludedPromotional = rate.nacPriceTaxIncludedPromotional;
+
+            this.bucket = rate.bucket;
         }
     }
 
@@ -265,6 +269,8 @@ module ratesComparator.Models {
         public applicationDuration : number;
         public ospTecnology: string;
 
+        public bucket: Object;
+
         /**
          * @ngdoc method
          * @name ratesComparator.Models:Rate#constructor
@@ -299,6 +305,8 @@ module ratesComparator.Models {
             this.terminals = [];
             //this.applicationDuration = rate.applicationDuration;
             this.ospTecnology = rate.ospTecnology;
+
+            this.bucket = rate.bucket;
         }
     }
 }

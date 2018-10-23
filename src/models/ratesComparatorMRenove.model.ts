@@ -22,6 +22,8 @@ module ratesComparatorMRenove.Models {
         nacPriceTaxIncludedPromotional: number;
         // ospTecnology: string para flag TV
 
+        bucket: Object;
+
         /**
          * @ngdoc method
          * @name ratesComparator.Models:Rate#constructor
