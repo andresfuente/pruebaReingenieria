@@ -1,6 +1,6 @@
 module OrangeFeSARQ.Services {
 
-    export class BillingAddressStoreSrv {
+    export class BillingAccountStoreSrv {
         private _store;
         private _principalMSISDN: string;
         private _currentPhoneLine: string;
@@ -34,10 +34,13 @@ module OrangeFeSARQ.Services {
                     ))
                     
                     const msisdn = characteristic && characteristic.value;
-                    const billingAddress = billingAccount && billingAccount.billingAddress;
+                    const billingAddress = billingAccount && billingAccount.billingAddress; // Cogemos la primera porque no se ha visto más direcciones
                     // Si todo va bien, construimos el store
                     if (msisdn && billingAddress) {
-                        store[msisdn] = billingAddress[0]   // Cogemos la primera porque no se ha visto más direcciones
+                        store[msisdn] = {
+                            id: billingAccount.id,
+                            billingAddress: billingAddress[0]
+                        }
                     }
                     return store;
                 }, {});
@@ -67,7 +70,7 @@ module OrangeFeSARQ.Services {
         }
 
         getCurrentPhoneLine(): string {
-            let currentPhoneLine = '';
+            let currentPhoneLine = 'wololo';
             const commercialData: any = JSON.parse(sessionStorage.getItem('commercialData'));
 
             if(commercialData) {
@@ -76,26 +79,42 @@ module OrangeFeSARQ.Services {
             }
             return currentPhoneLine;
         }
+
+        // Returns BillingAddress //
+
+        get principalBillingAddress(): any {
+            return this.principalBillingAccount.billingAddress;
+        }
         
         getBillingAddressByLine(line: string): any {
-            if(!this._store) {
-                this.loadFromSessionStorage();
-            }
-            return this._store[line]
+            return this.getBillingAccountByLine(line).billingAddress;
         }
 
         getCurrentBillingAddress(): any {
-            if(!this._currentPhoneLine) {
-                this._currentPhoneLine = this.getCurrentPhoneLine();
-            }
-            return this._currentPhoneLine ? this._store[this._currentPhoneLine] : this.principalBillingAddress;
+            return this.getCurrentBillingAccount().billingAddress
         }
 
-        get principalBillingAddress(): any {
+        // Return BillingAccount //
+
+        get principalBillingAccount(): any {
             if(!this._principalMSISDN || !this._store) {
                 this.loadFromSessionStorage();
             }
             return this._store[this._principalMSISDN];
+        }
+
+        getBillingAccountByLine(line: string): any {
+            if(!this._store) {
+                this.loadFromSessionStorage();
+            }
+            return line ? this._store[line] : this.principalBillingAccount;
+        }
+
+        getCurrentBillingAccount(): any {
+            if(!this._currentPhoneLine) {
+                this._currentPhoneLine = this.getCurrentPhoneLine();
+            }
+            return this._currentPhoneLine ? this._store[this._currentPhoneLine] : this.principalBillingAccount;
         }
 
         get store(): any {

@@ -19,7 +19,7 @@ module OrangeFeSARQ.Services {
         public storeProvince;
         private typeMulticomparatorRenove: boolean = true;
 
-        private billingAddressStore: OrangeFeSARQ.Services.BillingAddressStoreSrv;
+        private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
 
         /**
          * @ngdoc method
@@ -45,7 +45,7 @@ module OrangeFeSARQ.Services {
         setInjections($injector) {
             let srv = this;
             srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
-            srv.billingAddressStore = $injector.get('billingAddressStoreSrv');
+            srv.billingAccountStore = $injector.get('billingAccountStoreSrv');
         }
         getTerminalDataMulticomparator(
             rate: ratesComparator.Models.Rate,
@@ -110,7 +110,7 @@ module OrangeFeSARQ.Services {
             vm.setStoreProvince();
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = vm.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = vm.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }
@@ -391,7 +391,7 @@ module OrangeFeSARQ.Services {
             vm.setStoreProvince();
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = vm.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = vm.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }
@@ -484,7 +484,7 @@ module OrangeFeSARQ.Services {
             srv.setStoreProvince();
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = srv.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }
