@@ -89,7 +89,7 @@ module OrangeFeSARQ.Services {
         }
 
 
-        getProductBonusSpecification(tarifa: string, paqueteDatos: string): any {
+        getProductBonusSpecification(tarifa: string, paqueteDatos?: string): any {
             let vm = this;
             let _search: any = {
                 queryParams: {
