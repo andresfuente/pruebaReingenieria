@@ -70,7 +70,7 @@ module OrangeFeSARQ.Services {
         }
 
         getCurrentPhoneLine(): string {
-            let currentPhoneLine = 'wololo';
+            let currentPhoneLine = '';
             const commercialData: any = JSON.parse(sessionStorage.getItem('commercialData'));
 
             if(commercialData) {
