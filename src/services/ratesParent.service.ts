@@ -17,7 +17,7 @@ module OrangeFeSARQ.Services {
         private storeProvince: string;
         private customerSegment: string;
 
-        private billingAddressStore: OrangeFeSARQ.Services.BillingAddressStoreSrv;
+        private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
 
         constructor(public $injector) {
             super($injector);
@@ -31,7 +31,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
             vm.addToShoppingCartSrv = $injector.get('addToShoppingCartSrv');
-            vm.billingAddressStore = $injector.get('billingAddressStoreSrv');
+            vm.billingAccountStore = $injector.get('billingAccountStoreSrv');
         }
 
         /** @ngdoc method
@@ -98,7 +98,7 @@ module OrangeFeSARQ.Services {
             }
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = vm.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = vm.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }
@@ -183,7 +183,7 @@ module OrangeFeSARQ.Services {
             }
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = srv.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }
@@ -283,7 +283,7 @@ module OrangeFeSARQ.Services {
             };
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = srv.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }
@@ -329,7 +329,7 @@ module OrangeFeSARQ.Services {
             };
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = srv.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }
@@ -359,7 +359,7 @@ module OrangeFeSARQ.Services {
             };
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = vm.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = vm.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }
@@ -427,7 +427,7 @@ module OrangeFeSARQ.Services {
             }
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = vm.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = vm.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }
@@ -487,7 +487,7 @@ module OrangeFeSARQ.Services {
             }
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = vm.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = vm.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }

@@ -23,7 +23,7 @@ module OrangeFeSARQ.Services {
 
         public isTLV: boolean;
 
-        private billingAddressStore: OrangeFeSARQ.Services.BillingAddressStoreSrv;
+        private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
 
         /**
          * @name OrangeFeSARQ.Services:MosaicFileSrv
@@ -51,7 +51,7 @@ module OrangeFeSARQ.Services {
             srv.httpService = $injector.get('$http');
             srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
             srv.creditLimitSrv = $injector.get('creditLimitSrv');
-            srv.billingAddressStore = $injector.get('billingAddressStoreSrv');
+            srv.billingAccountStore = $injector.get('billingAccountStoreSrv');
         }
 
         /**
@@ -108,7 +108,7 @@ module OrangeFeSARQ.Services {
             let priceType = '';
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = srv.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }
@@ -395,7 +395,7 @@ module OrangeFeSARQ.Services {
             let _headers = new HashMap<string, string>();
 
             let clientGeolocation = 'Madrid'
-            const currentBillingAddress = srv.billingAddressStore.getCurrentBillingAddress()
+            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
             }
