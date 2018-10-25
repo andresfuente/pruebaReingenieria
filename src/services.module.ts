@@ -9,7 +9,7 @@ module OrangeFeSARQ.Constant {
         .service('addToShoppingCartSrv', OrangeFeSARQ.Services.AddToShoppingCartSrv)
         .service('alertsStore', OrangeFeSARQ.Services.AlertsStore)
         .service('amortizationSrv', OrangeFeSARQ.Services.AmortizationSrv)
-        .service('billingAddressStoreSrv', OrangeFeSARQ.Services.BillingAddressStoreSrv)
+        .service('billingAccountStoreSrv', OrangeFeSARQ.Services.BillingAccountStoreSrv)
         .service('billReviewSrv', OrangeFeSARQ.Services.BillReviewSrv)
         .service('bucketBalanceSrv', OrangeFeSARQ.Services.BucketBalanceSrv)
         .service('casesSrv', OrangeFeSARQ.Services.CasesSrv)
