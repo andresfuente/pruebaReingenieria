@@ -83,15 +83,15 @@ module OrangeFeSARQ.Services {
         // Returns BillingAddress //
 
         get principalBillingAddress(): any {
-            return this.principalBillingAccount.billingAddress;
+            return this.principalBillingAccount && this.principalBillingAccount.billingAddress;
         }
         
         getBillingAddressByLine(line: string): any {
-            return this.getBillingAccountByLine(line).billingAddress;
+            return this.getBillingAccountByLine(line) && this.getBillingAccountByLine(line).billingAddress;
         }
 
         getCurrentBillingAddress(): any {
-            return this.getCurrentBillingAccount().billingAddress
+            return this.getCurrentBillingAccount() && this.getCurrentBillingAccount().billingAddress
         }
 
         // Return BillingAccount //
