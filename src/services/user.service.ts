@@ -10,6 +10,7 @@ module OrangeFeSARQ.Services {
     export class UserSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector', '$q'];
         public clientAPIUrl: string;
+        public customerManagementAPI: string;
         public genericConstant;
         public CV;
         public hootAPIUrl: string;
@@ -26,6 +27,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             vm.genericConstant = $injector.get('genericConstant');
             vm.CV = $injector.get('customerViewStore');
+            vm.customerManagementAPI = vm.genericConstant.customerManagement;
             vm.clientAPIUrl = vm.genericConstant.customerView;
             vm.hootAPIUrl = vm.genericConstant.hoot;
             vm.utils = $injector.get('utils');
@@ -247,6 +249,41 @@ module OrangeFeSARQ.Services {
                     (error) => {
                         promise.reject(error.data);
                     });
+            return promise.promise;
+        }
+
+        getManagementSegment(param, inputValue: string, componentName?): any {
+            let vm = this;
+            let returnValue: boolean = false;
+            let promise = vm.$q.defer();
+            //let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+            let _search: any = {
+                queryParams: {
+                    brand: 'orange'
+                },
+                urlParams: ['customer'],
+            };
+
+            if (param && param !== 'publicKey' && _search.queryParams) {
+                _search.queryParams.publicId = inputValue;
+            } else {
+                _search.queryParams.publicKey = inputValue;
+            }
+
+            vm.httpCacheGett(vm.customerManagementAPI, _search, componentName)
+                .then((response) => {
+                    if (response && response.data && response.data.customer && response.data.customer.characteristic[0] 
+                        && response.data.customer.characteristic[0].value) {
+                            promise.resolve(response.data.customer.characteristic[0].value);
+                    } else {
+                        promise.resolve(false);
+                    }
+                })
+                .catch(function (error) {
+                    promise.reject(error.data);
+                });
+
             return promise.promise;
         }
     
