@@ -1792,7 +1792,7 @@ module OrangeFeSARQ.Services {
 
             if (commercialData && commercialData.length) {
                 commercialData.forEach((commData) => {
-                    if (commData.NACRateInShoppingCart) {
+                    if (!commData.ospIsSelected && commData.NACRateInShoppingCart) {
                         response = true;
                     }
                 });
