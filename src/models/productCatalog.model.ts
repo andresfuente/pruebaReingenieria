@@ -3,6 +3,8 @@ declare module  OrangeFeSARQ.Models {
     export interface productCatalog_getRates_request {
         contractType: string;
 		tmCodeOrigen: string;
-		segment?: string;
+        segment?: string;
+        spCode? : string;
+        rateType? : string;
     }
 }

@@ -252,6 +252,38 @@ module OrangeFeSARQ.Services {
         });
     }
 
+
+    getSummaryNac(ratesUsage: Array <any>, spOrigin: string, spDestiny: string, componentName: string): ng.IPromise<any> {
+      let vm = this;
+      let BRAND = vm.genericConstant.brand;
+      let METHOD = 'getSummaryNac';
+      let _search: Object = {
+        urlParams: [BRAND, METHOD],
+        queryParams: null,
+        body: {
+          'msisdnRates': ratesUsage,
+          'spCodeOrigin': spOrigin,
+          'spCodeDestino': spDestiny,
+        }
+      };
+
+      return vm.httpPost(vm.urlProductOrder, _search, componentName)
+        .then((response) => {
+          let _resp = response.data;
+          if (_resp.error) {
+            throw _resp.error;
+          }
+          return _resp;
+        })
+        .catch(function (error) {
+          if (error && error.data)
+            return error.data;
+          else
+            return error;
+        });
+    }
+    
+
     changeRate(requestBody: OrangeFeSARQ.Models.changeRate_postRequest, componentName: string): ng.IPromise<any> {
       let vm = this;
       let BRAND = vm.genericConstant.brand;

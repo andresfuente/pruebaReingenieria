@@ -136,7 +136,7 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-        getRates(msisdn: string, contractType: string, tmCodeOrigen: string, componentName: string, segment?: string): any {
+        getRates(msisdn: string, contractType: string, tmCodeOrigen: string, componentName: string, segment?: string, spCode? : string, rateType? : string): any {
             let vm = this;
             let _search: any;
             let brand = vm.genericConstant.brand;
@@ -148,10 +148,17 @@ module OrangeFeSARQ.Services {
                     tmCodeOrigen: tmCodeOrigen,
                     segment: segment
                 };
+            } else if (spCode){
+                request = {
+                    contractType: contractType,
+                    tmCodeOrigen: tmCodeOrigen,
+                    rateType : 'VOZ',
+                    spCode : spCode
+                };
             } else {
                 request = {
                     contractType: contractType,
-                    tmCodeOrigen: tmCodeOrigen
+                    tmCodeOrigen: tmCodeOrigen,
                 };
             }
 
