@@ -58,7 +58,7 @@ module OrangeFeSARQ.Services {
 
             if (loginData && loginData.sfid && loginData.sfid !== null) {
                 if (validAll || list && ((_.size(list) !== 0) && _.indexOf(list, loginData.sfid) !== -1)) {
-                    if (cv && cv.ospPointProgrammeType.toUpperCase() === 'SOCIO') {
+                    if (cv && cv.ospPointProgrammeType && cv.ospPointProgrammeType.toUpperCase() === 'SOCIO') {
                         return true;
                     } else if (!cv) {
                         return true;
