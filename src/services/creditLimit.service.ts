@@ -33,6 +33,7 @@ module OrangeFeSARQ.Services {
             let list: any = [];
             let validAll: boolean = false;
             let loginData = JSON.parse(sessionStorage.getItem('loginData'));
+            let cv = JSON.parse(sessionStorage.getItem('cv'));
 
             if (OrangeFeSARQ.Controllers.ParentController.shared
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
@@ -54,9 +55,14 @@ module OrangeFeSARQ.Services {
                 });
             }
 
+
             if (loginData && loginData.sfid && loginData.sfid !== null) {
                 if (validAll || list && ((_.size(list) !== 0) && _.indexOf(list, loginData.sfid) !== -1)) {
-                    return true;
+                    if (cv && cv.ospPointProgrammeType.toUpperCase() === 'SOCIO') {
+                        return true;
+                    } else if (!cv) {
+                        return true;
+                    }
                 }
             }
 
