@@ -120,7 +120,12 @@ module OrangeFeSARQ.Services {
             if(!this._currentPhoneLine) {
                 this._currentPhoneLine = this.getCurrentPhoneLine();
             }
-            return this._currentPhoneLine ? this._store[this._currentPhoneLine] : this.principalBillingAccount;
+            
+            if (this._currentPhoneLine &&  this._currentPhoneLine !== "" && this._store[this._currentPhoneLine] ){
+                return this._store[this._currentPhoneLine] ; 
+            }else {
+                return this.principalBillingAccount; 
+            }
         }
 
         get store(): any {
