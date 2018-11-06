@@ -115,7 +115,7 @@ module OrangeFeSARQ.Services {
         getCreditRisk(search: string, response): number {
             let vm = this;
             let limit;
-
+            let saldoEncontrado = false;
             if (search && response) {
                 if (search === 'UMBRAL') { // customerView
                     if (response.customer && response.customer.individual && _.size(response.customer.individual.characteristic) !== 0) {
@@ -132,8 +132,17 @@ module OrangeFeSARQ.Services {
                         limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
                     }
                 } else if (search === 'RENOVE') { // campañas
-                    if (response && response[0] && response[0].saldoDisponible) {
-                        limit = parseInt(response[0].saldoDisponible, 10);
+                    limit = 0;
+
+                    if(response) {
+                        response.forEach(campaign => { // Sacar el valor del primer renove
+                            if(campaign.campaignNum[0].desc === 'Renove' && !saldoEncontrado) {
+                                if(parseInt(campaign.saldoDisponible, 10) !== 0) {
+                                    limit = parseInt(campaign.saldoDisponible, 10);
+                                    saldoEncontrado = true;
+                                }
+                            }
+                        });
                     }
                 }
             }
