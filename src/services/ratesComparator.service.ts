@@ -187,8 +187,13 @@ module OrangeFeSARQ.Services {
                 }
 
             }).catch((error) => {
-                throw error;
-            });
+                let data = {
+                    rateSiebelId: rate.siebelId,
+                    terminalsiebelId: terminal.siebelId,
+                    deviceOffering: []
+                };
+                return data;
+        });
         }
 
         /**
@@ -524,6 +529,12 @@ module OrangeFeSARQ.Services {
             }
             return ratesListString;
         }
+
+        isFichadecliente(){
+            let rol = JSON.parse(sessionStorage.getItem('loginData'));
+            return rol.site === 'fichadecliente'; 
+        }
+
 
     }
 }
