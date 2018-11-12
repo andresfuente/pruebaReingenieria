@@ -118,8 +118,8 @@ module OrangeFeSARQ.Services {
             let saldoEncontrado = false;
             if (search && response) {
                 if (search === 'UMBRAL') { // customerView
-                    if (response.customer && response.customer.individual && _.size(response.customer.individual.characteristic) !== 0) {
-                        let existLimitCredit: any = _.find(response.customer.individual.characteristic, { 'name': 'limiteCredito' });
+                    if (response.customer && response.customer.customerCharacteristic && _.size(response.customer.individual.customerCharacteristic) !== 0) {
+                        let existLimitCredit: any = _.find(response.customer.individual.customerCharacteristic, { 'name': 'umbralOrange' });
                         if (existLimitCredit && existLimitCredit.value) {
                             limit = parseInt(existLimitCredit.value, 10);
                         }
