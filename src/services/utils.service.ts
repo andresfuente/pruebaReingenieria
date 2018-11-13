@@ -105,7 +105,12 @@ module OrangeFeSARQ.Services {
 
             inputDocument = inputDocument.trim().toUpperCase();
             if (inputDocument === 'MSISDN') {
-                searchUrl = 'publicKey';
+                if (sessionStorage.getItem('EMASIVO')) {
+                    value = sessionStorage.getItem('customerDocument');
+                    searchUrl = 'individualPublicId';
+                } else {
+                    searchUrl = 'publicKey';
+                }
             } else if (inputDocument === 'NIF' || inputDocument === 'NIE') {
                 searchUrl = 'individualPublicId';
             } else if (inputDocument === 'CIF') {
