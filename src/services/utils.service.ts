@@ -980,6 +980,7 @@ module OrangeFeSARQ.Services {
                     // Buscamos en el productCatalog el resto de datos alineando las APIs con el "tmcode" (código de las tarifas)
                     let isPack = false;
                     let ratePC;
+                    let bucket;
 
                     if (bundleSiebelCode && bundleSiebelCode.value) {
                         ratePC = _.find(PC, (characteristic: any) => {
@@ -994,6 +995,11 @@ module OrangeFeSARQ.Services {
                     if (ratePC && ratePC.productSpecCharacteristic && ratePC.productSpecCharacteristic.length > 0
                         && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue.length > 0) {
                         ranges = ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue[0].value;
+                    }
+
+                    if (ratePC && ratePC.ospGroupName && ratePC.ospGroupName.toUpperCase() === 'CONVERGENTE_NAC' && ratePC.productSpecCharacteristic) {
+                        bucket = _.find(ratePC.productSpecCharacteristic, {ospCategory:'BUCKET'});
+                        bucket = bucket && bucket.ospId ? bucket.ospId : '';
                     }
 
                     /* if (ratePC && ratePC.productSpecCharacteristic) {
@@ -1013,7 +1019,8 @@ module OrangeFeSARQ.Services {
                         siebelCode: rateSiebelCode ? rateSiebelCode.value : '',
                         bundle: bundleSiebelCode ? bundleSiebelCode.value : '',
                         pack: ratePC ? ratePC.ospFraseComercial : '',
-                        isPack: isPack
+                        isPack: isPack,
+                        bucket: bucket
                     };
                     /* if (info.isPack) {
                         let clientData = JSON.parse(sessionStorage.getItem('clientData'));

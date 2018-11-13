@@ -543,29 +543,33 @@ module OrangeFeSARQ.Services {
                                         let segment = sessionClientData.ospCustomerSegment
                                             && sessionClientData.ospCustomerSegment !== ''
                                             ? sessionClientData.ospCustomerSegment.toLowerCase() : 'residencial';
-                                        let type = rateComData.type;
-                                        let siebelId = rateComData.siebelId;
-                                        if ((type === 'Convergente'|| type === 'Convergente_NAC') && segment === 'residencial') {
-                                            agrupation = 'Love';
-                                        } else if ((type === 'Convergente' || type === 'Convergente_NAC') && segment === 'empresa') {
-                                            agrupation = 'Love Negocio';
-                                        } else if (type === 'Movil' && segment === 'residencial') {
-                                            agrupation = 'Go';
-                                        } else if (type === 'Movil' && segment === 'empresa') {
-                                            agrupation = 'Go Negocio';
-                                        } else if (siebelId === '1-OKX2HG') {
-                                            agrupation = 'Ardilla';
-                                        } else if (type === 'Fijo' && siebelId === '1-15VD39') {
-                                            agrupation = 'Mi Fijo';
-                                        } else if (type === 'Fijo' &&
+
+                                        if (rateComData) {
+                                            let type = rateComData.type;
+                                            let siebelId = rateComData.siebelId;
+                                            
+                                            if ((type === 'Convergente'|| type === 'Convergente_NAC') && segment === 'residencial') {
+                                                agrupation = 'Love';
+                                            } else if ((type === 'Convergente' || type === 'Convergente_NAC') && segment === 'empresa') {
+                                                agrupation = 'Love Negocio';
+                                            } else if (type === 'Movil' && segment === 'residencial') {
+                                                agrupation = 'Go';
+                                            } else if (type === 'Movil' && segment === 'empresa') {
+                                                agrupation = 'Go Negocio';
+                                            } else if (siebelId === '1-OKX2HG') {
+                                                agrupation = 'Ardilla';
+                                            } else if (type === 'Fijo' && siebelId === '1-15VD39') {
+                                                agrupation = 'Mi Fijo';
+                                            } else if (type === 'Fijo' &&
                                             (siebelId === '1-15PLF2' || siebelId === '1-1C3JRF')) {
-                                            agrupation = 'Mi Fijo Pro';
-                                        } else if (type === 'Fijo' && segment === 'residencial') {
-                                            agrupation = 'IEW';
-                                        } else if (type === 'Fijo' && segment === 'empresa') {
-                                            agrupation = 'IEW Pro';
-                                        } else if (type === 'Mundo') {
-                                            agrupation = 'Mundo';
+                                                agrupation = 'Mi Fijo Pro';
+                                            } else if (type === 'Fijo' && segment === 'residencial') {
+                                                agrupation = 'IEW';
+                                            } else if (type === 'Fijo' && segment === 'empresa') {
+                                                agrupation = 'IEW Pro';
+                                            } else if (type === 'Mundo') {
+                                                agrupation = 'Mundo';
+                                            }
                                         }
                                     }
                                 }
