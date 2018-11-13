@@ -118,8 +118,8 @@ module OrangeFeSARQ.Services {
             let saldoEncontrado = false;
             if (search && response) {
                 if (search === 'UMBRAL') { // customerView
-                    if (response.customer && response.customer.customerCharacteristic && _.size(response.customer.individual.customerCharacteristic) !== 0) {
-                        let existLimitCredit: any = _.find(response.customer.individual.customerCharacteristic, { 'name': 'umbralOrange' });
+                    if (response.customer && response.customer.customerCharacteristic && _.size(response.customer.customerCharacteristic) !== 0) {
+                        let existLimitCredit: any = _.find(response.customer.customerCharacteristic, { 'name': 'umbralOrange' });
                         if (existLimitCredit && existLimitCredit.value) {
                             limit = parseInt(existLimitCredit.value, 10);
                         }
@@ -135,13 +135,15 @@ module OrangeFeSARQ.Services {
                     limit = 0;
 
                     if(response) {
-                        response.forEach(campaign => { // Sacar el valor del primer renove
-                            if(campaign.campaignNum[0].desc === 'Renove' && !saldoEncontrado) {
-                                if(parseInt(campaign.saldoDisponible, 10) !== 0) {
-                                    limit = parseInt(campaign.saldoDisponible, 10);
-                                    saldoEncontrado = true;
+                        response.forEach(campaign => {// Sacar el valor del primer renove
+                            campaign.campaignNum.forEach(element2 => {
+                                if(element2.wcs && element2.wcs.typeRenove && element2.wcs.typeRenove === "Renove primario" && !saldoEncontrado) {
+                                    if(parseInt(campaign.saldoDisponible, 10) !== 0) {
+                                        limit = parseInt(campaign.saldoDisponible, 10);
+                                        saldoEncontrado = true;
+                                    }
                                 }
-                            }
+                            });
                         });
                     }
                 }
