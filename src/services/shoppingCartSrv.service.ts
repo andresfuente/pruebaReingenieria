@@ -195,6 +195,56 @@ module OrangeFeSARQ.Services {
                     }
                 );
         }
+
+        /**
+        * @ngdoc method
+        * @name shoppingCartSrv.Services.ShoppingCartSrv#renameNACRates
+        * @param {string} shoppingCart carrito a tratar
+        * @param {string} clientName datos del cliente
+        * @methodOf shoppingCartSrv.Services.ShoppingCartSrv
+        * @description
+        * Renombra las tarifas NAC principales usando datos del cliente
+        */
+        renameNACRates(shoppingCart: any, clientName: Array<string>) {
+            let vm = this;
+
+            let newName : string = '';
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+
+            // Formateamos el nombre (usando todos los elementos que se pasen)
+            if (clientName) {
+                for (let i = 0; i < clientName.length; i++) {
+                    if (clientName[i]) {
+                        if (i === 0) {
+                            newName += clientName[i];
+                        } else {
+                            newName += ' ' + clientName[i];
+                        }
+                    }
+                }
+            }
+
+            // Renombramos tarifas NAC para guardar 
+            if (newName && commercialData && shoppingCart && shoppingCart.cartItem) {
+                shoppingCart.cartItem.forEach(opt => {
+                    if (opt.cartItem) {
+                        opt.cartItem.forEach(cartItem => {
+                            if (cartItem && cartItem.product && cartItem.product.productRelationship && cartItem.product.productRelationship[0] 
+                            && cartItem.product.productRelationship[0].type === 'tarifa') {
+                                let comm : any = _.find(commercialData, {id: Math.floor(opt.id)});
+
+                                // Si es la tarifa principal, sustituimos el nombre
+                                if (comm && !comm.actParent && cartItem.product.name) {
+                                    cartItem.product.name = 'Love ' + newName;
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+            return shoppingCart;
+        }
     }
 
     angular.module('shoppingCartSrv', [])
