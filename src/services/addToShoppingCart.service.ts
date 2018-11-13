@@ -1793,7 +1793,7 @@ module OrangeFeSARQ.Services {
 
             if (commercialData && commercialData.length) {
                 commercialData.forEach((commData) => {
-                    if (!commData.ospIsSelected && commData.NACRateInShoppingCart) {
+                    if (commData.NACRateInShoppingCart) {
                         response = true;
                     }
                 });
