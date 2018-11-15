@@ -113,6 +113,85 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
+         * @name #getUser(param:string, clientId:string)
+         * @methodOf locator.UserSrv
+         * @returns {object} Replica al metodo getUser pero
+         * devuelve un error para controlar en función al status
+         */
+        getUserWithStatus(param: string, clientId: string, componentName: string = 'locatorComp'): any {
+            let vm = this;
+            let promise = vm.$q.defer();
+
+            if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
+                param = 'residential';
+            } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
+                param = 'business';
+            } else if (param === 'publicKey') {
+                param = 'telephoneNumber';
+            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))) {
+                param = 'residential';
+            }
+
+            let _search: Object = {
+                queryParams: {
+                    'onlyActive': vm.genericConstant.onlyActive,
+                },
+                urlParams: [vm.genericConstant.brand, 'customerView', param, clientId]
+
+            };
+
+            //TODO PRUEBA FASTDATA
+            // if(vm.genericConstant.site === 'FichaCliente' && window.location.hostname === 'fichadecliente-uat.int.si.orange.es'){
+                // switch (clientId){
+                    // case '24130682W':
+                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        // break;
+                    // case '18000712S':
+                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        // break;
+                    // case '26496966T':
+                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        // break;
+                    // case '44138785Z':
+                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        // break;
+                    // case '71558378L':
+                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        // break;
+                    // case '05422521H':
+                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        // break;
+                    // case '50185084G':
+                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
+                        // break;
+                    // default:
+                        // vm.clientAPIUrl = 'api/customerView/v1';
+                        // break;
+                // }
+            // }
+
+            vm.httpCacheGett(vm.clientAPIUrl, _search, componentName)
+                .then(
+                    (response) => {
+                        if (response.data && response.data.customer && componentName !== 'shopping_cart_resume') {
+                            if (response.data.customer.individual && response.data.customer.individual.id) {
+                                localStorage.setItem('id', JSON.stringify(response.data.customer.individual.id));
+                            } else {
+                                localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
+                            }
+                            vm.getMdgUser(param, clientId); // Cuando se realiza la llamada al Plan amigo no es necesario esta llamada
+                        }
+                        // - response.data.mdg = vm.mdgData;
+                        promise.resolve(response.data);
+                    },
+                    (error) => {
+                        promise.reject(error);
+                    });
+            return promise.promise;
+        }
+
+        /**
+         * @ngdoc method
          * @name #getJazztelUser(param:string, clientId:string, componentName:string)
          * @methodOf locator.UserSrv
          * @param {param}
@@ -281,7 +360,7 @@ module OrangeFeSARQ.Services {
                     }
                 })
                 .catch(function (error) {
-                    promise.reject(error.data);
+                    promise.reject(error);
                 });
 
             return promise.promise;
