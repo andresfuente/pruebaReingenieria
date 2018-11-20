@@ -225,6 +225,9 @@ module ratesParent.Models {
                                     let techniquePriceRate = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
                                         return price.priceType === 'techniquePriceRate';
                                     });
+                                    let techSiebelPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                        return price.priceType === 'techSiebelPriceRate';
+                                    });
 
                                     let productOfferingPriceAlteration = priceData[i].productOfferingPrice[j].
                                         productOfferingPriceAlteration;
@@ -298,6 +301,17 @@ module ratesParent.Models {
                                         } else {
                                             this.rateOfferingPriceTaxInluded = ratePrice.taxIncludedAmount;
                                             this.rateOfferingPrice = ratePrice.dutyFreeAmount;
+                                        }
+                                    } else if (techSiebelPrice) {
+                                        this.typePriceName = techSiebelPrice.priceType;
+                                        this.taxRate = techSiebelPrice.taxRate;
+                                        this.taxRateName = techSiebelPrice.ospTaxRateName;
+                                        if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                            this.ratePriceTaxIncluded = techSiebelPrice.taxIncludedAmount;
+                                            this.ratePrice = techSiebelPrice.dutyFreeAmount;
+                                        } else {
+                                            this.rateOfferingPriceTaxInluded = techSiebelPrice.taxIncludedAmount;
+                                            this.rateOfferingPrice = techSiebelPrice.dutyFreeAmount;
                                         }
                                     }
                                 }
