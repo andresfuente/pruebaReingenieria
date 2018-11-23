@@ -233,9 +233,13 @@ module OrangeFeSARQ.Services {
                             && cartItem.product.productRelationship[0].type === 'tarifa') {
                                 let comm : any = _.find(commercialData, {id: Math.floor(opt.id)});
 
-                                // Si es la tarifa principal, sustituimos el nombre
-                                if (comm && !comm.actParent && cartItem.product.name) {
-                                    cartItem.product.name = 'Love ' + newName;
+                                // Revisamos las tarifas para renombrar únicamente las LOVE NAC principales (movil_fijo)
+                                if (comm && comm.rates) {
+                                    let rate : any = _.find(comm.rates, {'siebelId': cartItem.id});
+
+                                    if (rate && rate.type === 'Convergente_NAC' && rate.typeService === 'movil_fijo' && cartItem.product.name) {
+                                        cartItem.product.name = 'Love ' + newName;
+                                    }
                                 }
                             }
                         });
