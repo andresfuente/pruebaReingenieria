@@ -14,6 +14,7 @@ module OrangeFeSARQ.Services {
         private storeProvince: string;
         private cacheOfRequests : HashMap<string, string>; 
         private linesUsageSrv;
+        public isChanging = false; 
 
         constructor(public $injector) {
             super($injector);
