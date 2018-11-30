@@ -647,7 +647,14 @@ module OrangeFeSARQ.Services {
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
-        putAdditionalRateInShoppingCart(commIndex, rate) {
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#createAdditionalRateCartItem
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Crea un carrito formado por una tarifa adicional (para NAC)
+         */
+        createAdditionalRateCartItem(rate, commData) {
             let vm = this;
 
             let bucket;
@@ -710,45 +717,35 @@ module OrangeFeSARQ.Services {
                 }
             };
 
-            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            
+            if (commData) {
+                let cartItemElementId = commData.id;
 
-            let cartItemElementId = 0;
-
-            if (commercialData && commercialData[commIndex]) {
-                cartItemElementId = commercialData[commIndex].id;
-            }
-
-            let cartItemElement = {
-                'id': cartItemElementId + 0.1,
-                'cartItem': [rateCartItemElement],
-                'action': 'New',
-                'cartItemRelationship': [{
-                    id: cartItemElementId
-                }],
-                'ospCartItemType': commercialData[commIndex].ospCartItemType,
-                'ospCartItemSubtype': commercialData[commIndex].ospCartItemSubtype.toLowerCase(),
-                'ospSelected': true
-            };
-
-            if (rate.groupName === 'Convergente_NAC' && rate.bucket) {
-                bucket = vm.createBucketCartItem(rate.bucket);
-
-                if (bucket) {
-                    cartItemElement.cartItem.push(bucket);
-                }
-            }
-
-            if (shoppingCart !== null) {
-                shoppingCart.cartItem.push(cartItemElement);
-            } else {
-                shoppingCart = {
-                    'id': '',
-                    'cartItem': [cartItemElement],
-                    'customer': {}
+                let cartItemElement = {
+                    'id': cartItemElementId + 0.1,
+                    'cartItem': [rateCartItemElement],
+                    'action': 'New',
+                    'cartItemRelationship': [{
+                        id: cartItemElementId
+                    }],
+                    'ospCartItemType': commData.ospCartItemType,
+                    'ospCartItemSubtype': commData.ospCartItemSubtype.toLowerCase(),
+                    'ospSelected': true
                 };
+
+                if (rate.groupName === 'Convergente_NAC' && rate.bucket) {
+                    bucket = vm.createBucketCartItem(rate.bucket);
+    
+                    if (bucket) {
+                        cartItemElement.cartItem.push(bucket);
+                    }
+                }
+                
+                return cartItemElement;
             }
-            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+
+            //sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
         /**
