@@ -111,6 +111,8 @@ module OrangeFeSARQ.Services {
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
+            } else {
+                clientGeolocation = srv.storeProvince;
             }
 
             // Cabeceras
@@ -398,6 +400,8 @@ module OrangeFeSARQ.Services {
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince
+            } else {
+                clientGeolocation = srv.storeProvince;
             }
 
             _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
