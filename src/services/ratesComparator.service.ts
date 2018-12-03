@@ -98,6 +98,7 @@ module OrangeFeSARQ.Services {
             creditLimit?: number
         ) {
             let vm = this;
+            let srv = this;
             if (riskLevel === 'bajo' || riskLevel === 'medio') {
                 riskLevel += ',alto';
             }
@@ -109,10 +110,14 @@ module OrangeFeSARQ.Services {
             vm.setCustomerData();
             vm.setStoreProvince();
 
-            let clientGeolocation = 'Madrid'
-            const currentBillingAddress = vm.billingAccountStore.getCurrentBillingAddress()
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
+
+            let clientGeolocation = clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopInfo.province.toUpperCase();
+            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
+
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince
+                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
             // CABECERA PANGEA
@@ -394,11 +399,15 @@ module OrangeFeSARQ.Services {
             // CABECERA HASHMAP
             vm.setCustomerData();
             vm.setStoreProvince();
+            let srv = this;
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
 
-            let clientGeolocation = 'Madrid'
-            const currentBillingAddress = vm.billingAccountStore.getCurrentBillingAddress()
+            let clientGeolocation = clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopInfo.province.toUpperCase();
+            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
+
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince
+                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
             let _headers = new HashMap<string, string>();
@@ -488,10 +497,14 @@ module OrangeFeSARQ.Services {
             srv.setCustomerData();
             srv.setStoreProvince();
 
-            let clientGeolocation = 'Madrid'
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
+
+            let clientGeolocation = clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopInfo.province.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
+
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince
+                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
             _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');

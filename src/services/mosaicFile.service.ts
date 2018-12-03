@@ -107,11 +107,14 @@ module OrangeFeSARQ.Services {
             let params;
             let deferred = srv.$q.defer();
             let priceType = '';
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
 
-            let clientGeolocation = 'Madrid'
+            let clientGeolocation = clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopInfo.province.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
-            if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince
+
+            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
             // Cabeceras
@@ -398,11 +401,14 @@ module OrangeFeSARQ.Services {
 
             //Cabeceras FdC
             let _headers = new HashMap<string, string>();
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
 
-            let clientGeolocation = 'Madrid'
+            let clientGeolocation = clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopInfo.province.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
-            if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince
+
+            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
             _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
