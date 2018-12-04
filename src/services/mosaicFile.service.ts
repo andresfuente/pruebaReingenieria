@@ -110,7 +110,7 @@ module OrangeFeSARQ.Services {
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
 
-            let clientGeolocation = clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopInfo.province.toUpperCase();
+            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopInfo.province.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
@@ -404,7 +404,7 @@ module OrangeFeSARQ.Services {
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
 
-            let clientGeolocation = clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopInfo.province.toUpperCase();
+            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopInfo.province.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
