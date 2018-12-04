@@ -114,13 +114,15 @@ module OrangeFeSARQ.Services {
          */
         getCreditRisk(search: string, response): number {
             let vm = this;
+
             let limit;
             let saldoEncontrado = false;
+
             if (search && response) {
                 if (search === 'UMBRAL') { // customerView
                     if (response.customer && response.customer.customerCharacteristic && _.size(response.customer.customerCharacteristic) !== 0) {
                         let existLimitCredit: any = _.find(response.customer.customerCharacteristic, { 'name': 'umbralOrange' });
-                        if (existLimitCredit && existLimitCredit.value) {
+                        if (existLimitCredit && existLimitCredit.value !== null) {
                             limit = parseInt(existLimitCredit.value, 10);
                         }
                     }
@@ -128,17 +130,17 @@ module OrangeFeSARQ.Services {
                     if (response.customer && response.customer.ospCustomerSalesProfile && response.customer.ospCustomerSalesProfile[0]
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0]
-                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount) {
+                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount !== null) {
                         limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
                     }
                 } else if (search === 'RENOVE') { // campañas
                     limit = 0;
 
-                    if(response) {
+                    if (response) {
                         response.forEach(campaign => {// Sacar el valor del primer renove
                             campaign.campaignNum.forEach(element2 => {
-                                if(element2.wcs && element2.wcs.typeRenove && element2.wcs.typeRenove === "Renove primario" && !saldoEncontrado) {
-                                    if(parseInt(campaign.saldoDisponible, 10) !== 0) {
+                                if (element2.wcs && element2.wcs.typeRenove && element2.wcs.typeRenove === "Renove primario" && !saldoEncontrado) {
+                                    if (campaign.saldoDisponible !== null) {
                                         limit = parseInt(campaign.saldoDisponible, 10);
                                         saldoEncontrado = true;
                                     }
