@@ -225,7 +225,7 @@ module OrangeFeSARQ.Services {
             }
 
             // Renombramos tarifas NAC para guardar 
-            if (newName && commercialData && shoppingCart && shoppingCart.cartItem) {
+            if (commercialData && shoppingCart && shoppingCart.cartItem) {
                 shoppingCart.cartItem.forEach(opt => {
                     if (opt.cartItem) {
                         opt.cartItem.forEach(cartItem => {
@@ -238,7 +238,11 @@ module OrangeFeSARQ.Services {
                                     let rate : any = _.find(comm.rates, {'siebelId': cartItem.id});
 
                                     if (rate && rate.type === 'Convergente_NAC' && rate.typeService === 'movil_fijo' && cartItem.product.name) {
-                                        cartItem.product.name = 'Love ' + newName;
+                                        if (newName) { // Si hay aprovechamiento, se pintan los apellidos
+                                            cartItem.product.name = 'Love ' + newName;
+                                        } else { // Si no hay aprvechamiento, se pinta "Love"
+                                            cartItem.product.name = 'Love';
+                                        }
                                     }
                                 }
                             }
