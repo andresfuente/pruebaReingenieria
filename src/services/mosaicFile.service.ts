@@ -766,11 +766,7 @@ module OrangeFeSARQ.Services {
                 }
 
                 if (vm.creditLimitSrv.isValidSFIDNMC() && clientData && clientData.creditLimitCapta && clientData.creditLimitCapta.creditLimitAvailable !== null) {
-                    if (shoppingCart && _.size(shoppingCart.cartItem) !== 0) {
-                        vm.creditLimitSrv.checkCreditLimit(clientData, shoppingCart);
-                    } else {
-                        dataOT.creditLimit = clientData.creditLimitCapta.staticCreditLimit;
-                    }
+                    dataOT.creditLimit = clientData.creditLimitCapta.creditLimitAvailable;
                 }
             }
 
