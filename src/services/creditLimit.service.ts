@@ -98,8 +98,13 @@ module OrangeFeSARQ.Services {
                         }
                     }
                 } else if (search === 'RENOVE' && sessionClientData.creditLimitRenove) {
-                    sessionClientData.creditLimitRenove.creditLimitAvailable = vm.getCreditRisk(search, response);
-                    sessionClientData.creditLimitRenove.staticCreditLimit = sessionClientData.creditLimitRenove.creditLimitAvailable;
+                    let creditLimit = vm.getCreditRisk(search, response);
+                    if (creditLimit !== undefined && creditLimit !== null) {
+                        sessionClientData.creditLimitRenove.creditLimitAvailable = creditLimit;
+                        sessionClientData.creditLimitRenove.staticCreditLimit = creditLimit;
+                    } else {
+                        delete sessionClientData.creditLimitRenove;
+                    }
                 }
             }
             sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
