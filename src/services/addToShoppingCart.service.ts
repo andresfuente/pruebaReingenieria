@@ -654,10 +654,8 @@ module OrangeFeSARQ.Services {
          * @description
          * Crea un carrito formado por una tarifa adicional (para NAC)
          */
-        createAdditionalRateCartItem(rate, commData) {
+        createAdditionalRateCartItem(rate, commData, bucket?) {
             let vm = this;
-
-            let bucket;
 
             let productItem = {
                 'href': '',
@@ -734,11 +732,17 @@ module OrangeFeSARQ.Services {
                     'ospSelected': true
                 };
 
-                if (rate.groupName === 'Convergente_NAC' && rate.bucket) {
-                    bucket = vm.createBucketCartItem(rate.bucket);
+                if (rate.groupName === 'Convergente_NAC') {
+                    let cartItemBucket;
+
+                    if (bucket) { // Si se informa el bucket, se crea con ese
+                        cartItemBucket = vm.createBucketCartItem(bucket);
+                    } else { // Recuperamos el bucket correspondiente del carrito 
+                        cartItemBucket = vm.getFullBucketInShoppingCart();
+                    }
     
-                    if (bucket) {
-                        cartItemElement.cartItem.push(bucket);
+                    if (cartItemBucket) {
+                        cartItemElement.cartItem.push(cartItemBucket);
                     }
                 }
                 
@@ -1882,7 +1886,6 @@ module OrangeFeSARQ.Services {
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#getBucketInShoppingCart
          * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
-         * @return {string} id del bucket seleccionado
          * @description
          * Devuelve el id del bucket que hay en carrito (en principio, solo puede haber uno)
          */
@@ -1899,6 +1902,35 @@ module OrangeFeSARQ.Services {
                             if (item.product && item.product.productRelationship && item.product.productRelationship[0]
                             && item.product.productRelationship[0].type === 'bucket') {
                                 bucket = item.id;
+                            }
+                        });
+                    }    
+                });
+            }
+
+            return bucket;
+        }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#getFullBucketInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Devuelve el bucket que hay en carrito
+         */
+        getFullBucketInShoppingCart() {
+            let vm = this;
+
+            let bucket: string;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+
+            if (shoppingCart && shoppingCart.cartItem) {
+                shoppingCart.cartItem.forEach((option: any) => {
+                    if (option.ospSelected && option.cartItem) {
+                        option.cartItem.forEach((item) => {
+                            if (item.product && item.product.productRelationship && item.product.productRelationship[0]
+                            && item.product.productRelationship[0].type === 'bucket') {
+                                bucket = item;
                             }
                         });
                     }    
