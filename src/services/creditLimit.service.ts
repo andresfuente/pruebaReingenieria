@@ -139,8 +139,6 @@ module OrangeFeSARQ.Services {
                         limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
                     }
                 } else if (search === 'RENOVE') { // campañas
-                    limit = 0;
-
                     if (response) {
                         response.forEach(campaign => {// Sacar el valor del primer renove
                             campaign.campaignNum.forEach(element2 => {
