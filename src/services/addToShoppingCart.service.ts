@@ -654,7 +654,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Crea un carrito formado por una tarifa adicional (para NAC)
          */
-        createAdditionalRateCartItem(rate, commData, bucket?) {
+        createAdditionalRateCartItem(rate, commData, bucket, saveShoppingCart) {
             let vm = this;
 
             let productItem = {
@@ -756,7 +756,9 @@ module OrangeFeSARQ.Services {
                     };
                 }
 
-                sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+                if (saveShoppingCart) { // Para flujo no NAC
+                    sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+                }
 
                 return cartItemElement;
             }
