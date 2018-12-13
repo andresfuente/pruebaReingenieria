@@ -746,10 +746,10 @@ module OrangeFeSARQ.Services {
                     }
                 }
                 
+                sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+
                 return cartItemElement;
             }
-
-            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
         /**
