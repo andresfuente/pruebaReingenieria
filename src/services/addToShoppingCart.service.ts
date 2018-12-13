@@ -745,7 +745,7 @@ module OrangeFeSARQ.Services {
                 return cartItemElement;
             }
 
-            //sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
         /**
