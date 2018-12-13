@@ -742,6 +742,16 @@ module OrangeFeSARQ.Services {
                     }
                 }
                 
+                if (shoppingCart !== null) {
+                    shoppingCart.cartItem.push(cartItemElement);
+                } else {
+                    shoppingCart = {
+                        'id': '',
+                        'cartItem': [cartItemElement],
+                        'customer': {}
+                    };
+                }
+
                 sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
 
                 return cartItemElement;
