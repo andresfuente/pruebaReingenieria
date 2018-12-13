@@ -10,9 +10,7 @@ module OrangeFeSARQ.Services {
      */
     export class CreditLimitSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
-
-        public checkRenove: boolean = false;
-
+        
         constructor(public $injector) {
             super($injector);
             let vm = this;
@@ -82,8 +80,6 @@ module OrangeFeSARQ.Services {
 
             let sessionClientData = JSON.parse(sessionStorage.getItem('clientData'));
 
-            vm.checkRenove = false;
-
             if (sessionClientData) {
                 if (search === 'UMBRAL') {
                     let umbral = vm.getCreditRisk(search, response);
@@ -103,17 +99,12 @@ module OrangeFeSARQ.Services {
                     }
                 } else if (search === 'RENOVE' && sessionClientData.creditLimitRenove) {
                     let creditLimit = vm.getCreditRisk(search, response);
-                    vm.checkRenove = true;
                     if (creditLimit !== undefined && creditLimit !== null) {
                         sessionClientData.creditLimitRenove.creditLimitAvailable = creditLimit;
                         sessionClientData.creditLimitRenove.staticCreditLimit = creditLimit;
                     } else {
                         delete sessionClientData.creditLimitRenove;
                     }
-                }
-
-                if (sessionClientData && sessionClientData.creditLimitRenove && !vm.checkRenove) {
-                    delete sessionClientData.creditLimitRenove;
                 }
             }
             sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
