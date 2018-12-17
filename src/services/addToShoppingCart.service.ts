@@ -17,6 +17,7 @@ module OrangeFeSARQ.Services {
         public data;
         public bucketId : string;
         public pressRateModifyButton : boolean;
+        public shoppingCartAux;
 
         /**
          * @ngdoc method
@@ -646,10 +647,15 @@ module OrangeFeSARQ.Services {
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
-        putAdditionalRateInShoppingCart(commIndex, rate) {
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#createAdditionalRateCartItem
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Crea un carrito formado por una tarifa adicional (para NAC)
+         */
+        createAdditionalRateCartItem(rate, commData, bucket, saveShoppingCart) {
             let vm = this;
-
-            let bucket;
 
             let productItem = {
                 'href': '',
@@ -709,45 +715,53 @@ module OrangeFeSARQ.Services {
                 }
             };
 
-            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            
+            if (commData) {
+                let cartItemElementId = commData.id;
 
-            let cartItemElementId = 0;
-
-            if (commercialData && commercialData[commIndex]) {
-                cartItemElementId = commercialData[commIndex].id;
-            }
-
-            let cartItemElement = {
-                'id': cartItemElementId + 0.1,
-                'cartItem': [rateCartItemElement],
-                'action': 'New',
-                'cartItemRelationship': [{
-                    id: cartItemElementId
-                }],
-                'ospCartItemType': commercialData[commIndex].ospCartItemType,
-                'ospCartItemSubtype': commercialData[commIndex].ospCartItemSubtype.toLowerCase(),
-                'ospSelected': true
-            };
-
-            if (rate.groupName === 'Convergente_NAC' && rate.bucket) {
-                bucket = vm.createBucketCartItem(rate.bucket);
-
-                if (bucket) {
-                    cartItemElement.cartItem.push(bucket);
-                }
-            }
-
-            if (shoppingCart !== null) {
-                shoppingCart.cartItem.push(cartItemElement);
-            } else {
-                shoppingCart = {
-                    'id': '',
-                    'cartItem': [cartItemElement],
-                    'customer': {}
+                let cartItemElement = {
+                    'id': cartItemElementId + 0.1,
+                    'cartItem': [rateCartItemElement],
+                    'action': 'New',
+                    'cartItemRelationship': [{
+                        id: cartItemElementId
+                    }],
+                    'ospCartItemType': commData.ospCartItemType,
+                    'ospCartItemSubtype': commData.ospCartItemSubtype.toLowerCase(),
+                    'ospSelected': true
                 };
+
+                if (rate.groupName === 'Convergente_NAC') {
+                    let cartItemBucket;
+
+                    if (bucket) { // Si se informa el bucket, se crea con ese
+                        cartItemBucket = vm.createBucketCartItem(bucket);
+                    } else { // Recuperamos el bucket correspondiente del carrito 
+                        cartItemBucket = vm.getFullBucketInShoppingCart();
+                    }
+    
+                    if (cartItemBucket) {
+                        cartItemElement.cartItem.push(cartItemBucket);
+                    }
+                }
+                
+                if (shoppingCart !== null) {
+                    shoppingCart.cartItem.push(cartItemElement);
+                } else {
+                    shoppingCart = {
+                        'id': '',
+                        'cartItem': [cartItemElement],
+                        'customer': {}
+                    };
+                }
+
+                if (saveShoppingCart) { // Para flujo no NAC
+                    sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+                }
+
+                return cartItemElement;
             }
-            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
         /**
@@ -1884,7 +1898,6 @@ module OrangeFeSARQ.Services {
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#getBucketInShoppingCart
          * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
-         * @return {string} id del bucket seleccionado
          * @description
          * Devuelve el id del bucket que hay en carrito (en principio, solo puede haber uno)
          */
@@ -1901,6 +1914,35 @@ module OrangeFeSARQ.Services {
                             if (item.product && item.product.productRelationship && item.product.productRelationship[0]
                             && item.product.productRelationship[0].type === 'bucket') {
                                 bucket = item.id;
+                            }
+                        });
+                    }    
+                });
+            }
+
+            return bucket;
+        }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#getFullBucketInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Devuelve el bucket que hay en carrito
+         */
+        getFullBucketInShoppingCart() {
+            let vm = this;
+
+            let bucket: string;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+
+            if (shoppingCart && shoppingCart.cartItem) {
+                shoppingCart.cartItem.forEach((option: any) => {
+                    if (option.ospSelected && option.cartItem) {
+                        option.cartItem.forEach((item) => {
+                            if (item.product && item.product.productRelationship && item.product.productRelationship[0]
+                            && item.product.productRelationship[0].type === 'bucket') {
+                                bucket = item;
                             }
                         });
                     }    

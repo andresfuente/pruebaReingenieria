@@ -20,7 +20,7 @@ module OrangeFeSARQ.Service {
     }
 
     getServicesContracted(msisdn: string, type: string, brand: string, detail: string,
-      componentName: string = 'contractedServicesComp', hasSource = true): any {
+      componentName: string = 'contractedServicesComp', hasSource = true, isFlexyGB = false): any {
       let vm = this;
       let _search = {};
 
@@ -45,6 +45,9 @@ module OrangeFeSARQ.Service {
      
       return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName)
         .then(function(response) {
+          if(isFlexyGB){
+            response.data.msisdn = response.config.url.split("/").pop();
+          }
           return response.data;
         })
         .catch(function(error) {

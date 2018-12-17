@@ -160,7 +160,7 @@ module OrangeFeSARQ.Services {
           return error;
         });
     }
-    
+
     fixedOrderCheckConv(brand: string, publicKey: string, lineCategory: string, orderType: string, provisionFlux: string, segment: string, componentName: string) {
       let vm = this;
       let _search: Object = {
@@ -170,24 +170,24 @@ module OrangeFeSARQ.Services {
           orderType: orderType,
           provisionFlux: provisionFlux,
           segment: segment
-        }, 
+        },
         urlParams: []
       };
 
-      return vm.httpCacheGett(vm.genericConstant.productOrder + '/' +  vm.genericConstant.brand + '/productOrder', _search, componentName)
+      return vm.httpCacheGett(vm.genericConstant.productOrder + '/' + vm.genericConstant.brand + '/productOrder', _search, componentName)
         .then((response) => {
-          if (response && response.data){
+          if (response && response.data) {
             return response.data;
           } else {
             return response;
           }
         })
         .catch(function (error) {
-          if (error && error.data){
+          if (error && error.data) {
             return error.data;
-           } else {
+          } else {
             return error;
-           }
+          }
         });
 
 
@@ -285,18 +285,29 @@ module OrangeFeSARQ.Services {
     }
 
 
-    getSummaryNac(ratesUsage: Array <any>, spOrigin: string, spDestiny: string, componentName: string): ng.IPromise<any> {
+    getSummaryNac(ratesUsage: Array<any>, spOrigin: string, spDestiny: string, componentName: string, siebel?: boolean): ng.IPromise<any> {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
       let METHOD = 'getSummaryNac';
+      let body: any;
+      if (siebel == true) {
+        body = {
+          'msisdnRates': ratesUsage,
+          'spCodSiebeleOrigin': spOrigin,
+          'spCodeSiebelDestino': spDestiny,
+        }
+      }
+      else {
+        body = {
+          'msisdnRates': ratesUsage,
+          'spCodeOrigin': spOrigin,
+          'spCodeDestino': spDestiny
+        }
+      }
       let _search: Object = {
         urlParams: [BRAND, METHOD],
         queryParams: null,
-        body: {
-          'msisdnRates': ratesUsage,
-          'spCodeOrigin': spOrigin,
-          'spCodeDestino': spDestiny,
-        }
+        body: body
       };
 
       return vm.httpPost(vm.urlProductOrder, _search, componentName)
@@ -314,7 +325,7 @@ module OrangeFeSARQ.Services {
             return error;
         });
     }
-    
+
 
     changeRate(requestBody: OrangeFeSARQ.Models.changeRate_postRequest, componentName: string): ng.IPromise<any> {
       let vm = this;

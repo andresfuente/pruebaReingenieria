@@ -99,6 +99,7 @@ module OrangeFeSARQ.Services {
             ospCustomerSegmentBinding: string,
             stateOrProvinceBinding: string,
             workflow: string,
+            callApiStock: boolean,
             campana_txt?: string,
             creditLimit?: number
         ): ng.IPromise<{} | void> {
@@ -106,11 +107,15 @@ module OrangeFeSARQ.Services {
             let params;
             let deferred = srv.$q.defer();
             let priceType = '';
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
 
-            let clientGeolocation = 'Madrid'
+            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
+            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
+
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince
+                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
             // Cabeceras
@@ -265,6 +270,7 @@ module OrangeFeSARQ.Services {
                             ospCustomerSegmentBinding,
                             stateOrProvinceBinding,
                             priceType,
+                            callApiStock,
                             campana_txt,
                             creditLimit
                         )
@@ -312,6 +318,7 @@ module OrangeFeSARQ.Services {
             ospCustomerSegmentBinding: string,
             stateOrProvinceBinding: string,
             priceType: string,
+            callApiStock: boolean,
             campana_txt?: string,
             creditLimit?: number
         ) {
@@ -335,6 +342,7 @@ module OrangeFeSARQ.Services {
                     ospCustomerSegmentBinding,
                     stateOrProvinceBinding,
                     priceType,
+                    callApiStock,
                     campana_txt,
                     creditLimit
                 );
@@ -379,6 +387,7 @@ module OrangeFeSARQ.Services {
             ospCustomerSegmentBinding: string,
             stateOrProvinceBinding: string,
             priceType: string,
+            callApiStock: boolean,
             campana_txt?: string,
             creditLimit?: number
         ) {
@@ -393,11 +402,15 @@ module OrangeFeSARQ.Services {
 
             //Cabeceras FdC
             let _headers = new HashMap<string, string>();
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
 
-            let clientGeolocation = 'Madrid'
+            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
+            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
+
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince
+                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
             _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
@@ -478,6 +491,7 @@ module OrangeFeSARQ.Services {
             // Si el terminal no estaba cacheado se hace la llamada que devuelve sus datos
             if (!mosaicTerminal) {
                 let deferred = srv.$q.defer();
+
                 mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
 
                 if (terminalName) {
@@ -493,13 +507,16 @@ module OrangeFeSARQ.Services {
                                     ospCustomerSegmentBinding,
                                     priceNameBinding,
                                     mosaicFileCompOWCSStore);
+
+                                srv.spinnerBlockSrv.show = false;
                                 // Se hace la llamada para recuperar el stock del terminal
                                 this.getStockData(mosaicTerminal,
                                     isExistingCustomer,
                                     commercialAction,
                                     portabilityOrigin,
                                     channel,
-                                    sfid);
+                                    sfid, callApiStock);
+
                             }
 
                         }).catch((error) => {
@@ -537,7 +554,8 @@ module OrangeFeSARQ.Services {
             commercialAction: string,
             portabilityOrigin: string,
             channel: string,
-            sfid: string
+            sfid: string,
+            callApiStock: boolean
         ) {
             let srv = this;
             srv.spinnerBlockSrv.show = true;
@@ -563,7 +581,7 @@ module OrangeFeSARQ.Services {
                 queryParams: {}
             };
 
-            if (codes.length && !srv.isTLV) {
+            if (codes.length && !srv.isTLV && callApiStock) {
                 srv.httpPost('api/APIStockData/v1', _search, 'mosaicFile.service')
                     .then((response) => {
                         terminal.loadStockData(response.data);
@@ -592,6 +610,7 @@ module OrangeFeSARQ.Services {
             fileTerminalCompOWCSStore,
             profileBinding: string,
             priceNameBinding: string,
+            callApiStock: boolean,
             ospCustomerSegmentBinding?: string,
             stateOrProvinceBinding?: string,
             campana_txt?: string,
@@ -611,7 +630,10 @@ module OrangeFeSARQ.Services {
                 priceNameBinding,
                 ospCustomerSegmentBinding,
                 stateOrProvinceBinding,
-                '', campana_txt, creditLimit).promise;
+                '',
+                callApiStock,
+                campana_txt,
+                creditLimit).promise;
         }
 
         handleCacheVersion(
@@ -744,11 +766,7 @@ module OrangeFeSARQ.Services {
                 }
 
                 if (vm.creditLimitSrv.isValidSFIDNMC() && clientData && clientData.creditLimitCapta && clientData.creditLimitCapta.creditLimitAvailable !== null) {
-                    if (shoppingCart && _.size(shoppingCart.cartItem) !== 0) {
-                        vm.creditLimitSrv.checkCreditLimit(clientData, shoppingCart);
-                    } else {
-                        dataOT.creditLimit = clientData.creditLimitCapta.staticCreditLimit;
-                    }
+                    dataOT.creditLimit = clientData.creditLimitCapta.creditLimitAvailable;
                 }
             }
 
@@ -874,7 +892,8 @@ module OrangeFeSARQ.Services {
             channel: string,
             ospCustomerSegmentBinding: string,
             mosaicFileCompOWCSStore,
-            sfid: string
+            sfid: string,
+            callApiStock: boolean
         ) {
             let srv = this;
             let headers = new HashMap<string, string>();
@@ -907,8 +926,8 @@ module OrangeFeSARQ.Services {
                             'portabilidad',
                             'pospago',
                             channel,
-                            sfid);
-                        return mosaicTerminal;
+                            sfid, callApiStock);
+
                     }
 
                 }).catch((error) => {

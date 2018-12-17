@@ -39,7 +39,6 @@ module OrangeFeSARQ.Services {
                 queryParams: data,
                 urlParams: ['orange', 'managePassword']
             };
-
             return vm._httpCacheOrange.post(vm.url, _search, comp)
                 .then(function(response) {
                     return response.data;
@@ -68,9 +67,28 @@ module OrangeFeSARQ.Services {
                 });        }
 
 
+        createUserPAE(data, comp: string) {
+            let vm = this;
+
+            let urlPublic;
+
+            let _search: Object = {
+                queryParams: data,
+                urlParams: ['orange', 'createUser']
+            };
+
+            urlPublic = '/public/' + vm.url;
+            return vm.httpPost(urlPublic, _search, comp)
+                .then(function(response) {
+                    return response.data;
+                })
+                .catch(function(error) {
+                    return error;
+                });        }
+
         changeUser(data, comp: string) {
             let vm = this;
-              let _search: Object = {
+            let _search: Object = {
                 queryParams: data,
                 urlParams: ['orange', 'changeUser']
             };

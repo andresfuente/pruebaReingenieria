@@ -61,7 +61,7 @@ module OrangeFeSARQ.Services {
         }
 
         /* Datos del terminal */
-        getData(str_id, sfid, fileTerminalCompOWCSStore) {
+        getData(str_id, sfid, fileTerminalCompOWCSStore, callApiStock) {
             let srv = this;
             let relatedProductOffering;
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
@@ -105,7 +105,7 @@ module OrangeFeSARQ.Services {
                     str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
                     dataOT.ospCartItemSubType, dataOT.creditRiskRating,
                     dataOT.channel, sfid, relatedProductOffering,
-                    fileTerminalCompOWCSStore, dataOT.profile, dataOT.priceName,
+                    fileTerminalCompOWCSStore, dataOT.profile, dataOT.priceName, callApiStock,
                     dataOT.ospCustomerSegment, dataOT.stateOrProvince, dataOT.campana_txt, dataOT.creditLimit
                 ).then((terminal) => {
                     srv.viewState.selectedVariant = terminal.variants[0];
