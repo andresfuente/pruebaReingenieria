@@ -34,6 +34,7 @@ module OrangeFeSARQ.Services {
         generateShoppingCart(body, componentName: string, customer?) {
             let vm = this;
             let _headers = vm.getParentSfid();
+            body = vm.conditionalJazztel(body);
             let _search = {
                 body: {
                     ospCartItemReqPost: [
@@ -52,6 +53,41 @@ module OrangeFeSARQ.Services {
                         throw error.data;
                     }
                 );
+        }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services.ShoppingCartSrv#conditionalJazztel
+         * @param {Object} body datos de shoppingCart
+         * @methodOf OrangeFeSARQ.Services.ShoppingCartSrv
+         * @description
+         * Agrega una caracteristica en caso de ser cliente jazztel
+         * @returns {object} Devuelve el body de la llamada
+         */
+        conditionalJazztel(body){
+            let loginData = JSON.parse(sessionStorage.getItem('loginData'));
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+            if(loginData.sfid === '53000053' && clientData && clientData.jazztelData){
+                if(body && body.cartItem && _.isArray(body.cartItem) && !_.isEmpty(body.cartItem)){
+                    let characteristic = {
+                        "name": "Aplicable Cambio Marca",
+                        "value": "YES"
+                    };
+                    _.forEach(body.cartItem, (element) =>{
+                        if(element.product && element.product.characteristic){
+                            element.product.characteristic.push(characteristic);
+                            return false;
+                        }else if(element.product && !element.product.characteristic){
+                            element.product.characteristic = [];
+                            element.product.characteristic.push(characteristic);
+                            return false;
+                        }
+                    });
+                }
+            }
+
+            return body;
         }
 
         /**
