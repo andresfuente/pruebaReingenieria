@@ -426,7 +426,7 @@ module OrangeFeSARQ.Services {
          * Consulta al productSpecification del catalogo la información de las tarifas
          * para el renove primario segun los parámetros de entrada
          */
-        getSpecificationRenewData(productType: string, clientSegment: string, ratesList, technologyList) {
+        getSpecificationRenewData(productType: string, clientSegment: string, ratesList, technologyList, defaultTechnology?) {
             let vm = this;
 
             let ratesString = '';
@@ -442,13 +442,19 @@ module OrangeFeSARQ.Services {
                 segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
                 idOfertaComercialList: ratesString, // Listado de idBundle 
                 idTecnologiaList: technologyString, // Listado de id de tecnologia
-                actocomercial: 'renove'
+                actocomercial: 'renove',
+                defaultTechnology: defaultTechnology
             };
             if (ratesString === '') {
                 delete params.idOfertaComercialList;
             }
-            if (technologyString === '') {
+
+            if (defaultTechnology || technologyString === '') {
                 delete params.idTecnologiaList;
+            }
+
+            if (!defaultTechnology)  {
+                delete params.defaultTechnology
             }
 
             let srv = this;
@@ -493,7 +499,7 @@ module OrangeFeSARQ.Services {
          * para el renove primario segun los parámetros de entrada
          */
         getOfferingRenewData(productType: string, clientSegment: string,
-            specificationData, ratesList, technologyList) {
+            specificationData, ratesList, technologyList, defaultTechnology? : boolean) {
             let vm = this;
             let ratesString = '';
             let technologyString = '';
@@ -508,13 +514,19 @@ module OrangeFeSARQ.Services {
                 segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
                 idOfertaComercialList: ratesString, // Listado de id Siebel 
                 idTecnologiaList: technologyString, // Listado de id de tecnologia
-                actocomercial: 'renove'
+                actocomercial: 'renove',
+                defaultTechnology: defaultTechnology
             };
+
             if (ratesString === '') {
                 delete params.idOfertaComercialList;
             }
-            if (technologyString === '') {
+            if (defaultTechnology || technologyString === '') {
                 delete params.idTecnologiaList;
+            }
+
+            if (!defaultTechnology)  {
+                delete params.defaultTechnology
             }
 
             let srv = this;
