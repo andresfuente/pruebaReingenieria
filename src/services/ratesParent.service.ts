@@ -426,7 +426,8 @@ module OrangeFeSARQ.Services {
          * Consulta al productSpecification del catalogo la información de las tarifas
          * para el renove primario segun los parámetros de entrada
          */
-        getSpecificationRenewData(productType: string, clientSegment: string, ratesList, technologyList, defaultTechnology?) {
+        getSpecificationRenewData(productType: string, clientSegment: string, ratesList,
+        technologyList, defaultTechnology?: string) {
             let vm = this;
 
             let ratesString = '';
@@ -499,7 +500,7 @@ module OrangeFeSARQ.Services {
          * para el renove primario segun los parámetros de entrada
          */
         getOfferingRenewData(productType: string, clientSegment: string,
-            specificationData, ratesList, technologyList, defaultTechnology? : boolean) {
+            specificationData, ratesList, technologyList, defaultTechnology?: string) {
             let vm = this;
             let ratesString = '';
             let technologyString = '';
