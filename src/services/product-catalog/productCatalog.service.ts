@@ -97,15 +97,30 @@ module OrangeFeSARQ.Services {
                 },
                 urlParams: [vm.genericConstant.brand, vm.genericConstant.site, 'productBonusSpecification', vm.OSP]
             };
-            if(paqueteDatos) {
-                _search.queryParams={
+            if (paqueteDatos) {
+                _search.queryParams = {
                     tarifa: tarifa,
-                    paqueteDatos : paqueteDatos
+                    paqueteDatos: paqueteDatos
                 }
             };
             return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
                 .then(function (response) {
                     return response.data.productSpecification;
+                })
+                .catch(function (error) {
+                    throw error;
+                });
+        }
+
+        getProductBonusSpecificationGeneral(queryParams?: any) {
+            let vm = this;
+            let _search: any = {
+                queryParams: queryParams || {},
+                urlParams: [vm.genericConstant.brand, vm.genericConstant.site, 'productBonusSpecification', vm.OSP]
+            };
+            return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
+                .then(function (response) {
+                    return response.data;
                 })
                 .catch(function (error) {
                     throw error;
@@ -136,7 +151,7 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-        getRates(msisdn: string, contractType: string, tmCodeOrigen: string, componentName: string, segment?: string, spCode? : string, rateType? : string): any {
+        getRates(msisdn: string, contractType: string, tmCodeOrigen: string, componentName: string, segment?: string, spCode?: string, rateType?: string): any {
             let vm = this;
             let _search: any;
             let brand = vm.genericConstant.brand;
@@ -147,13 +162,6 @@ module OrangeFeSARQ.Services {
                     contractType: contractType,
                     tmCodeOrigen: tmCodeOrigen,
                     segment: segment
-                };
-            } else if (spCode){
-                request = {
-                    contractType: contractType,
-                    tmCodeOrigen: tmCodeOrigen,
-                    rateType : 'VOZ',
-                    spCode : spCode
                 };
             } else {
                 request = {

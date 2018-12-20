@@ -5,7 +5,7 @@ module OrangeFeSARQ.Models {
         commercialAction?: 'renove' | 'migracion' | 'portabilidad' | 'alta';
         productType?: 'sva' | 'rate' | 'promo';
         category?: 'Convergenet' | 'Convergente_NAC' | 'Fijo' | 'Movil' | 'Mundo' | 'Holiday';
-        contractType?: 'POSPAGO' | 'PREPAGO';
+        contractType?: 'POSPAGO' | 'PREPAGO' | 'TV';
         channel?: string;
         idOfertaComercialList?: Array<string>;
         idTecnologiaList?: Array<string>;
@@ -14,6 +14,8 @@ module OrangeFeSARQ.Models {
         pack?: string;
         type?: 'movil' | 'movilfijo';
         currentDate?: string;
+        bundleId?: string;
+        mode?: 'complete' | 'light' | 'null';
     }
     
     export interface ProductSpecificationV2QueryParams {
@@ -21,7 +23,7 @@ module OrangeFeSARQ.Models {
         commercialAction?: 'renove' | 'migracion' | 'portabilidad' | 'alta';
         productType?: 'sva' | 'rate' | 'promo';
         category?: 'Convergente' | 'Convergente_NAC' | 'Fijo' | 'Movil' | 'Mundo' | 'Holiday';
-        contractType?: 'POSPAGO' | 'PREPAGO';
+        contractType?: 'POSPAGO' | 'PREPAGO' | 'TV';
         channel?: string;
         idOfertaComercialList?: Array<string>;
         idTecnologiaList?: Array<string>;
@@ -30,5 +32,7 @@ module OrangeFeSARQ.Models {
         pack?: string;
         type?: 'movil' | 'movilfijo';
         currentDate?: string;
+        bundleId?: string;
+        mode?: 'complete' | 'light' | 'null';
     }
 }
