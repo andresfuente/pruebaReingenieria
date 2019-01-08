@@ -1500,7 +1500,7 @@ module OrangeFeSARQ.Services {
         createInsuranceCartItem(device, type) {
             let seguroCartItem = {
                 id: device.insuranceSiebelId,
-                action: 'New',
+                action: 'Exclude',
                 ospSelected: device.insuranceSelected,
                 cartItem: [],
                 product: {
