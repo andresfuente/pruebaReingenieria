@@ -68,7 +68,7 @@ module OrangeFeSARQ.Services {
             let loginData = JSON.parse(sessionStorage.getItem('loginData'));
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
-            if(loginData.sfid === '53000053' && clientData && clientData.jazztelData){
+            if(clientData && clientData.jazztelData){
                 if(body && body.cartItem && _.isArray(body.cartItem) && !_.isEmpty(body.cartItem)){
                     let characteristic = {
                         "name": "Aplicable Cambio Marca",
