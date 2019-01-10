@@ -517,7 +517,7 @@ module OrangeFeSARQ.Services {
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
-                    rates.loadRates(specificationData, response.data);
+                    rates.loadRates(specificationData, response.data, bucketId);
                     return rates;
                 })
                 .catch((error) => {

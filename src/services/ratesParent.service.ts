@@ -207,18 +207,7 @@ module OrangeFeSARQ.Services {
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
-                    rates.loadRates(specificationData, response.data);
-                    
-                    // Si es tarifa NAC y el cliente ya es NAC o lleva una en la prescripcion mostrar el nombre personalizado
-                    /*
-                    if (srv.isNACClient()) {
-                        _.forEach(rates.rates, (rate) => {
-                            if (rate.groupName === 'Convergente_NAC') {
-                                rate.rateSubName = srv.getNameNAC() ? srv.getNameNAC() : rate.rateSubName;
-                            }
-                        })
-                    }
-                    */
+                    rates.loadRates(specificationData, response.data, bucketId);
 
                     return rates;
                 })
@@ -427,7 +416,7 @@ module OrangeFeSARQ.Services {
          * para el renove primario segun los parámetros de entrada
          */
         getSpecificationRenewData(productType: string, clientSegment: string, ratesList,
-        technologyList, defaultTechnology?: string) {
+        technologyList, defaultTechnology?: string, bucketId?: string) {
             let vm = this;
 
             let ratesString = '';
@@ -444,7 +433,8 @@ module OrangeFeSARQ.Services {
                 idOfertaComercialList: ratesString, // Listado de idBundle 
                 idTecnologiaList: technologyString, // Listado de id de tecnologia
                 actocomercial: 'renove',
-                defaultTechnology: defaultTechnology
+                defaultTechnology: defaultTechnology,
+                bucketId: bucketId
             };
             if (ratesString === '') {
                 delete params.idOfertaComercialList;
@@ -456,6 +446,10 @@ module OrangeFeSARQ.Services {
 
             if (!defaultTechnology)  {
                 delete params.defaultTechnology
+            }
+
+            if (!bucketId) {
+                delete params.bucketId;
             }
 
             let srv = this;
@@ -500,7 +494,7 @@ module OrangeFeSARQ.Services {
          * para el renove primario segun los parámetros de entrada
          */
         getOfferingRenewData(productType: string, clientSegment: string,
-            specificationData, ratesList, technologyList, defaultTechnology?: string) {
+            specificationData, ratesList, technologyList, defaultTechnology?: string, bucketId?: string) {
             let vm = this;
             let ratesString = '';
             let technologyString = '';
@@ -516,7 +510,8 @@ module OrangeFeSARQ.Services {
                 idOfertaComercialList: ratesString, // Listado de id Siebel 
                 idTecnologiaList: technologyString, // Listado de id de tecnologia
                 actocomercial: 'renove',
-                defaultTechnology: defaultTechnology
+                defaultTechnology: defaultTechnology,
+                bucketId: bucketId
             };
 
             if (ratesString === '') {
@@ -528,6 +523,10 @@ module OrangeFeSARQ.Services {
 
             if (!defaultTechnology)  {
                 delete params.defaultTechnology
+            }
+
+            if (!bucketId) {
+                delete params.bucketId;
             }
 
             let srv = this;
@@ -551,7 +550,7 @@ module OrangeFeSARQ.Services {
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
-                    rates.loadRates(specificationData, response.data);
+                    rates.loadRates(specificationData, response.data, bucketId);
                     return rates;
                 })
                 .catch((error) => {

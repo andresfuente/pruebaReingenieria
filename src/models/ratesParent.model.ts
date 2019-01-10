@@ -16,7 +16,7 @@ module ratesParent.Models {
             vm.promise = deferred ? deferred.promise : null;
         }
 
-        loadRates(specificationData, offeringData) {
+        loadRates(specificationData, offeringData, bucketInfo?) {
             let vm = this;
             if (specificationData.productSpecification && offeringData.productOffering) {
                 specificationData.productSpecification.forEach(function (specification) {
@@ -27,7 +27,8 @@ module ratesParent.Models {
                             productOffering.push(offering);
                         }
                     });
-                    let rate: Rate = new Rate(specification, productOffering);
+                    
+                    let rate: Rate = new Rate(specification, productOffering, bucketInfo);
 
                     vm.rates.push(rate);
                 });
@@ -113,7 +114,7 @@ module ratesParent.Models {
         public bucket: RateBucket;
         public NACLines: Rate[] = [];
 
-        constructor(rateData, priceData) {
+        constructor(rateData, priceData, bucketInfo?) {
             this.rateSubName = rateData.ospTitulo;
             this.rateDescription = rateData.description;
             this.siebelId = rateData.id;
@@ -145,8 +146,10 @@ module ratesParent.Models {
                         this.productBundle.push(raProductBundle);
                     }
 
-                    if (element.ospCategory === 'BUCKET') {
+                    if (element.ospCategory === 'BUCKET' && element.ospId) {
                         this.bucket = new RateBucket(element.name, element.ospId, element.ospOrden, element.ospLargeDescription, element.description, element.ospImagen);
+                    } else if (bucketInfo && rateData.ospGroupName === 'Convergente_NAC') {
+                        this.bucket = new RateBucket('', bucketInfo, '', '', '', '');
                     }
                 });
             }
