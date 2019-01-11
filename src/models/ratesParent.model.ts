@@ -235,6 +235,14 @@ module ratesParent.Models {
                                     let productOfferingPriceAlteration = priceData[i].productOfferingPrice[j].
                                         productOfferingPriceAlteration;
 
+                                    // Precio fijo para packEntry NAC
+                                    let precioFijo;
+
+                                    if (productOfferingPriceAlteration && productOfferingPriceAlteration.price
+                                    && productOfferingPriceAlteration.recurringChargePeriod === 'Precio fijo') {
+                                        precioFijo = productOfferingPriceAlteration.price;
+                                    }
+
                                     // Precios tarifa con promociones
                                     if (promotionalPrice) {
                                         this.typePriceName = promotionalPrice.priceType;
@@ -247,7 +255,7 @@ module ratesParent.Models {
                                             this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
                                             this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
                                         }
-                                    } else if (productOfferingPriceAlteration) {
+                                    } else if (productOfferingPriceAlteration && !precioFijo) {
                                         this.typePriceName = productOfferingPriceAlteration.priceType;
                                         this.descriptionPromotion = productOfferingPriceAlteration.description;
                                         this.applicationDuration = productOfferingPriceAlteration.applicationDuration;
@@ -261,7 +269,18 @@ module ratesParent.Models {
                                     }
 
                                     // Precios tarifas sin promo
-                                    if (commercialPrice) {
+                                    if (precioFijo) { // Prioritario el de packEntry
+                                        this.typePriceName = precioFijo.priceType;
+                                        this.taxRate = precioFijo.taxRate;
+                                        this.taxRateName = precioFijo.ospTaxRateName;
+                                        if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                            this.ratePriceTaxIncluded = precioFijo.taxIncludedAmount;
+                                            this.ratePrice = precioFijo.dutyFreeAmount;
+                                        } else {
+                                            this.rateOfferingPriceTaxInluded = precioFijo.taxIncludedAmount;
+                                            this.rateOfferingPrice = precioFijo.dutyFreeAmount;
+                                        }
+                                    } else if (commercialPrice) {
                                         this.typePriceName = commercialPrice.priceType;
                                         this.taxRate = commercialPrice.taxRate;
                                         this.taxRateName = commercialPrice.ospTaxRateName;
