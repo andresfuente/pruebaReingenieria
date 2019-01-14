@@ -451,8 +451,12 @@ module OrangeFeSARQ.Services {
                 } 
                 
                 if (rate.groupName === 'Convergente_NAC') {
-                    commercialData[commercialActIndex].NACRateInShoppingCart = true;
-                }
+                    if (rate.associatedLine) {
+                        commercialData[commercialActIndex].NACRateInShoppingCart = true;
+                    } else {
+                        commercialData[commercialActIndex].NACRateInShoppingCart = false;
+                    }
+                }    
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
             // Se comprueba si existe alguna tarifa en el shopping cart que se este modificando
@@ -991,7 +995,11 @@ module OrangeFeSARQ.Services {
                 }
 
                 if (rate.groupName === 'Convergente_NAC') {
-                    commercialData[commercialActIndex].NACRateInShoppingCart = true;
+                    if (rate.associatedLine) {
+                        commercialData[commercialActIndex].NACRateInShoppingCart = true;
+                    } else {
+                        commercialData[commercialActIndex].NACRateInShoppingCart = false;
+                    }
                 }
 
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
