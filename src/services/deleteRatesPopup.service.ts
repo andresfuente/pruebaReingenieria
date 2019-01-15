@@ -15,7 +15,7 @@ module OrangeFeSARQ.Services {
         constructor(public $injector) {
             let vm = this;
             vm.setInjections($injector);
-            vm.deleteRatesPopupVars = {};
+            vm.deleteRatesPopupVars;
         }
 
         setInjections($injector) {
@@ -28,13 +28,16 @@ module OrangeFeSARQ.Services {
          * @name #showPopup
          * @methodOf deleteRatesPopup.Services.DeleteRatesPopupSrv
          */
-        showDeleteRatesPopup(typeOfDelete): void {
+        showDeleteRatesPopup(typeOfDelete, act?, opt?, modify?): void {
             let vm = this;
             vm.deleteRatesPopupVars = {
                 size: '',
                 visible: true,
                 closeEnabled: true,
-                typeOfDelete: typeOfDelete
+                typeOfDelete: typeOfDelete,
+                act : act,
+                opt : opt,
+                modify : modify
             };
         }
 
@@ -135,6 +138,7 @@ module OrangeFeSARQ.Services {
             return vm.deleteRatesPopupVars ? vm.deleteRatesPopupVars.closeEnabled : undefined;
         }
     }
+
     angular.module('deleteRatesPopupSrv', [])
-        .service('deleteRatesPopupSrv', OrangeFeSARQ.Services.DeleteRatesPopupSrv);
+    .service('deleteRatesPopupSrv', OrangeFeSARQ.Services.DeleteRatesPopupSrv);
 }
