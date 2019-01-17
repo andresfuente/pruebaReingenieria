@@ -169,6 +169,11 @@ module OrangeFeSARQ.Services {
                     tmCodeOrigen: tmCodeOrigen,
                 };
             }
+			
+			if (spCode) {
+				request.spCode: spCode,
+				request.rateType: 'VOZ'
+			}
 
             _search = {
                 queryParams: request,
