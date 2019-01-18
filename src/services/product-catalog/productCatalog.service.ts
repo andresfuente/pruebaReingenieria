@@ -171,8 +171,8 @@ module OrangeFeSARQ.Services {
             }
 			
 			if (spCode) {
-				request.spCode: spCode,
-				request.rateType: 'VOZ'
+				request.spCode = spCode,
+				request.rateType = 'VOZ'
 			}
 
             _search = {
