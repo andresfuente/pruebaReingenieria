@@ -896,10 +896,13 @@ module OrangeFeSARQ.Services {
          * @description
          * Crea el item de ospTecnology cuando existe
          */
-        createIdTechnologyCartItem(rate, TVOrigen?) {
+        createIdTechnologyCartItem(rate) {
             let vm = this;
             let ospTecnology;
             let flagTvItem = {};
+            let characteristicCDM = {};
+            let flagTv = {};
+            let fixedclient = {};
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
             let coverage = JSON.parse(sessionStorage.getItem('coverage'));
@@ -940,20 +943,24 @@ module OrangeFeSARQ.Services {
                     value: vm.objectTv.value
                 };
                 ospTecnology.product.characteristic.push(flagTvItem);
-            }
-
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            if (clientData && clientData.jazztelData && clientData.jazztelData.customer && clientData.jazztelData.CDM) {
-                let characteristicCDM = {
+                characteristicCDM = {
                     name: 'Aplicable Cambio Marca',
                     value: 'Yes'
                 };
                 ospTecnology.product.characteristic.push(characteristicCDM);
-                let flagTv = {
+                flagTv = {
                     name: 'TVOrigen',
-                    value: clientData.jazztelData.tv
+                    value: 'Yes'
                 };
                 ospTecnology.product.characteristic.push(flagTv);
+                let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                if(clientData && clientData.clientFixedNumber ){
+                    fixedclient = {
+                        name: 'ClienteFijo',
+                        value: 'Yes'
+                    }
+                    ospTecnology.product.characteristic.push(fixedclient);
+                }
             }
             return ospTecnology;
         }
