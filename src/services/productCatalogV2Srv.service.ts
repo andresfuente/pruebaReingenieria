@@ -243,6 +243,68 @@ module OrangeFeSARQ.Services {
                     return error;
                 });
         }
+
+        getProductPrice(product: any, sva: boolean = false, promoted: boolean = true): number {
+            let vm = this;
+    
+            let price: number = 0;
+            if (product && product.productOfferingPrice) {
+                let priorities: string[] = [];
+                if (sva) {
+                    priorities = [
+                        'priceSva',
+                        'siebelPriceSva'
+                    ];
+                } else {
+                    priorities = [
+                        'promotionalCommercialPriceRate',
+                        'commercialPriceRate',
+                        'techSiebelProductBundlePriceRate',
+                        'siebelPriceRate',
+                        'priceRate',
+                        'techniquePriceRate',
+                        'techSiebelPriceRate'
+                    ];
+                }
+    
+                price = vm.getPriorityPrice(product.productOfferingPrice, priorities, promoted);
+            }
+    
+            return price;
+        }
+    
+        private getPriorityPrice(productPricesList: any[], priorities: string[], promoted: boolean = true): number {
+    
+            const PRICETYPE: string = 'Pago aplazado';
+    
+            for (let price of productPricesList) {
+                if (price.priceType == PRICETYPE) {
+                    if (promoted && price.productOfferingPriceAlteration && price.productOfferingPriceAlteration.price) {
+                        return price.productOfferingPriceAlteration.price.taxIncludedAmount;
+                    }
+                    for (let priority of priorities) {
+                        let priceReturn = _.find(price.price, function(o: any) { return o.priceType == priority});
+                        if(priceReturn) {
+                            return priceReturn.taxIncludedAmount;
+                        }
+                    }
+                }
+            }
+    
+            return;
+        }
+
+        getPromotionDescription(product: any): string {
+
+            if(product && product.productOfferingPrice && 
+                    product.productOfferingPrice.productOfferingPriceAlteration && 
+                    product.productOfferingPrice.productOfferingPriceAlteration.description) {  
+                return product.productOfferingPrice.productOfferingPriceAlteration.description;
+            }
+
+            return '';
+
+        }
     }
 
     angular.module('productCatalogV2Srv', [])
