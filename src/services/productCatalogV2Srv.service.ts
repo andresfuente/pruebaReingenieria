@@ -227,7 +227,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Obtiene el catalog specification de los datos proporcionados
          */
-        getProductCatalogSpecification(queryParams: OrangeFeSARQ.Models.ProductSpecificationV2QueryParams, compName: string, refresh: boolean = true): ng.IPromise<any> {
+        getProductCatalogSpecification(queryParams: OrangeFeSARQ.Models.ProductSpecificationV2QueryParams, compName: string, refresh: boolean = false): ng.IPromise<any> {
             let vm = this;
 
             let _search = {
