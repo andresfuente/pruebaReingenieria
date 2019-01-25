@@ -378,7 +378,7 @@ module OrangeFeSARQ.Services {
             });
         }
 
-        updateNAC(currentRate : any, applyPromo: boolean) {
+        updateNAC(currentRate : any) {
             let vm = this;
 
             let rateContainer = vm.getRateContainer();
@@ -405,18 +405,12 @@ module OrangeFeSARQ.Services {
                             rate.nacPriceTaxIncluded += line.ratePriceTaxIncluded;
                         }
 
-                        if (applyPromo) {
-                            if (line.ratePricePromotional !== undefined) {
-                                rate.nacPricePromotional += line.ratePricePromotional;
-                            } else if (line.ratePrice !== undefined) {
-                                rate.nacPricePromotional += line.ratePricePromotional;
-                            }
+                        if (line.ratePricePromotional !== undefined) {
+                            rate.nacPricePromotional += line.ratePricePromotional;
+                        }
 
-                            if (line.ratePriceTaxIncludedPromotional !== undefined) {
-                                rate.nacPriceTaxIncludedPromotional += line.ratePriceTaxIncludedPromotional;
-                            } else if (line.ratePriceTaxIncluded !== undefined) {
-                                rate.nacPriceTaxIncludedPromotional += line.ratePriceTaxIncluded;
-                            }
+                        if (line.ratePriceTaxIncludedPromotional !== undefined) {
+                            rate.nacPriceTaxIncludedPromotional += line.ratePriceTaxIncludedPromotional;
                         }
                     });
                 }
