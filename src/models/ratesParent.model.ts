@@ -548,6 +548,12 @@ module ratesParent.Models {
                                             let priceSVA: any = _.find(priceElement.price, { priceType: 'priceSva' });
                                             let siebelPriceSva: any = _.find(priceElement.price, { priceType: 'siebelPriceSva' });
 
+                                            if (priceElement && priceElement.priceTypeSVA === 'Recurring' || priceElement.priceTypeSVA === 'One-Time') {
+                                                svaPriceItem.priceTypeSVA = priceElement.priceTypeSVA;
+                                            } else {
+                                                svaPriceItem.priceTypeSVA = false;
+                                            }
+
                                             if (priceSVA && priceSVA !== null) {
                                                 svaPriceItem.priceType = priceElement.priceType;
                                                 svaPriceItem.price.taxRate = priceSVA.taxRate;
@@ -604,6 +610,7 @@ module ratesParent.Models {
         public id: string;
         public name: string;
         public priceType: string;
+        public priceTypeSVA: any;
         public price: RatePrice = new RatePrice();
         public recurringChargePeriod: number;
     }

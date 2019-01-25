@@ -7,4 +7,9 @@ declare module  OrangeFeSARQ.Models {
         spCode? : string;
         rateType? : string;
     }
+
+    export interface ProductCatalogSpecificationQueryParams  {
+        queryType?: string;
+        usages?: string;
+    }
 }

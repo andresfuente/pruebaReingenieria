@@ -310,6 +310,12 @@ module OrangeFeSARQ.Services {
             } else {
                 sessionClientData.creditLimitRenove.upperUmbral = true;
             }
+
+            if (priceVapsRenove > sessionClientData.creditLimitRenove.staticCreditLimit) {
+                sessionClientData.creditLimitRenove.upperCreditLimit = true;
+            } else {
+                sessionClientData.creditLimitRenove.upperCreditLimit = false;
+            }
         }
     }
 }
