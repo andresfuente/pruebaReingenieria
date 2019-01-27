@@ -407,10 +407,14 @@ module OrangeFeSARQ.Services {
 
                         if (line.ratePricePromotional !== undefined) {
                             rate.nacPricePromotional += line.ratePricePromotional;
+                        } else if (line.ratePrice !== undefined) {
+                            rate.nacPricePromotional += line.ratePrice;
                         }
 
                         if (line.ratePriceTaxIncludedPromotional !== undefined) {
                             rate.nacPriceTaxIncludedPromotional += line.ratePriceTaxIncludedPromotional;
+                        } else if (line.ratePriceTaxIncluded !== undefined) {
+                            rate.nacPriceTaxIncludedPromotional += line.ratePriceTaxIncluded;
                         }
                     });
                 }
