@@ -491,7 +491,7 @@ module OrangeFeSARQ.Services {
 
             let priceAlteration = [];
 
-            if (rate.ratePricePromotional || rate.ratePriceTaxIncludedPromotional) {
+            if (vm.hasPromotion(rate)) {
                 priceAlteration =[{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
@@ -499,11 +499,11 @@ module OrangeFeSARQ.Services {
                     'price': {
                         'dutyFreeAmount': {
                             'unit': 'EUR',
-                            'value': rate.ratePricePromotional
+                            'value': rate.ratePricePromotional ? rate.ratePricePromotional : rate.taxFreePrice
                         },
                         'taxIncludedAmount': {
                             'unit': 'EUR',
-                            'value': rate.ratePriceTaxIncludedPromotional
+                            'value': rate.ratePriceTaxIncludedPromotional ? rate.ratePriceTaxIncludedPromotional : rate.taxIncludedPrice
                         },
                         taxRate: rate.taxRate,
                         ospTaxRateName: rate.taxRateName
@@ -799,7 +799,7 @@ module OrangeFeSARQ.Services {
 
             let priceAlteration = []
 
-            if (rate.ratePricePromotional || rate.ratePriceTaxIncludedPromotional) {
+            if (vm.hasPromotion(rate)) {
                 priceAlteration =[{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
@@ -807,11 +807,11 @@ module OrangeFeSARQ.Services {
                     'price': {
                         'dutyFreeAmount': {
                             'unit': 'EUR',
-                            'value': rate.ratePricePromotional
+                            'value': rate.ratePricePromotional ? rate.ratePricePromotional : rate.taxFreePrice
                         },
                         'taxIncludedAmount': {
                             'unit': 'EUR',
-                            'value': rate.ratePriceTaxIncludedPromotional
+                            'value': rate.ratePriceTaxIncludedPromotional ? rate.ratePriceTaxIncludedPromotional : rate.taxIncludedPrice
                         },
                         taxRate: rate.taxRate,
                         ospTaxRateName: rate.taxRateName
@@ -1016,7 +1016,7 @@ module OrangeFeSARQ.Services {
 
             let priceAlteration = [];
 
-            if (rate.ratePricePromotional || rate.ratePriceTaxIncludedPromotional) {
+            if (vm.hasPromotion(rate)) {
                 priceAlteration =[{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
@@ -1024,11 +1024,11 @@ module OrangeFeSARQ.Services {
                     'price': {
                         'dutyFreeAmount': {
                             'unit': 'EUR',
-                            'value': rate.ratePricePromotional
+                            'value': rate.ratePricePromotional ? rate.ratePricePromotional : rate.taxFreePrice
                         },
                         'taxIncludedAmount': {
                             'unit': 'EUR',
-                            'value': rate.ratePriceTaxIncludedPromotional
+                            'value': rate.ratePriceTaxIncludedPromotional ? rate.ratePriceTaxIncludedPromotional : rate.taxIncludedPrice
                         },
                         taxRate: rate.taxRate,
                         ospTaxRateName: rate.taxRateName
@@ -1965,6 +1965,34 @@ module OrangeFeSARQ.Services {
             }
 
             return bucket;
+        }
+
+        /*
+        Devuelve true si aplica promoción al pack y false en otro caso
+        */
+        hasPromotion(rate: any) {
+            let vm = this;
+
+            let isPromo : boolean = false;
+
+            // Averiguamos si hay promociones en las líneas adicionales
+            if (rate.groupName === 'Convergente_NAC') {
+                 isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
+
+                // Si no hay promoción en la principal, comprobamos las adicionales
+                // y si alguna tiene promo, hay que pintarlo
+                if (!isPromo && rate.NACLines) {
+                    rate.NACLines.forEach((line) => {
+                        if (!isNaN(line.ratePriceTaxIncludedPromotional) || !isNaN(line.ratePricePromotional)) {
+                            isPromo = true;
+                        }
+                    });
+                }
+            } else { // Si no es NAC, hacemos la comprobación normal
+                isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
+            }
+
+            return isPromo;
         }
     }
 }
