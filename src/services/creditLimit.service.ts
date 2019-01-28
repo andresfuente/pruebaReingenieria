@@ -10,7 +10,7 @@ module OrangeFeSARQ.Services {
      */
     export class CreditLimitSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
-        
+
         constructor(public $injector) {
             super($injector);
             let vm = this;
@@ -214,7 +214,7 @@ module OrangeFeSARQ.Services {
             sessionShopingCart.cartItem.forEach(option => {
                 if (option.ospSelected) {
                     option.cartItem.forEach(element => {
-                        if (element.product) {
+                        if (element.product && element.product.productRelationship && element.product.productRelationship.length > 0) {
                             if (_.find(element.product.productRelationship, { 'type': 'VAP' })) {
                                 element.itemPrice.forEach(item => {
                                     if (item.priceType === 'cuota' && option.ospCartItemType !== 'renove') {
