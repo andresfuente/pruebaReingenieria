@@ -108,8 +108,10 @@ module OrangeFeSARQ.Services {
             _headers.set('locationName', _.deburr(vm.storeProvince.toUpperCase()));
             return vm.httpCacheGeth(vm.commercialCampaignsAPIUrl, _search, _headers, comp, true)
                 .then((response) => {
+                        vm.isChanging = false;
                         return response.data;
                     }, (err) => {
+                        vm.isChanging = false;
                         throw err;
                     }
                 );

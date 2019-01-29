@@ -166,24 +166,24 @@ module OrangeFeSARQ.Services {
 
             let sessionClientData = JSON.parse(sessionStorage.getItem('clientData'));
             let owcsCampaign: string = _.camelCase('Renove primario');
-
-            sessionClientData.creditLimitRenove.linesWithVAP = [];
-
-            if (sessionClientData && sessionClientData.creditLimitRenove && campaigns) {
-                campaigns.forEach(line => {
-                    let linesWithVAP: any = {};
-                    if (line.campaignNum && _.size(line.campaignNum) !== 0) {
-                        line.campaignNum.forEach(campaign => {
-                            if (campaign.wcs && _.camelCase(campaign.wcs.typeRenove) === owcsCampaign) {
-                                linesWithVAP = {
-                                    'line': line.idUser,
-                                    'ventaAPlazos': campaign.ventaAPlazos
+            if (sessionClientData && sessionClientData.creditLimitRenove) {
+                sessionClientData.creditLimitRenove.linesWithVAP = [];
+                if (campaigns) {
+                    campaigns.forEach(line => {
+                        let linesWithVAP: any = {};
+                        if (line.campaignNum && _.size(line.campaignNum) !== 0) {
+                            line.campaignNum.forEach(campaign => {
+                                if (campaign.wcs && _.camelCase(campaign.wcs.typeRenove) === owcsCampaign) {
+                                    linesWithVAP = {
+                                        'line': line.idUser,
+                                        'ventaAPlazos': campaign.ventaAPlazos
+                                    }
+                                    sessionClientData.creditLimitRenove.linesWithVAP.push(linesWithVAP);
                                 }
-                                sessionClientData.creditLimitRenove.linesWithVAP.push(linesWithVAP);
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
+                }
             }
 
             if (sessionClientData.creditLimitRenove.linesWithVAP && _.size(sessionClientData.creditLimitRenove.linesWithVAP) !== 0) {
