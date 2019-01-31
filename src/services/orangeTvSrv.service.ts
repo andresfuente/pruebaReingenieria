@@ -13,9 +13,7 @@ module OrangeFeSARQ.Services {
 
         private productContractedTranslateSrv: OrangeFeSARQ.Service.ProductContractedTranslateSrv;
         private sessionStorageManager: any;
-        private $rootScope: any;
         private utils;
-        private $q: ng.IQService;
 
         private PC: any;
         private CV: any;
@@ -23,7 +21,6 @@ module OrangeFeSARQ.Services {
         private CN: string;
 
         private fixedLines: any;
-        private OTVFixedLines: any;
 
         private orangeTVFixedProducts: any;
 
@@ -40,7 +37,6 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
             vm.orangeTVFixedProducts = [];
-            vm.OTVFixedLines = [];
             vm.fixedLines = [];
 
             vm.setInjections($injector);
@@ -57,22 +53,21 @@ module OrangeFeSARQ.Services {
         setInjections($injector) {
             let vm = this;
 
-            vm.$q = vm.$injector.get('$q');
             vm.utils = $injector.get('utils');
-            vm.$rootScope = $injector.get('$rootScope');
             vm.sessionStorageManager = $injector.get('sessionStorageSrv');
             vm.productContractedTranslateSrv = $injector.get('productContractedTranslateSrv');
         }
 
-        initialize(PC: any, CV:any, PT: string, CN: string) {
+        getOrangeTVLines(PC: any, CV: any, PT: string, CN: string) {
             let vm = this;
 
-            vm.PC = PC;
-            vm.CV = CV;
-            vm.PT = PT;
-            vm.CN = CN;
+            vm.PC = PC; // Product Catalog
+            vm.CV = CV; // Customer View
+            vm.PT = PT; // Product Type
+            vm.CN = CN; // Comp Name
 
             vm.getOrangeTVBasicProducts();
+            return vm.getLinesWithOrangeTV();
         }
         /**
          * @ngdoc method
@@ -95,8 +90,6 @@ module OrangeFeSARQ.Services {
                     }
                 }
             }
-
-            vm.getLinesWithOrangeTV();
         }
 
         /**
@@ -109,7 +102,6 @@ module OrangeFeSARQ.Services {
          */
         getLinesWithOrangeTV() {
             let vm = this;
-            let fixedLinesPos: number = 0;
             let promises = [];
 
             // Accedemos a todas las lineas del cliente y comprobamos con una promesa multiple si cada una de ellas tiene orange TV contratado
@@ -121,26 +113,26 @@ module OrangeFeSARQ.Services {
                     }
                 });
             }
+            return promises;
+        }
 
-            vm.$q.all(promises).then((response) => {
-                let fixedLinesProducts = response;
-
-                if (fixedLinesProducts) {
-                    // Se recogen los productos de todas las lineas fijas
-                    for (let i = 0; i < fixedLinesProducts.length; i++) {
-                        const pI = fixedLinesProducts[i]['product'];
-                        // Cruza los productos de todas las lineas fijas con los productos Orange TV del Product Specification
-                        vm.matchInventoryWithCatalog(pI, fixedLinesPos);
-                        fixedLinesPos++;
-                    }
-                    vm.OTVFixedLines = vm.fixedLines;
-                    vm.sessionStorageManager.setEntry('OTVLines', angular.toJson(vm.OTVFixedLines));
-                } else {
-                    // KO
-                }
-            }).catch((error) => {
-                // KO
-            })
+        /**
+         * @ngdoc method
+         * @name myOrangeTv.Controllers:myOrangeTvCtrl#matchPromisesWithCatalog
+         * @methodOf myOrangeTv.Controllers:myOrangeTvCtrl
+         * @description
+         * 
+         * Cruza las promesas resultantes de las lineas fijas con el Product Specification
+         */
+        matchPromisesWithCatalog(fixedLinesProducts) {
+            let vm = this;
+            // Se recogen los productos de todas las lineas fijas
+            for (let i = 0; i < fixedLinesProducts.length; i++) {
+                const pI = fixedLinesProducts[i]['product'];
+                // Cruza los productos de todas las lineas fijas con los productos Orange TV del Product Specification
+                vm.matchInventoryWithCatalog(pI, i);
+            }
+            return vm.fixedLines;
         }
 
         /**
