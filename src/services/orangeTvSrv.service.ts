@@ -12,6 +12,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
 
         private productContractedTranslateSrv: OrangeFeSARQ.Service.ProductContractedTranslateSrv;
+        private sessionStorageManager: any;
         private $rootScope: any;
         private utils;
         private $q: ng.IQService;
@@ -59,6 +60,7 @@ module OrangeFeSARQ.Services {
             vm.$q = vm.$injector.get('$q');
             vm.utils = $injector.get('utils');
             vm.$rootScope = $injector.get('$rootScope');
+            vm.sessionStorageManager = $injector.get('sessionStorageSrv');
             vm.productContractedTranslateSrv = $injector.get('productContractedTranslateSrv');
         }
 
@@ -132,7 +134,7 @@ module OrangeFeSARQ.Services {
                         fixedLinesPos++;
                     }
                     vm.OTVFixedLines = vm.fixedLines;
-                    vm.$rootScope.$emit('getOrangeTVLines', vm.OTVFixedLines);
+                    vm.sessionStorageManager.setEntry('OTVLines', angular.toJson(vm.OTVFixedLines));
                 } else {
                     // KO
                 }
