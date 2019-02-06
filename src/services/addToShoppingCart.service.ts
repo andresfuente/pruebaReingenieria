@@ -450,13 +450,10 @@ module OrangeFeSARQ.Services {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 } 
                 
-                if (rate.groupName === 'Convergente_NAC') {
-                    if (rate.associatedLine) {
-                        commercialData[commercialActIndex].NACRateInShoppingCart = true;
-                    } else {
-                        commercialData[commercialActIndex].NACRateInShoppingCart = false;
-                    }
-                }    
+                if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
+                    commercialData[commercialActIndex].NACRateInShoppingCart = true;
+                }
+
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
             // Se comprueba si existe alguna tarifa en el shopping cart que se este modificando
@@ -1001,12 +998,8 @@ module OrangeFeSARQ.Services {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 }
 
-                if (rate.groupName === 'Convergente_NAC') {
-                    if (rate.associatedLine) {
-                        commercialData[commercialActIndex].NACRateInShoppingCart = true;
-                    } else {
-                        commercialData[commercialActIndex].NACRateInShoppingCart = false;
-                    }
+                if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
+                    commercialData[commercialActIndex].NACRateInShoppingCart = true;
                 }
 
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
