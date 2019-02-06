@@ -104,13 +104,17 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-        getProductCatalogPrincipalLineV2(idOfertaComercialList) {
+        getProductCatalogPrincipalLineV2(idOfertaComercialList, segment) {
             let vm = this;
 
             let _search = {
                 queryParams: {
                     idOfertaComercialList: idOfertaComercialList,
-                    productType: 'rate'
+                    productType: 'rate',
+                    commercialAction: 'portabilidad',
+                    contractType: 'POSPAGO',
+                    isExistingCustomer: true,
+                    segment: segment
                 },
                 urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
             };
