@@ -220,23 +220,23 @@ module OrangeFeSARQ.Services {
                 }
 
                 params.channel = '';
-                params.campaignName = 'FIDELIZACION+PERSONAL+VAP+TOP+RIESGO+PLUS+PDV,FIDE+PERSONAL+VAP+TV-OBJ+CONECT+TOP+RIESGO+PDV';
+                params.campaignName = campana_txt;
 
-                params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
+                /* params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
                         'purchaseOption', 'price.fee', 'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
                         'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        'characteristic.color']); */
 
                 // Se seleccionan los parametros necesarios para la llamada a la OT
-                /* if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
+                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
-                        'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee', 'totalPaymentRange',
-                        'characteristic.OSData.groupData.OStype.value',
-                        'characteristic.cameraData.groupData.backCameraResolution.value',
+                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
+                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
+                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
@@ -250,7 +250,7 @@ module OrangeFeSARQ.Services {
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
                         'characteristic.color']);
-                } */
+                }
             }
 
             // Metodo http nativo por bug en los filtros
@@ -466,7 +466,7 @@ module OrangeFeSARQ.Services {
             if (params.commercialAction === 'renove') {
                 // Se seleccionan los parametros necesarios para la llamada a la OT
                 params.channel = '';
-                params.campaignName = 'FIDELIZACION+PERSONAL+VAP+TOP+RIESGO+PLUS+PDV,FIDE+PERSONAL+VAP+TV-OBJ+CONECT+TOP+RIESGO+PDV';
+                params.campaignName = campana_txt;
                 let clientData = JSON.parse(sessionStorage.getItem('clientData'));
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 let commercialActIndex = srv.getSelectedCommercialAct();
@@ -474,7 +474,7 @@ module OrangeFeSARQ.Services {
                 if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew' ||
                     commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'best_renove') {
                     priceNameBinding = 'primario';
-                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
                 }
                 // Renove secundario
                 if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
