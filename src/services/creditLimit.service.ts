@@ -68,6 +68,13 @@ module OrangeFeSARQ.Services {
 
             return false;
         }
+        /**
+         * 
+         */
+        isFdcSite() {
+            const loginData = JSON.parse(sessionStorage.getItem('loginData'));
+            return loginData.site === 'fichadecliente';
+        }
 
         /**
          * @name OrangeFeSARQ.Services:CreditLimitSrv#setCreditRisk
@@ -103,7 +110,9 @@ module OrangeFeSARQ.Services {
                         sessionClientData.creditLimitRenove.creditLimitAvailable = creditLimit;
                         sessionClientData.creditLimitRenove.staticCreditLimit = creditLimit;
                     } else {
-                        delete sessionClientData.creditLimitRenove;
+                        if (!vm.isFdcSite()) {
+                            delete sessionClientData.creditLimitRenove;
+                        }
                     }
                 }
             }
@@ -143,7 +152,7 @@ module OrangeFeSARQ.Services {
                     if (response) {
                         response.forEach(campaign => {// Sacar el valor del primer renove
                             campaign.campaignNum.forEach(element2 => {
-                                if (element2.wcs && element2.wcs.typeRenove && (element2.wcs.typeRenove === "Renove primario" || element2.wcs.typeRenove === "Renove secundario" ) && !saldoEncontrado) {
+                                if (element2.wcs && element2.wcs.typeRenove && (element2.wcs.typeRenove === "Renove primario" || element2.wcs.typeRenove === "Renove secundario") && !saldoEncontrado) {
                                     if (campaign.saldoDisponible !== null) {
                                         limit = parseInt(campaign.saldoDisponible, 10);
                                         saldoEncontrado = true;
