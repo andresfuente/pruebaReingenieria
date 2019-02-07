@@ -270,6 +270,7 @@ module ratesComparator.Models {
         public ospTecnology: string;
 
         public bucket: Object;
+        public groupName: string;
 
         /**
          * @ngdoc method
@@ -307,6 +308,8 @@ module ratesComparator.Models {
             this.ospTecnology = rate.ospTecnology;
 
             this.bucket = rate.bucket;
+
+            this.groupName = rate.groupName;
         }
     }
 }
