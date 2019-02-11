@@ -184,10 +184,12 @@ module OrangeFeSARQ.Services {
                     return data;
 
                 } else {
+                    let defaultData = JSON.parse(sessionStorage.getItem('defaultData')).idRateEssential;
                     let data = {
                         rateSiebelId: rate.siebelId,
                         terminalsiebelId: terminal.siebelId,
-                        deviceOffering: response.data
+                        deviceOffering: response.data,
+                        relatedProductOffering: "1-1RG3H8"
                     };
                     return data;
                 }

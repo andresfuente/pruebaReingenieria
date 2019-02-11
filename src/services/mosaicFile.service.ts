@@ -222,12 +222,21 @@ module OrangeFeSARQ.Services {
                 params.channel = '';
                 params.campaignName = campana_txt;
 
+                /* params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
+                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
+                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
+                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
+                        'characteristic.screenData.groupData.screenSize.value',
+                        'characteristic.memoryData.groupData.hardDisk.value',
+                        'characteristic.batteryData.groupData.batteryDurationInConversation.value',
+                        'characteristic.color']); */
+
                 // Se seleccionan los parametros necesarios para la llamada a la OT
                 if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
-                        'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee', 'totalPaymentRange',
-                        'characteristic.OSData.groupData.OStype.value',
-                        'characteristic.cameraData.groupData.backCameraResolution.value',
+                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
+                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
+                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
@@ -853,6 +862,11 @@ module OrangeFeSARQ.Services {
                         dataOT.ospCartItemType = 'renove';
                         dataOT.isExistingCustomer = '';
                         dataOT.channel = 'noChannel';
+                        if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
+                            dataOT.relatedRateResidential = commercialData[commercialActIndex].originRate;
+                        } else {
+                            dataOT.relatedRateBusiness = commercialData[commercialActIndex].originRate;
+                        }
                         break;
 
                     default: dataOT.priceName = 'primario';
