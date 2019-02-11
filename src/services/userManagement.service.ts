@@ -80,7 +80,7 @@ module OrangeFeSARQ.Services {
             urlPublic = '/public/' + vm.url;
             return vm.httpPost(urlPublic, _search, comp)
                 .then(function(response) {
-                    return response.data;
+                    return response;
                 })
                 .catch(function(error) {
                     return error;
