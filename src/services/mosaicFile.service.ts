@@ -138,7 +138,9 @@ module OrangeFeSARQ.Services {
                     break;
             }
             // Establece el nivel de riego
-            if (riskLevel === 'bajo' || riskLevel === 'medio') {
+            if (riskLevel === 'bajo' ){
+                riskLevel += 'medio,alto';
+            }else if( riskLevel === 'medio') {
                 riskLevel += ',alto';
             }
             // Establece el segmento del cliente
