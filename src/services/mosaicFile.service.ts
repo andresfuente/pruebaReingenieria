@@ -491,7 +491,9 @@ module OrangeFeSARQ.Services {
                 }
             }
 
-            if (riskLevel === 'bajo' || riskLevel === 'medio') {
+            if (riskLevel === 'bajo' ){
+                riskLevel += 'medio,alto';
+            }else if( riskLevel === 'medio') {
                 riskLevel += ',alto';
             }
 
