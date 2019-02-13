@@ -400,10 +400,12 @@ module OrangeFeSARQ.Services {
                 });
             // Se inserta el terminal secundario en el shopping cart
             if (shoppingCart !== null && shoppingCart.cartItem.length > 0) {
+                // *** let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                // *** let commercialActIndex = vm.getSelectedCommercialAct();
                 shoppingCart.cartItem.forEach(currentCartItem => {
                     let rate = _.find(currentCartItem.cartItem, { 'id': selectedCartRate });
                     let terminal = _.find(currentCartItem.cartItem, { 'id': selectedCartTerminal });
-                    if (rate && terminal) {
+                    if (rate && terminal /* || *** (terminal && commercialData[commercialActIndex] && commercialData[commercialActIndex].renewalType && commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove secundario')*/) {
                         currentCartItem.cartItem.push(secundaryDeviceCartItem);
                         if (payType === 'deferred') {
                             currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
@@ -1352,7 +1354,9 @@ module OrangeFeSARQ.Services {
             }
             // Se comprueba si existe algun dispositivo en el shopping cart que se este modificando
             if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
-                commercialData[commercialActIndex].ospIsSelected) {
+                commercialData[commercialActIndex].ospIsSelected && 
+                !(commercialData[commercialActIndex].renewalType && 
+                commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove secundario')) {
                 // Se eliminan los terminales del acto comercial existentes en el shopping cart
                 shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
                 commercialData[commercialActIndex].isCompletedAC = false;
