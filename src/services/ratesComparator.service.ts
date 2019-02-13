@@ -95,7 +95,8 @@ module OrangeFeSARQ.Services {
             channel: string,
             profile: string,
             nameSgmr: string,
-            creditLimit?: number
+            creditLimit?: number,
+            isSecondaryRenew?: boolean
         ) {
             let vm = this;
             let srv = this;
@@ -148,6 +149,10 @@ module OrangeFeSARQ.Services {
 
             if (creditLimit === undefined || creditLimit === null) {
                 delete params.creditLimit;
+            }
+
+            if (isSecondaryRenew) {
+                delete params['deviceOffering.category.name'];
             }
 
             // Prepago   
