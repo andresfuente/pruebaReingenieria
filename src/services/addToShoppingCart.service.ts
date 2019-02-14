@@ -900,6 +900,7 @@ module OrangeFeSARQ.Services {
             let characteristicCDM = {};
             let flagTv = {};
             let fixedclient = {};
+            let mantenRate = {};
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
             let coverage = JSON.parse(sessionStorage.getItem('coverage'));
@@ -951,14 +952,35 @@ module OrangeFeSARQ.Services {
                 };
                 ospTecnology.product.characteristic.push(flagTv);
                 let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                if(clientData && clientData.clientFixedNumber ){
+                if(clientData && clientData.length > 0 && clientData.clientFixedNumber ){
                     fixedclient = {
                         name: 'ClienteFijo',
                         value: 'Yes'
                     }
                     ospTecnology.product.characteristic.push(fixedclient);
                 }
+                if(clientData && clientData.length > 0 && clientData.desblinMantenTarif && clientData.desblinMantenTarif === true ){
+                    mantenRate = {
+                        name: 'manten_tarifa',
+                        value: 'Y'
+                    }
+                    ospTecnology.product.characteristic.push(mantenRate);
+                }
             }
+
+            /* let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            if (clientData && clientData.jazztelData && clientData.jazztelData.customer && clientData.jazztelData.CDM) {
+                let characteristicCDM = {
+                    name: 'Aplicable Cambio Marca',
+                    value: 'Yes'
+                };
+                ospTecnology.product.characteristic.push(characteristicCDM);
+                let flagTv = {
+                    name: 'TVOrigen',
+                    value: clientData.jazztelData.tv
+                };
+                ospTecnology.product.characteristic.push(flagTv);
+            } */
             return ospTecnology;
         }
 
