@@ -1967,7 +1967,7 @@ module OrangeFeSARQ.Services {
         getFullBucketInShoppingCart() {
             let vm = this;
 
-            let bucket: string;
+            let bucket;
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
 
             if (shoppingCart && shoppingCart.cartItem) {

@@ -67,13 +67,14 @@ module OrangeFeSARQ.Services {
                 });        }
 
 
-        createUserPAE(data, comp: string) {
+        createUserPAE(data, recaptcha, comp: string) {
             let vm = this;
 
             let urlPublic;
 
             let _search: Object = {
-                queryParams: data,
+                body: data,
+                queryParams: recaptcha,
                 urlParams: ['orange', 'createUser']
             };
 
