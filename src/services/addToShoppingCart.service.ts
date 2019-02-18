@@ -294,6 +294,7 @@ module OrangeFeSARQ.Services {
             let unPriceItem;
             let sTerminalsSC = [];
             let seguro;
+            let isSecondaryRenew: boolean = (commercialData[commercialActIndex] && commercialData[commercialActIndex].renewalType && commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove secundario');
 
             device.itemPrice.forEach(item => {
                 if (payType === 'deferred' && item.priceType === 'inicial' || item.priceType === 'cuota') {
@@ -321,7 +322,7 @@ module OrangeFeSARQ.Services {
 
             productItem = {
                 'href': device.srcImage,
-                'name': device.litTitle,
+                'name': device.litTitle ? device.litTitle : device.brand ? device.brand : undefined,
                 'description': device.litSubTitle ? device.litSubTitle : device.description,
                 'productRelationship': [{
                     'type': 'terminal'
@@ -356,74 +357,110 @@ module OrangeFeSARQ.Services {
                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
             };
+            if (!isSecondaryRenew) {
+                // Objeto para sTerminals
+                secundaryTerminal = {
+                    'sTerminalId': (sTerminalLastId + 1),
+                    'action': 'New',
+                    'siebelId': device.siebelId,
+                    'name': device.litTitle,
+                    'description': device.litSubTitle,
+                    'brand': device.litTitle,
+                    'insuranceSiebelId': device.insuranceSiebelId,
+                    'srcImage': device.srcImage,
+                    'insuranceSelected': device.insuranceSelected,
+                    'stock': device.stock,
+                    'itemPrice': device.itemPrice[0],
+                    'shoppingCart': [secundaryDeviceCartItem].concat(vapCartItems),
+                    'cpSiebel': device.cpSiebel,
+                    'cpDuration': device.cpDuration,
+                    'cpDescription': device.cpDescription,
+                    'id': device.id
+                };
+                if (device.insuranceSiebelId) {
+                    seguro = vm.createInsuranceCartItem(device, 'secundary');
+                }
 
-            // Objeto para sTerminals
-            secundaryTerminal = {
-                'sTerminalId': (sTerminalLastId + 1),
-                'action': 'New',
-                'siebelId': device.siebelId,
-                'name': device.litTitle,
-                'description': device.litSubTitle,
-                'brand': device.litTitle,
-                'insuranceSiebelId': device.insuranceSiebelId,
-                'srcImage': device.srcImage,
-                'insuranceSelected': device.insuranceSelected,
-                'stock': device.stock,
-                'itemPrice': device.itemPrice[0],
-                'shoppingCart': [secundaryDeviceCartItem].concat(vapCartItems),
-                'cpSiebel': device.cpSiebel,
-                'cpDuration': device.cpDuration,
-                'cpDescription': device.cpDescription,
-                'id': device.id
-            };
-            if (device.insuranceSiebelId) {
-                seguro = vm.createInsuranceCartItem(device, 'secundary');
-            }
-
-            // Se inserta el terminal en el array de terminales secundarios
-            if (!commercialData[commercialActIndex].sTerminals) {
-                commercialData[commercialActIndex].sTerminals = [];
-            }
-            commercialData[commercialActIndex].sTerminals.push(secundaryTerminal);
-            // Se inserta el terminal en el array de opciones seleccionadas 
-            commercialData[commercialActIndex].shoppingCartElementsSelected
-                .forEach((currentItem, index) => {
-                    if (currentItem.ospIsAddSecundary) {
-                        // Si sTerminals no esta definido
-                        if (!currentItem.sTerminals) {
-                            currentItem.sTerminals = [];
-                        }
-                        currentItem.sTerminals.push({ 'siebelId': device.siebelId });
-                        selectedCartTerminal = currentItem.terminalSiebelId;
-                        selectedCartRate = currentItem.rateSiebelId;
-                    }
-                });
-            // Se inserta el terminal secundario en el shopping cart
-            if (shoppingCart !== null && shoppingCart.cartItem.length > 0) {
-                // *** let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                // *** let commercialActIndex = vm.getSelectedCommercialAct();
-                shoppingCart.cartItem.forEach(currentCartItem => {
-                    let rate = _.find(currentCartItem.cartItem, { 'id': selectedCartRate });
-                    let terminal = _.find(currentCartItem.cartItem, { 'id': selectedCartTerminal });
-                    if (rate && terminal /* || *** (terminal && commercialData[commercialActIndex] && commercialData[commercialActIndex].renewalType && commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove secundario')*/) {
-                        currentCartItem.cartItem.push(secundaryDeviceCartItem);
-                        if (payType === 'deferred') {
-                            currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
-
-                            // Añadir cartItem compromiso de permanencia CP
-                            if (device.cpDescription && device.cpSiebel) {
-                                currentCartItem.cartItem.push(vm.createCPCartItem(device, true));
+                // Se inserta el terminal en el array de terminales secundarios
+                if (!commercialData[commercialActIndex].sTerminals) {
+                    commercialData[commercialActIndex].sTerminals = [];
+                }
+                commercialData[commercialActIndex].sTerminals.push(secundaryTerminal);
+                // Se inserta el terminal en el array de opciones seleccionadas 
+                    commercialData[commercialActIndex].shoppingCartElementsSelected
+                        .forEach((currentItem, index) => {
+                            if (currentItem.ospIsAddSecundary) {
+                                // Si sTerminals no esta definido
+                                if (!currentItem.sTerminals) {
+                                    currentItem.sTerminals = [];
+                                }
+                                currentItem.sTerminals.push({ 'siebelId': device.siebelId });
+                                selectedCartTerminal = currentItem.terminalSiebelId;
+                                selectedCartRate = currentItem.rateSiebelId;
                             }
+                        });
+                    // Se inserta el terminal secundario en el shopping cart
+                    if (shoppingCart !== null && shoppingCart.cartItem.length > 0) {
+                        shoppingCart.cartItem.forEach(currentCartItem => {
+                            let rate = _.find(currentCartItem.cartItem, { 'id': selectedCartRate });
+                            let terminal = _.find(currentCartItem.cartItem, { 'id': selectedCartTerminal });
+                            if (rate && terminal) {
+                                currentCartItem.cartItem.push(secundaryDeviceCartItem);
+                                if (payType === 'deferred') {
+                                    currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
 
-                        }
-                        if (device.insuranceSiebelId) {
-                            currentCartItem.cartItem.push(seguro);
-                        }
+                                    // Añadir cartItem compromiso de permanencia CP
+                                    if (device.cpDescription && device.cpSiebel) {
+                                        currentCartItem.cartItem.push(vm.createCPCartItem(device, true));
+                                    }
+
+                                }
+                                if (device.insuranceSiebelId) {
+                                    currentCartItem.cartItem.push(seguro);
+                                }
+                            }
+                        });
                     }
-                });
+                    sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+                    sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+
+            } else {
+
+                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                let commercialActIndex: number = vm.getSelectedCommercialAct();
+
+                if (commercialActIndex !== -1 && commercialData[commercialActIndex].id) {
+                    let commercialActId: number = Number(commercialData[commercialActIndex].id);
+                    let lastCartItemId: number = vm.getLastCartItemId(shoppingCart, commercialActId);
+                    let cartItemElementId: number = Number((lastCartItemId + 0.1).toFixed(1));
+
+                    let cartItemElement = {
+                        'id': cartItemElementId,
+                        'cartItem': payType === 'unique' ? [secundaryDeviceCartItem] : [secundaryDeviceCartItem].concat(vapCartItems),
+                        'action': 'New',
+                        'cartItemRelationship': [{
+                            id: commercialActId
+                        }],
+                        'ospSelected': true,
+                        'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                        'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
+                    };
+
+                    if (shoppingCart) {
+                        shoppingCart.cartItem.push(cartItemElement);
+                    } else {
+                        shoppingCart = {
+                            'id': '',
+                            'cartItem': [cartItemElement],
+                            'customer': {}
+                        };
+                    }
+                    sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+
+                }
+                
             }
-            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
-            sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+
         }
 
         /**
@@ -1354,9 +1391,7 @@ module OrangeFeSARQ.Services {
             }
             // Se comprueba si existe algun dispositivo en el shopping cart que se este modificando
             if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
-                commercialData[commercialActIndex].ospIsSelected && 
-                !(commercialData[commercialActIndex].renewalType && 
-                commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove secundario')) {
+                commercialData[commercialActIndex].ospIsSelected) {
                 // Se eliminan los terminales del acto comercial existentes en el shopping cart
                 shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
                 commercialData[commercialActIndex].isCompletedAC = false;
@@ -1401,7 +1436,7 @@ module OrangeFeSARQ.Services {
 
             productItem = {
                 'href': device.srcImage,
-                'name': device.brand,
+                'name': device.brand ? device.brand : device.litTitle ? device.litTitle : undefined,
                 'description': device.litSubTitle,
                 'productRelationship': [{
                     'type': 'terminal'
