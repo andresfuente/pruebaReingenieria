@@ -145,6 +145,43 @@ module OrangeFeSARQ.Services {
           });
 
     }
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:ProductInventoryService#getPaymentServices
+     * @description
+     * #rest
+     * Servicio que busca un cliente en funcion de distintos parámetros
+     */
+    comprobarGrupo(codigoGrupo, segment?): any {
+      let vm = this;
+
+      let METHOD = 'services';
+
+      // parametro obligatorio lineCategory
+      // segmento no coge residential
+      // el numero no vale el de por defecto 666666666
+
+      let _search: Object = {
+        queryParams: {
+          queryType: 'infoGrupo',
+          gruopId: codigoGrupo,
+          lineCategory: 'mobile'
+        },
+        urlParams: [vm.genericConstant.brand, METHOD, '652166828']
+      };
+
+      return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search)
+        .then(function (response) {
+          if (response.data) {
+            return response.data;
+          } else {
+            throw response.data.error;
+          }
+        })
+        .catch(function (error) {
+          return error.data;
+        });
+    }
 
   }
 }
