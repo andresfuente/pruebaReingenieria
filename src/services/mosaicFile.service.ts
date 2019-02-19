@@ -215,7 +215,7 @@ module OrangeFeSARQ.Services {
 
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
-                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N') {
+                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
                             params.priceType = 'unico';
                         }
                     });
@@ -486,7 +486,7 @@ module OrangeFeSARQ.Services {
 
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
-                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N') {
+                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
                             params.priceType = 'unico';
                         }
                     });

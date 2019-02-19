@@ -95,7 +95,8 @@ module OrangeFeSARQ.Services {
             channel: string,
             profile: string,
             nameSgmr: string,
-            creditLimit?: number
+            creditLimit?: number,
+            priceType?: string
         ) {
             let vm = this;
             let srv = this;
@@ -143,7 +144,8 @@ module OrangeFeSARQ.Services {
                 'deviceOffering.category.name': 'primario',
                 campaignName: nameSgmr,
                 fields: 'deviceOffering',
-                creditLimit: creditLimit
+                creditLimit: creditLimit,
+                priceType: priceType
             }; 
 
             if (creditLimit === undefined || creditLimit === null) {
