@@ -139,7 +139,7 @@ module OrangeFeSARQ.Services {
             }
             // Establece el nivel de riego
             if (riskLevel === 'bajo' ){
-                riskLevel += 'medio,alto';
+                riskLevel += ',medio,alto';
             }else if( riskLevel === 'medio') {
                 riskLevel += ',alto';
             }
@@ -494,7 +494,7 @@ module OrangeFeSARQ.Services {
             }
 
             if (riskLevel === 'bajo' ){
-                riskLevel += 'medio,alto';
+                riskLevel += ',medio,alto';
             }else if( riskLevel === 'medio') {
                 riskLevel += ',alto';
             }
