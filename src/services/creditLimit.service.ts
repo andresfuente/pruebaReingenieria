@@ -178,14 +178,19 @@ module OrangeFeSARQ.Services {
             if (sessionClientData && sessionClientData.creditLimitRenove) {
                 sessionClientData.creditLimitRenove.linesWithVAP = [];
                 if (campaigns) {
+                    let ventaAPlazos: string;
                     campaigns.forEach(line => {
                         let linesWithVAP: any = {};
                         if (line.campaignNum && _.size(line.campaignNum) !== 0) {
                             line.campaignNum.forEach(campaign => {
                                 if (campaign.wcs && _.camelCase(campaign.wcs.typeRenove) === owcsCampaign) {
+                                    ventaAPlazos = campaign.ventaAPlazos;
+                                    if (!ventaAPlazos || ventaAPlazos==='null'){
+                                        ventaAPlazos='N';
+                                    }
                                     linesWithVAP = {
                                         'line': line.idUser,
-                                        'ventaAPlazos': campaign.ventaAPlazos
+                                        'ventaAPlazos': ventaAPlazos
                                     }
                                     sessionClientData.creditLimitRenove.linesWithVAP.push(linesWithVAP);
                                 }
