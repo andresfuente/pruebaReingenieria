@@ -226,7 +226,7 @@ module OrangeFeSARQ.Services {
                 sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
             }
             sessionShopingCart.cartItem.forEach(option => {
-                if (option.ospSelected) {
+                if (option.ospSelected && !(option.ospSelectable && option.ospSelectable === 'error')) {
                     option.cartItem.forEach(element => {
                         if (element.product && element.product.productRelationship && element.product.productRelationship.length > 0) {
                             if (_.find(element.product.productRelationship, { 'type': 'VAP' })) {
