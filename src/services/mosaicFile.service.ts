@@ -867,6 +867,7 @@ module OrangeFeSARQ.Services {
                     case 'secondary_renew':
                         dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
                         dataOT.ospCartItemType = 'renove';
+                        dataOT.priceName = 'secundario';
                         if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
                             dataOT.relatedRateResidential = commercialData[commercialActIndex].originRate;
                         } else {
