@@ -114,7 +114,7 @@ module OrangeFeSARQ.Services {
             let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+            if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
@@ -138,9 +138,9 @@ module OrangeFeSARQ.Services {
                     break;
             }
             // Establece el nivel de riego
-            if (riskLevel === 'bajo' ){
+            if (riskLevel === 'bajo') {
                 riskLevel += ',medio,alto';
-            }else if( riskLevel === 'medio') {
+            } else if (riskLevel === 'medio') {
                 riskLevel += ',alto';
             }
             // Establece el segmento del cliente
@@ -215,8 +215,10 @@ module OrangeFeSARQ.Services {
 
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
-                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
+                        if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N') || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
                             params.priceType = 'unico';
+                        } else {
+                            delete params.deviceOffering;
                         }
                     });
                 }
@@ -237,7 +239,8 @@ module OrangeFeSARQ.Services {
                 if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
-                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
+                        'deviceOffering.category.name', 'purchaseOption', 'price.fee', 'totalPaymentRange',
+                        'characteristic.OSData.groupData.OStype.value',
                         'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
@@ -246,7 +249,8 @@ module OrangeFeSARQ.Services {
                 } else {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
-                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
+                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'deviceOffering.category.name',
+                        'characteristic.OSData.groupData.OStype.value',
                         'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
@@ -420,7 +424,7 @@ module OrangeFeSARQ.Services {
             let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+            if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
@@ -472,30 +476,40 @@ module OrangeFeSARQ.Services {
                 let clientData = JSON.parse(sessionStorage.getItem('clientData'));
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 let commercialActIndex = srv.getSelectedCommercialAct();
-                // Renove pimaraio
-                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew' ||
-                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'best_renove') {
-                    priceNameBinding = 'primario';
-                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
-                }
-                // Renove secundario
-                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
-                    priceNameBinding = 'secundario';
-                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
-                }
-
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
-                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
+                        if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral))) {
                             params.priceType = 'unico';
                         }
                     });
                 }
+
+                // Renove pimaraio
+                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew' ||
+                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'best_renove') {
+                    if (!params.priceType) {
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
+                    } else {
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'deviceOffering.category.name']);
+                    }
+                }
+
+                // Renove secundario
+                else if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
+                    if (!params.priceType) {
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                    } else {
+
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'deviceOffering.category.name']);
+                    }
+                }
+
+
             }
 
-            if (riskLevel === 'bajo' ){
+            if (riskLevel === 'bajo') {
                 riskLevel += ',medio,alto';
-            }else if( riskLevel === 'medio') {
+            } else if (riskLevel === 'medio') {
                 riskLevel += ',alto';
             }
 
@@ -829,9 +843,11 @@ module OrangeFeSARQ.Services {
 
             if (commercialData[commercialActIndex].ospTerminalWorkflow) {
                 switch (commercialData[commercialActIndex].ospTerminalWorkflow) {
-                    case 'standar': dataOT.priceName = 'primario';
+                    case 'standar':
+                        dataOT.priceName = 'primario';
                         break;
-                    case 'secundario': dataOT.priceName = 'secundario';
+                    case 'secundario':
+                        dataOT.priceName = 'secundario';
                         break;
                     case 'libre':
                         dataOT.priceName = 'primario';
@@ -844,6 +860,7 @@ module OrangeFeSARQ.Services {
                     case 'primary_renew':
                         dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
                         dataOT.ospCartItemType = 'renove';
+
                         if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
                             dataOT.relatedRateResidential = commercialData[commercialActIndex].originRate;
                         } else {
