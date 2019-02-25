@@ -504,6 +504,12 @@ module OrangeFeSARQ.Services {
                     }
                 }
 
+                // Renove primario al añadir secundario
+                else if (commercialData[commercialActIndex].renewalType &&
+                    commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove primario' && 
+                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secundario') {
+                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                }
 
             }
 
