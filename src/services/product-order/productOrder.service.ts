@@ -561,8 +561,8 @@ module OrangeFeSARQ.Services {
 
       let _search: Object = {
         body: {
-          msisdn: '652166828',
-          productId: 'por definir1',
+          msisdn: '650531495',
+          productId: '5014',
           action: 'A',
           productCharacteristic:[
                   {
