@@ -217,8 +217,6 @@ module OrangeFeSARQ.Services {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
                         if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N') || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
                             params.priceType = 'unico';
-                        } else {
-                            delete params.deviceOffering;
                         }
                     });
                 }
