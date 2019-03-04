@@ -152,6 +152,7 @@ module OrangeFeSARQ.Services {
                 for (let j = 0; j < vm.orangeTVFixedProducts.length; j++) {
                     const fixedProduct = vm.orangeTVFixedProducts[j];
                     if (lineProduct.id === fixedProduct.productNumber) {
+                        vm.fixedLines.hasOrangeTV = true;
                         vm.fixedLines[fixedLinesPos].hasOrangeTV = true;
                         vm.fixedLines[fixedLinesPos].channels.push({ "name": fixedProduct.name, "index": fixedProduct.ospGroupIndex });
                     }
