@@ -140,7 +140,8 @@ module OrangeFeSARQ.Services {
         private getStringCache(){
             let vm = this;
             let credentialInformation = JSON.parse(sessionStorage.getItem('credentialInformation'));
-            return credentialInformation.rol + '-' + vm.linesUsageSrv.subperfil +'-' + credentialInformation.document; 
+            let defaultData: any = JSON.parse(sessionStorage.getItem('defaultData')) || {};
+            return credentialInformation.rol + '-' + defaultData.subProfile + '-' + credentialInformation.document; 
         }
 
     }

@@ -72,6 +72,7 @@ module OrangeFeSARQ.Constant {
         .service('documentValidatorFCUSrv', OrangeFeSARQ.Services.DocumentValidatorFCUSrv)
         .service('configSrv', OrangeFeSARQ.Services.ConfigSrv)
         .service('discriminatorSrv', OrangeFeSARQ.Services.DiscriminatorSrv)
+        .service('orangeTvSrv', OrangeFeSARQ.Services.OrangeTvSrv)
         .service('deleteRatesPopupSrv', OrangeFeSARQ.Services.DeleteRatesPopupSrv)
         .service('directionPopupSrv', OrangeFeSARQ.Services.DirectionPopupSrv)
         .service('capturaDocumentacionPopupSrv', capturaDocumentacionPopup.Services.CapturaDocumentacionPopupSrv)

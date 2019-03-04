@@ -178,14 +178,19 @@ module OrangeFeSARQ.Services {
             if (sessionClientData && sessionClientData.creditLimitRenove) {
                 sessionClientData.creditLimitRenove.linesWithVAP = [];
                 if (campaigns) {
+                    let ventaAPlazos: string;
                     campaigns.forEach(line => {
                         let linesWithVAP: any = {};
                         if (line.campaignNum && _.size(line.campaignNum) !== 0) {
                             line.campaignNum.forEach(campaign => {
                                 if (campaign.wcs && _.camelCase(campaign.wcs.typeRenove) === owcsCampaign) {
+                                    ventaAPlazos = campaign.ventaAPlazos;
+                                    if (!ventaAPlazos || ventaAPlazos==='null'){
+                                        ventaAPlazos='Y';
+                                    }
                                     linesWithVAP = {
                                         'line': line.idUser,
-                                        'ventaAPlazos': campaign.ventaAPlazos
+                                        'ventaAPlazos': ventaAPlazos
                                     }
                                     sessionClientData.creditLimitRenove.linesWithVAP.push(linesWithVAP);
                                 }
@@ -221,7 +226,7 @@ module OrangeFeSARQ.Services {
                 sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
             }
             sessionShopingCart.cartItem.forEach(option => {
-                if (option.ospSelected) {
+                if (option.ospSelected && !(option.ospSelectable && option.ospSelectable === 'error')) {
                     option.cartItem.forEach(element => {
                         if (element.product && element.product.productRelationship && element.product.productRelationship.length > 0) {
                             if (_.find(element.product.productRelationship, { 'type': 'VAP' })) {
