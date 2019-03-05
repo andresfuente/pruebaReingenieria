@@ -12,6 +12,7 @@ module capturaDocumentacionPopup.Services {
 
         public showPopup: boolean;
         public iframeURL: string;
+        public isShopping: boolean;
 
         constructor(public $injector) {
             let vm = this;
