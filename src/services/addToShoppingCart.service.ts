@@ -1629,9 +1629,9 @@ module OrangeFeSARQ.Services {
         createSVACartItem(sva, isBono?) {
             let vm = this;
             let productItem;
-            let svaCartItemElement, cartItemElement;
-            let cartItemElementId, cartItemIndex, lastCartItemId, commercialActId: number;
-            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let svaCartItemElement;
+            //let cartItemElementId, cartItemIndex, lastCartItemId, commercialActId: number;
+            //let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
 
@@ -1691,13 +1691,14 @@ module OrangeFeSARQ.Services {
                                 "dutyFreeAmount": {
                                     "unit": "EUR",
                                     "value": 0
-                                },
-                                "taxIncludedAmount": {
-                                    "value": 0,
-                                    "unit": "EUR"
-                                },
-                                "taxRate": 0.21,
-                                "ospTaxRateName": ""
+                                }
+                                //se comenta esta parte ya que para la formacion del carrito con acciones NEW, el inyector no lo necesita, con pasarle el dutyFreeAmount es suficiente.
+                                // "taxIncludedAmount": {
+                                //     "value": 0,
+                                //     "unit": "EUR"
+                                // },
+                                // "taxRate": 0.21,
+                                // "ospTaxRateName": ""
                             },
                             "priceType": "siebelPriceSva"
                         }
