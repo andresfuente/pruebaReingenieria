@@ -95,7 +95,9 @@ module OrangeFeSARQ.Services {
             channel: string,
             profile: string,
             nameSgmr: string,
-            creditLimit?: number
+            creditLimit?: number,
+            priceType?: string,            
+            isSecondaryRenew?: boolean
         ) {
             let vm = this;
             let srv = this;
@@ -143,11 +145,16 @@ module OrangeFeSARQ.Services {
                 'deviceOffering.category.name': 'primario',
                 campaignName: nameSgmr,
                 fields: 'deviceOffering',
-                creditLimit: creditLimit
+                creditLimit: creditLimit,
+                priceType: priceType
             }; 
 
             if (creditLimit === undefined || creditLimit === null) {
                 delete params.creditLimit;
+            }
+
+            if (isSecondaryRenew) {
+                delete params['deviceOffering.category.name'];
             }
 
             // Prepago   

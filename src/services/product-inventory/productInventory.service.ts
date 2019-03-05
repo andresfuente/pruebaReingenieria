@@ -165,11 +165,11 @@ module OrangeFeSARQ.Services {
         queryParams: {
           lineCategory: 'mobile',          
           queryType: 'infoGrupo',
-          gruopId: codigoGrupo,
+          groupId: codigoGrupo,
         },
         urlParams: [vm.genericConstant.brand, METHOD, '666666666']
       };
-
+      
       return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search)
         .then(function (response) {
           if (response.data) {
