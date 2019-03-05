@@ -187,6 +187,8 @@ module OrangeFeSARQ.Services {
                 queryParams:  body,
                 urlParams: ['communicationMessage']
             };
+            vm.communicationListAPIUrlV2 = 'api/communication/v2';
+
 
             return vm.httpPost(vm.communicationListAPIUrlV2, _search, componentName)
                 .then(
