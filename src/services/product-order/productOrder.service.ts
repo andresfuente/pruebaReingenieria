@@ -174,7 +174,7 @@ module OrangeFeSARQ.Services {
         urlParams: []
       };
 
-      return vm.httpCacheGett(vm.genericConstant.productOrder + '/' + vm.genericConstant.brand + '/productOrder', _search, componentName)
+      return vm.httpCacheGett(vm.genericConstant.productOrdering + '/' + vm.genericConstant.brand + '/productOrder', _search, componentName)
         .then((response) => {
           if (response && response.data) {
             return response.data;

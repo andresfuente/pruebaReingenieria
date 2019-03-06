@@ -98,17 +98,33 @@ module OrangeFeSARQ.Services {
                 } else if (search === 'PRESCORING') {
                     let creditLimit = vm.getCreditRisk(search, response);
                     if (creditLimit !== undefined && creditLimit !== null) {
-                        sessionClientData.creditLimitCapta = {
-                            'creditLimitAvailable': creditLimit,
-                            'staticCreditLimit': creditLimit,
-                            'upperCreditLimit': false
+                        if (creditLimit > 0) {
+                            sessionClientData.creditLimitCapta = {
+                                'creditLimitAvailable': creditLimit,
+                                'staticCreditLimit': creditLimit,
+                                'upperCreditLimit': false
+                            }
+                        } else {
+                            sessionClientData.creditLimitCapta = {
+                                'creditLimitAvailable': creditLimit,
+                                'staticCreditLimit': 0,
+                                'upperCreditLimit': true
+                            }
                         }
                     }
                 } else if (search === 'RENOVE' && sessionClientData.creditLimitRenove) {
                     let creditLimit = vm.getCreditRisk(search, response);
                     if (creditLimit !== undefined && creditLimit !== null) {
-                        sessionClientData.creditLimitRenove.creditLimitAvailable = creditLimit;
-                        sessionClientData.creditLimitRenove.staticCreditLimit = creditLimit;
+                        if (creditLimit < 0) {
+                            sessionClientData.creditLimitRenove.creditLimitAvailable = creditLimit;
+                            sessionClientData.creditLimitRenove.staticCreditLimit = 0;
+                            sessionClientData.creditLimitRenove.umbral = 0;
+                            sessionClientData.creditLimitRenove.upperCreditLimit = true;
+                            sessionClientData.creditLimitRenove.upperUmbral = true;
+                        } else {
+                            sessionClientData.creditLimitRenove.creditLimitAvailable = creditLimit;
+                            sessionClientData.creditLimitRenove.staticCreditLimit = creditLimit;
+                        }
                     } else {
                         if (!vm.isFdcSite()) {
                             delete sessionClientData.creditLimitRenove;
@@ -175,6 +191,7 @@ module OrangeFeSARQ.Services {
 
             let sessionClientData = JSON.parse(sessionStorage.getItem('clientData'));
             let owcsCampaign: string = _.camelCase('Renove primario');
+            let owcsCampaignSecundario: string = _.camelCase('Renove secundario');
             if (sessionClientData && sessionClientData.creditLimitRenove) {
                 sessionClientData.creditLimitRenove.linesWithVAP = [];
                 if (campaigns) {
@@ -183,10 +200,10 @@ module OrangeFeSARQ.Services {
                         let linesWithVAP: any = {};
                         if (line.campaignNum && _.size(line.campaignNum) !== 0) {
                             line.campaignNum.forEach(campaign => {
-                                if (campaign.wcs && _.camelCase(campaign.wcs.typeRenove) === owcsCampaign) {
+                                if (campaign.wcs && (_.camelCase(campaign.wcs.typeRenove) === owcsCampaign || _.camelCase(campaign.wcs.typeRenove) === owcsCampaignSecundario)) {
                                     ventaAPlazos = campaign.ventaAPlazos;
-                                    if (!ventaAPlazos || ventaAPlazos==='null'){
-                                        ventaAPlazos='N';
+                                    if (!ventaAPlazos || ventaAPlazos === 'null') {
+                                        ventaAPlazos = 'Y';
                                     }
                                     linesWithVAP = {
                                         'line': line.idUser,

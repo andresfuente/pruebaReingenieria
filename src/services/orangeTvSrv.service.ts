@@ -64,6 +64,7 @@ module OrangeFeSARQ.Services {
             vm.PT = PT; // Product Type
             vm.CN = CN; // Comp Name
 
+            vm.clear();
             vm.getOrangeTVBasicProducts();
             return vm.getLinesWithOrangeTV();
         }
@@ -152,6 +153,7 @@ module OrangeFeSARQ.Services {
                 for (let j = 0; j < vm.orangeTVFixedProducts.length; j++) {
                     const fixedProduct = vm.orangeTVFixedProducts[j];
                     if (lineProduct.id === fixedProduct.productNumber) {
+                        vm.fixedLines.hasOrangeTV = true;
                         vm.fixedLines[fixedLinesPos].hasOrangeTV = true;
                         vm.fixedLines[fixedLinesPos].channels.push({ "name": fixedProduct.name, "index": fixedProduct.ospGroupIndex });
                     }
@@ -179,6 +181,13 @@ module OrangeFeSARQ.Services {
                 listChannels.push(channel.name);
             });
             groupChannels.formattedChannels = listChannels.join(" + ");
+        }
+
+        clear() {
+            let vm = this;
+
+            vm.fixedLines = [];
+            vm.orangeTVFixedProducts = [];
         }
     }
 
