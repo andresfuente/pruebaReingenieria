@@ -476,7 +476,7 @@ module OrangeFeSARQ.Services {
                 let commercialActIndex = srv.getSelectedCommercialAct();
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
-                        if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral))) {
+                        if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)))) {
                             params.priceType = 'unico';
                         }
                     });
@@ -488,17 +488,19 @@ module OrangeFeSARQ.Services {
                     if (!params.priceType) {
                         params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
                     } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'deviceOffering.category.name']);
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId','priceType','deviceOffering.category.name']);
                     }
                 }
 
                 // Renove secundario
                 else if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
+                    if (clientData && clientData.creditLimitRenove && ( clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)) {
+                        params.priceType = 'unico';
+                    }
                     if (!params.priceType) {
                         params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
                     } else {
-
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'deviceOffering.category.name']);
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType','deviceOffering.category.name']);
                     }
                 }
 

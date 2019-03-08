@@ -64,6 +64,7 @@ module OrangeFeSARQ.Services {
             vm.PT = PT; // Product Type
             vm.CN = CN; // Comp Name
 
+            vm.clear();
             vm.getOrangeTVBasicProducts();
             return vm.getLinesWithOrangeTV();
         }
@@ -180,6 +181,13 @@ module OrangeFeSARQ.Services {
                 listChannels.push(channel.name);
             });
             groupChannels.formattedChannels = listChannels.join(" + ");
+        }
+
+        clear() {
+            let vm = this;
+
+            vm.fixedLines = [];
+            vm.orangeTVFixedProducts = [];
         }
     }
 
