@@ -101,7 +101,9 @@ module OrangeFeSARQ.Services {
         ) {
             let vm = this;
             let srv = this;
-            if (riskLevel === 'bajo' || riskLevel === 'medio') {
+            if (riskLevel === 'bajo') {
+                riskLevel += ',medio,alto';
+            } else if(riskLevel === 'medio'){
                 riskLevel += ',alto';
             }
             if (commercialAction.toLowerCase() === 'migracion') {
