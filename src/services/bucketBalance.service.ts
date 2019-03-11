@@ -24,8 +24,8 @@ module OrangeFeSARQ.Services {
             vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalance;
             _search = {
                 queryParams: {
-                    publicKey: msisdn,
                     productBucket: '',
+                    publicKey: msisdn,
                     'onlyActive':vm.genericConstant.onlyActive
                 },
                 urlParams: [vm.genericConstant.brand, 'usageReport', 'OSP']
@@ -34,12 +34,9 @@ module OrangeFeSARQ.Services {
 
             if (param === 'Line') {
                 _search.queryParams.productBucket = 'line';
-                // - vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceLineAPIUrl;
+                
             } else if (param === 'Bonus') {
-                /*_search.queryParams.productBucket = 'bonus';
-                vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceBonusAPIUrl;
-                _search = {};
-                TO-DO: para llamar a la api*/
+                
                 _search.queryParams.productBucket = 'bonus';
             }
             return vm.httpCacheGett(vm.bucketBalanceAPIUrl, _search, componentName)
