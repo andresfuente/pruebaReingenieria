@@ -291,7 +291,7 @@ module OrangeFeSARQ.Services {
                 vm.calculateCreditLimitCapta(sessionClientData, priceVapsCapta, totalPriceVaps);
             }
 
-            if (sessionClientData.creditLimitRenove && priceVapsRenove !== null) {
+            if (sessionClientData.creditLimitRenove && sessionClientData.creditLimitRenove.staticCreditLimit && priceVapsRenove !== null) {
                 vm.calculateCreditLimitRenove(sessionClientData, priceVapsRenove, totalPriceVaps);
             }
         }
