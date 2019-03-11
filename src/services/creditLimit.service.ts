@@ -287,11 +287,11 @@ module OrangeFeSARQ.Services {
 
             totalPriceVaps = priceVapsCapta + priceVapsRenove;
 
-            if (sessionClientData.creditLimitCapta && priceVapsCapta && priceVapsCapta !== null) {
+            if (sessionClientData.creditLimitCapta && priceVapsCapta !== null) {
                 vm.calculateCreditLimitCapta(sessionClientData, priceVapsCapta, totalPriceVaps);
             }
 
-            if (sessionClientData.creditLimitRenove && priceVapsRenove && priceVapsRenove !== null) {
+            if (sessionClientData.creditLimitRenove && priceVapsRenove !== null) {
                 vm.calculateCreditLimitRenove(sessionClientData, priceVapsRenove, totalPriceVaps);
             }
         }
