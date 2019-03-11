@@ -116,6 +116,7 @@ module OrangeFeSARQ.Services {
                     let creditLimit = vm.getCreditRisk(search, response);
                     if (creditLimit !== undefined && creditLimit !== null) {
                         if (creditLimit < 0) {
+                            
                             sessionClientData.creditLimitRenove.creditLimitAvailable = creditLimit;
                             sessionClientData.creditLimitRenove.staticCreditLimit = 0;
                             sessionClientData.creditLimitRenove.umbral = 0;
@@ -286,11 +287,11 @@ module OrangeFeSARQ.Services {
 
             totalPriceVaps = priceVapsCapta + priceVapsRenove;
 
-            if (sessionClientData.creditLimitCapta && priceVapsCapta !== null) {
-                vm.calculateCreditLimitCapta(sessionClientData, priceVapsCapta, priceVapsRenove, totalPriceVaps);
+            if (sessionClientData.creditLimitCapta && priceVapsCapta && priceVapsCapta !== null) {
+                vm.calculateCreditLimitCapta(sessionClientData, priceVapsCapta, totalPriceVaps);
             }
 
-            if (sessionClientData.creditLimitRenove && priceVapsRenove !== null) {
+            if (sessionClientData.creditLimitRenove && priceVapsRenove && priceVapsRenove !== null) {
                 vm.calculateCreditLimitRenove(sessionClientData, priceVapsRenove, totalPriceVaps);
             }
         }
@@ -302,7 +303,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Calcula el precio del limite de credito de captacion
          */
-        calculateCreditLimitCapta(sessionClientData, priceVapsCapta, priceVapsRenove, totalPriceVaps) {
+        calculateCreditLimitCapta(sessionClientData, priceVapsCapta, totalPriceVaps) {
             let vm = this;
 
             if (sessionClientData.creditLimitCapta && sessionClientData.creditLimitCapta.creditLimitAvailable) {
@@ -326,14 +327,12 @@ module OrangeFeSARQ.Services {
         calculateCreditLimitRenove(sessionClientData, priceVapsRenove, totalPriceVaps) {
             let vm = this;
 
-            if (sessionClientData.creditLimitCapta) {
-                sessionClientData.creditLimitCapta.creditLimitAvailable =
-                    sessionClientData.creditLimitCapta.staticCreditLimit - totalPriceVaps;
-            }
-
-            if (sessionClientData.creditLimitRenove) {
+            if (sessionClientData.creditLimitRenove && !sessionClientData.creditLimitCapta) {
                 sessionClientData.creditLimitRenove.creditLimitAvailable =
                     sessionClientData.creditLimitRenove.staticCreditLimit - priceVapsRenove;
+            } else {
+                sessionClientData.creditLimitRenove.creditLimitAvailable =
+                    sessionClientData.creditLimitRenove.staticCreditLimit - totalPriceVaps;
             }
 
             if (sessionClientData.creditLimitRenove.creditLimitAvailable > sessionClientData.creditLimitRenove.umbral) {
