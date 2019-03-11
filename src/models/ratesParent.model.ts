@@ -159,7 +159,11 @@ module ratesParent.Models {
                         if (element.attachment && element.attachment.href){
                             img = element.attachment.href
                         }
-                        optionalFeature = new OptionalFeature(element.ospId, img, element.name, element.productSpecSubcharacteristic);
+                        if (element.name === '#lineas#') {
+                            optionalFeature = new OptionalFeature(element.ospId, img, element.name);
+                        } else {
+                            optionalFeature = new OptionalFeature(element.ospId, img, element.name, element.productSpecSubcharacteristic);
+                        }        
                         if (!_.some(this.optionalFeatures, {ospId: element.ospId})) {
                             this.optionalFeatures.push(optionalFeature);
                         }
