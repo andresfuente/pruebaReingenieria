@@ -561,6 +561,8 @@ module OrangeFeSARQ.Services {
 
       if(nameGroup === '' || nameGroup === undefined){
         nameGroup = ''
+      } else{
+        nameGroup = nameGroup;
       }
 
       let _search: Object = {
