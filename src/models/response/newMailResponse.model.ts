@@ -13,12 +13,8 @@ module newAccount.Models {
         private _error: OrangeFeSARQ.Models.ErrorResponse;
 
         constructor(result: string = null, error: OrangeFeSARQ.Models.ErrorResponse = null) {
-            this._result = result;
             this._error = error;
-        }
-
-        get result(): string {
-            return this._result;
+            this._result = result;
         }
 
         set result(value: string) {
@@ -27,6 +23,10 @@ module newAccount.Models {
 
         get error(): OrangeFeSARQ.Models.ErrorResponse {
             return this._error;
+        }
+
+        get result(): string {
+            return this._result;
         }
 
         set error(value: OrangeFeSARQ.Models.ErrorResponse) {

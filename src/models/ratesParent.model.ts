@@ -114,6 +114,8 @@ module ratesParent.Models {
         public bucket: RateBucket;
         public NACLines: Rate[] = [];
 
+        public optionalFeatures: Array<OptionalFeature> = []; 
+
         constructor(rateData, priceData, bucketInfo?) {
             this.rateSubName = rateData.ospTitulo;
             this.rateDescription = rateData.description;
@@ -150,6 +152,21 @@ module ratesParent.Models {
                         this.bucket = new RateBucket(element.name, element.ospId, element.ospOrden, element.ospLargeDescription, element.description, element.ospImagen);
                     } else if (bucketInfo && rateData.ospGroupName === 'Convergente_NAC') {
                         this.bucket = new RateBucket('', bucketInfo, '', '', '', '');
+                    }
+                    if (rateData.ospGroupName === 'Convergente_NAC' && element.ospCategory === 'optional' && element.ospId) {
+                        let optionalFeature: OptionalFeature = undefined;
+                        let img: string = '';
+                        if (element.attachment && element.attachment.href){
+                            img = element.attachment.href
+                        }
+                        if (element.name === '#lineas#') {
+                            optionalFeature = new OptionalFeature(element.ospId, img, element.name);
+                        } else {
+                            optionalFeature = new OptionalFeature(element.ospId, img, element.name, element.productSpecSubcharacteristic);
+                        }        
+                        if (!_.some(this.optionalFeatures, {ospId: element.ospId})) {
+                            this.optionalFeatures.push(optionalFeature);
+                        }
                     }
                 });
             }
@@ -632,7 +649,7 @@ module ratesParent.Models {
         public largeDescription: string;
         public quantity: string
         public img: string;
-
+        
         constructor(name: string, id: string, shortDesc: string, largeDesc: string, quantity: string, img: string) {
             this.name = name;
             this.id = id;
@@ -640,6 +657,44 @@ module ratesParent.Models {
             this.largeDescription = largeDesc;
             this.quantity = quantity;
             this.img = img;
+        }
+    }
+
+    export class OptionalFeature {
+        public ospId: string;
+        public img: string;
+        public name: string;
+        public subFeatures: Array<any> = [];
+        
+        constructor(ospId: string, img: string, name: string, subFeatures?: Array<any>) {
+            this.ospId = ospId;
+            this.img = img;
+            this.name = name;
+            this.subFeatures = this.getSubFeatures(subFeatures);
+        }
+
+        getSubFeatures(subFeatures) {
+            let res = [];
+            _.forEach(subFeatures, (subFeature) => {
+                let img: string = '';
+                if (subFeature.attachment && subFeature.attachment.href){
+                    img = subFeature.attachment.href
+                }
+                res.push(new SubFeature(subFeature.ospId, img, subFeature.name));
+            });
+            return res;
+        }
+    }
+
+    export class SubFeature {
+        public ospId: string;
+        public img: string;
+        public name: string;
+
+        constructor(ospId: string, img: string, name: string) {
+            this.ospId = ospId;
+            this.img = img;
+            this.name = name;
         }
     }
 }
