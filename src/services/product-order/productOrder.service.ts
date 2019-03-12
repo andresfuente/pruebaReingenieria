@@ -559,6 +559,10 @@ module OrangeFeSARQ.Services {
 
       let METHOD = 'setPromotions';
 
+      if(nameGroup === '' || nameGroup === undefined){
+        nameGroup = ''
+      }
+
       let _search: Object = {
         body: {
           msisdn: '666666666',
