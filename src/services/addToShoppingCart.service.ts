@@ -101,22 +101,12 @@ module OrangeFeSARQ.Services {
             let shoppingCart;
             let commercialData;
             let commercialActIndex;
-            vm.getComercialActs();
 
             // Se obtiene el ID del acto comercial que se esta modificando
-            if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
-                commercialActId = Number(commercialData[commercialActIndex].id);
-            }
             // Se comprueba si existe algun dispositivo TSS en el shopping cart que se este modificando
-            if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
-                commercialData[commercialActIndex].ospIsSelected) {
-                // Se eliminan los TSS del acto comercial existentes en el shopping cart
-                shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
-                commercialData[commercialActIndex].isCompletedAC = false;
-                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
-            }
+            // Se eliminan los TSS del acto comercial existentes en el shopping cart
             // Se obtiene el id del ultimo elmento del cart item del shopping cart
-            lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
+            vm.getComercialActs();
 
             productItem = {
                 'href': device.srcImage,
@@ -1364,24 +1354,13 @@ module OrangeFeSARQ.Services {
             let shoppingCart;
             let commercialData;
             let commercialActIndex;
+            
+            // Se obtiene el ID del acto comercial que se esta modificando
+            // Se comprueba si existe algun dispositivo en el shopping cart que se este modificando
+            // Se obtiene el id del ultimo elmento del cart item del shopping cart
+            // Tipo del terminal
             vm.getComercialActs();
 
-            // Se obtiene el ID del acto comercial que se esta modificando
-            if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
-                commercialActId = Number(commercialData[commercialActIndex].id);
-            }
-            // Se comprueba si existe algun dispositivo en el shopping cart que se este modificando
-            if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
-                commercialData[commercialActIndex].ospIsSelected) {
-                // Se eliminan los terminales del acto comercial existentes en el shopping cart
-                shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
-                commercialData[commercialActIndex].isCompletedAC = false;
-                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
-            }
-            // Se obtiene el id del ultimo elmento del cart item del shopping cart
-            lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
-
-            // Tipo del terminal
 
             device.characteristic = [
                 {
@@ -2119,9 +2098,22 @@ module OrangeFeSARQ.Services {
 
         getComercialActs(){
             let vm = this;
+            let lastCartItemId: number;
+            let commercialActId: number;
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
+
+            if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
+                commercialActId = Number(commercialData[commercialActIndex].id);
+            }
+            if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
+                commercialData[commercialActIndex].ospIsSelected) {
+                shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
+                commercialData[commercialActIndex].isCompletedAC = false;
+                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+            }
+            lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
         }
     }
 }
