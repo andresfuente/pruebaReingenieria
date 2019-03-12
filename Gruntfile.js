@@ -2,45 +2,206 @@
 /*jshint esnext: true */
 
 module.exports = function (grunt) {
-
+    const sass = require('node-sass');
     grunt.initConfig({
 
         pkg: grunt.file.readJSON('package.json'),
+
+        shortName: grunt.file.readJSON('package.json').name.replace('orange-', ''),
+
+        clean: {
+            dev: ['./.tscache', './build/*', './prebuild/*', './dist/*', './.sonar', './.scannerwork'],
+            coverage: ['./coverage'],
+            css: ['./src/styles/css/*', './dist/styles/css/*', '!./src/styles/css/animate.css'],
+            reports: ['./scss-lint-report.xml'],
+            artifacts: ['./*.zip'],
+            tempTs: ['./*tmp.txt']
+        },
+
+        postcss: {
+            options: {
+                processors: [
+                    require('autoprefixer')({
+                        // add the specific-browser css-prefix
+                        browsers: ['> 0%', 'last 2 versions']
+                    })
+                    // require('cssnano')()    // minify the result
+                ]
+            },
+            commons: {
+                src: './dist/styles/commons-<%= shortName %>.css',
+                dest: './dist/styles/commons-<%= shortName %>.css'
+            },
+            amena: {
+                src: './dist/styles/amena-<%= shortName %>.css',
+                dest: './dist/styles/amena-<%= shortName %>.css'
+            },
+            fdc: {
+                src: './dist/styles/fdc-<%= shortName %>.css',
+                dest: './dist/styles/fdc-<%= shortName %>.css'
+            },
+            pae: {
+                src: './dist/styles/pae-<%= shortName %>.css',
+                dest: './dist/styles/pae-<%= shortName %>.css'
+            },
+            mbf: {
+                src: './dist/styles/mbf-<%= shortName %>.css',
+                dest: './dist/styles/mbf-<%= shortName %>.css'
+            },
+            pdv: {
+                src: './dist/styles/pdv-<%= shortName %>.css',
+                dest: './dist/styles/pdv-<%= shortName %>.css'
+            },
+            altamira: {
+                src: './dist/styles/altamira-<%= shortName %>.css',
+                dest: './dist/styles/altamira-<%= shortName %>.css'
+            },
+            wdt: {
+                src: './dist/styles/wdt-<%= shortName %>.css',
+                dest: './dist/styles/wdt-<%= shortName %>.css'
+            },
+            kyc: {
+                src: './dist/styles/kyc-<%= shortName %>.css',
+                dest: './dist/styles/kyc-<%= shortName %>.css'
+            },
+        },
+
+        sass: {
+            options: {
+                sourceMap: true,
+                sourceComments: false,
+                implementation: sass
+            },
+            dist: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './dist/styles/commons-<%= shortName %>.css': './src/sass/<%= shortName %>.scss'
+                }
+            },
+            amena: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './dist/styles/amena-<%= shortName %>.css': './src/sass/amena-<%= shortName %>.scss'
+                }
+            },
+            fdc: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './dist/styles/fdc-<%= shortName %>.css': './src/sass/fdc-<%= shortName %>.scss'
+                }
+            },
+            mbf: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './dist/styles/mbf-<%= shortName %>.css': './src/sass/mbf-<%= shortName %>.scss'
+                }
+            },
+            pae: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './dist/styles/pae-<%= shortName %>.css': './src/sass/pae-<%= shortName %>.scss'
+                }
+            },
+            pdv: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './dist/styles/pdv-<%= shortName %>.css': './src/sass/pdv-<%= shortName %>.scss'
+                }
+            },
+            altamira: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './dist/styles/commons-<%= shortName %>.css': './src/sass/pae-<%= shortName %>.scss'
+                }
+            },
+            wdt: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './dist/styles/wdt-<%= shortName %>.css': './src/sass/wdt-<%= shortName %>.scss'
+                }
+            },
+            kyc: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './dist/styles/kyc-<%= shortName %>.css': './src/sass/kyc-<%= shortName %>.scss'
+                }
+            },
+        },
 
         ts: {
             default: {
                 tsconfig: true
             }
         },
-        clean: {
-            dev: ['./.sonar', './.tscache', './build', './dist']
+
+        config: {
+            js: {
+                src: 'build/**/components/*.component.js',
+                dist: 'build/'
+            },
+            html: { // Se indica de donde coger los ficheros HTML y dónde se deben depositar
+                src: 'src/templates/*.html',
+                dist: 'build/'
+            }
         },
 
         concat: {
             options: {
                 banner: '/**************************************************************************\n' +
-                '* <%= pkg.title || pkg.name %>, ' +
-                'v<%= pkg.version %>; ' +
-                '<%= pkg.license %>\n' +
-                '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-                '**************************************************************************/\n',
+                    '* <%= pkg.title || pkg.name %>, ' +
+                    'v<%= pkg.version %>; ' +
+                    '<%= pkg.license %>\n' +
+                    '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
+                    '**************************************************************************/\n',
                 stripBanners: true
             },
-
             dist: {
                 src: [
-                    'build/src/**/*models.js',
-                    'build/src/**/*service.js',
-                    'build/src/**/**.js',
-					
-                    '!build/test/**/**'
-
+                    'build/**/*constant.js',
+                    'build/**/*.model.js',
+                    'build/**/*.filter.js',
+                    'build/**/*service.js',
+                    'build/**/*directive.js',
+                    'build/**/*controller.js',
+                    'build/types/**/*.js',
+                    'build/**/*component.js',
+                    'build/**/*.module.js',
+                    '!build/test/**/*.js',
                 ],
                 dest: 'dist/<%= pkg.name %>.js'
             }
         },
 
-        copy: {},
+        copy: {
+            img: {
+                src: './src/images/examples/<%= pkg.name %>.png',
+                dest: './dist/images/examples/orange-p<%= pkg.name%>.png'
+            },
+            sass: {
+                expand: true,
+                cwd: './src/sass/',
+                src: '*.scss',
+                dest: './dist/stylesSCSS/'
+            }
+        },
 
         uglify: {
             options: {
@@ -58,7 +219,7 @@ module.exports = function (grunt) {
                 jshintrc: true
             },
             afterconcat: ['dist/<%= pkg.name %>.js'],
-            files: ['Gruntfile.js', 'build/**/*.js', 'test/**/*.js']
+            files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js']
         },
 
         watch: {
@@ -66,48 +227,46 @@ module.exports = function (grunt) {
             tasks: ['jshint']
         },
 
-        config: {
-            js: {
-                src: 'build/components/*.js',
-                dist: 'build/'
-            },
-
-            html: {
-                src: 'src/templates/*.html',
-                dist: 'build/'
-            }
-
-        },
-
-        tslint: {
-            options: {
-                configuration: "tslint.json"
-            },
-            files: {
-                src: [
-                    "src/**/*.ts"
-                ]
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
             }
         },
 
-		scsslint: {
-            options: {
-                bundleExec: false,
-                config: '.scss-lint.yml',
-                reporterOutput: 'scss-lint-report.xml',  // The jUnit XML file to save the output to
-                //reporterOutput: 'null',
-                colorizeOutput: true
-            },
-            files: [
-                './src/styles/scss/*.scss',
-            ]
+        remapIstanbul: {
+            dist: {
+                src: "./coverage/test-raw-reports/coverage.json",
+                options: {
+                    fail: true,
+                    reports: {
+                        "html": "./coverage/lcov-report",
+                        "json": "./coverage/test-raw-reports/coverage-final.json",
+                        "lcovonly": "./coverage/lcov-report/lcov.info"
+                    }
+                }
+            }
         },
-        'string-replace': {
+
+        coverage: {
+            check: {
+                options: {
+                    thresholds: {
+                        branches: 10,
+                        functions: 10,
+                        lines: 10,
+                        statements: 10
+                    },
+                    dir: "./coverage"
+                }
+            }
+        },
+
+        'string-replace': { // Ejemplos de uso en la web oficial https://www.npmjs.com/package/grunt-string-replace
             html: {
-                files: {
+                files: { // Definición de qué archivos se van a editar
                     '<%= config.html.dist %>': '<%= config.html.src %>'
                 },
-                options: {
+                options: { // Definición de los patrones de reemplazo para dejar en una única línea el contenido del HTML
                     replacements: [
                         {
                             pattern: /(")/ig,
@@ -122,7 +281,7 @@ module.exports = function (grunt) {
                 }
             },
             js: {
-                files: {
+                files: { // Ficheros que van a ser editados
                     '<%= config.js.dist %>': '<%= config.js.src %>'
                 },
                 options: {
@@ -133,11 +292,20 @@ module.exports = function (grunt) {
                         },
 
                         {
-                            pattern: /('tpls.*')/ig,
+                            pattern: /(')(\/*)(tpls)(.*)(html')/ig,
                             replacement: function (match, p1) {
-                                var p = grunt.file.read('build/src/templates/' + __NAME__ + '.html');
+                                // Expresion regular para recoger nombre del template
+                                let templateNamePattern = ".*templates\\/(.*)'";
+                                //Construccion de nuevo objeto RegExp() que utiliza el patron definido anteriormente
+                                let regexObject = new RegExp(templateNamePattern, "g");
+                                // Se construye la ruta del a que se leera el template escapeado que se sustituira en el
+                                // this.templateURL del componente, para ello se indica la ruta de la carpeta build mas el
+                                // nombre del template que hemos extraido mediante la expresion regular
+                                let ruta = 'build/src/templates/'+ match.replace(regexObject, '$1'); // $1 es lo que cojo de la expresión regular, es nomenclatura
+                                // Se lee el fichero de la ruta definida en el paso anterior
+                                var p = grunt.file.read(ruta);
+                                // Mediante el return se sustituye 'tpls/components..' por el el contenido del fichero leido
                                 return "\"" + p + "\"";
-
                             }
                         }
                     ]
@@ -157,57 +325,57 @@ module.exports = function (grunt) {
                     }]
                 }
             }
-
-        },
-        karma: {
-            unit: {
-                configFile: 'karma.conf.js'
-            }
-        },
-        remapIstanbul: {
-            dist: {
-                src: "./coverage/test-raw-reports/coverage.json",
-                options: {
-                    fail: true,
-                    reports: {
-                        "html": "./coverage/lcov-report",
-                        "json": "./coverage/test-raw-reports/coverage-final.json"
-                    }
-                }
-            }
-        },
-
-        coverage: {
-            check: {
-                options: {
-                    thresholds: {
-                        branches: 0,
-                        functions: 0,
-                        lines: 0,
-                        statements: 0
-                    },
-                    dir: "./coverage"
-                }
-            }
         },
 
         dtsGenerator: {
             options: {
                 exclude: ['node_modules/**', 'typings/**', 'test/**/**'],
-                name: 'services',
+                name: '<%= shortName %>',
                 project: './',
-                out: 'dist/typings/services.d.ts'
+                out: 'dist/typings/<%= shortName %>.d.ts'
             },
             default: {
                 src: ['/path/to/package-directory/**/*.ts']
             }
+        },
+        
+        /**
+         * NgDocs: tarea que genera documentación del código en base a las notaciones en los ficheros desarrollados
+         */
+        ngdocs: {
+            options: {
+                dest: 'docs/<%= shortName %>/' + '<%= shortName %>@' + require('./package.json').version,
+                title: '<%= shortName %>',
+                sourceLink: true,
+                startPage: '/modules'
+            },
+            components: {
+                src: ['build/src/components/**/*.js'],
+                title: 'Componentes'
+            },
+            services: {
+                src: ['build/src/services/**/*.js'],
+                title: 'Servicios'
+            },
+            filters: {
+                src: ['build/src/filters/**/*.js'],
+                title: 'Filtros'
+            },
+            controllers: {
+                src: ['build/src/controllers/**/*.js'],
+                title: 'Controladores'
+            },
+            modules: {
+                src: ['build/src/*.module.js'],
+                title: 'Modulo'
+            }
         }
 
     });
-
     grunt.loadNpmTasks('grunt-string-replace');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -220,20 +388,19 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('dts-generator');
     grunt.loadNpmTasks('grunt-ngdocs');
-	
-    grunt.loadNpmTasks("grunt-tslint");
-    grunt.loadNpmTasks('grunt-scss-lint');
-	
 
-    grunt.registerTask('ts-linter', ['ts', 'tslint']);	
-    grunt.registerTask('scss-linter', ['scsslint']);
-	
     grunt.registerTask('str', ['string-replace']);
     grunt.registerTask('rejs', ['string-replace:js']);
 
-    grunt.registerTask('test', ['string-replace:dist', 'karma:unit']);  // ['jshint', 'karma']
-    grunt.registerTask('generate-coverage-report', [ 'test', 'remapIstanbul', 'coverage']);
-    grunt.registerTask('dts-generate', ['dtsGenerator']);
+    grunt.registerTask('ts-linter', ['ts', 'tslint']);
+    grunt.registerTask('test-with-linter', ['ts-linter', 'karma:unit']);
+    grunt.registerTask('quality-code', ['clean', 'ts-linter', 'string-replace', 'test-with-linter', 'remapIstanbul', 'coverage']);
 
-    grunt.registerTask('default', ['clean', 'ts', 'string-replace:html', 'string-replace:js', 'concat', 'uglify', 'dts-generate']);
+    grunt.registerTask('build-css', ['sass', 'postcss']);
+    grunt.registerTask('test', ['string-replace:dist', 'karma:unit']);  // ['jshint', 'karma']
+    grunt.registerTask('generate-coverage-report', ['test', 'remapIstanbul', 'coverage']);
+    grunt.registerTask('dts-generate', ['dtsGenerator']);
+    grunt.registerTask('genDocs', ['clean', 'ts', 'ngdocs']);
+    grunt.registerTask('default', ['clean', 'string-replace:html', 'ts', 'string-replace:js', 'concat', 'dts-generate','uglify','build-css', 'copy']);
+    grunt.registerTask('build', ['clean',  'ts', 'string-replace:html', 'string-replace:js', 'concat', 'dts-generate','build-css', 'copy']);
 };
