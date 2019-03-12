@@ -132,6 +132,42 @@ module OrangeFeSARQ.Services {
                 ]
             };
 
+            rateCartItemElement = {
+                'id': '',
+                'action': 'New',
+                'product': {
+                    'name': '',
+                    'description': '',
+                    'productRelationship': [{
+                        'type': 'tarifa'
+                    }]
+                },
+                'productOffering': {
+                    'id': '',
+                    'name': '',
+                    'isBundle': ''
+                },
+                'cartItemRelationship': [],
+                'itemPrice': [{
+                    'priceType': '',
+                    'price': {
+                        'dutyFreeAmount': {
+                            'unit': '',
+                            'value': 0
+                        },
+                        'taxIncludedAmount': {
+                            'unit': '',
+                            value: 0
+                        },
+                        taxRate: 0,
+                        ospTaxRateName: ''
+                    },
+                }],
+                'ospSelected': '',
+                'ospCartItemType': '',
+                'ospCartItemSubtype': ''
+            };
+
             // Se guarda el IMEI del terminal si se dispone de el
             if (device && device.IMEI && device.IMEI !== undefined) {
                 let imei = {
@@ -162,78 +198,24 @@ module OrangeFeSARQ.Services {
                 && commercialData[commercialActIndex].originRate) {
 
                 let idBundle = vm.getBundle();
-
-                rateCartItemElement = {
-                    'id': idBundle,
-                    'action': 'New',
-                    'product': {
-                        'name': 'RENOVE_SECUNDARIO',
-                        'description': '',
-                        'productRelationship': [{
-                            'type': 'tarifa'
-                        }]
-                    },
-                    'productOffering': {
-                        'id': idBundle,
-                        'name': 'RENOVE_SECUNDARIO',
-                        'isBundle': true
-                    },
-                    'cartItemRelationship': [],
-                    'itemPrice': [{
-                        'priceType': '',
-                        'price': {
-                            'dutyFreeAmount': {
-                                'unit': '',
-                                'value': 0
-                            },
-                            'taxIncludedAmount': {
-                                'unit': '',
-                                value: 0
-                            },
-                            taxRate: 0,
-                            ospTaxRateName: ''
-                        },
-                    }],
-                    'ospSelected': true,
-                    'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
-                    'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
-                };
+                rateCartItemElement.id = idBundle;
+                rateCartItemElement.product.name = 'RENOVE_SECUNDARIO'
+                rateCartItemElement.productOffering.id = idBundle;
+                rateCartItemElement.productOffering.name = 'RENOVE_SECUNDARIO'
+                rateCartItemElement.productOffering.isBundle = true;
+                rateCartItemElement.ospSelected = true;
+                rateCartItemElement.ospCartItemType = commercialData[commercialActIndex].ospCartItemType.toLowerCase();
+                rateCartItemElement.ospCartItemSubtype = commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase();
             } else {
-                rateCartItemElement = {
-                    'id': '1-CWOOG9',
-                    'action': 'New',
-                    'product': {
-                        'name': 'peach',
-                        'description': '',
-                        'productRelationship': [{
-                            'type': 'tarifa'
-                        }]
-                    },
-                    'productOffering': {
-                        'id': '1-CWOOG9',
-                        'name': 'peach',
-                        'isBundle': true
-                    },
-                    'cartItemRelationship': [],
-                    'itemPrice': [{
-                        'priceType': '',
-                        'price': {
-                            'dutyFreeAmount': {
-                                'unit': '',
-                                'value': 0
-                            },
-                            'taxIncludedAmount': {
-                                'unit': '',
-                                value: 0
-                            },
-                            taxRate: 0,
-                            ospTaxRateName: ''
-                        },
-                    }],
-                    'ospSelected': true,
-                    'ospCartItemType': 'alta',
-                    'ospCartItemSubtype': ''
-                };
+                let idBundle = vm.getBundle();
+                rateCartItemElement.id = '1-CWOOG9';
+                rateCartItemElement.product.name = 'peach'
+                rateCartItemElement.productOffering.id = '1-CWOOG9';
+                rateCartItemElement.productOffering.name = 'peach'
+                rateCartItemElement.productOffering.isBundle = true;
+                rateCartItemElement.ospSelected = true;
+                rateCartItemElement.ospCartItemType = 'alta';
+                rateCartItemElement.ospCartItemSubtype = '';
             }
 
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
