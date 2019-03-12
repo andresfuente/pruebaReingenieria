@@ -98,9 +98,10 @@ module OrangeFeSARQ.Services {
             let cartItemElementId: number;
             let lastCartItemId: number;
             let commercialActId: number;
-            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
-            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            let commercialActIndex = vm.getSelectedCommercialAct();
+            let shoppingCart;
+            let commercialData;
+            let commercialActIndex;
+            vm.getComercialActs();
 
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
@@ -1360,10 +1361,10 @@ module OrangeFeSARQ.Services {
             let cartItemIndex: number;
             let lastCartItemId: number;
             let commercialActId: number;
-
-            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
-            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            let commercialActIndex = vm.getSelectedCommercialAct();
+            let shoppingCart;
+            let commercialData;
+            let commercialActIndex;
+            vm.getComercialActs();
 
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
@@ -2114,6 +2115,13 @@ module OrangeFeSARQ.Services {
             }
 
             return isPromo;
+        }
+
+        getComercialActs(){
+            let vm = this;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let commercialActIndex = vm.getSelectedCommercialAct();
         }
     }
 }
