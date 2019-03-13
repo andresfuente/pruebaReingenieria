@@ -89,6 +89,43 @@ module OrangeFeSARQ.Services {
                 });
         }
 
+        
+        /** @ngdoc method
+         * @name discriminatorSrv.Services:discriminatorSrv#orderFeasibilityCheckRequestStep2
+         * @methodOf discriminatorSrv.Services:discriminatorSrv
+         * @param {discriminator.Models.OrderFeasibilityCheckRequest} checkRequest
+         * @description
+         * 
+         */
+        orderFeasibilityCheckRequestStep2(checkRequestStep2: discriminator.Models.Step2CheckRequest, fixedNumber?: string, CDM?): ng.IPromise<any> {
+            let vm = this;
+            
+            let _queryParams;
+            _queryParams = {};
+
+            if(fixedNumber) {
+                _queryParams = {
+                    MSISDN: fixedNumber
+                };
+            }
+            if(CDM) {
+                _queryParams.CDM = CDM;
+            }
+
+            let _data = {
+                body: checkRequestStep2,
+                queryParams: _queryParams,
+                urlParams: ['orderFeasibilityCheckRequestStep2']
+            };
+
+            return vm.httpPost(vm.genericConstant.serviceCoverageStep2, _data, 'discriminatorPopupComp')
+                .then((response) => {
+                    return response;
+                }).catch((error) => {
+                    throw error;
+                });
+        }
+
 
     }
     angular.module('discriminatorSrv', [])
