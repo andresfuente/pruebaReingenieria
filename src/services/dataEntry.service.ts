@@ -11,6 +11,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
 
         public storeLocatorURL: string;
+        private primarioOferta: string = 'primario oferta'
 
         constructor(public $injector) {
             super($injector);
@@ -601,7 +602,7 @@ module OrangeFeSARQ.Services {
                                     } else {
                                         primaryTerminalTypePrice = 'solo sim';
                                     }
-                                    vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                    vm.insertarCampo(dCC + ' ' + vm.primarioOferta + numOferta,
                                         dDE + auxPrimary + numOferta, primaryTerminalTypePrice,
                                         contene,
                                         responseObj);
@@ -632,7 +633,7 @@ module OrangeFeSARQ.Services {
                                 } else if (cont === 'seguro') {
                                     // Terminal primario
                                     if (insurancePrimaryTerminal) {
-                                        vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                        vm.insertarCampo(dCC + ' ' + vm.primarioOferta + numOferta,
                                             dDE + numOferta, 'seguro móvil',
                                             contene, responseObj);
                                     }
@@ -666,7 +667,7 @@ module OrangeFeSARQ.Services {
                                     vm.insertarCampo(dCC + ' ' + 'Secundario', dDE + 'Sec' + numOferta, 'si', contene, responseObj);
                                 } else {
                                     if (primaryTerminal) {
-                                        vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                        vm.insertarCampo(dCC + ' ' + vm.primarioOferta + numOferta,
                                             dDE + auxPrimary + numOferta, primaryTerminal.product[cont],
                                             contene,
                                             responseObj);
