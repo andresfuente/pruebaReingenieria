@@ -231,7 +231,8 @@ module OrangeFeSARQ.Services {
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentPayer, contene, responseObj);  
                         }   else if (dDE === 'dtratAuto' && sessionClientData[cont] && sessionClientData[cont].treatmentAuthorized) {
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentAuthorized, contene, responseObj);  
-                        }  else {
+                        }  
+                         else {
                             vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                         }
                     }
@@ -257,6 +258,10 @@ module OrangeFeSARQ.Services {
                             cont = 'formattedName';
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont]
                                 ? sessionClientData[cont] : defaultData, contene, responseObj);
+                        } else if(dDE === 'idpetition'){ // MCM campos id petición
+                            sessionClientData.idpetition.forEach(element => {
+                                vm.insertarCampo(dCC, dDE, element, contene, responseObj);
+                            });
                         } else {
                             // Flujo normal
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont]
