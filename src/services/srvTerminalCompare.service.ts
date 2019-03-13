@@ -351,7 +351,7 @@ module OrangeFeSARQ.Services {
                 'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack', 'selectedSvaList',
                 'taxRate', 'taxRateName', 'applicationDuration',
                 'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'nacPriceTaxIncludedPromotional', 'nacPricePromotional',
-                'ospTecnology', 'type', 'associatedLine', 'bucket', 'NACLines']);
+                'ospTecnology', 'type', 'associatedLine', 'bucket', 'NACLines', 'optionalFeatures', 'descriptionPromotion', 'recurringChargePeriodPromotion']);
 
             return rateForSession;
         }
