@@ -27,7 +27,7 @@ module ratesParent.Models {
                             productOffering.push(offering);
                         }
                     });
-                    
+
                     let rate: Rate = new Rate(specification, productOffering, bucketInfo);
 
                     vm.rates.push(rate);
@@ -178,7 +178,7 @@ module ratesParent.Models {
 
             // Buscamos líneas por defecto para packs
             let defaultLines = [];
-            defaultLines = _.filter(rateData.productSpecificationRelationship, {type: 'defaultLine'});
+            defaultLines = _.filter(rateData.productSpecificationRelationship, { type: 'defaultLine' });
 
             if (defaultLines && defaultLines.length > 0) {
                 this.defaultLines = defaultLines;
@@ -239,7 +239,7 @@ module ratesParent.Models {
                                     let precioFijo;
 
                                     if (productOfferingPriceAlteration && productOfferingPriceAlteration.price
-                                    && productOfferingPriceAlteration.recurringChargePeriod === 'Precio fijo') {
+                                        && productOfferingPriceAlteration.recurringChargePeriod === 'Precio fijo') {
                                         precioFijo = productOfferingPriceAlteration.price;
                                     }
 
@@ -348,7 +348,7 @@ module ratesParent.Models {
                     }
                 }
             }
-            
+
             let descripcionCompleta = rateData.description + ((rateData.ospLargeDescription != null) ? ' <br/> ' + rateData.ospLargeDescription : "");
             let info: RatePopupInfo = new RatePopupInfo('titulo', descripcionCompleta);
             this.pupupInfo.push(info);
@@ -544,18 +544,14 @@ module ratesParent.Models {
                                 if (currentSVAOffering.productOfferingPrice) {
                                     currentSVAOffering.productOfferingPrice.forEach(priceElement => {
                                         svaPriceItem = new RatePriceItem();
-                                        if (priceElement.priceType.toLowerCase() === 'pago aplazado') {
+                                        
+                                        if (priceElement) {
                                             let priceSVA: any = _.find(priceElement.price, { priceType: 'priceSva' });
                                             let siebelPriceSva: any = _.find(priceElement.price, { priceType: 'siebelPriceSva' });
 
-                                            if (priceElement && priceElement.priceTypeSVA === 'Recurring' || priceElement.priceTypeSVA === 'One-Time') {
-                                                svaPriceItem.priceTypeSVA = priceElement.priceTypeSVA;
-                                            } else {
-                                                svaPriceItem.priceTypeSVA = false;
-                                            }
+                                            svaPriceItem.priceType = priceElement.priceTypeSVA ? priceElement.priceTypeSVA : 'Recurring';
 
                                             if (priceSVA && priceSVA !== null) {
-                                                svaPriceItem.priceType = priceElement.priceType;
                                                 svaPriceItem.price.taxRate = priceSVA.taxRate;
                                                 svaPriceItem.price.ospTaxRateName = priceSVA.ospTaxRateName;
                                                 svaPriceItem.price.dutyFreeAmount.unit = priceSVA.currencyCode;
@@ -563,7 +559,6 @@ module ratesParent.Models {
                                                 svaPriceItem.price.taxIncludedAmount.value = priceSVA.taxIncludedAmount;
                                                 svaPriceItem.price.taxIncludedAmount.unit = priceSVA.currencyCode;
                                             } else if (siebelPriceSva && siebelPriceSva !== null) {
-                                                svaPriceItem.priceType = priceElement.priceType;
                                                 svaPriceItem.price.taxRate = siebelPriceSva.taxRate;
                                                 svaPriceItem.price.ospTaxRateName = siebelPriceSva.ospTaxRateName;
                                                 svaPriceItem.price.dutyFreeAmount.unit = siebelPriceSva.currencyCode;
