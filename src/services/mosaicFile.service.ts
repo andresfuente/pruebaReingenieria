@@ -119,10 +119,10 @@ module OrangeFeSARQ.Services {
             }
 
             // Cabeceras
-            let headers = {
-                'Geolocation-local': srv.storeProvince.toUpperCase(),
-                'Geolocation-client': clientGeolocation.toUpperCase()
-            };
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+
             // ELIMINAR cuando se eliminen los select.
             // Establece el codigo de la tarifa segun lo seleccionado
             let codTarifa = '';
@@ -258,12 +258,13 @@ module OrangeFeSARQ.Services {
             }
 
             // Metodo http nativo por bug en los filtros
-            return srv.httpService({
-                method: 'GET',
-                url: srv.genericConstant.getMosaico,
-                params: params,
-                headers: headers
-            })
+            // return srv.httpService({
+            //     method: 'GET',
+            //     url: srv.genericConstant.getMosaico,
+            //     params: params,
+            //     headers: headers
+            // })
+            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', true)
                 .then((response) => {
                     return {
                         // tslint:disable-next-line
@@ -963,7 +964,7 @@ module OrangeFeSARQ.Services {
             };
             let deferred = srv.$q.defer();
             let mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
-            return srv.httpCacheGeth(srv.genericConstant.getTerminalDetails, { queryParams: params }, headers, 'mosaicFileComp', false)
+            return srv.httpCacheGeth(srv.genericConstant.getTerminalDetails, { queryParams: params }, headers, 'mosaicFileComp', true)
                 .then((response) => {
                     // Si la respuesta es vacia se muestra el mensaje de error
                     if (response.data.length === 0) {
