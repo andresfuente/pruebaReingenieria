@@ -118,12 +118,12 @@ module OrangeFeSARQ.Services {
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                 'description', 'litSubTitle', 'brand', 'priceType', 'payType', 'preSelectDiviceToRate', 'insuranceSiebelId', 'srcImage',
                 'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName',
-                'tipoPago', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc']);
+                'tipoPago', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc', 'litInsurancePaid']);
             if (device.renewRates !== undefined && device.renewRates) {
                 deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                     'description', 'litSubTitle', 'brand', 'priceType', 'payType', 'preSelectDiviceToRate', 'insuranceSiebelId', 'srcImage',
                     'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates', 'eSim',
-                    'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc']);
+                    'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc', 'litInsurancePaid']);
             }
 
             return deviceForSession;

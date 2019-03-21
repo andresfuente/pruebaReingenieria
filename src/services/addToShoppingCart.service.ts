@@ -1481,6 +1481,11 @@ module OrangeFeSARQ.Services {
                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
             };
+            // Añade seguro en caso de que se haya seleccionado
+            if (device.insuranceSiebelId) {
+                cartItemElement.cartItem.push(vm.createInsuranceCartItem(device, 'primary'));
+            }
+
 
             // Añadir cartItem compromiso de permanencia CP
             if (device.cpDescription && device.cpSiebel) {
