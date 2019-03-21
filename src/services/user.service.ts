@@ -181,8 +181,9 @@ module OrangeFeSARQ.Services {
                             }
                             vm.getMdgUser(param, clientId); // Cuando se realiza la llamada al Plan amigo no es necesario esta llamada
                         }
-                        // - response.data.mdg = vm.mdgData;
+                        // - response.data.mdg = vm.mdgData;                      
                         promise.resolve(response);
+
                     },
                     (error) => {
                         promise.reject(error);
