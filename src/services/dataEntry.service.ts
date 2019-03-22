@@ -260,9 +260,11 @@ module OrangeFeSARQ.Services {
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont]
                                 ? sessionClientData[cont] : defaultData, contene, responseObj);
                         } else if(dDE === 'idpetition'){ // MCM campos id petición
-                            sessionClientData.idpetition.forEach(element => {
-                                vm.insertarCampo(dCC, dDE, element, contene, responseObj);
-                            });
+                            if (sessionClientData.idpetition) {
+                                sessionClientData.idpetition.forEach(element => {
+                                    vm.insertarCampo(dCC, dDE, element, contene, responseObj);
+                                });
+                            }
                         } else {
                             // Flujo normal
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont]
