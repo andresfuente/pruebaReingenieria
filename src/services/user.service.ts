@@ -182,7 +182,7 @@ module OrangeFeSARQ.Services {
                             vm.getMdgUser(param, clientId); // Cuando se realiza la llamada al Plan amigo no es necesario esta llamada
                         }
                         // - response.data.mdg = vm.mdgData;
-                        promise.resolve(response);
+                        promise.resolve(response.data);
                     },
                     (error) => {
                         promise.reject(error);
@@ -356,7 +356,7 @@ module OrangeFeSARQ.Services {
                         && response.data.customer.characteristic[0].value) {
                             promise.resolve(response.data.customer.characteristic[0].value);
                     } else {
-                        promise.resolve(response);
+                        promise.resolve(false);
                     }
                 })
                 .catch(function (error) {
