@@ -354,11 +354,11 @@ module OrangeFeSARQ.Services {
         .then((response) => {
           let _resp = response.data;
           let status = response.status;
-          if (_resp.error) {
-            throw _resp.error;
-          }
           if (status == 202 || status == 422) {
             return response;
+          }
+          if (_resp.error) {
+            throw _resp.error;
           }
           return _resp.productOrder;
         })
