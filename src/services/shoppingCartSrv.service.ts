@@ -31,7 +31,7 @@ module OrangeFeSARQ.Services {
          * Crea/valida el carrito
          * @returns {object} Devuelve una promesa con el response.
          */
-        generateShoppingCart(body, componentName: string, customer?) {
+        generateShoppingCart(body, componentName: string, customer?, contactMedium?, relatedParty?) {
             let vm = this;
             let _headers = vm.getParentSfid();
             body = vm.conditionalJazztel(body);
@@ -40,7 +40,9 @@ module OrangeFeSARQ.Services {
                     ospCartItemReqPost: [
                         body
                     ],
-                    customer
+                    customer,
+                    contactMedium,
+                    relatedParty
                 },
                 urlParams: ['ospShoppingCart']
             };
