@@ -255,10 +255,16 @@ module ratesParent.Models {
 
                                     // Precio fijo para packEntry NAC
                                     let precioFijo;
+                                    let arrayPromo;
 
-                                    if (productOfferingPriceAlteration && productOfferingPriceAlteration.price
-                                    && productOfferingPriceAlteration.recurringChargePeriod === 'Precio fijo') {
-                                        precioFijo = productOfferingPriceAlteration.price;
+                                    if (productOfferingPriceAlteration && productOfferingPriceAlteration.price) {
+                                        if (productOfferingPriceAlteration.recurringChargePeriod) {
+                                            arrayPromo = productOfferingPriceAlteration.recurringChargePeriod.split('|');
+
+                                            if (arrayPromo && _.find(arrayPromo, (promo) => {return promo === 'Precio fijo'})) {
+                                                precioFijo = productOfferingPriceAlteration.price;
+                                            }
+                                        }
                                     }
 
                                     // Precios tarifa con promociones
