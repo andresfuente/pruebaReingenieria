@@ -786,12 +786,10 @@ module OrangeFeSARQ.Services {
 
         /**
          * Método para obtener la localización del cliente
-         * @param {string} originRate tarifa de origen 
-         * @param {string} originTechnology tecnologia de la tarifa 
-         * @returns {IPromise<TResult>}
-         * @description Realiza la llamada al end point changeRateListv2 de productCatalog
+         * @returns {string}
+         * @description Obtiene la localización del cliente
          */
-        getClientGeolocation() {
+        getClientGeolocation() : string {
             let srv = this;
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
