@@ -12,8 +12,7 @@ module OrangeFeSARQ.Services {
 
         public commercialCampaignsAPIUrl: string;
         private storeProvince: string;
-        private cacheOfRequests : HashMap<string, string>;
-        private cacheOWCSData; 
+        private cacheOfRequests : HashMap<string, string>; 
         private linesUsageSrv;
         public isChanging = false; 
 
@@ -137,17 +136,6 @@ module OrangeFeSARQ.Services {
             vm.cacheOfRequests.set(vm.getStringCache(), response); 
 
         }
-        
-        setOWCSData(data: any) {
-            let vm = this;
-            vm.cacheOWCSData = data;
-        }
-
-        getOWCSData() {
-            let vm = this;
-
-            return vm.cacheOWCSData;
-        }
 
         private getStringCache(){
             let vm = this;
@@ -155,6 +143,7 @@ module OrangeFeSARQ.Services {
             let defaultData: any = JSON.parse(sessionStorage.getItem('defaultData')) || {};
             return credentialInformation.rol + '-' + defaultData.subProfile + '-' + credentialInformation.document; 
         }
+
     }
 
     // Registration
