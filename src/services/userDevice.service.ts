@@ -55,7 +55,7 @@ module OrangeFeSARQ.Services {
             return vm.httpCacheGett(vm.userDeviceAPIUrl, _search, comp)
                 .then(
                     (response) => {
-                        return response.data;
+                        return response;
                     },
                     (err) => {
                         throw err;
