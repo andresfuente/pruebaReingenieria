@@ -43,15 +43,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let promise = vm.$q.defer();
 
-            if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
-                param = 'residential';
-            } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
-                param = 'business';
-            } else if (param === 'publicKey') {
-                param = 'telephoneNumber';
-            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))) {
-                param = 'residential';
-            }
+            param = vm.getParamsGetUser(param, clientId);
 
             let _search: Object = {
                 queryParams: {
@@ -94,15 +86,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let promise = vm.$q.defer();
 
-            if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
-                param = 'residential';
-            } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
-                param = 'business';
-            } else if (param === 'publicKey') {
-                param = 'telephoneNumber';
-            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))) {
-                param = 'residential';
-            }
+            param = vm.getParamsGetUser(param, clientId);
 
             let _search: Object = {
                 queryParams: {
@@ -264,15 +248,8 @@ module OrangeFeSARQ.Services {
         getAmenaUser(param: string, clientId: string, componentName: string): any {
             let vm = this;
             let promise = vm.$q.defer();
-            if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
-                param = 'residential';
-            } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
-                param = 'business';
-            } else if (param === 'publicKey') {
-                param = 'telephoneNumber';
-            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))) {
-                param = 'residential';
-            }
+
+            param = vm.getParamsGetUser(param, clientId);
 
             let _search: Object = {
                 queryParams: {
@@ -358,5 +335,23 @@ module OrangeFeSARQ.Services {
 
                     });
         }
+
+        getParamsGetUser(param: string, clientId: string) : string {
+            let vm = this;
+
+            let returnParam = param;
+
+            if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
+                returnParam = 'residential';
+            } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
+                returnParam = 'business';
+            } else if (param === 'publicKey') {
+                returnParam = 'telephoneNumber';
+            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))) {
+                returnParam = 'residential';
+            }
+
+            return returnParam;
+        } 
     }
 }
