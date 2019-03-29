@@ -96,17 +96,8 @@ module OrangeFeSARQ.Services {
             if (!releatedRatesClient || releatedRatesClient === '') {
                 delete params.idParqueList;
             }
-            let srv = this;
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
 
-            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
-            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
-            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
-
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
-            }
+            let clientGeolocation = vm.getClientGeolocation();
 
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
@@ -187,16 +178,7 @@ module OrangeFeSARQ.Services {
                 delete params.idParqueList;
             }
 
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
-
-            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
-            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
-            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
-
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
-            }
+            let clientGeolocation = srv.getClientGeolocation();
 
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
@@ -281,16 +263,7 @@ module OrangeFeSARQ.Services {
                 bundleId : idBundle
             };
 
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
-
-            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
-            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
-            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
-
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
-            }
+            let clientGeolocation = srv.getClientGeolocation();
 
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
@@ -332,16 +305,7 @@ module OrangeFeSARQ.Services {
                 bundleId : idBundle
             };
 
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
-
-            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
-            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
-            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
-
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
-            }
+            let clientGeolocation = srv.getClientGeolocation();
 
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
@@ -368,16 +332,9 @@ module OrangeFeSARQ.Services {
             };
 
             let srv = this;
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
 
-            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
-            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
-            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
+            let clientGeolocation = vm.getClientGeolocation();
 
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
-            }
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince.toUpperCase() : 'Madrid');
@@ -453,16 +410,7 @@ module OrangeFeSARQ.Services {
             }
 
             let srv = this;
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
-
-            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
-            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
-            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
-
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
-            }
+            let clientGeolocation = srv.getClientGeolocation();
 
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
@@ -530,16 +478,7 @@ module OrangeFeSARQ.Services {
             }
 
             let srv = this;
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
-
-            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
-            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
-            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
-
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
-            }
+            let clientGeolocation = srv.getClientGeolocation();
 
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
@@ -843,6 +782,30 @@ module OrangeFeSARQ.Services {
             }
 
             return validSFID;
+        }
+
+        /**
+         * Método para obtener la localización del cliente
+         * @param {string} originRate tarifa de origen 
+         * @param {string} originTechnology tecnologia de la tarifa 
+         * @returns {IPromise<TResult>}
+         * @description Realiza la llamada al end point changeRateListv2 de productCatalog
+         */
+        getClientGeolocation() {
+            let srv = this;
+
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
+
+            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
+            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
+            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
+
+            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
+            }
+
+            return clientGeolocation;
         }
     }
     angular.module('RatesParentSrv', [])
