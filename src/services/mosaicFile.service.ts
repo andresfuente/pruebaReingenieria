@@ -264,7 +264,7 @@ module OrangeFeSARQ.Services {
             //     params: params,
             //     headers: headers
             // })
-            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', true)
+            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
                 .then((response) => {
                     return {
                         // tslint:disable-next-line
@@ -964,7 +964,7 @@ module OrangeFeSARQ.Services {
             };
             let deferred = srv.$q.defer();
             let mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
-            return srv.httpCacheGeth(srv.genericConstant.getTerminalDetails, { queryParams: params }, headers, 'mosaicFileComp', true)
+            return srv.httpCacheGeth(srv.genericConstant.getTerminalDetails, { queryParams: params }, headers, 'mosaicFileComp', false)
                 .then((response) => {
                     // Si la respuesta es vacia se muestra el mensaje de error
                     if (response.data.length === 0) {
