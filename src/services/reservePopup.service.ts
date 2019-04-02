@@ -82,12 +82,12 @@ module reservePopup.Services {
             return vm.httpPostFull(vm.genericConstant.stockData, _search, 'reservePopupComp')
                 .then(
                 (response) => {
-                    return response.data.respuesta;
+                    return response;
                 },
                 (error) => {
                     vm.hideReservePopup();
                     vm.informationCenter.addInformationMessage(2, 'Error', 'No se ha podido realizar la reserva');
-                    throw error.data;
+                    throw error;
                 });
         }
 

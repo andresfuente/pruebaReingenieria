@@ -355,7 +355,7 @@ module OrangeFeSARQ.Services {
                 .then((response) => {
                     if (response && response.data && response.data.customer && response.data.customer.characteristic[0] 
                         && response.data.customer.characteristic[0].value) {
-                            promise.resolve(response.data.customer.characteristic[0].value);
+                            promise.resolve(response);
                     } else {
                         promise.resolve(response);
                     }

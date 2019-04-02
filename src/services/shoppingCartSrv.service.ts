@@ -114,12 +114,12 @@ module OrangeFeSARQ.Services {
             return vm.httpPut(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
                 .then(
                     (response) => {
-                        return response.data;
+                        return response;
                     }
                 )
                 .catch(
                     (error) => {
-                        throw error.data;
+                        throw error;
                     }
                 );
         }
