@@ -207,7 +207,7 @@ module OrangeFeSARQ.Services {
                 body: body
             };
 
-            return vm.httpPostFull(vm.genericConstant.customerManagement, _search, comp)
+            return vm.httpPost(vm.genericConstant.customerManagement, _search, comp)
                 .then(function (response) {
                     if (response.data.error && response.data.error !== null) {
                         throw response.data.error;
@@ -218,6 +218,7 @@ module OrangeFeSARQ.Services {
                     throw error.data;
                 });
         }
+        
 
         /**
          * @ngdoc method
