@@ -382,7 +382,8 @@ module OrangeFeSARQ.Services {
                 pack: pack, // Pack de las tarifas
                 type: type, // [movil/ movilfijo]
                 defaultTechnology: defaultTechnology,
-                bucketId: bucketId
+                bucketId: bucketId,
+                ospContractible: 'Y'
             };
 
             if (!params.bucketId) {
