@@ -103,10 +103,10 @@ module OrangeFeSARQ.Services {
                             vm.getMdgUser(param, clientId); // Cuando se realiza la llamada al Plan amigo no es necesario esta llamada
                         }
                         // - response.data.mdg = vm.mdgData;
-                        promise.resolve(response.data);
+                        promise.resolve(response);
                     },
                     (error) => {
-                        promise.reject(error.data);
+                        promise.reject(error);
                     });
             return promise.promise;
         }
