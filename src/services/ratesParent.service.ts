@@ -662,7 +662,8 @@ module OrangeFeSARQ.Services {
                 pack: pack, // Pack de las tarifas
                 type: type, // [movil/ movilfijo]
                 defaultTechnology: defaultTechnology,
-                bucketId: bucketId
+                bucketId: bucketId,
+                ospContractible: 'Y'
             };
     
             if (!bucketId) {
@@ -746,7 +747,8 @@ module OrangeFeSARQ.Services {
                 idTecnologiaList: technologyString, // Listado de id de tecnologia
                 actocomercial: 'renove',
                 defaultTechnology: defaultTechnology,
-                bucketId: bucketId
+                bucketId: bucketId,
+                ospContractible: 'Y'
             };
 
             if (ratesString === '') {
