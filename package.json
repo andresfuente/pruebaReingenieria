@@ -1,7 +1,7 @@
 {
   "name": "orange-services",
   "title": "Orange-services",
-  "version": "1.54.4-SNAPSHOT.1",
+  "version": "1.55.46-RC",
   "description": "Contiene los servicios comunes no core.",
   "main": "index.js",
   "scripts": {
