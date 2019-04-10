@@ -90,8 +90,7 @@ module OrangeFeSARQ.Services {
                     commercialAction: commercialAction,
                     productType: productType,
                     isExistingCustomer: isExistingCustomer,
-                    idOfertaComercialList: idOfertaComercialList,
-                    ospContractible: 'Y'
+                    idOfertaComercialList: idOfertaComercialList
                 },
                 urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
             };

@@ -71,8 +71,7 @@ module OrangeFeSARQ.Services {
                 pack: pack, // Pack de las tarifas
                 type: type, // [movil/ movilfijo]
                 defaultTechnology: defaultTechnology,
-                bucketId: bucketId,
-                ospContractible: 'Y'
+                bucketId: bucketId
             };
 
             if (!bucketId) {
@@ -392,8 +391,7 @@ module OrangeFeSARQ.Services {
                 idTecnologiaList: technologyString, // Listado de id de tecnologia
                 actocomercial: 'renove',
                 defaultTechnology: defaultTechnology,
-                bucketId: bucketId,
-                ospContractible: 'Y'
+                bucketId: bucketId
             };
             if (ratesString === '') {
                 delete params.idOfertaComercialList;
