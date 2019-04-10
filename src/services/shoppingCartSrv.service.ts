@@ -49,10 +49,10 @@ module OrangeFeSARQ.Services {
             return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, {}, null, _headers)
                 .then(
                     (response) => {
-                        return response.data;
+                        return response;
                     },
                     (error) => {
-                        throw error.data;
+                        throw error
                     }
                 );
         }
@@ -114,12 +114,12 @@ module OrangeFeSARQ.Services {
             return vm.httpPut(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
                 .then(
                     (response) => {
-                        return response;
+                        return response.data;
                     }
                 )
                 .catch(
                     (error) => {
-                        throw error;
+                        throw error.data;
                     }
                 );
         }
