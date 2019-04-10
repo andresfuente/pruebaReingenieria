@@ -18,6 +18,7 @@ module OrangeFeSARQ.Services {
         public bucketId : string;
         public pressRateModifyButton : boolean;
         public shoppingCartAux;
+        public promoInformative;
 
         /**
          * @ngdoc method
@@ -520,7 +521,7 @@ module OrangeFeSARQ.Services {
                     'type': 'tarifa'
                 }],
                 'place': [],
-                'characteristic': []
+                'characteristic': vm.informativePromo(rate)
             };
 
             let priceAlteration = [];
@@ -684,6 +685,28 @@ module OrangeFeSARQ.Services {
 
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#informativePromo
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Añade las promos informativas al carrito
+         */
+        informativePromo(rate){
+            let vm = this;
+
+           let promoInformativeName = rate.recurringChargePeriodPromotion ? rate.recurringChargePeriodPromotion.split('|') : [];
+           let promoInformativeValue = rate.descriptionPromotion ? rate.descriptionPromotion.split('|') : [];
+
+           let arrayPromoInformative = _.zipWith(promoInformativeName,promoInformativeValue, (a, b) => {
+                return {name: a, value: b};
+           });
+           
+           arrayPromoInformative = _.filter(arrayPromoInformative, {name: 'Información'});
+
+           return arrayPromoInformative;
+           }
 
         /**
          * @ngdoc method
