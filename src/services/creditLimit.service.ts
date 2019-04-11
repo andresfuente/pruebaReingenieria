@@ -217,7 +217,7 @@ module OrangeFeSARQ.Services {
                 }
             }
 
-            if (sessionClientData.creditLimitRenove.linesWithVAP && _.size(sessionClientData.creditLimitRenove.linesWithVAP) !== 0) {
+            if (sessionClientData.creditLimitRenove && sessionClientData.creditLimitRenove.linesWithVAP && _.size(sessionClientData.creditLimitRenove.linesWithVAP) !== 0) {
                 sessionClientData.creditLimitRenove.linesWithVAP = _.uniqBy(sessionClientData.creditLimitRenove.linesWithVAP, 'line');
                 sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
             }
