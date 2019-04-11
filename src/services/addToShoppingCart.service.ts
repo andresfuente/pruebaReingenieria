@@ -726,7 +726,7 @@ module OrangeFeSARQ.Services {
                     'type': 'tarifa'
                 }],
                 'place': [],
-                'characteristic': []
+                'characteristic': vm.informativePromo(rate)
             };
 
             let rateCartItemElement = {
@@ -851,7 +851,7 @@ module OrangeFeSARQ.Services {
                     'type': 'tarifa'
                 }],
                 'place': [],
-                'characteristic': []
+                'characteristic': vm.informativePromo(rate)
             };
 
             let priceAlteration = []
@@ -1132,6 +1132,7 @@ module OrangeFeSARQ.Services {
                     'productRelationship': [{
                         'type': 'tarifa'
                     }],
+                    'characteristic': vm.informativePromo(rate),
                     'place': []
                 },
                 'itemPrice': [
