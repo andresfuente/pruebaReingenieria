@@ -711,7 +711,7 @@ module OrangeFeSARQ.Services {
          * @description
          * Tratamiento de parámetros para renove
          */
-        setParamsRenove(ratesList, technologyList, productType, clientSegment, defaultTechnology, bucketId) {
+        setParamsRenove(ratesList, technologyList, productType: string, clientSegment: string, defaultTechnology?: string, bucketId?: string) {
 
             let vm = this;
 
@@ -744,7 +744,7 @@ module OrangeFeSARQ.Services {
             }
 
             if (!defaultTechnology)  {
-                delete params.defaultTechnology
+                delete params.defaultTechnology;
             }
 
             if (!bucketId) {
