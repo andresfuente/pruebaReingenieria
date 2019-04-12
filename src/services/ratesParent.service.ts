@@ -275,38 +275,7 @@ module OrangeFeSARQ.Services {
         technologyList, defaultTechnology?: string, bucketId?: string) {
             let vm = this;
 
-            let ratesString = '';
-            let technologyString = '';
-            if (ratesList) {
-                ratesString = vm.getRatesString(ratesList);
-            }
-            if (technologyList) {
-                technologyString = vm.getIdTechnologyString(technologyList);
-            }
-            let params = {
-                productType: productType, // Tipo de producto (rate)
-                segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
-                idOfertaComercialList: ratesString, // Listado de idBundle 
-                idTecnologiaList: technologyString, // Listado de id de tecnologia
-                actocomercial: 'renove',
-                defaultTechnology: defaultTechnology,
-                bucketId: bucketId
-            };
-            if (ratesString === '') {
-                delete params.idOfertaComercialList;
-            }
-
-            if (defaultTechnology || technologyString === '') {
-                delete params.idTecnologiaList;
-            }
-
-            if (!defaultTechnology)  {
-                delete params.defaultTechnology
-            }
-
-            if (!bucketId) {
-                delete params.bucketId;
-            }
+            let params = vm.setParamsRenove(ratesList, technologyList, productType, clientSegment, defaultTechnology, bucketId);
 
             let _headers = vm.setHeaders();
 
@@ -337,38 +306,8 @@ module OrangeFeSARQ.Services {
         getOfferingRenewData(productType: string, clientSegment: string,
             specificationData, ratesList, technologyList, defaultTechnology?: string, bucketId?: string) {
             let vm = this;
-            let ratesString = '';
-            let technologyString = '';
-            if (ratesList) {
-                ratesString = vm.getRatesString(ratesList);
-            }
-            if (technologyList) {
-                technologyString = vm.getIdTechnologyString(technologyList);
-            }
-            let params = {
-                productType: productType, // Tipo de producto (rate)
-                segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
-                idOfertaComercialList: ratesString, // Listado de id Siebel 
-                idTecnologiaList: technologyString, // Listado de id de tecnologia
-                actocomercial: 'renove',
-                defaultTechnology: defaultTechnology,
-                bucketId: bucketId
-            };
 
-            if (ratesString === '') {
-                delete params.idOfertaComercialList;
-            }
-            if (defaultTechnology || technologyString === '') {
-                delete params.idTecnologiaList;
-            }
-
-            if (!defaultTechnology)  {
-                delete params.defaultTechnology
-            }
-
-            if (!bucketId) {
-                delete params.bucketId;
-            }
+            let params = vm.setParamsRenove(ratesList, technologyList, productType, clientSegment, defaultTechnology, bucketId);
 
             let _headers = vm.setHeaders();
 
@@ -766,6 +705,55 @@ module OrangeFeSARQ.Services {
             return _headers;
         }
         
+        /**
+         * @name ratesParent.Services:RatesParentSrv#setParamsRenove
+         * @methodOf ratesParent.Services:RatesParentSrv
+         * @description
+         * Tratamiento de parámetros para renove
+         */
+        setParamsRenove(ratesList, technologyList, productType, clientSegment, defaultTechnology, bucketId) {
+
+            let vm = this;
+
+            let ratesString = '';
+            let technologyString = '';
+
+            if (ratesList) {
+                ratesString = vm.getRatesString(ratesList);
+            }
+            if (technologyList) {
+                technologyString = vm.getIdTechnologyString(technologyList);
+            }
+
+            let params = {
+                productType: productType, // Tipo de producto (rate)
+                segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
+                idOfertaComercialList: ratesString, // Listado de idBundle 
+                idTecnologiaList: technologyString, // Listado de id de tecnologia
+                actocomercial: 'renove',
+                defaultTechnology: defaultTechnology,
+                bucketId: bucketId
+            };
+
+            if (ratesString === '') {
+                delete params.idOfertaComercialList;
+            }
+
+            if (defaultTechnology || technologyString === '') {
+                delete params.idTecnologiaList;
+            }
+
+            if (!defaultTechnology)  {
+                delete params.defaultTechnology
+            }
+
+            if (!bucketId) {
+                delete params.bucketId;
+            }
+
+            return params;
+        }
+
       }
     angular.module('RatesParentSrv', [])
         .service('RatesParentSrv', OrangeFeSARQ.Services.RatesParentSrv);
