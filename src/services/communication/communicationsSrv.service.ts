@@ -11,6 +11,8 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
 
         public communicationListAPIUrl: string;
+        public communicationListAPIUrlV2: string;
+
 
         constructor(public $injector) {
             super($injector);
@@ -133,6 +135,30 @@ module OrangeFeSARQ.Services {
                     }
                 );
         }
+
+        sendSMS(body: any, componentName) : any {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams:  body,
+                urlParams: ['communicationMessage']
+            };
+            vm.communicationListAPIUrlV2 = 'api/communication/v2';
+
+
+            return vm.httpPost(vm.communicationListAPIUrlV2, _search, componentName)
+                .then(
+                    (response) => {
+                        return response.data;
+                    }
+                )
+                .catch(
+                    (error) => {
+                        return error.data;
+                    }
+                );
+        }
+
         getCommunicationList(body: OrangeFeSARQ.Models.IBody2, componentName) {
             let vm = this;
 
