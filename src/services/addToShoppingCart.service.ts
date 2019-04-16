@@ -1375,16 +1375,27 @@ module OrangeFeSARQ.Services {
             let cartItemIndex: number;
             let lastCartItemId: number;
             let commercialActId: number;
-            let shoppingCart;
-            let commercialData;
-            let commercialActIndex;
-            
-            // Se obtiene el ID del acto comercial que se esta modificando
-            // Se comprueba si existe algun dispositivo en el shopping cart que se este modificando
-            // Se obtiene el id del ultimo elmento del cart item del shopping cart
-            // Tipo del terminal
-            vm.getComercialActs();
 
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let commercialActIndex = vm.getSelectedCommercialAct();
+
+            // Se obtiene el ID del acto comercial que se esta modificando
+            if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
+                commercialActId = Number(commercialData[commercialActIndex].id);
+            }
+            // Se comprueba si existe algun dispositivo en el shopping cart que se este modificando
+            if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
+                commercialData[commercialActIndex].ospIsSelected) {
+                // Se eliminan los terminales del acto comercial existentes en el shopping cart
+                shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
+                commercialData[commercialActIndex].isCompletedAC = false;
+                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+            }
+            // Se obtiene el id del ultimo elmento del cart item del shopping cart
+            lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
+
+            // Tipo del terminal
 
             device.characteristic = [
                 {
@@ -1488,6 +1499,7 @@ module OrangeFeSARQ.Services {
                 };
             }
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+
         }
 
         obtainRateCartItemElement(commercialData, commercialActIndex){
