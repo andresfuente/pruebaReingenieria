@@ -1453,6 +1453,46 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
             };
 
+            rateCartItemElement = vm.obtainRateCartItemElement(commercialData, commercialActIndex);
+
+            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
+            cartItemElement = {
+                'id': cartItemElementId,
+                'cartItem': uniquePaid ? [deviceCartItemElement, rateCartItemElement] : [deviceCartItemElement, rateCartItemElement].concat(vapCartItems),
+                'action': 'New',
+                'cartItemRelationship': [{
+                    id: commercialActId
+                }],
+                'ospSelected': false,
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
+            };
+            // Añade seguro en caso de que se haya seleccionado
+            if (device.insuranceSiebelId) {
+                cartItemElement.cartItem.push(vm.createInsuranceCartItem(device, 'primary'));
+            }
+
+
+            // Añadir cartItem compromiso de permanencia CP
+            if (device.cpDescription && device.cpSiebel) {
+                cartItemElement.cartItem.push(vm.createCPCartItem(device));
+            }
+
+            if (shoppingCart !== null) {
+                shoppingCart.cartItem.push(cartItemElement);
+            } else {
+                shoppingCart = {
+                    'id': '',
+                    'cartItem': [cartItemElement],
+                    'customer': {}
+                };
+            }
+            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        }
+
+        obtainRateCartItemElement(commercialData, commercialActIndex){
+            let vm = this;
+            let rateCartItemElement;
             if (commercialData && commercialData[commercialActIndex]
                 && commercialData[commercialActIndex].ospTerminalWorkflow === 'secondary_renew'
                 && commercialData[commercialActIndex].ospCartItemType
@@ -1533,35 +1573,7 @@ module OrangeFeSARQ.Services {
                     'ospCartItemSubtype': ''
                 };
             }
-
-            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
-            cartItemElement = {
-                'id': cartItemElementId,
-                'cartItem': uniquePaid ? [deviceCartItemElement, rateCartItemElement] : [deviceCartItemElement, rateCartItemElement].concat(vapCartItems),
-                'action': 'New',
-                'cartItemRelationship': [{
-                    id: commercialActId
-                }],
-                'ospSelected': false,
-                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
-                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
-            };
-
-            // Añadir cartItem compromiso de permanencia CP
-            if (device.cpDescription && device.cpSiebel) {
-                cartItemElement.cartItem.push(vm.createCPCartItem(device));
-            }
-
-            if (shoppingCart !== null) {
-                shoppingCart.cartItem.push(cartItemElement);
-            } else {
-                shoppingCart = {
-                    'id': '',
-                    'cartItem': [cartItemElement],
-                    'customer': {}
-                };
-            }
-            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+            return rateCartItemElement;
         }
 
         /**
