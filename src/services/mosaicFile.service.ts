@@ -257,7 +257,6 @@ module OrangeFeSARQ.Services {
                 }
             }
 
-            let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
             _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
 
