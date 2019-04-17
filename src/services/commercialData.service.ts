@@ -81,7 +81,7 @@ module OrangeFeSARQ.Services {
             index =  _.findIndex(commercialData, function(currentCommercialAct){
                 return currentCommercialAct.ospIsSelected  === true;
             });
-            if (commercialData.length > 0 && index === -1) {
+            if (index === -1) {
                 return 0;
             } else {
                 return index;
