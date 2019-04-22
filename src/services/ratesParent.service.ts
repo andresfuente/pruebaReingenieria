@@ -19,6 +19,8 @@ module OrangeFeSARQ.Services {
 
         private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
 
+        private tabGroupName: string;
+
         constructor(public $injector) {
             super($injector);
             let vm = this;
@@ -764,6 +766,18 @@ module OrangeFeSARQ.Services {
             _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
 
             return _headers;
+        }
+
+        setInitTab(tabGroup: string) {
+            let vm = this;
+
+            vm.tabGroupName = tabGroup;
+        }
+
+        getInitTab() {
+            let vm = this;
+
+            return vm.tabGroupName;
         }
         
       }
