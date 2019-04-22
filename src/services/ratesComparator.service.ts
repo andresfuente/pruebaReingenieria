@@ -11,6 +11,8 @@ module OrangeFeSARQ.Services {
     export class RatesComparatorSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
+        public GEOLOCATION_LOCAL = 'Geolocation-local';
+        public GEOLOCATION_CLIENT = 'Geolocation-client';
         // Inject vars
         private spinnerBlockSrv;
 
@@ -132,8 +134,8 @@ module OrangeFeSARQ.Services {
             // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(vm.GEOLOCATION_LOCAL, vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set(vm.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
             let params = {
                 channel: channel,
@@ -424,8 +426,8 @@ module OrangeFeSARQ.Services {
             }
 
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(vm.GEOLOCATION_LOCAL, vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set(vm.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -521,8 +523,8 @@ module OrangeFeSARQ.Services {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
-            _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(vm.GEOLOCATION_LOCAL, srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
+            _headers.set(vm.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)

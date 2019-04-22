@@ -572,7 +572,7 @@ module mosaicFile.Models {
                     if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'prepaid_renew') {
                         commercialData[commercialActIndex].prepaidProducts.forEach((product, i) => {
                             if (product.codSAP === serviceData.deviceSpecification.id) {
-                                product.offertDetails.forEach((offert, i) => {
+                                product.offertDetails.forEach(offert => {
                                     let prepaidPrice = {
                                         valorRecarga: offert.valorRecarga,
                                         valorPuntos: offert.valorPuntos,
@@ -586,7 +586,7 @@ module mosaicFile.Models {
                     // Si es renove primario se guardan todas las tarifas asociadas
                     if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'primary_renew' ||
                         commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'best_renove') {
-                        serviceData.deviceOffering.forEach((deviceOff, x) => {
+                        serviceData.deviceOffering.forEach(deviceOff => {
                             if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length) {
                                 deviceOff.deviceOfferingPrice.forEach((price, x) => {
                                     if (price.relatedProductOffering && price.relatedProductOffering.length) {
