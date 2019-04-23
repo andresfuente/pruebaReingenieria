@@ -20,6 +20,7 @@ module OrangeFeSARQ.Services {
         private cache = {}; // Storage to prevent repeating calls to the API
         private storeProvince: string = '';
         private httpService;
+        public CHARACTERISTICCOLOR = 'characteristic.color';
 
         public isTLV: boolean;
 
@@ -193,7 +194,7 @@ module OrangeFeSARQ.Services {
                     'characteristic.screenData.groupData.screenSize.value',
                     'characteristic.memoryData.groupData.hardDisk.value',
                     'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                    'characteristic.color']);
+                    this.CHARACTERISTICCOLOR]);
             }
 
             // Parametros para Prepago   
@@ -210,8 +211,9 @@ module OrangeFeSARQ.Services {
 
             // Parametros para Renove
             if (params.commercialAction === 'renove') {
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = srv.getSelectedCommercialAct(); let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = srv.getSelectedCommercialAct(); 
 
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
@@ -243,7 +245,7 @@ module OrangeFeSARQ.Services {
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        this.CHARACTERISTICCOLOR]);
                 } else {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
@@ -253,7 +255,7 @@ module OrangeFeSARQ.Services {
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        this.CHARACTERISTICCOLOR]);
                 }
             }
 
