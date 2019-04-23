@@ -1407,13 +1407,15 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
 
+            let isSecondaryRenew: boolean = (commercialData[commercialActIndex].renewalType && commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove secundario') ? true : false;
+
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
             }
             // Se comprueba si existe algun dispositivo en el shopping cart que se este modificando
             if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
-                commercialData[commercialActIndex].ospIsSelected) {
+                commercialData[commercialActIndex].ospIsSelected && !isSecondaryRenew) {
                 // Se eliminan los terminales del acto comercial existentes en el shopping cart
                 shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
                 commercialData[commercialActIndex].isCompletedAC = false;
@@ -1456,7 +1458,7 @@ module OrangeFeSARQ.Services {
                 }
             }
 
-            
+
             productItem = {
                 'href': device.srcImage,
                 'name': device.brand ? device.brand : device.litTitle ? device.litTitle : undefined,
@@ -1476,7 +1478,7 @@ module OrangeFeSARQ.Services {
                 };
                 productItem.characteristic.push(imei);
             }
-
+            
             deviceCartItemElement = {
                 'id': device.siebelId,
                 'action': 'New',
@@ -1501,7 +1503,7 @@ module OrangeFeSARQ.Services {
                 'cartItemRelationship': [{
                     id: commercialActId
                 }],
-                'ospSelected': false,
+                'ospSelected': isSecondaryRenew ? true : false,
                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
             };
