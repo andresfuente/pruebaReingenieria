@@ -1,0 +1,88 @@
+[
+  {
+    "listOptionsLiteral": [
+      {
+        "name": "FFCC",
+        "description": "",
+        "value": "FFCC"
+      },
+      {
+        "name": "FFCC_BO",
+        "description": "",
+        "value": "FFCC_BO"
+      }
+    ],
+    "name": "defaultFFCC",
+    "title": null,
+    "desc": null
+  },
+  {
+    "listOptionsLiteral": [
+      {
+        "name": "TLW",
+        "description": "",
+        "value": "TLW"
+      },
+      {
+        "name": "TLV_ADMIN",
+        "description": "",
+        "value": "TLV_ADMIN"
+      },
+      {
+        "name": "TLV_DESPL",
+        "description": "",
+        "value": "TLV_DESPL"
+      },
+      {
+        "name": "INBOUND",
+        "description": "",
+        "value": "INBOUND"
+      },
+      {
+        "name": "OUTBOUND",
+        "description": "",
+        "value": "OUTBOUND"
+      }
+    ],
+    "name": "defaultTLV",
+    "title": null,
+    "desc": null
+  },
+  {
+    "listOptionsLiteral": [
+      {
+        "name": "PDV",
+        "description": "",
+        "value": "PDV"
+      },
+      {
+        "name": "PDV_ADMIN",
+        "description": "",
+        "value": "PDV_ADMIN"
+      },
+      {
+        "name": "PDV_DESPL",
+        "description": "",
+        "value": "PDV_DESPL"
+      },
+      {
+        "name": "PDV_NONMA",
+        "description": "",
+        "value": "PDV_NONMA"
+      },
+      {
+        "name": "TPH",
+        "description": "",
+        "value": "TPH"
+      },
+      {
+        "name": "ECI",
+        "description": "",
+        "value": "ECI"
+      }
+    ],
+    "name": "defaultPDV",
+    "title": null,
+    "desc": null
+  }
+]
