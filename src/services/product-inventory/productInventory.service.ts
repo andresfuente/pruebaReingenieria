@@ -20,9 +20,8 @@ module OrangeFeSARQ.Services {
       vm.utils = $injector.get('utils');
     }
 
-    getServicesContracted(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
+    allServicesContracted (msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false, brand: string) {
       let vm = this;
-      let BRAND = vm.genericConstant.brand;
       let METHOD = 'services';
       let type = vm.utils.isFixedLine(msisdn) ? 'fixed' : 'mobile';
       let request;
@@ -34,7 +33,7 @@ module OrangeFeSARQ.Services {
       }
       let _search: Object = {
         queryParams: request,
-        urlParams: [BRAND, METHOD, msisdn]
+        urlParams: [brand, METHOD, msisdn]
       };
       return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
         .then(function (response) {
@@ -48,32 +47,16 @@ module OrangeFeSARQ.Services {
         });
     }
 
+    getServicesContracted(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
+      let vm = this;
+      let BRAND = vm.genericConstant.brand;
+      vm.allServicesContracted(msisdn, componentName, refresh, BRAND);      
+    }
+
     getServicesContractedJazztel(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
       let vm = this;
       let BRAND = 'jazztel';
-      let METHOD = 'services';
-      let type = vm.utils.isFixedLine(msisdn) ? 'fixed' : 'mobile';
-      let request;
-      request = {};
-      request.lineCategory = type;
-      request.onlyActive = vm.genericConstant.onlyActive;
-      if (!vm.utils.isFixedLine(msisdn)) {
-        request.source = 'mdw';
-      }
-      let _search: Object = {
-        queryParams: request,
-        urlParams: [BRAND, METHOD, msisdn]
-      };
-      return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
-        .then(function (response) {
-          if (response.data && response.data.product) {
-            return response.data.product;
-          }
-          throw response.data.error;
-        })
-        .catch(function (error) {
-          return error.data;
-        });
+      vm.allServicesContracted(msisdn, componentName, refresh, BRAND);
     }
 
     getPaymentServices(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {

@@ -212,7 +212,6 @@ module OrangeFeSARQ.Services {
             // Parametros para Renove
             if (params.commercialAction === 'renove') {
                 let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 commercialActIndex = srv.getSelectedCommercialAct(); 
 
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
@@ -473,9 +472,6 @@ module OrangeFeSARQ.Services {
                 // Se seleccionan los parametros necesarios para la llamada a la OT
                 params.channel = '';
                 params.campaignName = campana_txt;
-                let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = srv.getSelectedCommercialAct();
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
                         if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)))) {

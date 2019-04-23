@@ -283,34 +283,34 @@ module OrangeFeSARQ.Services {
          */
         getClientType(siebelId: string) {
             let vm = this;
-            let type = '2'; // Por defecto es el valor que se devuelve
+            let typeRtc = '2'; // Por defecto es el valor que se devuelve
 
-            let cv = sessionStorage.getItem('cv');
+            let customerView = sessionStorage.getItem('cv');
 
-            if (!cv || cv === null || cv === undefined) {
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            if (!customerView || customerView === null || customerView === undefined) {
+                let comData = JSON.parse(sessionStorage.getItem('commercialData'));
 
                 // Buscamos el tipo de esta tarifa en commercial data
-                if (commercialData && commercialData.length > 0) {
-                    let currentAct: any = _.find(commercialData, { 'ospIsSelected': true });
+                if (comData && comData.length > 0) {
+                    let currentActRtc: any = _.find(comData, { 'ospIsSelected': true });
 
-                    if (currentAct !== null && currentAct.rates && currentAct.rates.length > 0) {
-                        let movilFijoRate: any = _.find(currentAct.rates, function (rate: any) {
-                            if (rate.siebelId === siebelId && rate.typeService.toUpperCase() === 'MOVIL_FIJO') {
-                                return rate;
+                    if (currentActRtc !== null && currentActRtc.rates && currentActRtc.rates.length > 0) {
+                        let tarifaMovilFijo: any = _.find(currentActRtc.rates, function (rateMF: any) {
+                            if (rateMF.siebelId === siebelId && rateMF.typeService.toUpperCase() === 'MOVIL_FIJO') {
+                                return rateMF;
                             }
                         });
 
-                        let movilRate: any = _.find(currentAct.rates, function (rate: any) {
-                            if (rate.siebelId === siebelId && rate.typeService.toUpperCase() !== 'MOVIL_FIJO') {
-                                return rate;
+                        let tarifaMovil: any = _.find(currentActRtc.rates, function (rateM: any) {
+                            if (rateM.siebelId === siebelId && rateM.typeService.toUpperCase() !== 'MOVIL_FIJO') {
+                                return rateM;
                             }
                         });
 
-                        if (movilFijoRate !== undefined && movilFijoRate !== null) {
-                            type = '2';
-                        } else if (movilRate !== undefined && movilRate !== null) {
-                            type = '0';
+                        if (tarifaMovilFijo !== undefined && tarifaMovilFijo !== null) {
+                            typeRtc = '2';
+                        } else if (tarifaMovil !== undefined && tarifaMovil !== null) {
+                            typeRtc = '0';
                         }
                     }
                 }
@@ -318,11 +318,11 @@ module OrangeFeSARQ.Services {
                 let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
                 if (clientData && clientData.clientType) {
-                    type = clientData.clientType;
+                    typeRtc = clientData.clientType;
                 }
             }
 
-            return type;
+            return typeRtc;
         }
 
         /**
