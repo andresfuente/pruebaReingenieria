@@ -320,6 +320,7 @@ module mosaicFile.Models {
                                     // Se busca caracteristica de nivel 1
                                     let group = _.find(this.fileCharacteristic, { title: characteristic.description });
                                     // Si no existe
+                                    let child:any;
                                     if (!group) {
                                         // Se crea el nivel 1
                                         let characteristicNew: OrangeMosaicFileTerminalCharacteristicsLvl1 =
@@ -332,6 +333,7 @@ module mosaicFile.Models {
                                             characteristicNew.title = characteristic.description;
                                         }
                                         // Si tiene hijo, se crea y se añade al objeto de nivel 1
+                                        let child:any;
                                         if (characteristic.characteristicValue.length > 0) {
                                             let objects;
                                             characteristic.characteristicValue.forEach((characteristicValue, z) => {
@@ -344,7 +346,7 @@ module mosaicFile.Models {
                                                             characteristicValue.value);
                                                     let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
-                                                    let child;
+                                                    
                                                     if (groupOWCS && groupOWCS['listOptionsLiteral']) {
                                                         child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
                                                     }
@@ -357,7 +359,7 @@ module mosaicFile.Models {
                                         }
                                         let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
                                             { name: characteristic.ospCharCategory });
-                                        let child;
+                                        child=null;
                                         if (groupOWCS && groupOWCS['listOptionsLiteral']) {
                                             child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
                                         }
@@ -381,7 +383,7 @@ module mosaicFile.Models {
                                                             characteristicValue.value);
                                                     let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
-                                                    let child;
+                                                    child=null;
                                                     if (groupOWCS && groupOWCS['listOptionsLiteral']) {
                                                         child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
                                                     }
@@ -570,7 +572,7 @@ module mosaicFile.Models {
                 if (commercialData[commercialActIndex].ospTerminalWorkflow) {
                     // Renove prepago
                     if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'prepaid_renew') {
-                        commercialData[commercialActIndex].prepaidProducts.forEach((product, i) => {
+                        commercialData[commercialActIndex].prepaidProducts.forEach((product) => {
                             if (product.codSAP === serviceData.deviceSpecification.id) {
                                 product.offertDetails.forEach(offert => {
                                     let prepaidPrice = {
@@ -588,7 +590,7 @@ module mosaicFile.Models {
                         commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'best_renove') {
                         serviceData.deviceOffering.forEach(deviceOff => {
                             if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length) {
-                                deviceOff.deviceOfferingPrice.forEach((price, x) => {
+                                deviceOff.deviceOfferingPrice.forEach((price) => {
                                     if (price.relatedProductOffering && price.relatedProductOffering.length) {
                                         price.relatedProductOffering.forEach((product) => {
                                             if (product.isBundle) {
