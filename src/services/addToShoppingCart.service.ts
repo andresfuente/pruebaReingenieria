@@ -1511,7 +1511,7 @@ module OrangeFeSARQ.Services {
             this.commercialData = [];
             this.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
-            return _.findIndex(this.commercialData, function (currentCommercialAct) {
+            return _.findIndex(this.commercialData, function (currentCommercialAct: any) {
                 return currentCommercialAct.ospIsSelected === true;
             });
         }
