@@ -6,6 +6,7 @@ module ratesParent.Models {
         private deferred: ng.IDeferred<{}>;
         public promise: ng.IPromise<{}>;
         private customerSegment;
+        
 
         public rateName: string; // Nombre de la pestaña
         public rates: Rate[] = []; /// Listado de tarifas
@@ -77,6 +78,7 @@ module ratesParent.Models {
         public newRateConditions: boolean = false;
         public associatedLine: Array<Object>;
         public defaultLines: Array<Object>;
+        public info: RatePopupInfo;
 
         // Id Tech
 
@@ -351,21 +353,21 @@ module ratesParent.Models {
                     } else {
                         if (priceData[i].bundledProductOffering && _.find(priceData[i].bundledProductOffering, { 'id': rateData.id })) {
                             // Recoger info
-                            let info: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
-                            this.pupupInfo.push(info);
+                            this.info = new RatePopupInfo(priceData[i].name, priceData[i].description);
+                            this.pupupInfo.push(this.info);
                         }
                     }
                 }
             }
 
             let descripcionCompleta = rateData.description + ((rateData.ospLargeDescription != null) ? ' <br/> ' + rateData.ospLargeDescription : "");
-            let info: RatePopupInfo = new RatePopupInfo('titulo', descripcionCompleta);
-            this.pupupInfo.push(info);
+            this.info = new RatePopupInfo('titulo', descripcionCompleta);
+            this.pupupInfo.push(this.info);
             // && rateData.productSpecCharacteristic[i].ospLargeDescription != null 
             for (let i in rateData.productSpecCharacteristic) {
                 if (rateData.productSpecCharacteristic[i].ospCategory === 'highlight') {
-                    let info: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
-                    this.pupupInfo.push(info);
+                    this.info = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                    this.pupupInfo.push(this.info);
                 }
             }
             for (let i in rateData.productSpecCharacteristic) {
@@ -377,8 +379,8 @@ module ratesParent.Models {
                         }
                     }
                     if (!repetida) {
-                        let info: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
-                        this.pupupInfo.push(info);
+                        this.info = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                        this.pupupInfo.push(this.info);
                     }
                 }
             }

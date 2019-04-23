@@ -45,7 +45,7 @@ module OrangeFeSARQ.Services {
 
             param = vm.getParamsGetUser(param, clientId);
 
-            let _search: Object = vm.objSearch();
+            let _search: Object = vm.objSearch(param);
 
             vm.httpCacheGett(vm.clientAPIUrl, _search, componentName)
                 .then(
@@ -80,7 +80,7 @@ module OrangeFeSARQ.Services {
 
             param = vm.getParamsGetUser(param, clientId);
 
-            let _search: Object = vm.objSearch();
+            let _search: Object = vm.objSearch(param);
 
             //TODO PRUEBA FASTDATA
             // if(vm.genericConstant.site === 'FichaCliente' && window.location.hostname === 'fichadecliente-uat.int.si.orange.es'){
@@ -340,13 +340,13 @@ module OrangeFeSARQ.Services {
             return returnParam;
         } 
 
-        objSearch(){
+        objSearch(urlParams){
             let vm = this;
             let _search: Object = {
                 queryParams: {
                     'onlyActive': vm.genericConstant.onlyActive,
                 },
-                urlParams: [vm.genericConstant.brand, 'customerView', param, clientId]
+                urlParams: [vm.genericConstant.brand, 'customerView', urlParams.param, urlParams.clientId]
 
             };
             return _search;
