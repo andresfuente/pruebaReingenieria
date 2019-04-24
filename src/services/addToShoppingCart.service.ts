@@ -15,10 +15,10 @@ module OrangeFeSARQ.Services {
         public clientJazztelSrv: OrangeFeSARQ.Services.ClientJazztelSrv;
         public userSrv: OrangeFeSARQ.Services.UserSrv;
         public data;
-        public bucketId : string;
-        public pressRateModifyButton : boolean;
+        public bucketId: string;
+        public pressRateModifyButton: boolean;
         public shoppingCartAux;
-        private lastCartItemId : number;
+        private lastCartItemId: number;
         private commercialActId: number;
         private shoppingCart;
         private commercialData;
@@ -55,12 +55,15 @@ module OrangeFeSARQ.Services {
         }
 
         getBundle() {
+            let vm = this;
+
             let cv = JSON.parse(sessionStorage.getItem('cv'));
-            this.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            let active = _.findIndex(this.commercialData, { 'ospIsSelected': true });
-
+            let active = _.findIndex(vm.commercialData, { 'ospIsSelected': true });
+            
             let bundleId = '';
-
+            
+            vm.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            
             if (cv && cv.product) {
                 for (let i = 0; i < cv.product.length; i++) {
                     if (cv.product[i].productCharacteristic) {
@@ -88,8 +91,9 @@ module OrangeFeSARQ.Services {
             return bundleId;
         }
 
-        getCommercialAndCartInfo(){
+        getCommercialAndCartInfo() {
             let vm = this;
+
             vm.shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             vm.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             vm.commercialActIndex = vm.getSelectedCommercialAct();
@@ -102,12 +106,12 @@ module OrangeFeSARQ.Services {
             if (vm.shoppingCart !== null && vm.commercialData !== null && vm.commercialData[vm.commercialActIndex].isCompletedAC &&
                 vm.commercialData[vm.commercialActIndex].ospIsSelected) {
                 // Se eliminan los TSS del acto comercial existentes en el shopping cart
-                vm.shoppingCart = vm.deleteElementInCartItem(vm.shoppingCart,vm.commercialActId);
+                vm.shoppingCart = vm.deleteElementInCartItem(vm.shoppingCart, vm.commercialActId);
                 vm.commercialData[vm.commercialActIndex].isCompletedAC = false;
                 sessionStorage.setItem('commercialData', JSON.stringify(vm.commercialData));
             }
             // Se obtiene el id del ultimo elmento del cart item del shopping cart
-            this.lastCartItemId = vm.getLastCartItemId(vm.shoppingCart, vm.commercialActId);
+            vm.lastCartItemId = vm.getLastCartItemId(vm.shoppingCart, vm.commercialActId);
         }
 
         /**
@@ -164,9 +168,9 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': ''
             };
 
-            vm.obtainRateCartItemElement(vm.commercialData, vm.commercialActIndex)
+            rateCartItemElement = vm.obtainRateCartItemElement(vm.commercialData, vm.commercialActIndex)
 
-            cartItemElementId = Number((this.lastCartItemId + 0.1).toFixed(1));
+            cartItemElementId = Number((vm.lastCartItemId + 0.1).toFixed(1));
 
             cartItemElement = {
                 'id': cartItemElementId,
@@ -206,12 +210,10 @@ module OrangeFeSARQ.Services {
          */
         putSecundaryDeviceInShoppingCart(device, payType) {
             let vm = this;
+
             let secundaryTerminal;
             let productItem;
             let secundaryDeviceCartItem;
-            vm.shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
-            vm.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            vm.commercialActIndex = vm.getSelectedCommercialAct();
             let sTerminalsLength = vm.commercialData[vm.commercialActIndex].sTerminals ? vm.commercialData[vm.commercialActIndex].sTerminals.length : 0;
             let sTerminalLastId = sTerminalsLength === 0 ? 0 : vm.commercialData[vm.commercialActIndex].sTerminals[sTerminalsLength - 1].id;
             let selectedCartItemId;
@@ -223,6 +225,10 @@ module OrangeFeSARQ.Services {
             let sTerminalsSC = [];
             let seguro;
             let isSecondaryRenew: boolean = (vm.commercialData[vm.commercialActIndex] && vm.commercialData[vm.commercialActIndex].renewalType && vm.commercialData[vm.commercialActIndex].renewalType.toLowerCase() === 'renove secundario');
+            
+            vm.shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            vm.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            vm.commercialActIndex = vm.getSelectedCommercialAct();
 
             device.itemPrice.forEach(item => {
                 if (payType === 'deferred' && item.priceType === 'inicial' || item.priceType === 'cuota') {
@@ -285,6 +291,7 @@ module OrangeFeSARQ.Services {
                 'ospCartItemType': vm.commercialData[vm.commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': vm.commercialData[vm.commercialActIndex].ospCartItemSubtype.toLowerCase()
             };
+
             if (!isSecondaryRenew) {
                 // Objeto para sTerminals
                 secundaryTerminal = {
@@ -315,42 +322,42 @@ module OrangeFeSARQ.Services {
                 }
                 vm.commercialData[vm.commercialActIndex].sTerminals.push(secundaryTerminal);
                 // Se inserta el terminal en el array de opciones seleccionadas 
-                    vm.commercialData[vm.commercialActIndex].shoppingCartElementsSelected
-                        .forEach((currentItem, index) => {
-                            if (currentItem.ospIsAddSecundary) {
-                                // Si sTerminals no esta definido
-                                if (!currentItem.sTerminals) {
-                                    currentItem.sTerminals = [];
-                                }
-                                currentItem.sTerminals.push({ 'siebelId': device.siebelId });
-                                selectedCartTerminal = currentItem.terminalSiebelId;
-                                selectedCartRate = currentItem.rateSiebelId;
+                vm.commercialData[vm.commercialActIndex].shoppingCartElementsSelected
+                    .forEach((currentItem, index) => {
+                        if (currentItem.ospIsAddSecundary) {
+                            // Si sTerminals no esta definido
+                            if (!currentItem.sTerminals) {
+                                currentItem.sTerminals = [];
                             }
-                        });
-                    // Se inserta el terminal secundario en el shopping cart
-                    if (vm.shoppingCart !== null && vm.shoppingCart.cartItem.length > 0) {
-                      vm.  shoppingCart.cartItem.forEach(currentCartItem => {
-                            let rate = _.find(currentCartItem.cartItem, { 'id': selectedCartRate });
-                            let terminal = _.find(currentCartItem.cartItem, { 'id': selectedCartTerminal });
-                            if (rate && terminal) {
-                                currentCartItem.cartItem.push(secundaryDeviceCartItem);
-                                if (payType === 'deferred') {
-                                    currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
+                            currentItem.sTerminals.push({ 'siebelId': device.siebelId });
+                            selectedCartTerminal = currentItem.terminalSiebelId;
+                            selectedCartRate = currentItem.rateSiebelId;
+                        }
+                    });
+                // Se inserta el terminal secundario en el shopping cart
+                if (vm.shoppingCart !== null && vm.shoppingCart.cartItem.length > 0) {
+                    vm.shoppingCart.cartItem.forEach(currentCartItem => {
+                        let rate = _.find(currentCartItem.cartItem, { 'id': selectedCartRate });
+                        let terminal = _.find(currentCartItem.cartItem, { 'id': selectedCartTerminal });
+                        if (rate && terminal) {
+                            currentCartItem.cartItem.push(secundaryDeviceCartItem);
+                            if (payType === 'deferred') {
+                                currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
 
-                                    // Añadir cartItem compromiso de permanencia CP
-                                    if (device.cpDescription && device.cpSiebel) {
-                                        currentCartItem.cartItem.push(vm.createCPCartItem(device, true));
-                                    }
+                                // Añadir cartItem compromiso de permanencia CP
+                                if (device.cpDescription && device.cpSiebel) {
+                                    currentCartItem.cartItem.push(vm.createCPCartItem(device, true));
+                                }
 
-                                }
-                                if (device.insuranceSiebelId) {
-                                    currentCartItem.cartItem.push(seguro);
-                                }
                             }
-                        });
-                    }
-                    sessionStorage.setItem('shoppingCart', JSON.stringify(vm.shoppingCart));
-                    sessionStorage.setItem('commercialData', JSON.stringify(vm.commercialData));
+                            if (device.insuranceSiebelId) {
+                                currentCartItem.cartItem.push(seguro);
+                            }
+                        }
+                    });
+                }
+                sessionStorage.setItem('shoppingCart', JSON.stringify(vm.shoppingCart));
+                sessionStorage.setItem('commercialData', JSON.stringify(vm.commercialData));
 
             } else {
 
@@ -359,8 +366,9 @@ module OrangeFeSARQ.Services {
 
                 if (vm.commercialActIndex !== -1 && vm.commercialData[vm.commercialActIndex].id) {
                     vm.commercialActId = Number(vm.commercialData[vm.commercialActIndex].id);
-                    this.lastCartItemId = vm.getLastCartItemId(vm.shoppingCart, vm.commercialActId);
-                    let cartItemElementId: number = Number((this.lastCartItemId + 0.1).toFixed(1));
+                    let cartItemElementId: number = Number((vm.lastCartItemId + 0.1).toFixed(1));
+
+                    vm.lastCartItemId = vm.getLastCartItemId(vm.shoppingCart, vm.commercialActId);
 
                     let cartItemElement = {
                         'id': cartItemElementId,
@@ -386,7 +394,7 @@ module OrangeFeSARQ.Services {
                     sessionStorage.setItem('shoppingCart', JSON.stringify(vm.shoppingCart));
 
                 }
-                
+
             }
 
         }
@@ -400,29 +408,32 @@ module OrangeFeSARQ.Services {
          */
         putRateInShoppingCart(rate) {
             let vm = this;
+
             let productItem;
             let rateCartItemElement;
             let cartItemElement;
             let cartItemElementId, cartItemIndex, lastCartItemId, commercialActId: number;
             let svaCartItemList = [];
+            let bucket;
+
             vm.shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             vm.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             vm.commercialActIndex = vm.getSelectedCommercialAct();
-            let bucket;
 
             // Se obtiene el ID del acto comercial que se esta modificando
             if (vm.commercialActIndex !== -1 && vm.commercialData[vm.commercialActIndex].id !== null) {
                 vm.commercialActId = Number(vm.commercialData[vm.commercialActIndex].id);
                 if (rate.groupName === 'Convergente' && rate.family === 'love') {
                     vm.commercialData[vm.commercialActIndex].loveRateInShoppingCart = true;
-                } 
-                
+                }
+
                 if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
                     vm.commercialData[vm.commercialActIndex].NACRateInShoppingCart = true;
                 }
 
                 sessionStorage.setItem('commercialData', JSON.stringify(vm.commercialData));
             }
+            
             // Se comprueba si existe alguna tarifa en el shopping cart que se este modificando
             if (vm.shoppingCart !== null && vm.commercialData !== null && vm.commercialData[vm.commercialActIndex].isCompletedAC &&
                 vm.commercialData[vm.commercialActIndex].ospIsSelected) {
@@ -431,6 +442,7 @@ module OrangeFeSARQ.Services {
                 vm.shoppingCart = vm.deleteElementInCartItem(vm.shoppingCart, commercialActId);
                 sessionStorage.setItem('commercialData', JSON.stringify(vm.commercialData));
             }
+
             // Se obtiene el id del ultimo elmento del cart item del shopping cart
             lastCartItemId = vm.getLastCartItemId(vm.shoppingCart, commercialActId);
 
@@ -456,7 +468,7 @@ module OrangeFeSARQ.Services {
             let priceAlteration = [];
 
             if (vm.hasPromotion(rate)) {
-                priceAlteration =[{
+                priceAlteration = [{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
                     'applicationDuration': rate.applicationDuration,
@@ -475,11 +487,11 @@ module OrangeFeSARQ.Services {
                 }];
 
                 // Si es NAC, añadimos los precios promocionados de las líneas adicionales al pack, si existen
-                if (rate.groupName === 'Convergente_NAC') { 
+                if (rate.groupName === 'Convergente_NAC') {
                     if (priceAlteration[0].price.dutyFreeAmount.value !== undefined && rate.nacPricePromotional !== undefined) {
                         priceAlteration[0].price.dutyFreeAmount.value += rate.nacPricePromotional;
                     }
-                    
+
                     if (priceAlteration[0].price.taxIncludedAmount.value !== undefined && rate.nacPriceTaxIncludedPromotional !== undefined) {
                         priceAlteration[0].price.taxIncludedAmount.value += rate.nacPriceTaxIncludedPromotional;
                     }
@@ -684,7 +696,7 @@ module OrangeFeSARQ.Services {
             };
 
             vm.shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
-            
+
             if (commData) {
                 let cartItemElementId = commData.id;
 
@@ -708,12 +720,12 @@ module OrangeFeSARQ.Services {
                     } else { // Recuperamos el bucket correspondiente del carrito 
                         cartItemBucket = vm.getFullBucketInShoppingCart();
                     }
-    
+
                     if (cartItemBucket) {
                         cartItemElement.cartItem.push(cartItemBucket);
                     }
                 }
-                
+
                 if (vm.shoppingCart !== null) {
                     vm.shoppingCart.cartItem.push(cartItemElement);
                 } else {
@@ -741,14 +753,16 @@ module OrangeFeSARQ.Services {
          */
         putRateInShoppingCartForSva(rate) {
             let vm = this;
+            
             let productItem;
             let rateCartItemElement;
             let cartItemElement;
             let cartItemElementId, cartItemIndex, lastCartItemId, commercialActId: number;
             let svaCartItemList = [];
+            let bucket;
+
             vm.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             vm.commercialActIndex = vm.getSelectedCommercialAct();
-            let bucket;
 
             productItem = {
                 'href': '',
@@ -764,7 +778,7 @@ module OrangeFeSARQ.Services {
             let priceAlteration = []
 
             if (vm.hasPromotion(rate)) {
-                priceAlteration =[{
+                priceAlteration = [{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
                     'applicationDuration': rate.applicationDuration,
@@ -862,15 +876,17 @@ module OrangeFeSARQ.Services {
          */
         createIdTechnologyCartItem(rate) {
             let vm = this;
+            
             let ospTecnology;
             let flagTvItem = {};
             let characteristicCDM = {};
             let flagTv = {};
             let fixedclient = {};
             let mantenRate = {};
+            let coverage = JSON.parse(sessionStorage.getItem('coverage'));
+
             vm.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             vm.commercialActIndex = vm.getSelectedCommercialAct();
-            let coverage = JSON.parse(sessionStorage.getItem('coverage'));
 
             if (coverage && coverage.hasFlagTv) {
                 coverage.hasFlagTv.forEach(item => {
@@ -919,14 +935,14 @@ module OrangeFeSARQ.Services {
                 };
                 ospTecnology.product.characteristic.push(flagTv);
                 let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                if(clientData && clientData.length > 0 && clientData.clientFixedNumber ){
+                if (clientData && clientData.length > 0 && clientData.clientFixedNumber) {
                     fixedclient = {
                         name: 'ClienteFijo',
                         value: 'Yes'
                     }
                     ospTecnology.product.characteristic.push(fixedclient);
                 }
-                if(clientData && clientData.length > 0 && clientData.desblinMantenTarif && clientData.desblinMantenTarif === true ){
+                if (clientData && clientData.length > 0 && clientData.desblinMantenTarif && clientData.desblinMantenTarif === true) {
                     mantenRate = {
                         name: 'manten_tarifa',
                         value: 'Y'
@@ -998,7 +1014,7 @@ module OrangeFeSARQ.Services {
             let priceAlteration = [];
 
             if (vm.hasPromotion(rate)) {
-                priceAlteration =[{
+                priceAlteration = [{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
                     'applicationDuration': rate.applicationDuration,
@@ -1016,11 +1032,11 @@ module OrangeFeSARQ.Services {
                     }
                 }];
 
-                if (rate.groupName === 'Convergente_NAC') { 
+                if (rate.groupName === 'Convergente_NAC') {
                     if (priceAlteration[0].price.dutyFreeAmount.value !== undefined && rate.nacPricePromotional !== undefined) {
                         priceAlteration[0].price.dutyFreeAmount.value += rate.nacPricePromotional;
                     }
-                    
+
                     if (priceAlteration[0].price.taxIncludedAmount.value !== undefined && rate.nacPriceTaxIncludedPromotional !== undefined) {
                         priceAlteration[0].price.taxIncludedAmount.value += rate.nacPriceTaxIncludedPromotional;
                     }
@@ -1341,7 +1357,7 @@ module OrangeFeSARQ.Services {
                 }
             }
 
-            
+
             productItem = {
                 'href': device.srcImage,
                 'name': device.brand ? device.brand : device.litTitle ? device.litTitle : undefined,
@@ -1413,14 +1429,16 @@ module OrangeFeSARQ.Services {
             sessionStorage.setItem('shoppingCart', JSON.stringify(vm.shoppingCart));
         }
 
-        obtainRateCartItemElement(commercialData, commercialActIndex){
+        obtainRateCartItemElement(commercialData, commercialActIndex) {
             let vm = this;
+
             let rateCartItemElement;
-            if (commercialData && vm.commercialData[vm.commercialActIndex]
-                && vm.commercialData[vm.commercialActIndex].ospTerminalWorkflow === 'secondary_renew'
-                && vm.commercialData[vm.commercialActIndex].ospCartItemType
-                && vm.commercialData[vm.commercialActIndex].ospCartItemSubtype
-                && vm.commercialData[vm.commercialActIndex].originRate) {
+
+            if (commercialData && commercialData[commercialActIndex]
+                && commercialData[commercialActIndex].ospTerminalWorkflow === 'secondary_renew'
+                && commercialData[commercialActIndex].ospCartItemType
+                && commercialData[commercialActIndex].ospCartItemSubtype
+                && commercialData[commercialActIndex].originRate) {
 
                 let idBundle = vm.getBundle();
 
@@ -1456,8 +1474,8 @@ module OrangeFeSARQ.Services {
                         },
                     }],
                     'ospSelected': true,
-                    'ospCartItemType': vm.commercialData[vm.commercialActIndex].ospCartItemType.toLowerCase(),
-                    'ospCartItemSubtype': vm.commercialData[vm.commercialActIndex].ospCartItemSubtype.toLowerCase()
+                    'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                    'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
                 };
             } else {
                 rateCartItemElement = {
@@ -1496,6 +1514,7 @@ module OrangeFeSARQ.Services {
                     'ospCartItemSubtype': ''
                 };
             }
+
             return rateCartItemElement;
         }
 
@@ -1508,8 +1527,10 @@ module OrangeFeSARQ.Services {
          * en caso contrario retorna -1
          */
         getSelectedCommercialAct(): number {
-            this.commercialData = [];
-            this.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let vm = this;
+
+            vm.commercialData = [];
+            vm.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
             return _.findIndex(this.commercialData, function (currentCommercialAct: any) {
                 return currentCommercialAct.ospIsSelected === true;
@@ -1675,7 +1696,7 @@ module OrangeFeSARQ.Services {
             let priceAlteration = [];
 
             if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
-                priceAlteration =[{
+                priceAlteration = [{
                     'name': sva.typePriceName ? sva.typePriceName : '',
                     'priceType': sva.priceType,
                     'applicationDuration': sva.applicationDuration,
@@ -1739,7 +1760,7 @@ module OrangeFeSARQ.Services {
                 };
             } else {
                 if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
-                    let priceAlteration =[{
+                    let priceAlteration = [{
                         'name': sva.typePriceName ? sva.typePriceName : '',
                         'priceType': sva.priceType,
                         'applicationDuration': sva.applicationDuration,
@@ -1881,7 +1902,7 @@ module OrangeFeSARQ.Services {
          */
         NACRateInShoppingCart(): boolean {
 
-            let response : boolean = false;
+            let response: boolean = false;
 
             this.commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
@@ -1979,7 +2000,7 @@ module OrangeFeSARQ.Services {
          * Devuelve el id del bucket que hay en carrito (en principio, solo puede haber uno)
          */
         getBucketInShoppingCart() {
-            
+
             let bucket: string;
             this.shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
 
@@ -1988,11 +2009,11 @@ module OrangeFeSARQ.Services {
                     if (option.ospSelected && option.cartItem) {
                         option.cartItem.forEach((item) => {
                             if (item.product && item.product.productRelationship && item.product.productRelationship[0]
-                            && item.product.productRelationship[0].type === 'bucket') {
+                                && item.product.productRelationship[0].type === 'bucket') {
                                 bucket = item.id;
                             }
                         });
-                    }    
+                    }
                 });
             }
 
@@ -2016,11 +2037,11 @@ module OrangeFeSARQ.Services {
                     if (option.ospSelected && option.cartItem) {
                         option.cartItem.forEach((item) => {
                             if (item.product && item.product.productRelationship && item.product.productRelationship[0]
-                            && item.product.productRelationship[0].type === 'bucket') {
+                                && item.product.productRelationship[0].type === 'bucket') {
                                 bucket = item;
                             }
                         });
-                    }    
+                    }
                 });
             }
 
@@ -2032,11 +2053,11 @@ module OrangeFeSARQ.Services {
         */
         hasPromotion(rate: any) {
 
-            let isPromo : boolean = false;
+            let isPromo: boolean = false;
 
             // Averiguamos si hay promociones en las líneas adicionales
             if (rate.groupName === 'Convergente_NAC') {
-                 isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
+                isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
 
                 // Si no hay promoción en la principal, comprobamos las adicionales
                 // y si alguna tiene promo, hay que pintarlo
