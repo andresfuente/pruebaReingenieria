@@ -344,26 +344,26 @@ module mosaicFile.Models {
                                                     let characteristicValueNew: OrangeMosaicFileTerminalCharacteristicsLvl2 =
                                                         new OrangeMosaicFileTerminalCharacteristicsLvl2(characteristic.name,
                                                             characteristicValue.value);
-                                                    let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
+                                                    let groupOWCS1 = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
                                                     
-                                                    if (groupOWCS && groupOWCS['listOptionsLiteral']) {
-                                                        child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
+                                                    if (groupOWCS1 && groupOWCS1['listOptionsLiteral']) {
+                                                        child = _.find(groupOWCS1['listOptionsLiteral'], { name: characteristic.name });
                                                     }
-                                                    if (groupOWCS && child) {
+                                                    if (groupOWCS1 && child) {
                                                         characteristicValueNew.name = child.value;
                                                         characteristicNew.subCharacteristicsList.push(characteristicValueNew);
                                                     }
                                                 }
                                             });
                                         }
-                                        let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
+                                        let groupOWCS2 = _.find(mosaicFileCompOWCSStore.listOption,
                                             { name: characteristic.ospCharCategory });
                                         child=null;
-                                        if (groupOWCS && groupOWCS['listOptionsLiteral']) {
-                                            child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
+                                        if (groupOWCS2 && groupOWCS2['listOptionsLiteral']) {
+                                            child = _.find(groupOWCS2['listOptionsLiteral'], { name: characteristic.name });
                                         }
-                                        if (groupOWCS && child) {
+                                        if (groupOWCS2 && child) {
                                             this.fileCharacteristic.push(characteristicNew);
                                         }
                                     } else { // Si existe
@@ -381,13 +381,13 @@ module mosaicFile.Models {
                                                     let characteristicValueNew: OrangeMosaicFileTerminalCharacteristicsLvl2 =
                                                         new OrangeMosaicFileTerminalCharacteristicsLvl2(characteristic.name,
                                                             characteristicValue.value);
-                                                    let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
+                                                    let groupOWCS3 = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
                                                     child=null;
-                                                    if (groupOWCS && groupOWCS['listOptionsLiteral']) {
-                                                        child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
+                                                    if (groupOWCS3 && groupOWCS3['listOptionsLiteral']) {
+                                                        child = _.find(groupOWCS3['listOptionsLiteral'], { name: characteristic.name });
                                                     }
-                                                    if (groupOWCS && child) {
+                                                    if (groupOWCS3 && child) {
                                                         characteristicValueNew.name = child.value;
                                                         if (characteristicValueNew.name === 'Cámara trasera'
                                                             && characteristicValueNew.value === 'Si') {
