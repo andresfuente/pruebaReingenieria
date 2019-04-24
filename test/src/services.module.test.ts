@@ -59,7 +59,7 @@ module servicesCommons.Tests.Controllers {
         });
         it('rateInfoPopup Controller should be defined', function () {
             expect(rateInfoPopup).toBeDefined();
-
+        });
 
         /**
 		 * @ngdoc test pack
