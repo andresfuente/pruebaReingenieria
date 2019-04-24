@@ -50,13 +50,13 @@ module OrangeFeSARQ.Services {
     getServicesContracted(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
       let vm = this;
       let BRAND = vm.genericConstant.brand;
-      vm.allServicesContracted(msisdn, componentName, refresh, BRAND);      
+      return vm.allServicesContracted(msisdn, componentName, refresh, BRAND);      
     }
 
     getServicesContractedJazztel(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
       let vm = this;
       let BRAND = 'jazztel';
-      vm.allServicesContracted(msisdn, componentName, refresh, BRAND);
+      return vm.allServicesContracted(msisdn, componentName, refresh, BRAND);
     }
 
     getPaymentServices(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
