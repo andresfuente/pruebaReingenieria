@@ -25,13 +25,15 @@ module OrangeFeSARQ.Services {
         postCreateCommercialActSPA(shoppingCart, customer, comp ){
             let vm = this;
 
+            let endPoint = 'createCommercialActSPA';
+
             let _search: Object = {
                 body: {
                     shoppingCart: shoppingCart,
                     customer: customer
                 },
                 queryParams: {},
-                urlParams: []
+                urlParams: [endPoint]
             };
             
             vm.httpPost(vm.genericConstant.createCommercialActSPA, _search, comp)
