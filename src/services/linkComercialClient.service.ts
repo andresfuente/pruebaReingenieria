@@ -58,10 +58,10 @@ module linkComercialClient.Services {
             };
             return vm.httpCacheGett(vm.genericConstant.getProfilesSrvOwcs, _search)
                 .then(function (response) {
-                    return response;
+                    return response.data;
                 })
                 .catch(function (error) {
-                    throw error;
+                    throw error.data;
                 });
         }
     }

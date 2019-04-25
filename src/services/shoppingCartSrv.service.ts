@@ -49,10 +49,10 @@ module OrangeFeSARQ.Services {
             return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, {}, null, _headers)
                 .then(
                     (response) => {
-                        return response;
+                        return response.data;
                     },
                     (error) => {
-                        throw error
+                        throw error.data;
                     }
                 );
         }
