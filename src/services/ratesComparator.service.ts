@@ -19,7 +19,9 @@ module OrangeFeSARQ.Services {
         public storeProvince;
         private typeMulticomparatorRenove: boolean = true;
 
+        // Services
         private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
+        private addToShoppingCart: OrangeFeSARQ.Services.AddToShoppingCartSrv;
 
         /**
          * @ngdoc method
@@ -46,6 +48,7 @@ module OrangeFeSARQ.Services {
             let srv = this;
             srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
             srv.billingAccountStore = $injector.get('billingAccountStoreSrv');
+            srv.addToShoppingCart = $injector.get('addToShoppingCartSrv');
         }
         getTerminalDataMulticomparator(
             rate: ratesComparator.Models.Rate,
@@ -96,14 +99,14 @@ module OrangeFeSARQ.Services {
             profile: string,
             nameSgmr: string,
             creditLimit?: number,
-            priceType?: string,            
+            priceType?: string,
             isSecondaryRenew?: boolean
         ) {
             let vm = this;
             let srv = this;
             if (riskLevel === 'bajo') {
                 riskLevel += ',medio,alto';
-            } else if(riskLevel === 'medio'){
+            } else if (riskLevel === 'medio') {
                 riskLevel += ',alto';
             }
             if (commercialAction.toLowerCase() === 'migracion') {
@@ -121,7 +124,7 @@ module OrangeFeSARQ.Services {
             let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+            if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
@@ -134,7 +137,9 @@ module OrangeFeSARQ.Services {
             let _headers = new HashMap<string, string>();
             _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
             _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
-
+            let commercialData;
+            let commercialActIndex;
+            let bucketID = vm.checkBucketID();
             let params = {
                 channel: channel,
                 isExistingCustomer: isExistingCustomer,
@@ -148,21 +153,21 @@ module OrangeFeSARQ.Services {
                 campaignName: nameSgmr,
                 fields: 'deviceOffering',
                 creditLimit: creditLimit,
-                priceType: priceType
-            }; 
+                priceType: priceType,
+                bucketID: bucketID
+            };
 
             if (creditLimit === undefined || creditLimit === null) {
                 delete params.creditLimit;
             }
-
-            if (isSecondaryRenew) {
-                delete params['deviceOffering.category.name'];
+            if (bucketID) {
+                delete params[bucketID];
             }
 
             // Prepago   
             if (sessionStorage.getItem('commercialData')) {
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = vm.getSelectedCommercialAct();
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = vm.getSelectedCommercialAct();
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemSubtype && commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
                     if (commercialAction === 'portabilidad') {
                         delete params.portabilityOrigin;
@@ -171,8 +176,8 @@ module OrangeFeSARQ.Services {
             }
             // Cliente existente para Renove   
             if (sessionStorage.getItem('commercialData')) {
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = vm.getSelectedCommercialAct();
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = vm.getSelectedCommercialAct();
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.toLowerCase() === 'renove' && vm.typeMulticomparatorRenove) {
                     delete params.isExistingCustomer;
                     delete params.portabilityOrigin;
@@ -180,6 +185,10 @@ module OrangeFeSARQ.Services {
                     delete params.profile;
                     delete params.creditLimit;
                 }
+            }
+            
+            if (isSecondaryRenew || vm.checkCommercialData(commercialData, commercialActIndex)) {
+                delete params['deviceOffering.category.name'];
             }
 
             return vm.httpCacheGeth(vm.genericConstant.getTerminalDetails, { queryParams: params }, _headers
@@ -193,7 +202,7 @@ module OrangeFeSARQ.Services {
                     return data;
 
                 } else {
-                    let defaultData = JSON.parse(sessionStorage.getItem('defaultData')).idRateEssential;
+                    
                     let data = {
                         rateSiebelId: rate.siebelId,
                         terminalsiebelId: terminal.siebelId,
@@ -210,7 +219,39 @@ module OrangeFeSARQ.Services {
                     deviceOffering: []
                 };
                 return data;
-        });
+            });
+        }
+        
+        /**
+        * @ngdoc method
+        * @name ratesComparator.Services:RatesComparatorSrv#checkCommercialData
+        * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
+        * @description
+        * @return {boolean} Retorna verdadero en caso de que para mejor renove haya una campaña de renove secundario,
+        * en caso contrario devuelve false
+        */
+        checkCommercialData(commercialData, commercialActIndex){
+            let value = false;
+            if (commercialData){
+                if (commercialData[commercialActIndex] && commercialData[commercialActIndex].ospTerminalWorkflow && commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove' 
+                && commercialData[commercialActIndex].bestRenoveInfo && commercialData[commercialActIndex].bestRenoveInfo.length){
+                    let bestRenove = commercialData[commercialActIndex].bestRenoveInfo
+                    bestRenove.forEach(renove => {
+                        if (renove.campaigns && renove.campaigns.length){
+                            renove.campaigns.forEach(campaign => {
+                                if (campaign.cod !== undefined && campaign.cod !== null){
+                                    if (campaign.typeRenew && campaign.typeRenew === 'Renove secundario') {
+                                        value = true;
+                                    }
+                                }
+                            });
+                        }
+                        
+                    });
+                }
+            }
+
+            return value;
         }
 
         /**
@@ -280,7 +321,6 @@ module OrangeFeSARQ.Services {
          * Calcula el tipo de cliente con el que se hace la llamada a la OT         
          */
         getClientType(siebelId: string) {
-            let vm = this;
             let type = '2'; // Por defecto es el valor que se devuelve
 
             let cv = sessionStorage.getItem('cv');
@@ -419,7 +459,7 @@ module OrangeFeSARQ.Services {
             let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+            if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
@@ -517,7 +557,7 @@ module OrangeFeSARQ.Services {
             let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+            if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
@@ -557,11 +597,48 @@ module OrangeFeSARQ.Services {
             return ratesListString;
         }
 
-        isFichadecliente(){
+        isFichadecliente() {
             let rol = JSON.parse(sessionStorage.getItem('loginData'));
-            return rol.site === 'fichadecliente'; 
+            return rol.site === 'fichadecliente';
+        }
+        checkBucketID() {
+            let vm = this;
+            let bucketID;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            if (vm.addToShoppingCart.NACRateInShoppingCart()) {
+                if (shoppingCart && shoppingCart.cartItem && shoppingCart.cartItem.length && shoppingCart.cartItem.length > 0) {
+                    bucketID = vm.checkShoppingCartNACSelected(shoppingCart.cartItem);
+                }
+            } else if (clientData && clientData.bucket) {
+                bucketID = clientData.bucket
+            }
+
+            return bucketID;
         }
 
+
+        checkShoppingCartNACSelected(cart) {
+            let idBucket = '';
+            for (let k = 0; k < cart.length; k++) {
+                let cartItems = cart[k];
+                if (cartItems.ospSelected) {
+                    if (cartItems.cartItem && cartItems.cartItem.length && cartItems.cartItem.length > 0) {
+                        for (let i = 0; i < cartItems.cartItem.length; i++) {
+                            let cartItem = cartItems.cartItem[i];
+                            if (cartItem.product && cartItem.product.productRelationship && cartItem.product.productRelationship.length && cartItem.product.productRelationship.length > 0) {
+                                for (let j = 0; j < cartItem.product.productRelationship.length; j++) {
+                                    if (cartItem.product.productRelationship[j].type && cartItem.product.productRelationship[j].type === 'bucket') {
+                                        idBucket = cartItem.id;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return idBucket;
+        }
 
     }
 }
