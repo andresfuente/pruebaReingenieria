@@ -23,6 +23,9 @@ module OrangeFeSARQ.Services {
 
         private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
 
+        public clientData;
+        public shopInfo;
+
         /**
          * @ngdoc method
          * @name ratesComparator.Services:RatesComparatorSrv#constructor
@@ -35,6 +38,7 @@ module OrangeFeSARQ.Services {
             super($injector);
             let vm = this;
             vm.setInjections($injector);
+            vm.getSession();
         }
 
         /** @ngdoc method
@@ -48,6 +52,12 @@ module OrangeFeSARQ.Services {
             let srv = this;
             srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
             srv.billingAccountStore = $injector.get('billingAccountStoreSrv');
+        }
+
+        getSession(){
+            let vm = this;
+            vm.clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            vm.shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
         }
         getTerminalDataMulticomparator(
             rate: ratesComparator.Models.Rate,
@@ -116,11 +126,10 @@ module OrangeFeSARQ.Services {
             vm.setCustomerData();
             vm.setStoreProvince();
 
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
+            vm.getSession();
 
-            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
-            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
+            let shopGeolocation = vm.shopInfo && vm.shopInfo.province ? vm.shopInfo.province : 'Madrid';
+            let clientGeolocation = vm.clientData && vm.clientData.generalAddress && vm.clientData.generalAddress.city ? vm.clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
@@ -241,17 +250,17 @@ module OrangeFeSARQ.Services {
          */
         setCustomerData() {
             let vm = this;
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            vm.getSession();
             // Si los datos de clientes se encuentran en el session storage
-            if (clientData !== null) {
+            if (vm.clientData !== null) {
                 // Segmento                
-                if (clientData.ospCustomerSegment && clientData.ospCustomerSegment.length > 0) {
-                    vm.customerSegment = clientData.ospCustomerSegment;
+                if (vm.clientData.ospCustomerSegment && vm.clientData.ospCustomerSegment.length > 0) {
+                    vm.customerSegment = vm.clientData.ospCustomerSegment;
                 }
                 // Provincia                
-                if (clientData.postalContact && clientData.postalContact.stateOrProvince &&
-                    clientData.postalContact.stateOrProvince.length > 0) {
-                    vm.customerProvince = clientData.postalContact.stateOrProvince;
+                if (vm.clientData.postalContact && vm.clientData.postalContact.stateOrProvince &&
+                    vm.clientData.postalContact.stateOrProvince.length > 0) {
+                    vm.customerProvince = vm.clientData.postalContact.stateOrProvince;
                 }
             }
         }
@@ -265,9 +274,9 @@ module OrangeFeSARQ.Services {
          */
         setStoreProvince() {
             let vm = this;
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
-            if (shopInfo !== null && shopInfo.province) {
-                vm.storeProvince = shopInfo.province;
+            vm.getSession();
+            if (vm.shopInfo !== null && vm.shopInfo.province) {
+                vm.storeProvince = vm.shopInfo.province;
             } else {
                 vm.storeProvince = 'Madrid';
             }
@@ -315,10 +324,10 @@ module OrangeFeSARQ.Services {
                     }
                 }
             } else {
-                let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                vm.getSession();
 
-                if (clientData && clientData.clientType) {
-                    typeRtc = clientData.clientType;
+                if (vm.clientData && vm.clientData.clientType) {
+                    typeRtc = vm.clientData.clientType;
                 }
             }
 
@@ -384,7 +393,8 @@ module OrangeFeSARQ.Services {
                 pack: pack, // Pack de las tarifas
                 type: type, // [movil/ movilfijo]
                 defaultTechnology: defaultTechnology,
-                bucketId: bucketId
+                bucketId: bucketId,
+                ospContractible: 'Y'
             };
 
             if (!params.bucketId) {
@@ -414,11 +424,8 @@ module OrangeFeSARQ.Services {
             vm.setCustomerData();
             vm.setStoreProvince();
 
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
-
-            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
-            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
+            let shopGeolocation = vm.shopInfo && vm.shopInfo.province ? vm.shopInfo.province : 'Madrid';
+            let clientGeolocation = vm.clientData && vm.clientData.generalAddress && vm.clientData.generalAddress.city ? vm.clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = vm.billingAccountStore.getCurrentBillingAddress()
 
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
@@ -512,11 +519,10 @@ module OrangeFeSARQ.Services {
             srv.setCustomerData();
             srv.setStoreProvince();
 
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
+            srv.getSession();
 
-            let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
-            let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
+            let shopGeolocation = srv.shopInfo && srv. shopInfo.province ? srv.shopInfo.province : 'Madrid';
+            let clientGeolocation = srv.clientData && srv.clientData.generalAddress && srv.clientData.generalAddress.city ? srv.clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {

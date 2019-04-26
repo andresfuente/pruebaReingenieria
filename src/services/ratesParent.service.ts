@@ -23,6 +23,8 @@ module OrangeFeSARQ.Services {
         public LITPRODUCTSPECIFICATION = '/productSpecificationv2View/OSP';
         public LITPRODUCTOFFERING = '/productOfferingv2View/OSP';
 
+        private tabGroupName: string;
+
         constructor(public $injector) {
             super($injector);
             let vm = this;
@@ -58,57 +60,15 @@ module OrangeFeSARQ.Services {
             ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string,
             bucketId?: string): ng.IPromise<{} | void> {
             let vm = this;
-            let technologyString = '';
-            if (technologyList) {
-                technologyString = vm.getIdTechnologyString(technologyList);
-            }
-            let params = {
-                category: categoryParam, // Familia tarifa 
-                productType: productType, // Tipo de producto (rate)
-                segment: clientSegment, // Segmento del cliente (Residencial/Empresas),
-                contractType: contractType, // POSPAGO/PREPAGO
-                idOfertaComercialList: ratesIdListString, // Listado de Id's de tarifas
-                idTecnologiaList: technologyString, // Listado de id de tecnologia
-                commercialAction: commercialAction, // Tipo de acto comercial
-                isExistingCustomer: isExistingCustomer, // Cliente existente?,
-                idParqueList: releatedRatesClient, // Tarifas del cliente
-                pack: pack, // Pack de las tarifas
-                type: type, // [movil/ movilfijo]
-                defaultTechnology: defaultTechnology,
-                bucketId: bucketId
-            };
 
-            if (!bucketId) {
-                delete params.bucketId;
-            }
+            let params = vm.setParams(categoryParam, productType, clientSegment,
+                contractType, commercialAction, isExistingCustomer, technologyList,
+                ratesIdListString, releatedRatesClient, pack, type, defaultTechnology,
+                bucketId);
 
-            if (!pack) {
-                delete params.pack;
-            }
+            let _headers = vm.setHeaders();
 
-            // Si la categoria no es convergente se eliminan los parametros para la tecnologia
-            if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC') || defaultTechnology === 'Y') {
-                delete params.idTecnologiaList;
-            }
-            // Si alguna de las listas queda vacia no se pasa como parametro en la llamada
-            if (ratesIdListString === '') {
-                delete params.idOfertaComercialList;
-            }
-            if (technologyString === '') {
-                delete params.idTecnologiaList;
-            }
-            if (!releatedRatesClient || releatedRatesClient === '') {
-                delete params.idParqueList;
-            }
-
-            let clientGeolocation = vm.getClientGeolocation();
-
-            // CABECERA HASHMAP
-            let _headers = new HashMap<string, string>();
-            _headers.set(vm.GEOLOCATIONLOCAL, vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set(vm.GEOLOCATIONCLIENT, clientGeolocation.toUpperCase());
-
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
+                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -140,56 +100,12 @@ module OrangeFeSARQ.Services {
             ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string,
             bucketId?: string) {
             let srv = this;
-            let technologyString = '';
-            if (technologyList) {
-                technologyString = srv.getIdTechnologyString(technologyList);
-            }
-            let params = {
-                category: categoryParam, // Familia tarifa 
-                productType: productType, // Tipo de producto (rate)
-                segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
-                contractType: contractType, // POSPAGO/PREPAGO
-                idOfertaComercialList: ratesIdListString, // Listado de Id's de tarifas 
-                idTecnologiaList: technologyString, // Listado de id de tecnologia
-                commercialAction: commercialAction, // Tipo de acto comercial
-                isExistingCustomer: isExistingCustomer, // Cliente existente?
-                idParqueList: releatedRatesClient, // Tarifas del cliente
-                pack: pack,
-                type: type,
-                defaultTechnology: defaultTechnology,
-                bucketId: bucketId
-            };
-
-            if (!bucketId) {
-                delete params.bucketId;
-            }
-
-            if (!pack) {
-                delete params.pack;
-            }
-
-            // Si la categoria no es convergente se eliminan los parametros para la tecnologia            
-            if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC') || defaultTechnology === 'Y') {
-                delete params.idTecnologiaList;
-            }
-            if (ratesIdListString === '') {
-                delete params.idOfertaComercialList;
-            }
-            if (technologyString === '') {
-                delete params.idTecnologiaList;
-            }
-            if (!releatedRatesClient || releatedRatesClient === '') {
-                delete params.idParqueList;
-            }
-
-            let clientGeolocation = srv.getClientGeolocation();
-
-            // CABECERA HASHMAP
-            let _headers = new HashMap<string, string>();
-            _headers.set(this.GEOLOCATIONLOCAL, srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set(this.GEOLOCATIONCLIENT, clientGeolocation.toUpperCase());
-
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.LITPRODUCTOFFERING,
+            let params = srv.setParams(categoryParam, productType, clientSegment,
+                contractType, commercialAction, isExistingCustomer, technologyList,
+                ratesIdListString, releatedRatesClient, pack, type, defaultTechnology,
+                bucketId);
+            let _headers = srv.setHeaders();
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + srv.LITPRODUCTOFFERING,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -267,14 +183,9 @@ module OrangeFeSARQ.Services {
                 bundleId : idBundle
             };
 
-            let clientGeolocation = srv.getClientGeolocation();
+            let _headers = srv.setHeaders();
 
-            // CABECERA HASHMAP
-            let _headers = new HashMap<string, string>();
-            _headers.set(this.GEOLOCATIONLOCAL, srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set(this.GEOLOCATIONCLIENT, clientGeolocation.toUpperCase());
-
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.LITPRODUCTSPECIFICATION,
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + srv.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -309,14 +220,9 @@ module OrangeFeSARQ.Services {
                 bundleId : idBundle
             };
 
-            let clientGeolocation = srv.getClientGeolocation();
+            let _headers = srv.setHeaders();
 
-            // CABECERA HASHMAP
-            let _headers = new HashMap<string, string>();
-            _headers.set(this.GEOLOCATIONLOCAL, srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set(this.GEOLOCATIONCLIENT, clientGeolocation.toUpperCase());
-
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.LITPRODUCTOFFERING,
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + srv.LITPRODUCTOFFERING,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return ratesParent.Models.RateSVA.createSVAList(specificationData, response.data, customerSegment);
@@ -335,14 +241,7 @@ module OrangeFeSARQ.Services {
                 idSvaList: idList
             };
 
-            let srv = this;
-
-            let clientGeolocation = vm.getClientGeolocation();
-
-            // CABECERA HASHMAP
-            let _headers = new HashMap<string, string>();
-            _headers.set(vm.GEOLOCATIONLOCAL, vm.storeProvince ? vm.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set(vm.GEOLOCATIONCLIENT, clientGeolocation.toUpperCase());
+            let _headers = vm.setHeaders();
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
@@ -413,13 +312,7 @@ module OrangeFeSARQ.Services {
                 delete params.bucketId;
             }
 
-            let srv = this;
-            let clientGeolocation = srv.getClientGeolocation();
-
-            // CABECERA HASHMAP
-            let _headers = new HashMap<string, string>();
-            _headers.set(vm.GEOLOCATIONLOCAL, vm.storeProvince ? vm.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set(vm.GEOLOCATIONCLIENT, clientGeolocation.toUpperCase());
+            let _headers = vm.setHeaders();
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
@@ -481,13 +374,7 @@ module OrangeFeSARQ.Services {
                 delete params.bucketId;
             }
 
-            let srv = this;
-            let clientGeolocation = srv.getClientGeolocation();
-
-            // CABECERA HASHMAP
-            let _headers = new HashMap<string, string>();
-            _headers.set(vm.GEOLOCATIONLOCAL, vm.storeProvince ? vm.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set(vm.GEOLOCATIONCLIENT, clientGeolocation.toUpperCase());
+            let _headers = vm.setHeaders();
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTOFFERING,
                 { queryParams: params }, _headers)
@@ -809,7 +696,144 @@ module OrangeFeSARQ.Services {
 
             return clientGeolocation;
         }
-    }
+
+/**
+         * @ngdoc method
+         * @description
+         * Añade los params
+         */
+
+        setParams(categoryParam: string, productType: string, clientSegment: string,
+            contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
+            ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string,
+            bucketId?: string){
+            let vm = this;
+            let technologyString = '';
+            if (technologyList) {
+                technologyString = vm.getIdTechnologyString(technologyList);
+            }
+            let params = {
+                category: categoryParam, // Familia tarifa 
+                productType: productType, // Tipo de producto (rate)
+                segment: clientSegment, // Segmento del cliente (Residencial/Empresas),
+                contractType: contractType, // POSPAGO/PREPAGO
+                idOfertaComercialList: ratesIdListString, // Listado de Id's de tarifas
+                idTecnologiaList: technologyString, // Listado de id de tecnologia
+                commercialAction: commercialAction, // Tipo de acto comercial
+                isExistingCustomer: isExistingCustomer, // Cliente existente?,
+                idParqueList: releatedRatesClient, // Tarifas del cliente
+                pack: pack, // Pack de las tarifas
+                type: type, // [movil/ movilfijo]
+                defaultTechnology: defaultTechnology,
+                bucketId: bucketId,
+                ospContractible: 'Y'
+            };
+    
+            if (!bucketId) {
+                delete params.bucketId;
+            }
+    
+            if (!pack) {
+                delete params.pack;
+            }
+    
+            // Si la categoria no es convergente se eliminan los parametros para la tecnologia
+            if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC') || defaultTechnology === 'Y') {
+                delete params.idTecnologiaList;
+            }
+            // Si alguna de las listas queda vacia no se pasa como parametro en la llamada
+            if (ratesIdListString === '') {
+                delete params.idOfertaComercialList;
+            }
+            if (technologyString === '') {
+                delete params.idTecnologiaList;
+            }
+            if (!releatedRatesClient || releatedRatesClient === '') {
+                delete params.idParqueList;
+            }
+
+            return params;
+        }
+
+/**
+         * @ngdoc method
+         * @description
+         * Añade las cabeceras
+         */
+        setHeaders(){
+            let vm = this;
+            let clientGeolocation = vm.getClientGeolocation();
+            let _headers = new HashMap<string, string>();
+
+            _headers.set(vm.GEOLOCATIONLOCAL, vm.storeProvince ? vm.storeProvince.toUpperCase() : 'Madrid');
+            _headers.set(vm.GEOLOCATIONCLIENT, clientGeolocation.toUpperCase());
+
+            return _headers;
+        }
+
+        setInitTab(tabGroup: string) {
+            let vm = this;
+
+            vm.tabGroupName = tabGroup;
+        }
+
+        getInitTab() {
+            let vm = this;
+
+            return vm.tabGroupName;
+        }
+        
+        /**
+         * @name ratesParent.Services:RatesParentSrv#setParamsRenove
+         * @methodOf ratesParent.Services:RatesParentSrv
+         * @description
+         * Tratamiento de parámetros para renove
+         */
+        setParamsRenove(ratesList, technologyList, productType: string, clientSegment: string, defaultTechnology?: string, bucketId?: string) {
+
+            let vm = this;
+
+            let ratesString = '';
+            let technologyString = '';
+
+            if (ratesList) {
+                ratesString = vm.getRatesString(ratesList);
+            }
+            if (technologyList) {
+                technologyString = vm.getIdTechnologyString(technologyList);
+            }
+
+            let params = {
+                productType: productType, // Tipo de producto (rate)
+                segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
+                idOfertaComercialList: ratesString, // Listado de idBundle 
+                idTecnologiaList: technologyString, // Listado de id de tecnologia
+                actocomercial: 'renove',
+                defaultTechnology: defaultTechnology,
+                bucketId: bucketId,
+                ospContractible: 'Y'
+            };
+
+            if (ratesString === '') {
+                delete params.idOfertaComercialList;
+            }
+
+            if (defaultTechnology || technologyString === '') {
+                delete params.idTecnologiaList;
+            }
+
+            if (!defaultTechnology)  {
+                delete params.defaultTechnology;
+            }
+
+            if (!bucketId) {
+                delete params.bucketId;
+            }
+
+            return params;
+        }
+
+      }
     angular.module('RatesParentSrv', [])
         .service('RatesParentSrv', OrangeFeSARQ.Services.RatesParentSrv);
 }

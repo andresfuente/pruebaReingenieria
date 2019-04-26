@@ -258,13 +258,18 @@ module OrangeFeSARQ.Services {
                 }
             }
 
+            let _headers = new HashMap<string, string>();
+            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+
             // Metodo http nativo por bug en los filtros
-            return srv.httpService({
-                method: 'GET',
-                url: srv.genericConstant.getMosaico,
-                params: params,
-                headers: headers
-            })
+            // return srv.httpService({
+            //     method: 'GET',
+            //     url: srv.genericConstant.getMosaico,
+            //     params: params,
+            //     headers: headers
+            // })
+            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
                 .then((response) => {
                     return {
                         // tslint:disable-next-line
