@@ -239,7 +239,7 @@ module OrangeFeSARQ.Services {
                     throw error.data;
                 });
         }
-        
+
 
         /**
          * @ngdoc method
@@ -338,8 +338,40 @@ module OrangeFeSARQ.Services {
                 .catch(function (error) {
                     throw error;
                 });
-
-
         }
+
+        getNormalizedAddress(address) {
+            let vm = this;
+
+            let params: any = {};
+
+            params.city = address.province;
+            params.locality = address.city;
+            params.postcode = address.postalCode;
+            params.streetName = address.street;
+            params.streetNr = address.streetNumber;
+            params.streetType = address.streetType;
+            params.floorNumber = address.floorNumber;
+            params.externalId = address.externalId;
+            if (params.externalId && address.ospINECityCode && address.ospSingularEntity) {
+                params.ospAddressExternalId = [
+                    {
+                        refId: 'arvatoCode',
+                        externalId: params.externalId
+                    }
+                ],
+                params.ospINECityCode = address.ospINECityCode;
+                params.ospSingularEntity = address.ospSingularEntity;
+            }
+
+
+            return vm.httpCacheGett(vm.genericConstant.address, { queryParams: params }, 'coverageComp')
+                .then((response) => {
+                    return response.data;
+                }).catch((error) => {
+                    throw error;
+                });
+        }
+
     }
 }
