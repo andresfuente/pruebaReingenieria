@@ -22,21 +22,22 @@ module OrangeFeSARQ.Services {
          * @description
          * Servicio para comprobar las ordenes en vuelo
          */
-        getOrders(publicIdType, publicId, comp ){
+        getOrders(publicIdType, publicId, comp) {
             let vm = this;
 
             let _search: Object = {
                 queryParams: {},
                 urlParams: [publicIdType, publicId]
             };
-            
-            vm.httpCacheGett(vm.genericConstant.inflightOrders, _search, comp)
+
+            return vm.httpCacheGett(vm.genericConstant.inflightOrders, _search, comp)
                 .then((response) => {
-                   return response;
-                    }, (err) => {
-                        throw err;
-                    }
-                );
+                    return response.data;
+
+                })
+                .catch((error) => {
+                    return error;
+                });
         }
     }
 }
