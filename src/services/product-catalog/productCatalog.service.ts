@@ -89,20 +89,27 @@ module OrangeFeSARQ.Services {
         }
 
 
-        getProductBonusSpecification(tarifa: string, paqueteDatos?: string): any {
+        getProductBonusSpecification(tarifa: string, paqueteDatos?: string,  msisdn?: string): any {
             let vm = this;
             let _search: any = {
                 queryParams: {
                     tarifa: tarifa
                 },
                 urlParams: [vm.genericConstant.brand, vm.genericConstant.site, 'productBonusSpecification', vm.OSP]
-            };
+            }
             if (paqueteDatos) {
                 _search.queryParams = {
                     tarifa: tarifa,
                     paqueteDatos: paqueteDatos
                 }
-            };
+            }
+            if (msisdn) {
+                _search.queryParams = {
+                    tarifa: tarifa,
+                    paqueteDatos: paqueteDatos,
+                    msisdn: msisdn
+                }
+            }
             return vm.httpCacheGett(vm.productCatalogAPIUrl, _search)
                 .then(function (response) {
                     return response.data.productSpecification;
