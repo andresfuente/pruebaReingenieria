@@ -1624,11 +1624,14 @@ module OrangeFeSARQ.Services {
          */
         getSelectedCommercialAct(): number {
             let commercialData = [];
+            let commercialDataIndex;
             commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
-            return _.findIndex(commercialData, function (currentCommercialAct) {
+            commercialDataIndex = _.findIndex(commercialData, function (currentCommercialAct) {
                 return currentCommercialAct.ospIsSelected === true;
             });
+
+            return commercialDataIndex > -1? commercialDataIndex : commercialData.length -1;
         }
 
         /**
