@@ -1,0 +1,1 @@
+@)src/services/getDataPermanency.service.ts 2tsX+h
