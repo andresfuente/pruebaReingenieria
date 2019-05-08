@@ -19,7 +19,9 @@ module OrangeFeSARQ.Services {
         public storeProvince;
         private typeMulticomparatorRenove: boolean = true;
 
+        // Services
         private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
+        private addToShoppingCart: OrangeFeSARQ.Services.AddToShoppingCartSrv;
 
         public clientData;
         public shopInfo;
@@ -50,6 +52,7 @@ module OrangeFeSARQ.Services {
             let srv = this;
             srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
             srv.billingAccountStore = $injector.get('billingAccountStoreSrv');
+            srv.addToShoppingCart = $injector.get('addToShoppingCartSrv');
         }
 
         getSession(){
@@ -144,6 +147,9 @@ module OrangeFeSARQ.Services {
             _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
             _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
 
+            let commercialData;
+            let commercialActIndex;
+
             let params = {
                 channel: channel,
                 isExistingCustomer: isExistingCustomer,
@@ -170,8 +176,8 @@ module OrangeFeSARQ.Services {
 
             // Prepago   
             if (sessionStorage.getItem('commercialData')) {
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = vm.getSelectedCommercialAct();
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = vm.getSelectedCommercialAct();
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemSubtype && commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
                     if (commercialAction === 'portabilidad') {
                         delete params.portabilityOrigin;
@@ -180,8 +186,8 @@ module OrangeFeSARQ.Services {
             }
             // Cliente existente para Renove   
             if (sessionStorage.getItem('commercialData')) {
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = vm.getSelectedCommercialAct();
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = vm.getSelectedCommercialAct();
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.toLowerCase() === 'renove' && vm.typeMulticomparatorRenove) {
                     delete params.isExistingCustomer;
                     delete params.portabilityOrigin;
@@ -189,6 +195,9 @@ module OrangeFeSARQ.Services {
                     delete params.profile;
                     delete params.creditLimit;
                 }
+            }
+            if (isSecondaryRenew || vm.checkCommercialData(commercialData, commercialActIndex)) {
+                delete params['deviceOffering.category.name'];
             }
 
             return vm.httpCacheGeth(vm.genericConstant.getTerminalDetails, { queryParams: params }, _headers
@@ -202,7 +211,6 @@ module OrangeFeSARQ.Services {
                     return data;
 
                 } else {
-                    let defaultData = JSON.parse(sessionStorage.getItem('defaultData')).idRateEssential;
                     let data = {
                         rateSiebelId: rate.siebelId,
                         terminalsiebelId: terminal.siebelId,
@@ -219,8 +227,40 @@ module OrangeFeSARQ.Services {
                     deviceOffering: []
                 };
                 return data;
-        });
+            });
         }
+        /**
+        * @ngdoc method
+        * @name ratesComparator.Services:RatesComparatorSrv#checkCommercialData
+        * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
+        * @description
+        * @return {boolean} Retorna verdadero en caso de que para mejor renove haya una campaña de renove secundario,
+        * en caso contrario devuelve false
+        */
+        checkCommercialData(commercialData, commercialActIndex){
+            let value = false;
+            if (commercialData){
+                if (commercialData[commercialActIndex] && commercialData[commercialActIndex].ospTerminalWorkflow && commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove' 
+                && commercialData[commercialActIndex].bestRenoveInfo && commercialData[commercialActIndex].bestRenoveInfo.length){
+                    let bestRenove = commercialData[commercialActIndex].bestRenoveInfo
+                    bestRenove.forEach(renove => {
+                        if (renove.campaigns && renove.campaigns.length){
+                            renove.campaigns.forEach(campaign => {
+                                if (campaign.cod !== undefined && campaign.cod !== null){
+                                    if (campaign.typeRenew && campaign.typeRenew === 'Renove secundario') {
+                                        value = true;
+                                    }
+                                }
+                            });
+                        }
+                        
+                    });
+                }
+            }
+
+            return value;
+        }
+
 
         /**
         * @ngdoc method
@@ -569,7 +609,5 @@ module OrangeFeSARQ.Services {
             let rol = JSON.parse(sessionStorage.getItem('loginData'));
             return rol.site === 'fichadecliente'; 
         }
-
-
     }
 }
