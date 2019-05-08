@@ -488,7 +488,7 @@ module OrangeFeSARQ.Services {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 } else if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
                     commercialData[commercialActIndex].NACRateInShoppingCart = true;
-                } else if (rate.groupName === 'Mobile Only' && rate.typeService === 'movil' && rate.pack && rate.pack === 'PACK GO NEGOCIO TOTAL') {
+                } else if (rate.groupName === 'Mobile Only' && rate.typeService === 'movil' && rate.pack && rate.pack !== undefined) {
                     commercialData[commercialActIndex].LNTPRateInShoppingCart = true;
                 } 
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
@@ -1079,7 +1079,7 @@ module OrangeFeSARQ.Services {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 } else if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
                     commercialData[commercialActIndex].NACRateInShoppingCart = true;
-                } else if (rate.groupName === 'Mobile Only' && rate.typeService === 'movil' && rate.pack && rate.pack === 'PACK GO NEGOCIO TOTAL') {
+                } else if (rate.groupName === 'Mobile Only' && rate.typeService === 'movil' && rate.pack && rate.pack !== undefined) {
                     commercialData[commercialActIndex].LNTPRateInShoppingCart = true;
                 } 
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
