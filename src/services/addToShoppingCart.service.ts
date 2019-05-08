@@ -486,12 +486,11 @@ module OrangeFeSARQ.Services {
                 commercialActId = Number(commercialData[commercialActIndex].id);
                 if (rate.groupName === 'Convergente' && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
-                } 
-                
-                if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
+                } else if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
                     commercialData[commercialActIndex].NACRateInShoppingCart = true;
-                }
-
+                } else if (rate.groupName === 'Mobile Only' && rate.typeService === 'movil' && rate.pack && rate.pack === 'PACK GO NEGOCIO TOTAL') {
+                    commercialData[commercialActIndex].LNTPRateInShoppingCart = true;
+                } 
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
             // Se comprueba si existe alguna tarifa en el shopping cart que se este modificando
@@ -1078,12 +1077,11 @@ module OrangeFeSARQ.Services {
                 commercialActId = Number(commercialData[commercialActIndex].id);
                 if (rate.groupName === 'Convergente' && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
-                }
-
-                if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
+                } else if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
                     commercialData[commercialActIndex].NACRateInShoppingCart = true;
-                }
-
+                } else if (rate.groupName === 'Mobile Only' && rate.typeService === 'movil' && rate.pack && rate.pack === 'PACK GO NEGOCIO TOTAL') {
+                    commercialData[commercialActIndex].LNTPRateInShoppingCart = true;
+                } 
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
             // Se obtiene el id del ultimo elemento del cart item del shopping cart
@@ -2046,6 +2044,31 @@ module OrangeFeSARQ.Services {
 
             sessionStorage.setItem('commercialData', JSON.stringify(''));
 
+        }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#LNTPRateInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @return {boolean} true si se ha llegado al carrito con una tarifa Love Negocio Total +
+         * @description
+         * Devuelve si se ha llegado al carrito con una tarifa Love Negocio Total +
+         */
+        LNTPRateInShoppingCart(): boolean {
+
+            let response : boolean = false;
+
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+
+            if (commercialData && commercialData.length) {
+                commercialData.forEach((commData) => {
+                    if (commData.LNTPRateInShoppingCart) {
+                        response = true;
+                    }
+                });
+            }
+
+            return response;
         }
 
         /**
