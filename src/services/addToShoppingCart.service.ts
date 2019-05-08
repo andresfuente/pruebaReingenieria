@@ -424,8 +424,8 @@ module OrangeFeSARQ.Services {
 
             } else {
 
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex: number = vm.getSelectedCommercialAct();
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = vm.getSelectedCommercialAct();
 
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].id) {
                     let commercialActId: number = Number(commercialData[commercialActIndex].id);
@@ -1830,7 +1830,7 @@ module OrangeFeSARQ.Services {
                 };
             } else {
                 if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
-                    let priceAlteration =[{
+                    priceAlteration =[{
                         'name': sva.typePriceName ? sva.typePriceName : '',
                         'priceType': sva.priceType,
                         'applicationDuration': sva.applicationDuration,
