@@ -257,6 +257,10 @@ module OrangeFeSARQ.Services {
                 }
             }
 
+            
+            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
+            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+
             // Metodo http nativo por bug en los filtros
             // return srv.httpService({
             //     method: 'GET',
@@ -264,7 +268,7 @@ module OrangeFeSARQ.Services {
             //     params: params,
             //     headers: headers
             // })
-            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', true)
+            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
                 .then((response) => {
                     return {
                         // tslint:disable-next-line

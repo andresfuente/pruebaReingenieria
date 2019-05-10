@@ -18,6 +18,7 @@ module OrangeFeSARQ.Services {
         public bucketId : string;
         public pressRateModifyButton : boolean;
         public shoppingCartAux;
+        public promoInformative;
 
         /**
          * @ngdoc method
@@ -493,7 +494,7 @@ module OrangeFeSARQ.Services {
                     'type': 'tarifa'
                 }],
                 'place': [],
-                'characteristic': []
+                'characteristic': vm.informativePromo(rate)
             };
 
             let priceAlteration = [];
@@ -660,6 +661,28 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#informativePromo
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Añade las promos informativas al carrito
+         */
+        informativePromo(rate){
+            let vm = this;
+
+           let promoInformativeName = rate.recurringChargePeriodPromotion ? rate.recurringChargePeriodPromotion.split('|') : [];
+           let promoInformativeValue = rate.descriptionPromotion ? rate.descriptionPromotion.split('|') : [];
+
+           let arrayPromoInformative = _.zipWith(promoInformativeName,promoInformativeValue, (a, b) => {
+                return {name: a, value: b};
+           });
+           
+           arrayPromoInformative = _.filter(arrayPromoInformative, {name: 'Información'});
+
+           return arrayPromoInformative;
+           }
+
+        /**
+         * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#createAdditionalRateCartItem
          * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
          * @description
@@ -676,7 +699,7 @@ module OrangeFeSARQ.Services {
                     'type': 'tarifa'
                 }],
                 'place': [],
-                'characteristic': []
+                'characteristic': vm.informativePromo(rate)
             };
 
             let rateCartItemElement = {
@@ -801,7 +824,7 @@ module OrangeFeSARQ.Services {
                     'type': 'tarifa'
                 }],
                 'place': [],
-                'characteristic': []
+                'characteristic': vm.informativePromo(rate)
             };
 
             let priceAlteration = []
@@ -1082,6 +1105,7 @@ module OrangeFeSARQ.Services {
                     'productRelationship': [{
                         'type': 'tarifa'
                     }],
+                    'characteristic': vm.informativePromo(rate),
                     'place': []
                 },
                 'itemPrice': [
@@ -1443,6 +1467,11 @@ module OrangeFeSARQ.Services {
                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
             };
+            // Añade seguro en caso de que se haya seleccionado
+            if (device.insuranceSiebelId) {
+                cartItemElement.cartItem.push(vm.createInsuranceCartItem(device, 'primary'));
+            }
+
 
             // Añadir cartItem compromiso de permanencia CP
             if (device.cpDescription && device.cpSiebel) {
