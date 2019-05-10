@@ -344,7 +344,7 @@ module mosaicFile.Models {
                                                             characteristicValue.value);
                                                     let groupOWCS1 = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
-                                                    let child;
+                                                 
                                                     if (groupOWCS1 && groupOWCS1['listOptionsLiteral']) {
                                                         child = _.find(groupOWCS1['listOptionsLiteral'], { name: characteristic.name });
                                                     }
