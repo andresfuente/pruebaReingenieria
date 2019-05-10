@@ -30,13 +30,15 @@ module OrangeFeSARQ.Services {
                 urlParams: [publicIdType, publicId]
             };
 
-            return vm.httpCacheGett(vm.genericConstant.inflightOrders, _search, comp)
+            let url = vm.genericConstant.s8SalesOrder + '/inflightOrders';
+
+            return vm.httpCacheGett(url, _search, comp)
                 .then((response) => {
                     return response.data;
 
                 })
                 .catch((error) => {
-                    return error;
+                    throw error;
                 });
         }
     }

@@ -36,13 +36,13 @@ module OrangeFeSARQ.Services {
                 urlParams: [endPoint]
             };
 
-            return vm.httpPost(vm.genericConstant.createCommercialActSPA, _search, comp)
+            return vm.httpPost(vm.genericConstant.repository, _search, comp)
                 .then((response) => {
                     return response.data;
 
                 })
                 .catch((error) => {
-                    return error;
+                    throw error;
                 });
         }
     }
