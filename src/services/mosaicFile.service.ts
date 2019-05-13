@@ -526,7 +526,11 @@ module OrangeFeSARQ.Services {
                 else if (commercialData[commercialActIndex].renewalType &&
                     commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove primario' && 
                     commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secundario') {
-                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                        if (params.priceType) {
+                            params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType', 'deviceOffering.category.name']);
+                        } else {
+                            params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                        }
                 }
 
             }
