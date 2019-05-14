@@ -122,13 +122,13 @@ module OrangeFeSARQ.Services {
             }
 
             return userService.getUser(searchUrl, value)
-                .then(
+                .then( 
                 (response) => {
                     return response.data;
                 }
                 )
                 .catch(function (error) {
-                    return error;
+                    return error.data;
                 });
         }
 
