@@ -210,6 +210,11 @@ module OrangeFeSARQ.Services {
 
             // Parametros para Renove
             if (params.commercialAction === 'renove') {
+
+                const color = 'characteristic.color';
+                const osType = 'characteristic.OSData.groupData.OStype.value';
+                const backCameraResolution = 'characteristic.cameraData.groupData.backCameraResolution.value';
+
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 let commercialActIndex = srv.getSelectedCommercialAct(); let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
@@ -238,22 +243,22 @@ module OrangeFeSARQ.Services {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
                         'deviceOffering.category.name', 'purchaseOption', 'price.fee', 'totalPaymentRange',
-                        'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
+                        osType,
+                        'priceType', backCameraResolution,
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        color]);
                 } else {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
                         'purchaseOption', 'price.fee', 'totalPaymentRange', 'deviceOffering.category.name',
-                        'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
+                        osType,
+                        'priceType', backCameraResolution,
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        color]);
                 }
             }
 
