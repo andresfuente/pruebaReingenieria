@@ -1,6 +1,0 @@
-projectKey=FUN_ANG_SERVICES
-serverUrl=https://torredecontrol.si.orange.es/sonar
-serverVersion=6.7.1.35068
-dashboardUrl=https://torredecontrol.si.orange.es/sonar/dashboard/index/FUN_ANG_SERVICES
-ceTaskId=AWqYBOWRUPoPk42ZU0wc
-ceTaskUrl=https://torredecontrol.si.orange.es/sonar/api/ce/task?id=AWqYBOWRUPoPk42ZU0wc

@@ -1,1 +1,0 @@
-osrc/models/response :mpqn

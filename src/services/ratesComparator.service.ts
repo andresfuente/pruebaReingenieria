@@ -149,6 +149,7 @@ module OrangeFeSARQ.Services {
 
             let commercialData;
             let commercialActIndex;
+            let bucketID = vm.checkBucketID();
 
             let params = {
                 channel: channel,
@@ -163,15 +164,13 @@ module OrangeFeSARQ.Services {
                 campaignName: nameSgmr,
                 fields: 'deviceOffering',
                 creditLimit: creditLimit,
-                priceType: priceType
+                priceType: priceType,
+                bucketID: bucketID
+
             }; 
 
             if (creditLimit === undefined || creditLimit === null) {
                 delete params.creditLimit;
-            }
-
-            if (isSecondaryRenew) {
-                delete params['deviceOffering.category.name'];
             }
 
             // Prepago   
@@ -196,9 +195,13 @@ module OrangeFeSARQ.Services {
                     delete params.creditLimit;
                 }
             }
-            if (isSecondaryRenew || vm.checkCommercialData(commercialData, commercialActIndex)) {
+            if (isSecondaryRenew || vm.checkCampaignType(commercialData, commercialActIndex)) {
                 delete params['deviceOffering.category.name'];
             }
+            if (bucketID) {
+                delete params[bucketID];
+            }
+
 
             return vm.httpCacheGeth(vm.genericConstant.getTerminalDetails, { queryParams: params }, _headers
             ).then((response) => {
@@ -231,13 +234,14 @@ module OrangeFeSARQ.Services {
         }
         /**
         * @ngdoc method
-        * @name ratesComparator.Services:RatesComparatorSrv#checkCommercialData
+        * @name ratesComparator.Services:RatesComparatorSrv#checkCampaignType
+        * @author Jesús Alberto Mora San Andrés
         * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
-        * @description
-        * @return {boolean} Retorna verdadero en caso de que para mejor renove haya una campaña de renove secundario,
+        * @description Retorna verdadero en caso de que para mejor renove haya una campaña de renove secundario,
         * en caso contrario devuelve false
+        * @return {boolean} 
         */
-        checkCommercialData(commercialData, commercialActIndex){
+        checkCampaignType(commercialData, commercialActIndex){
             let value = false;
             if (commercialData){
                 if (commercialData[commercialActIndex] && commercialData[commercialActIndex].ospTerminalWorkflow && commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove' 
@@ -260,6 +264,63 @@ module OrangeFeSARQ.Services {
 
             return value;
         }
+
+        /**
+        * @ngdoc method
+        * @name ratesComparator.Services:RatesComparatorSrv#checkBucketID
+        * @author Jesús Alberto Mora San Andrés
+        * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
+        * @description Comprueba si hay una tarifa NAC para la línea ppal en el carrito o en caso de que no, comprueba si la línea ppal tiene una tarifa NAC
+        * Y devuelve el código bucket
+        * @return {string} idBucket
+        */
+        checkBucketID() {
+            let vm = this;
+            let bucketID;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            if (vm.addToShoppingCart.NACRateInShoppingCart()) {
+                if (shoppingCart && shoppingCart.cartItem && shoppingCart.cartItem.length && shoppingCart.cartItem.length > 0) {
+                    bucketID = vm.checkShoppingCartNACSelected(shoppingCart.cartItem);
+                }
+            } else if (clientData && clientData.principalLine && clientData.principalLine.bucket) {
+                bucketID = clientData.principalLine.bucket
+            }
+
+            return bucketID;
+        }
+
+        /**
+        * @ngdoc method
+        * @name ratesComparator.Services:RatesComparatorSrv#checkShoppingCartNACSelected
+        * @author Jesús Alberto Mora San Andrés
+        * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
+        * @descriptionBusca en el carrito la tarifa NAC y devuelve el bundle
+        * @return {string} idBucket
+        */
+        checkShoppingCartNACSelected(cart) {
+            let idBucket = '';
+            for (let k = 0; k < cart.length; k++) {
+                let cartItems = cart[k];
+                if (cartItems.ospSelected) {
+                    if (cartItems.cartItem && cartItems.cartItem.length && cartItems.cartItem.length > 0) {
+                        for (let i = 0; i < cartItems.cartItem.length; i++) {
+                            let cartItem = cartItems.cartItem[i];
+                            if (cartItem.product && cartItem.product.productRelationship && cartItem.product.productRelationship.length && cartItem.product.productRelationship.length > 0) {
+                                for (let j = 0; j < cartItem.product.productRelationship.length; j++) {
+                                    if (cartItem.product.productRelationship[j].type && cartItem.product.productRelationship[j].type === 'bucket') {
+                                        idBucket = cartItem.id;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return idBucket;
+        }
+
+
 
 
         /**
