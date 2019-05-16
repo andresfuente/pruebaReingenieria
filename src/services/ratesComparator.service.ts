@@ -25,6 +25,7 @@ module OrangeFeSARQ.Services {
 
         public clientData;
         public shopInfo;
+        public principalNumber;
 
         /**
          * @ngdoc method
@@ -199,7 +200,7 @@ module OrangeFeSARQ.Services {
             if (isSecondaryRenew || vm.checkCampaignType(commercialData, commercialActIndex)) {
                 delete params['deviceOffering.category.name'];
             }
-            if (!bucketID) {
+            if (!bucketID && vm.checkPrincipalLine(commercialData)) {
                 delete params.bucketID;
             }
 
@@ -283,7 +284,10 @@ module OrangeFeSARQ.Services {
                     bucketID = vm.checkShoppingCartNACSelected(shoppingCart.cartItem);
                 }
             } else if (clientData && clientData.principalLine && clientData.principalLine.bucket) {
-                bucketID = clientData.principalLine.bucket
+                bucketID = clientData.principalLine.bucket;
+            }
+            if (clientData && clientData.principalLine && clientData.principalLine.number){
+                vm.principalNumber = clientData.principalLine.number;
             }
 
             return bucketID;
@@ -316,6 +320,22 @@ module OrangeFeSARQ.Services {
                 }
             }
             return idBucket;
+        }
+
+        checkPrincipalLine(commercialData){
+            let principalLine: boolean = false;
+            let vm = this;
+
+            if (commercialData) {
+                commercialData.forEach(commercial => {
+                    if (commercial.ospIsSelected && commercial.serviceNumber && commercial.serviceNumber === vm.principalNumber){
+                        principalLine = true;
+                    }
+                });
+            }
+
+            
+            return principalLine;
         }
 
 
