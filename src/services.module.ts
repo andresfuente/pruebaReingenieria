@@ -13,6 +13,7 @@ module OrangeFeSARQ.Constant {
         .service('billReviewSrv', OrangeFeSARQ.Services.BillReviewSrv)
         .service('bucketBalanceSrv', OrangeFeSARQ.Services.BucketBalanceSrv)
         .service('casesSrv', OrangeFeSARQ.Services.CasesSrv)
+        .service('fullDataFormSrv', OrangeFeSARQ.Services.FullDataFormSrv)
         .service('casesStore', OrangeFeSARQ.Services.CasesStore)
         .service('cookieStoreSrv', OrangeFeSARQ.Services.CookieStoreService)
         .service('changeOfferSrv', OrangeFeSARQ.Services.ChangeOfferSrv)

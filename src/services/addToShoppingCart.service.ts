@@ -425,7 +425,7 @@ module OrangeFeSARQ.Services {
             } else {
 
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex: number = vm.getSelectedCommercialAct();
+                 commercialActIndex = vm.getSelectedCommercialAct();
 
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].id) {
                     let commercialActId: number = Number(commercialData[commercialActIndex].id);
