@@ -51,37 +51,58 @@ module OrangeFeSARQ.Services {
         }
 
         getBundle() {
+            let vm = this;
+
             let cv = JSON.parse(sessionStorage.getItem('cv'));
-            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            let active = _.findIndex(commercialData, { 'ospIsSelected': true });
 
             let bundleId = '';
 
             if (cv && cv.product) {
                 for (let i = 0; i < cv.product.length; i++) {
                     if (cv.product[i].productCharacteristic) {
-                        let charMSISDN: any = _.find(cv.product[i].productCharacteristic, (char: any) => {
-                            if (char.name === 'MSISDN' && commercialData[active].serviceNumber === char.value) {
-                                return char;
-                            }
-                        });
+                        bundleId = vm.getCVBundleData(cv.product[i].productCharacteristic);
 
-                        if (charMSISDN) {
-                            let bundle: any = _.find(cv.product[i].productCharacteristic, (char: any) => {
-                                if (char.name === 'Product Bundle Siebel') {
-                                    return char;
-                                }
-                            });
-
-                            if (bundle && bundle.value) {
-                                bundleId = bundle.value;
-                                break;
-                            }
+                        if (bundleId) {
+                            break;
                         }
                     }
                 }
             }
+
             return bundleId;
+        }
+
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#getCVBundleData
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Busca la información relativa al bundle en el CV
+         */
+        getCVBundleData(productCharacteristic) {
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let active = _.findIndex(commercialData, { 'ospIsSelected': true });
+
+            let returnBundle: string = '';
+
+            let charMSISDN: any = _.find(productCharacteristic, (char: any) => {
+                if (char.name === 'MSISDN' && commercialData[active].serviceNumber === char.value) {
+                    return char;
+                }
+            });
+
+            let bundle: any = _.find(productCharacteristic, (char: any) => {
+                if (char.name === 'Product Bundle Siebel') {
+                    return char;
+                }
+            });
+
+            if (charMSISDN && bundle && bundle.value) {
+                returnBundle = bundle.value;
+            }
+
+            return returnBundle;
         }
 
         /**
@@ -397,9 +418,8 @@ module OrangeFeSARQ.Services {
                     sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
 
             } else {
-
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex: number = vm.getSelectedCommercialAct();
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = vm.getSelectedCommercialAct();
 
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].id) {
                     let commercialActId: number = Number(commercialData[commercialActIndex].id);
@@ -1831,7 +1851,7 @@ module OrangeFeSARQ.Services {
                 };
             } else {
                 if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
-                    let priceAlteration =[{
+                    priceAlteration =[{
                         'name': sva.typePriceName ? sva.typePriceName : '',
                         'priceType': sva.priceType,
                         'applicationDuration': sva.applicationDuration,
