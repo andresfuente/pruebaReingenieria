@@ -200,7 +200,7 @@ module OrangeFeSARQ.Services {
             if (isSecondaryRenew || vm.checkCampaignType(commercialData, commercialActIndex)) {
                 delete params['deviceOffering.category.name'];
             }
-            if (!bucketID && vm.checkPrincipalLine(commercialData)) {
+            if (!bucketID || vm.checkPrincipalLine(commercialData)) {
                 delete params.bucketID;
             }
 
@@ -322,6 +322,14 @@ module OrangeFeSARQ.Services {
             return idBucket;
         }
 
+        /**
+        * @ngdoc method
+        * @name ratesComparator.Services:RatesComparatorSrv#checkPrincipalLine
+        * @author Jesús Alberto Mora San Andrés
+        * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
+        * @descriptionBusca Si el número para la oferta es el mismo que el de la línea principal, devuelve true
+        * @return {string} principalLine: boolean
+        */
         checkPrincipalLine(commercialData){
             let principalLine: boolean = false;
             let vm = this;
