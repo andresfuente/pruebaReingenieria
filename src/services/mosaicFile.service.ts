@@ -517,20 +517,6 @@ module OrangeFeSARQ.Services {
                     }
                 }
 
-                // Renove secundario al añadir secundario
-/* ***                if (commercialData[commercialActIndex].renewalType && commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove secundario' && commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secundario') {
-                    let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
-                    params.relatedProductOffering = (clientData.ospCustomerSegment && clientData.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') ? defaultData.idRateDefault : '';
-                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
-                }
- */
-                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
-                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
-                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
-                            params.priceType = 'unico';
-                        }
-                    });
-                }
                 // Renove primario al añadir secundario
                 else if (commercialData[commercialActIndex].renewalType &&
                     commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove primario' && 
@@ -540,6 +526,14 @@ module OrangeFeSARQ.Services {
                         } else {
                             params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
                         }
+                }
+
+                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
+                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
+                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
+                            params.priceType = 'unico';
+                        }
+                    });
                 }
 
             }
