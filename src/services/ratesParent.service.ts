@@ -75,6 +75,30 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
+         /*Consulta al productSpecification del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
+         */
+        //Cambio_Adaptacion_Jazztel JPA
+        getSpecificationDataJZ(categoryParam: string, productType: string, clientSegment: string,
+            contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
+            ratesIdListString: string, releatedRatesClient: string, Tarifa: string, Promocion: string, Paquete: string, pack?: string, type?: string, defaultTechnology?: string,
+            bucketId?: string): ng.IPromise<{} | void> {
+            let vm = this;
+
+            let params = vm.setParamsJZ( productType, Tarifa, Promocion, Paquete);
+
+            let _headers = vm.setHeaders();
+
+                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+                { queryParams: params }, _headers)
+                .then((response) => {
+                    return {
+                        specificationData: response.data
+                    };
+                })
+                .catch((error) => {
+                    throw error;
+                });
+        }
 
         /** @ngdoc method
          * @name ratesParent.Services:RatesParentSrv#getOfferingData
@@ -100,6 +124,30 @@ module OrangeFeSARQ.Services {
                 contractType, commercialAction, isExistingCustomer, technologyList,
                 ratesIdListString, releatedRatesClient, pack, type, defaultTechnology,
                 bucketId);
+            let _headers = srv.setHeaders();
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
+                { queryParams: params }, _headers)
+                .then((response) => {
+                    let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
+                    rates.loadRates(specificationData, response.data, bucketId);
+
+                    return rates;
+                })
+                .catch((error) => {
+                    throw error;
+                });
+
+        }
+        
+        /* Consulta al productOffering del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
+         */
+        //Cambio_Adaptacion_Jazztel JPA
+        getOfferingDataJZ(categoryParam: string, productType: string, clientSegment: string,
+            contractType: string, commercialAction: string, isExistingCustomer: string, specificationData, technologyList,
+            ratesIdListString: string, releatedRatesClient: string,  Tarifa: string, Promocion: string, Paquete: string, pack?: string, type?: string, defaultTechnology?: string,
+            bucketId?: string) {
+            let srv = this;
+            let params = srv.setParamsJZ(productType,Tarifa, Promocion, Paquete);
             let _headers = srv.setHeaders();
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
@@ -749,6 +797,21 @@ module OrangeFeSARQ.Services {
             if (!releatedRatesClient || releatedRatesClient === '') {
                 delete params.idParqueList;
             }
+
+            return params;
+        }
+
+        //Parametros de Jazztel
+        //Cambio_Adaptacion_Jazztel JPA
+        setParamsJZ(productType: string, Tarifa: string, Promocion: string, Paquete: string){
+            let vm = this;
+            
+            let params = {
+                productType: productType, // Tipo de producto (rate)
+                idTarifa:Tarifa, //IDs de  las tarifas posibles de Jazztel
+                idPromocion:Promocion, //IDs de  las promocion posibles de Jazztel
+                idPaquete:Paquete //IDs de las paquete posibles de Jazztel
+            };
 
             return params;
         }
