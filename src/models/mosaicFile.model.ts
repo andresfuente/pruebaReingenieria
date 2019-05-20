@@ -289,8 +289,6 @@ module mosaicFile.Models {
                                     break;
                                 }
                                 default: {
-                                    let child;
-
                                     // Se busca caracteristica de nivel 1
                                     let group = _.find(this.fileCharacteristic, { title: characteristic.description });
                                     // Si no existe
@@ -306,8 +304,6 @@ module mosaicFile.Models {
                                         if (characteristic.description) {
                                             characteristicNew.title = characteristic.description;
                                         }
-                                        // Si tiene hijo, se crea y se añade al objeto de nivel 1
-                                        let child:any;
                                         if (characteristic.characteristicValue.length > 0) {
                                             characteristic.characteristicValue.forEach((characteristicValue, z) => {
                                                 if (characteristic.name && characteristicValue.value) {
