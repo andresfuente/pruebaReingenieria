@@ -294,6 +294,7 @@ module mosaicFile.Models {
                                     // Se busca caracteristica de nivel 1
                                     let group = _.find(this.fileCharacteristic, { title: characteristic.description });
                                     // Si no existe
+                                    let child:any;
                                     if (!group) {
                                         // Se crea el nivel 1
                                         let characteristicNew: OrangeMosaicFileTerminalCharacteristicsLvl1 =
@@ -306,6 +307,7 @@ module mosaicFile.Models {
                                             characteristicNew.title = characteristic.description;
                                         }
                                         // Si tiene hijo, se crea y se añade al objeto de nivel 1
+                                        let child:any;
                                         if (characteristic.characteristicValue.length > 0) {
                                             characteristic.characteristicValue.forEach((characteristicValue, z) => {
                                                 if (characteristic.name && characteristicValue.value) {
@@ -329,7 +331,6 @@ module mosaicFile.Models {
                                         }
                                         let groupOWCS2 = _.find(mosaicFileCompOWCSStore.listOption,
                                             { name: characteristic.ospCharCategory });
-
                                         if (groupOWCS2 && groupOWCS2['listOptionsLiteral']) {
                                             child = _.find(groupOWCS2['listOptionsLiteral'], { name: characteristic.name });
                                         }
@@ -351,7 +352,6 @@ module mosaicFile.Models {
                                                             characteristicValue.value);
                                                     let groupOWCS3 = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
-
                                                     if (groupOWCS3 && groupOWCS3['listOptionsLiteral']) {
                                                         child = _.find(groupOWCS3['listOptionsLiteral'], { name: characteristic.name });
                                                     }
@@ -540,7 +540,7 @@ module mosaicFile.Models {
                 if (commercialData[commercialActIndex].ospTerminalWorkflow) {
                     // Renove prepago
                     if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'prepaid_renew') {
-                        commercialData[commercialActIndex].prepaidProducts.forEach((product, i) => {
+                        commercialData[commercialActIndex].prepaidProducts.forEach((product) => {
                             if (product.codSAP === serviceData.deviceSpecification.id) {
                                 product.offertDetails.forEach((offert) => {
                                     let prepaidPrice = {

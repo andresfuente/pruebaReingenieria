@@ -20,6 +20,7 @@ module OrangeFeSARQ.Services {
         private cache = {}; // Storage to prevent repeating calls to the API
         private storeProvince: string = '';
         private httpService;
+        public CHARACTERISTICCOLOR = 'characteristic.color';
 
         public isTLV: boolean;
 
@@ -196,7 +197,7 @@ module OrangeFeSARQ.Services {
                     'characteristic.screenData.groupData.screenSize.value',
                     'characteristic.memoryData.groupData.hardDisk.value',
                     'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                    'characteristic.color']);
+                    this.CHARACTERISTICCOLOR]);
             }
 
             // Parametros para Prepago   

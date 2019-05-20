@@ -18,6 +18,10 @@ module OrangeFeSARQ.Services {
         private customerSegment: string;
 
         private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
+        public GEOLOCATIONLOCAL = 'Geolocation-local';
+        public GEOLOCATIONCLIENT = 'Geolocation-client';
+        public LITPRODUCTSPECIFICATION = '/productSpecificationv2View/OSP';
+        public LITPRODUCTOFFERING = '/productOfferingv2View/OSP';
 
         private tabGroupName: string;
         private arrayFixed: Array<any>;
@@ -65,7 +69,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -102,7 +106,7 @@ module OrangeFeSARQ.Services {
                 ratesIdListString, releatedRatesClient, pack, type, defaultTechnology,
                 bucketId);
             let _headers = srv.setHeaders();
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + srv.LITPRODUCTOFFERING,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -182,7 +186,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = srv.setHeaders();
 
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productSpecificationv2View/OSP',
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + srv.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -219,7 +223,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = srv.setHeaders();
 
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + srv.LITPRODUCTOFFERING,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return ratesParent.Models.RateSVA.createSVAList(specificationData, response.data, customerSegment);
@@ -238,14 +242,12 @@ module OrangeFeSARQ.Services {
                 idSvaList: idList
             };
 
-            let srv = this;
-
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((responseSpecification) => {
-                    return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productOffering2View/OSP',
+                    return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTOFFERING,
                         { queryParams: params }, _headers)
                         .then((responseOffering) => {
                             return {
@@ -282,7 +284,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -314,7 +316,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productOfferingv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTOFFERING,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -703,8 +705,8 @@ module OrangeFeSARQ.Services {
             let clientGeolocation = vm.getClientGeolocation();
             let _headers = new HashMap<string, string>();
 
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(vm.GEOLOCATIONLOCAL, vm.storeProvince ? vm.storeProvince.toUpperCase() : 'Madrid');
+            _headers.set(vm.GEOLOCATIONCLIENT, clientGeolocation.toUpperCase());
 
             return _headers;
         }

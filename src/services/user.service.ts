@@ -53,8 +53,6 @@ module OrangeFeSARQ.Services {
 
             };
 
-            
-
             vm.httpCacheGett(vm.clientAPIUrl, _search, componentName)
                 .then(
                     (response) => {
