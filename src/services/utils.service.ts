@@ -8,6 +8,11 @@ module OrangeFeSARQ.Services {
      * Clase que contine diversas funciones/utilidades
      */
     export class Utils {
+        private storeRemedyArray = [];
+        private storeRemedyObject: any = {};
+        private sessionStorageManager;
+        private storeRemedy = [];
+        private filterObject: any = {};
 
         static $inject = ['$injector'];
 
@@ -1153,22 +1158,18 @@ module OrangeFeSARQ.Services {
         // - en el storage perteneciente a un msisdn a partir de un objeto {name: 'nombreDelCampo'}
         getRequestStorage(obj: OrangeFeSARQ.Models.IObjName, msisdn: string, storeName: string) {
             let vm = this;
+            vm.initRequestStorage(msisdn, storeName);
+            
+            vm.storeRemedyArray = vm.sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(vm.sessionStorageManager.getEntry(storeName)) : [];
+                vm.storeRemedyObject = _.find(vm.storeRemedyArray, { msisdn: msisdn }) ?
+                _.find(vm.storeRemedyArray, { msisdn: msisdn }) : {};
 
-            let storeRemedyArray = [];
-            let storeRemedy = [];
-            let filterObject: any = {};
-            let storeRemedyObject: any = {};
-            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
-
-            storeRemedyArray = sessionStorageManager.getEntry(storeName) ?
-                JSON.parse(sessionStorageManager.getEntry(storeName)) : [];
-            storeRemedyObject = _.find(storeRemedyArray, { msisdn: msisdn }) ?
-                _.find(storeRemedyArray, { msisdn: msisdn }) : {};
-            if (!_.isEmpty(storeRemedyObject)) {
-                storeRemedy = storeRemedyObject.request ? storeRemedyObject.request : [];
-                filterObject = _.find(storeRemedy, obj) ? _.find(storeRemedy, obj) : {};
-                if (filterObject.value) {
-                    return filterObject.value;
+            if (!_.isEmpty(vm.storeRemedyObject)) {
+                vm.storeRemedy = vm.storeRemedyObject.request ? vm.storeRemedyObject.request : [];
+                vm.filterObject = _.find(vm.storeRemedy, obj) ? _.find(vm.storeRemedy, obj) : {};
+                if (vm.filterObject.value) {
+                    return vm.filterObject.value;
                 } else {
                     return '';
                 }
@@ -1181,42 +1182,49 @@ module OrangeFeSARQ.Services {
         // - la razón (valor del campo), msisdn y el nombre del Storage formulario alamcenado en el sessionStorage
         fillRequestStorage(obj: OrangeFeSARQ.Models.IObjName, reason: any, msisdn: string, storeName: string): void {
             let vm = this;
+            vm.initRequestStorage(msisdn, storeName);
 
-            let storeRemedyArray = [];
-            let storeRemedy = [];
-            let filterObject: any = {};
-            let storeRemedyObject: any = {};
-            let sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+            vm.storeRemedyArray = vm.sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(vm.sessionStorageManager.getEntry(storeName)) : [];
+                vm.storeRemedyObject = _.find(vm.storeRemedyArray, { msisdn: msisdn }) ?
+                _.find(vm.storeRemedyArray, { msisdn: msisdn }) : {};
 
-            storeRemedyArray = sessionStorageManager.getEntry(storeName) ?
-                JSON.parse(sessionStorageManager.getEntry(storeName)) : [];
-            storeRemedyObject = _.find(storeRemedyArray, { msisdn: msisdn }) ?
-                _.find(storeRemedyArray, { msisdn: msisdn }) : {};
-
-            if (!_.isEmpty(storeRemedyObject)) {
-                storeRemedy = storeRemedyObject.request ? storeRemedyObject.request : [];
-                _.remove(storeRemedyArray, storeRemedyObject);
-                if (!_.isEmpty(storeRemedy)) {
-                    filterObject = _.find(storeRemedy, obj) ? _.find(storeRemedy, obj) : {};
-                    if (!_.isEmpty(filterObject)) {
-                        _.remove(storeRemedy, filterObject);
-                        if (filterObject.name === 'reason2') {
-                            _.remove(storeRemedy, { name: 'reason3' });
+            if (!_.isEmpty(vm.storeRemedyObject)) {
+                vm.storeRemedy = vm.storeRemedyObject.request ? vm.storeRemedyObject.request : [];
+                _.remove(vm.storeRemedyArray, vm.storeRemedyObject);
+                if (!_.isEmpty(vm.storeRemedy)) {
+                    vm.filterObject = _.find(vm.storeRemedy, obj) ? _.find(vm.storeRemedy, obj) : {};
+                    if (!_.isEmpty(vm.filterObject)) {
+                        _.remove(vm.storeRemedy, vm.filterObject);
+                        if (vm.filterObject.name === 'reason2') {
+                            _.remove(vm.storeRemedy, { name: 'reason3' });
                         }
-                        if (filterObject.name === 'reason1') {
-                            _.remove(storeRemedy, { name: 'reason2' });
-                            _.remove(storeRemedy, { name: 'reason3' });
+                        if (vm.filterObject.name === 'reason1') {
+                            _.remove(vm.storeRemedy, { name: 'reason2' });
+                            _.remove(vm.storeRemedy, { name: 'reason3' });
                         }
                     }
                 }
             }
-            filterObject.name = obj.name;
-            filterObject.value = reason;
-            storeRemedy.push(filterObject);
-            storeRemedyObject = { msisdn: msisdn, request: storeRemedy };
-            storeRemedyArray.push(storeRemedyObject);
-            sessionStorageManager.removeEntry(storeName);
-            sessionStorageManager.setEntry(storeName, JSON.stringify(storeRemedyArray));
+            vm.filterObject.name = obj.name;
+            vm.filterObject.value = reason;
+            vm.storeRemedy.push(vm.filterObject);
+            vm.storeRemedyObject = { msisdn: msisdn, request: vm.storeRemedy };
+            vm.storeRemedyArray.push(vm.storeRemedyObject);
+            vm.sessionStorageManager.removeEntry(storeName);
+            vm.sessionStorageManager.setEntry(storeName, JSON.stringify(vm.storeRemedyArray));
+        }
+
+        initRequestStorage(msisdn: string, storeName: string): void {
+            let vm = this;            
+            vm.storeRemedy = [];
+            vm.filterObject = {};
+            vm.sessionStorageManager = vm.$injector.get('sessionStorageSrv');
+
+            vm.storeRemedyArray = vm.sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(vm.sessionStorageManager.getEntry(storeName)) : [];
+            vm.storeRemedyObject = _.find(vm.storeRemedyArray, { msisdn: msisdn }) ?
+                _.find(vm.storeRemedyArray, { msisdn: msisdn }) : {};
         }
 
         // Método que elimina todos los storage almacenados en el sessionStorage (Para que podamos usarlo todos,

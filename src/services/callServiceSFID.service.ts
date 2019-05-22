@@ -8,7 +8,7 @@ module OrangeFeSARQ.Services {
      * @description
      * Servicio para comprobar las ordenes en vuelo
      */
-    export class s8salesOrderSrv extends OrangeFeSARQ.Services.ParentService {
+    export class callServiceSFIDSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
         constructor(public $injector) {
@@ -17,25 +17,24 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc service
-         * @name OrangeFeSARQ.Services:getOrders
+         * @name OrangeFeSARQ.Services:getSFID
          * @author Jaime Alain
          * @description
-         * Servicio para comprobar las ordenes en vuelo
+         * Servicio para recoger los SFID por filtro en OWCS
          */
-        getOrders(publicIdType, publicId, comp) {
+        getSFID(filter, comp) {
             let vm = this;
 
             let _search: Object = {
                 queryParams: {},
-                urlParams: [publicIdType, publicId]
+                urlParams: [filter]
             };
 
-            let url = vm.genericConstant.s8SalesOrder + '/inflightOrders';
+            let url = vm.genericConstant.dataController + '/getFilterSfid';
 
             return vm.httpCacheGett(url, _search, comp)
                 .then((response) => {
                     return response.data;
-
                 })
                 .catch((error) => {
                     throw error;

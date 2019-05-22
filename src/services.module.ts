@@ -13,6 +13,7 @@ module OrangeFeSARQ.Constant {
         .service('billReviewSrv', OrangeFeSARQ.Services.BillReviewSrv)
         .service('bucketBalanceSrv', OrangeFeSARQ.Services.BucketBalanceSrv)
         .service('casesSrv', OrangeFeSARQ.Services.CasesSrv)
+        .service('fullDataFormSrv', OrangeFeSARQ.Services.FullDataFormSrv)
         .service('casesStore', OrangeFeSARQ.Services.CasesStore)
         .service('cookieStoreSrv', OrangeFeSARQ.Services.CookieStoreService)
         .service('changeOfferSrv', OrangeFeSARQ.Services.ChangeOfferSrv)
@@ -82,7 +83,9 @@ module OrangeFeSARQ.Constant {
         .service('commercialCampaignsSrv', OrangeFeSARQ.Services.CommercialCampaignsSrv)
         .service('s8salesOrderSrv', OrangeFeSARQ.Services.s8salesOrderSrv)
         .service('repositorySrv', OrangeFeSARQ.Services.repositorySrv)
+        .service('callServiceSFIDSrv', OrangeFeSARQ.Services.callServiceSFIDSrv)
         /* .service('agreementSrv', OFC.Services.AgreementSrv) */
         .service('userDeviceSrv', OrangeFeSARQ.Services.UserDeviceSrv)
-        .service('eligibilitySrv', OrangeFeSARQ.Services.EligibilitySrv);
+        .service('eligibilitySrv', OrangeFeSARQ.Services.EligibilitySrv)
+        .service('getRolProfileSrv', OrangeFeSARQ.Services.getRolProfileSrv);
 }

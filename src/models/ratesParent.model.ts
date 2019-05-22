@@ -353,21 +353,21 @@ module ratesParent.Models {
                     } else {
                         if (priceData[i].bundledProductOffering && _.find(priceData[i].bundledProductOffering, { 'id': rateData.id })) {
                             // Recoger info
-                            this.info = new RatePopupInfo(priceData[i].name, priceData[i].description);
-                            this.pupupInfo.push(this.info);
+                            let info1: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
+                            this.pupupInfo.push(info1);
                         }
                     }
                 }
             }
 
             let descripcionCompleta = rateData.description + ((rateData.ospLargeDescription != null) ? ' <br/> ' + rateData.ospLargeDescription : "");
-            this.info = new RatePopupInfo('titulo', descripcionCompleta);
-            this.pupupInfo.push(this.info);
+            let info2: RatePopupInfo = new RatePopupInfo('titulo', descripcionCompleta);
+            this.pupupInfo.push(info2);
             // && rateData.productSpecCharacteristic[i].ospLargeDescription != null 
             for (let i in rateData.productSpecCharacteristic) {
                 if (rateData.productSpecCharacteristic[i].ospCategory === 'highlight') {
-                    this.info = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
-                    this.pupupInfo.push(this.info);
+                    let info3: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                    this.pupupInfo.push(info3);
                 }
             }
             for (let i in rateData.productSpecCharacteristic) {
@@ -379,8 +379,8 @@ module ratesParent.Models {
                         }
                     }
                     if (!repetida) {
-                        this.info = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
-                        this.pupupInfo.push(this.info);
+                        let info4: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                        this.pupupInfo.push(info4);
                     }
                 }
             }

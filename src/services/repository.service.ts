@@ -22,8 +22,10 @@ module OrangeFeSARQ.Services {
          * @description
          * Servicio para realizar inyectar las ordenes
          */
-        postCreateCommercialActSPA(shoppingCart, customer, comp ){
+        postCreateCommercialActSPA(shoppingCart, customer, comp) {
             let vm = this;
+
+            let endPoint = 'createCommercialActSPA';
 
             let _search: Object = {
                 body: {
@@ -31,16 +33,17 @@ module OrangeFeSARQ.Services {
                     customer: customer
                 },
                 queryParams: {},
-                urlParams: []
+                urlParams: [endPoint]
             };
-            
-            vm.httpPost(vm.genericConstant.createCommercialActSPA, _search, comp)
+
+            return vm.httpPost(vm.genericConstant.repository, _search, comp)
                 .then((response) => {
-                   return response.data;
-                    }, (err) => {
-                        throw err;
-                    }
-                );
+                    return response.data;
+
+                })
+                .catch((error) => {
+                    throw error;
+                });
         }
     }
 }

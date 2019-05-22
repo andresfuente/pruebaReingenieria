@@ -216,7 +216,11 @@ module mosaicFile.Models {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = _.findIndex(commercialData, function (currentCommercialAct: any) {
                 return currentCommercialAct.ospIsSelected === true;
-            });
+            });            
+            if(commercialActIndex < 0) {
+                commercialActIndex = commercialData.length - 1;
+            }
+            
             // Banderas para controlar las opciones de la cámara
             let backCamera = false;
             let frontCamera = false;
@@ -320,6 +324,7 @@ module mosaicFile.Models {
                                     // Se busca caracteristica de nivel 1
                                     let group = _.find(this.fileCharacteristic, { title: characteristic.description });
                                     // Si no existe
+                                    let child:any;
                                     if (!group) {
                                         // Se crea el nivel 1
                                         let characteristicNew: OrangeMosaicFileTerminalCharacteristicsLvl1 =
@@ -332,6 +337,7 @@ module mosaicFile.Models {
                                             characteristicNew.title = characteristic.description;
                                         }
                                         // Si tiene hijo, se crea y se añade al objeto de nivel 1
+                                        let child:any;
                                         if (characteristic.characteristicValue.length > 0) {
                                             let objects;
                                             characteristic.characteristicValue.forEach((characteristicValue, z) => {
@@ -342,26 +348,26 @@ module mosaicFile.Models {
                                                     let characteristicValueNew: OrangeMosaicFileTerminalCharacteristicsLvl2 =
                                                         new OrangeMosaicFileTerminalCharacteristicsLvl2(characteristic.name,
                                                             characteristicValue.value);
-                                                    let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
+                                                    let groupOWCS1 = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
-                                                    let child;
-                                                    if (groupOWCS && groupOWCS['listOptionsLiteral']) {
-                                                        child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
+                                                 
+                                                    if (groupOWCS1 && groupOWCS1['listOptionsLiteral']) {
+                                                        child = _.find(groupOWCS1['listOptionsLiteral'], { name: characteristic.name });
                                                     }
-                                                    if (groupOWCS && child) {
+                                                    if (groupOWCS1 && child) {
                                                         characteristicValueNew.name = child.value;
                                                         characteristicNew.subCharacteristicsList.push(characteristicValueNew);
                                                     }
                                                 }
                                             });
                                         }
-                                        let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
+                                        let groupOWCS2 = _.find(mosaicFileCompOWCSStore.listOption,
                                             { name: characteristic.ospCharCategory });
-                                        let child;
-                                        if (groupOWCS && groupOWCS['listOptionsLiteral']) {
-                                            child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
+                                        child=null;
+                                        if (groupOWCS2 && groupOWCS2['listOptionsLiteral']) {
+                                            child = _.find(groupOWCS2['listOptionsLiteral'], { name: characteristic.name });
                                         }
-                                        if (groupOWCS && child) {
+                                        if (groupOWCS2 && child) {
                                             this.fileCharacteristic.push(characteristicNew);
                                         }
                                     } else { // Si existe
@@ -379,13 +385,13 @@ module mosaicFile.Models {
                                                     let characteristicValueNew: OrangeMosaicFileTerminalCharacteristicsLvl2 =
                                                         new OrangeMosaicFileTerminalCharacteristicsLvl2(characteristic.name,
                                                             characteristicValue.value);
-                                                    let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
+                                                    let groupOWCS3 = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
-                                                    let child;
-                                                    if (groupOWCS && groupOWCS['listOptionsLiteral']) {
-                                                        child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
+                                                    child=null;
+                                                    if (groupOWCS3 && groupOWCS3['listOptionsLiteral']) {
+                                                        child = _.find(groupOWCS3['listOptionsLiteral'], { name: characteristic.name });
                                                     }
-                                                    if (groupOWCS && child) {
+                                                    if (groupOWCS3 && child) {
                                                         characteristicValueNew.name = child.value;
                                                         if (characteristicValueNew.name === 'Cámara trasera'
                                                             && characteristicValueNew.value === 'Si') {
@@ -570,7 +576,7 @@ module mosaicFile.Models {
                 if (commercialData[commercialActIndex].ospTerminalWorkflow) {
                     // Renove prepago
                     if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'prepaid_renew') {
-                        commercialData[commercialActIndex].prepaidProducts.forEach((product, i) => {
+                        commercialData[commercialActIndex].prepaidProducts.forEach((product) => {
                             if (product.codSAP === serviceData.deviceSpecification.id) {
                                 product.offertDetails.forEach(offert => {
                                     let prepaidPrice = {
@@ -588,7 +594,7 @@ module mosaicFile.Models {
                         commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'best_renove') {
                         serviceData.deviceOffering.forEach(deviceOff => {
                             if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length) {
-                                deviceOff.deviceOfferingPrice.forEach((price, x) => {
+                                deviceOff.deviceOfferingPrice.forEach((price) => {
                                     if (price.relatedProductOffering && price.relatedProductOffering.length) {
                                         price.relatedProductOffering.forEach((product) => {
                                             if (product.isBundle) {
