@@ -84,4 +84,5 @@ module OrangeFeSARQ.Constant {
         .service('repositorySrv', OrangeFeSARQ.Services.repositorySrv)
         /* .service('agreementSrv', OFC.Services.AgreementSrv) */
         .service('userDeviceSrv', OrangeFeSARQ.Services.UserDeviceSrv)
+        .service('eligibilitySrv', OrangeFeSARQ.Services.EligibilitySrv);
 }
