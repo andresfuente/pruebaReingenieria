@@ -200,7 +200,7 @@ module OrangeFeSARQ.Services {
             if (isSecondaryRenew || vm.checkCampaignType(commercialData, commercialActIndex)) {
                 delete params['deviceOffering.category.name'];
             }
-            if (!bucketID || vm.checkPrincipalLine(commercialData, rate)) {
+            if (!bucketID || vm.validLineRate(commercialData, rate)) {
                 delete params.bucketID;
             }
 
@@ -324,14 +324,14 @@ module OrangeFeSARQ.Services {
 
         /**
         * @ngdoc method
-        * @name ratesComparator.Services:RatesComparatorSrv#checkPrincipalLine
+        * @name ratesComparator.Services:RatesComparatorSrv#validLineRate
         * @author Jesús Alberto Mora San Andrés
         * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
-        * @descriptionBusca Si el número para la oferta es el mismo que el de la línea principal, devuelve true
-        * @return {string} principalLine: boolean
+        * @description Si el número para la oferta es el mismo que el de la línea principal o si se trata de una tarifa NAC, devuelve true
+        * @return {string} value: boolean
         */
-        checkPrincipalLine(commercialData, rate){
-            let principalLine: boolean = false;
+        validLineRate(commercialData, rate){
+            let value: boolean = false;
             let number;
             let vm = this;
             if (rate && rate.line) {
@@ -341,15 +341,19 @@ module OrangeFeSARQ.Services {
             if (commercialData) {
                 commercialData.forEach(commercial => {
                     if (commercial.ospIsSelected && commercial.serviceNumber && commercial.serviceNumber === vm.principalNumber){
-                        principalLine = true;
+                        value = true;
                     } else if (commercial.serviceNumber === "" && number === vm.principalNumber) {
-                        principalLine = true;
+                        value = true;
                     }
+                    commercial.rates.forEach(rate => {
+                        if (commercial.ospIsSelected && rate && rate.groupName && rate.groupName !== "Convergente_NAC") {
+                            value = true;
+                        }
+                    });
                 });
             }
-
             
-            return principalLine;
+            return value;
         }
 
 
