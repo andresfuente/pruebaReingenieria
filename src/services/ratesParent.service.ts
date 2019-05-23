@@ -78,17 +78,14 @@ module OrangeFeSARQ.Services {
          /*Consulta al productSpecification del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
          */
         //Cambio_Adaptacion_Jazztel JPA
-        getSpecificationDataJZ(categoryParam: string, productType: string, clientSegment: string,
-            contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
-            ratesIdListString: string, releatedRatesClient: string, Tarifa: string, Promocion: string, Paquete: string, pack?: string, type?: string, defaultTechnology?: string,
-            bucketId?: string): ng.IPromise<{} | void> {
+        getSpecificationDataJZ(productType: string, tarifa: string, promocion: string, paquete: string): ng.IPromise<{} | void> {
             let vm = this;
 
-            let params = vm.setParamsJZ( productType, Tarifa, Promocion, Paquete);
+            let params = vm.setParamsJZ( productType, tarifa, promocion, paquete);
 
             let _headers = vm.setHeaders();
 
-                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brandjz + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -142,14 +139,12 @@ module OrangeFeSARQ.Services {
         /* Consulta al productOffering del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
          */
         //Cambio_Adaptacion_Jazztel JPA
-        getOfferingDataJZ(categoryParam: string, productType: string, clientSegment: string,
-            contractType: string, commercialAction: string, isExistingCustomer: string, specificationData, technologyList,
-            ratesIdListString: string, releatedRatesClient: string,  Tarifa: string, Promocion: string, Paquete: string, pack?: string, type?: string, defaultTechnology?: string,
+        getOfferingDataJZ( productType: string, specificationData, tarifa: string, promocion: string, paquete: string,
             bucketId?: string) {
             let srv = this;
-            let params = srv.setParamsJZ(productType,Tarifa, Promocion, Paquete);
+            let params = srv.setParamsJZ(productType,tarifa, promocion, paquete);
             let _headers = srv.setHeaders();
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brandjz + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -808,9 +803,9 @@ module OrangeFeSARQ.Services {
             
             let params = {
                 productType: productType, // Tipo de producto (rate)
-                idTarifa:Tarifa, //IDs de  las tarifas posibles de Jazztel
-                idPromocion:Promocion, //IDs de  las promocion posibles de Jazztel
-                idPaquete:Paquete //IDs de las paquete posibles de Jazztel
+                idCRMTarifa:Tarifa, //IDs de  las tarifas posibles de Jazztel
+                idCRMPromocion:Promocion, //IDs de  las promocion posibles de Jazztel
+                idCRMPaquete:Paquete //IDs de las paquete posibles de Jazztel
             };
 
             return params;
