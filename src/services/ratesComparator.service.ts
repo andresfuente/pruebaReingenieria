@@ -200,7 +200,7 @@ module OrangeFeSARQ.Services {
             if (isSecondaryRenew || vm.checkCampaignType(commercialData, commercialActIndex)) {
                 delete params['deviceOffering.category.name'];
             }
-            if (!bucketID || vm.checkPrincipalLine(commercialData)) {
+            if (!bucketID || vm.checkPrincipalLine(commercialData, rate)) {
                 delete params.bucketID;
             }
 
@@ -283,7 +283,7 @@ module OrangeFeSARQ.Services {
                 if (shoppingCart && shoppingCart.cartItem && shoppingCart.cartItem.length && shoppingCart.cartItem.length > 0) {
                     bucketID = vm.checkShoppingCartNACSelected(shoppingCart.cartItem);
                 }
-            } else if (clientData && clientData.principalLine && clientData.principalLine.bucket) {
+            } else if (clientData && clientData.isNACClient && clientData.principalLine && clientData.principalLine.bucket) {
                 bucketID = clientData.principalLine.bucket;
             }
             if (clientData && clientData.principalLine && clientData.principalLine.number){
@@ -330,13 +330,19 @@ module OrangeFeSARQ.Services {
         * @descriptionBusca Si el número para la oferta es el mismo que el de la línea principal, devuelve true
         * @return {string} principalLine: boolean
         */
-        checkPrincipalLine(commercialData){
+        checkPrincipalLine(commercialData, rate){
             let principalLine: boolean = false;
+            let number;
             let vm = this;
+            if (rate && rate.line) {
+                number = rate.line;
+            }
 
             if (commercialData) {
                 commercialData.forEach(commercial => {
                     if (commercial.ospIsSelected && commercial.serviceNumber && commercial.serviceNumber === vm.principalNumber){
+                        principalLine = true;
+                    } else if (commercial.serviceNumber === "" && number === vm.principalNumber) {
                         principalLine = true;
                     }
                 });
