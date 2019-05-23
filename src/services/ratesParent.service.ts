@@ -157,6 +157,24 @@ module OrangeFeSARQ.Services {
                 return false;
             }
         }
+                /** @ngdoc method
+         * @name OrangeFeSARQ.Services:RatesParentSrv#isSOHOClient
+         * @methodOf ratesParent.Services:RatesParentSrv
+         * @description
+         * Método auxiliar para saber si el cliente es SOHO
+         */
+        //TODO comprobar que este método funciona
+        isSOHOClient() {
+            let srv = this;
+
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+            if (clientData && clientData.isSOHOClient) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
         /** @ngdoc method
          * @name OrangeFeSARQ.Services:RatesParentSrv#getSpecificationData
