@@ -113,6 +113,9 @@ module ratesParent.Models {
         public bucket: RateBucket;
         public NACLines: Rate[] = [];
 
+        //Jazztel
+        public characteristicJzz: RatesCharacteristicJzz[] = [];
+
         constructor(rateData, priceData, bucketInfo?) {
 
 
@@ -135,7 +138,7 @@ module ratesParent.Models {
                 this.nacPriceTaxIncludedPromotional = 0;
 
                 // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
-                if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
+                if (rateData.ospTecnology) {
                     this.ospTecnology = rateData.ospTecnology;
                 }
 
@@ -158,6 +161,14 @@ module ratesParent.Models {
                         } else if (bucketInfo && rateData.ospGroupName === 'Convergente_NAC') {
                             this.bucket = new RateBucket('', bucketInfo, '', '', '', '');
                         }
+                        //Se obtienen las caracteríticas para jazztel de forma provisional
+                        if(element.name === 'LiteralTarifa'){
+                            if(element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length > 0 && element.productSpecCharacteristicValue[0].value){
+                                let characteristicJazztelRate = new RatesCharacteristicJzz(element.productSpecCharacteristicValue[0].value);
+                                this.characteristicJzz.push(characteristicJazztelRate);
+                            }
+                        }
+
                     });
                 }
                 // Se obtienen los Id's de los SVA de la tarifa
@@ -596,6 +607,13 @@ module ratesParent.Models {
         }
     }
 
+    export class RatesCharacteristicJzz {
+        public description: string;
+
+        constructor(description: string) {
+        this.description = description;
+        }
+    }
     export class RatePopupInfo {
         public name: string;
         public description: string;
