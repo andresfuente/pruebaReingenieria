@@ -203,7 +203,7 @@ module OrangeFeSARQ.Services {
 
       return vm.httpPost(vm.urlProductOrder, _search, componentName)
         .then(function (success) {
-          if (success.status == 202 || success.status == 422 || success.status == 403) {
+          if (success.status == 202 || success.status == 422) {
             return success;
           }
           else {
@@ -354,7 +354,7 @@ module OrangeFeSARQ.Services {
         .then((response) => {
           let _resp = response.data;
           let status = response.status;
-          if (status == 202 || status == 422) {
+          if (status == 202 || status == 422 || status == 403) {
             return response;
           }
           if (_resp.error) {
