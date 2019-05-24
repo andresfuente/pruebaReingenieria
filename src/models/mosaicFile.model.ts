@@ -327,6 +327,7 @@ module mosaicFile.Models {
                                         }
                                         let groupOWCS2 = _.find(mosaicFileCompOWCSStore.listOption,
                                             { name: characteristic.ospCharCategory });
+
                                         if (groupOWCS2 && groupOWCS2['listOptionsLiteral']) {
                                             child = _.find(groupOWCS2['listOptionsLiteral'], { name: characteristic.name });
                                         }
@@ -348,6 +349,7 @@ module mosaicFile.Models {
                                                             characteristicValue.value);
                                                     let groupOWCS3 = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
+
                                                     if (groupOWCS3 && groupOWCS3['listOptionsLiteral']) {
                                                         child = _.find(groupOWCS3['listOptionsLiteral'], { name: characteristic.name });
                                                     }
