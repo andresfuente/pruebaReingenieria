@@ -15,8 +15,8 @@ module OrangeFeSARQ.Services {
         public clientJazztelSrv: OrangeFeSARQ.Services.ClientJazztelSrv;
         public userSrv: OrangeFeSARQ.Services.UserSrv;
         public data;
-        public bucketId : string;
-        public pressRateModifyButton : boolean;
+        public bucketId: string;
+        public pressRateModifyButton: boolean;
         public shoppingCartAux;
 
         /**
@@ -139,6 +139,19 @@ module OrangeFeSARQ.Services {
                     'value': device.IMEI
                 };
                 productItem.characteristic.push(imei);
+
+                if (!vm.isFdcSite()) {
+                    productItem.characteristic.push(
+                        {
+                            name: 'codigoSAP',
+                            value: device.id
+                        },
+                        {
+                            name: 'idReserva',
+                            value: device.idReserva
+                        }
+                    );
+                }
             }
 
             deviceCartItemElement = {
@@ -339,6 +352,19 @@ module OrangeFeSARQ.Services {
                     'value': device.IMEI
                 };
                 productItem.characteristic.push(imei);
+
+                if (!vm.isFdcSite()) {
+                    productItem.characteristic.push(
+                        {
+                            name: 'codigoSAP',
+                            value: device.id
+                        },
+                        {
+                            name: 'idReserva',
+                            value: device.idReserva
+                        }
+                    );
+                }
             }
 
             // Objeto para shopping cart
@@ -385,47 +411,47 @@ module OrangeFeSARQ.Services {
                 }
                 commercialData[commercialActIndex].sTerminals.push(secundaryTerminal);
                 // Se inserta el terminal en el array de opciones seleccionadas 
-                    commercialData[commercialActIndex].shoppingCartElementsSelected
-                        .forEach((currentItem, index) => {
-                            if (currentItem.ospIsAddSecundary) {
-                                // Si sTerminals no esta definido
-                                if (!currentItem.sTerminals) {
-                                    currentItem.sTerminals = [];
-                                }
-                                currentItem.sTerminals.push({ 'siebelId': device.siebelId });
-                                selectedCartTerminal = currentItem.terminalSiebelId;
-                                selectedCartRate = currentItem.rateSiebelId;
+                commercialData[commercialActIndex].shoppingCartElementsSelected
+                    .forEach((currentItem, index) => {
+                        if (currentItem.ospIsAddSecundary) {
+                            // Si sTerminals no esta definido
+                            if (!currentItem.sTerminals) {
+                                currentItem.sTerminals = [];
                             }
-                        });
-                    // Se inserta el terminal secundario en el shopping cart
-                    if (shoppingCart !== null && shoppingCart.cartItem.length > 0) {
-                        shoppingCart.cartItem.forEach(currentCartItem => {
-                            let rate = _.find(currentCartItem.cartItem, { 'id': selectedCartRate });
-                            let terminal = _.find(currentCartItem.cartItem, { 'id': selectedCartTerminal });
-                            if (rate && terminal) {
-                                currentCartItem.cartItem.push(secundaryDeviceCartItem);
-                                if (payType === 'deferred') {
-                                    currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
+                            currentItem.sTerminals.push({ 'siebelId': device.siebelId });
+                            selectedCartTerminal = currentItem.terminalSiebelId;
+                            selectedCartRate = currentItem.rateSiebelId;
+                        }
+                    });
+                // Se inserta el terminal secundario en el shopping cart
+                if (shoppingCart !== null && shoppingCart.cartItem.length > 0) {
+                    shoppingCart.cartItem.forEach(currentCartItem => {
+                        let rate = _.find(currentCartItem.cartItem, { 'id': selectedCartRate });
+                        let terminal = _.find(currentCartItem.cartItem, { 'id': selectedCartTerminal });
+                        if (rate && terminal) {
+                            currentCartItem.cartItem.push(secundaryDeviceCartItem);
+                            if (payType === 'deferred') {
+                                currentCartItem.cartItem = currentCartItem.cartItem.concat(vapCartItems);
 
-                                    // Añadir cartItem compromiso de permanencia CP
-                                    if (device.cpDescription && device.cpSiebel) {
-                                        currentCartItem.cartItem.push(vm.createCPCartItem(device, true));
-                                    }
+                                // Añadir cartItem compromiso de permanencia CP
+                                if (device.cpDescription && device.cpSiebel) {
+                                    currentCartItem.cartItem.push(vm.createCPCartItem(device, true));
+                                }
 
-                                }
-                                if (device.insuranceSiebelId) {
-                                    currentCartItem.cartItem.push(seguro);
-                                }
                             }
-                        });
-                    }
-                    sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
-                    sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+                            if (device.insuranceSiebelId) {
+                                currentCartItem.cartItem.push(seguro);
+                            }
+                        }
+                    });
+                }
+                sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
 
             } else {
 
                 let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                 commercialActIndex = vm.getSelectedCommercialAct();
+                commercialActIndex = vm.getSelectedCommercialAct();
 
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].id) {
                     let commercialActId: number = Number(commercialData[commercialActIndex].id);
@@ -456,7 +482,7 @@ module OrangeFeSARQ.Services {
                     sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
 
                 }
-                
+
             }
 
         }
@@ -485,8 +511,8 @@ module OrangeFeSARQ.Services {
                 commercialActId = Number(commercialData[commercialActIndex].id);
                 if (rate.groupName === 'Convergente' && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
-                } 
-                
+                }
+
                 if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
                     commercialData[commercialActIndex].NACRateInShoppingCart = true;
                 }
@@ -526,7 +552,7 @@ module OrangeFeSARQ.Services {
             let priceAlteration = [];
 
             if (vm.hasPromotion(rate)) {
-                priceAlteration =[{
+                priceAlteration = [{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
                     'applicationDuration': rate.applicationDuration,
@@ -545,11 +571,11 @@ module OrangeFeSARQ.Services {
                 }];
 
                 // Si es NAC, añadimos los precios promocionados de las líneas adicionales al pack, si existen
-                if (rate.groupName === 'Convergente_NAC') { 
+                if (rate.groupName === 'Convergente_NAC') {
                     if (priceAlteration[0].price.dutyFreeAmount.value !== undefined && rate.nacPricePromotional !== undefined) {
                         priceAlteration[0].price.dutyFreeAmount.value += rate.nacPricePromotional;
                     }
-                    
+
                     if (priceAlteration[0].price.taxIncludedAmount.value !== undefined && rate.nacPriceTaxIncludedPromotional !== undefined) {
                         priceAlteration[0].price.taxIncludedAmount.value += rate.nacPriceTaxIncludedPromotional;
                     }
@@ -692,20 +718,20 @@ module OrangeFeSARQ.Services {
          * @description
          * Añade las promos informativas al carrito
          */
-        informativePromo(rate){
+        informativePromo(rate) {
             let vm = this;
 
-           let promoInformativeName = rate.recurringChargePeriodPromotion ? rate.recurringChargePeriodPromotion.split('|') : [];
-           let promoInformativeValue = rate.descriptionPromotion ? rate.descriptionPromotion.split('|') : [];
+            let promoInformativeName = rate.recurringChargePeriodPromotion ? rate.recurringChargePeriodPromotion.split('|') : [];
+            let promoInformativeValue = rate.descriptionPromotion ? rate.descriptionPromotion.split('|') : [];
 
-           let arrayPromoInformative = _.zipWith(promoInformativeName,promoInformativeValue, (a, b) => {
-                return {name: a, value: b};
-           });
-           
-           arrayPromoInformative = _.filter(arrayPromoInformative, {name: 'Información'});
+            let arrayPromoInformative = _.zipWith(promoInformativeName, promoInformativeValue, (a, b) => {
+                return { name: a, value: b };
+            });
 
-           return arrayPromoInformative;
-           }
+            arrayPromoInformative = _.filter(arrayPromoInformative, { name: 'Información' });
+
+            return arrayPromoInformative;
+        }
 
         /**
          * @ngdoc method
@@ -776,7 +802,7 @@ module OrangeFeSARQ.Services {
             };
 
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
-            
+
             if (commData) {
                 let cartItemElementId = commData.id;
 
@@ -800,12 +826,12 @@ module OrangeFeSARQ.Services {
                     } else { // Recuperamos el bucket correspondiente del carrito 
                         cartItemBucket = vm.getFullBucketInShoppingCart();
                     }
-    
+
                     if (cartItemBucket) {
                         cartItemElement.cartItem.push(cartItemBucket);
                     }
                 }
-                
+
                 if (shoppingCart !== null) {
                     shoppingCart.cartItem.push(cartItemElement);
                 } else {
@@ -856,7 +882,7 @@ module OrangeFeSARQ.Services {
             let priceAlteration = []
 
             if (vm.hasPromotion(rate)) {
-                priceAlteration =[{
+                priceAlteration = [{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
                     'applicationDuration': rate.applicationDuration,
@@ -1011,14 +1037,14 @@ module OrangeFeSARQ.Services {
                 };
                 ospTecnology.product.characteristic.push(flagTv);
                 let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                if(clientData && clientData.length > 0 && clientData.clientFixedNumber ){
+                if (clientData && clientData.length > 0 && clientData.clientFixedNumber) {
                     fixedclient = {
                         name: 'ClienteFijo',
                         value: 'Yes'
                     }
                     ospTecnology.product.characteristic.push(fixedclient);
                 }
-                if(clientData && clientData.length > 0 && clientData.desblinMantenTarif && clientData.desblinMantenTarif === true ){
+                if (clientData && clientData.length > 0 && clientData.desblinMantenTarif && clientData.desblinMantenTarif === true) {
                     mantenRate = {
                         name: 'manten_tarifa',
                         value: 'Y'
@@ -1091,7 +1117,7 @@ module OrangeFeSARQ.Services {
             let priceAlteration = [];
 
             if (vm.hasPromotion(rate)) {
-                priceAlteration =[{
+                priceAlteration = [{
                     'name': rate.typePriceName ? rate.typePriceName : '',
                     'priceType': rate.priceType,
                     'applicationDuration': rate.applicationDuration,
@@ -1109,11 +1135,11 @@ module OrangeFeSARQ.Services {
                     }
                 }];
 
-                if (rate.groupName === 'Convergente_NAC') { 
+                if (rate.groupName === 'Convergente_NAC') {
                     if (priceAlteration[0].price.dutyFreeAmount.value !== undefined && rate.nacPricePromotional !== undefined) {
                         priceAlteration[0].price.dutyFreeAmount.value += rate.nacPricePromotional;
                     }
-                    
+
                     if (priceAlteration[0].price.taxIncludedAmount.value !== undefined && rate.nacPriceTaxIncludedPromotional !== undefined) {
                         priceAlteration[0].price.taxIncludedAmount.value += rate.nacPriceTaxIncludedPromotional;
                     }
@@ -1211,6 +1237,19 @@ module OrangeFeSARQ.Services {
                     'value': deviceReserve.IMEI
                 };
                 device.characteristic.push(imei);
+
+                if (!vm.isFdcSite()) {
+                    device.characteristic.push(
+                        {
+                            name: 'codigoSAP',
+                            value: deviceReserve.id
+                        },
+                        {
+                            name: 'idReserva',
+                            value: deviceReserve.idReserva
+                        }
+                    );
+                }
             }
             if (device.insuranceSiebelId) {
                 insurance = vm.createInsuranceCartItem(device, 'primary');
@@ -1476,8 +1515,21 @@ module OrangeFeSARQ.Services {
                     'value': device.IMEI
                 };
                 productItem.characteristic.push(imei);
+
+                if (!vm.isFdcSite()) {
+                    productItem.characteristic.push(
+                        {
+                            name: 'codigoSAP',
+                            value: device.id
+                        },
+                        {
+                            name: 'idReserva',
+                            value: device.idReserva
+                        }
+                    );
+                }
             }
-            
+
             deviceCartItemElement = {
                 'id': device.siebelId,
                 'action': 'New',
@@ -1529,7 +1581,7 @@ module OrangeFeSARQ.Services {
             sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         }
 
-        obtainRateCartItemElement(commercialData, commercialActIndex){
+        obtainRateCartItemElement(commercialData, commercialActIndex) {
             let vm = this;
             let rateCartItemElement;
             if (commercialData && commercialData[commercialActIndex]
@@ -1791,7 +1843,7 @@ module OrangeFeSARQ.Services {
             let priceAlteration = [];
 
             if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
-                priceAlteration =[{
+                priceAlteration = [{
                     'name': sva.typePriceName ? sva.typePriceName : '',
                     'priceType': sva.priceType,
                     'applicationDuration': sva.applicationDuration,
@@ -1855,7 +1907,7 @@ module OrangeFeSARQ.Services {
                 };
             } else {
                 if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
-                    let priceAlteration =[{
+                    let priceAlteration = [{
                         'name': sva.typePriceName ? sva.typePriceName : '',
                         'priceType': sva.priceType,
                         'applicationDuration': sva.applicationDuration,
@@ -1997,7 +2049,7 @@ module OrangeFeSARQ.Services {
          */
         NACRateInShoppingCart(): boolean {
 
-            let response : boolean = false;
+            let response: boolean = false;
 
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
@@ -2095,7 +2147,7 @@ module OrangeFeSARQ.Services {
          * Devuelve el id del bucket que hay en carrito (en principio, solo puede haber uno)
          */
         getBucketInShoppingCart() {
-            
+
             let bucket: string;
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
 
@@ -2104,11 +2156,11 @@ module OrangeFeSARQ.Services {
                     if (option.ospSelected && option.cartItem) {
                         option.cartItem.forEach((item) => {
                             if (item.product && item.product.productRelationship && item.product.productRelationship[0]
-                            && item.product.productRelationship[0].type === 'bucket') {
+                                && item.product.productRelationship[0].type === 'bucket') {
                                 bucket = item.id;
                             }
                         });
-                    }    
+                    }
                 });
             }
 
@@ -2132,11 +2184,11 @@ module OrangeFeSARQ.Services {
                     if (option.ospSelected && option.cartItem) {
                         option.cartItem.forEach((item) => {
                             if (item.product && item.product.productRelationship && item.product.productRelationship[0]
-                            && item.product.productRelationship[0].type === 'bucket') {
+                                && item.product.productRelationship[0].type === 'bucket') {
                                 bucket = item;
                             }
                         });
-                    }    
+                    }
                 });
             }
 
@@ -2148,11 +2200,11 @@ module OrangeFeSARQ.Services {
         */
         hasPromotion(rate: any) {
 
-            let isPromo : boolean = false;
+            let isPromo: boolean = false;
 
             // Averiguamos si hay promociones en las líneas adicionales
             if (rate.groupName === 'Convergente_NAC') {
-                 isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
+                isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
 
                 // Si no hay promoción en la principal, comprobamos las adicionales
                 // y si alguna tiene promo, hay que pintarlo
@@ -2168,6 +2220,11 @@ module OrangeFeSARQ.Services {
             }
 
             return isPromo;
+        }
+
+        isFdcSite() {
+            const loginData = JSON.parse(sessionStorage.getItem('loginData'));
+            return loginData.site === 'fichadecliente';
         }
     }
 }
