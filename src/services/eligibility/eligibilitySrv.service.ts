@@ -31,7 +31,7 @@ module OrangeFeSARQ.Services {
                 queryParams: {
                     service: service
                 },
-                urlParams: [msisdn]
+                urlParams: ['eligibilityCriteria', msisdn]
             };
 
             return vm.httpCacheGett(vm.baseURL, _search, componentName)
