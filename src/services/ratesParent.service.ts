@@ -24,6 +24,7 @@ module OrangeFeSARQ.Services {
         public LITPRODUCTOFFERING = '/productOfferingv2View/OSP';
 
         private tabGroupName: string;
+        private arrayFixed: Array<any>;
 
         constructor(public $injector) {
             super($injector);
@@ -738,7 +739,7 @@ module OrangeFeSARQ.Services {
             }
     
             // Si la categoria no es convergente se eliminan los parametros para la tecnologia
-            if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC') || defaultTechnology === 'Y') {
+            if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC' && categoryParam !== 'Fijo_Pangea') || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
             }
             // Si alguna de las listas queda vacia no se pasa como parametro en la llamada
@@ -771,12 +772,24 @@ module OrangeFeSARQ.Services {
             return _headers;
         }
 
+        /**
+         * @name ratesParent.Services:RatesParentSrv#setInitTab
+         * @methodOf ratesParent.Services:RatesParentSrv
+         * @description
+         * Almacena la pestaña a la que posicionar por defecto en mosaico
+         */
         setInitTab(tabGroup: string) {
             let vm = this;
 
             vm.tabGroupName = tabGroup;
         }
 
+        /**
+         * @name ratesParent.Services:RatesParentSrv#getInitTab
+         * @methodOf ratesParent.Services:RatesParentSrv
+         * @description
+         * Obtiene el valor de la pestaña a la que posicionar por defecto en mosaico
+         */
         getInitTab() {
             let vm = this;
 
@@ -831,6 +844,33 @@ module OrangeFeSARQ.Services {
             }
 
             return params;
+        }
+
+        /**
+         * @name ratesParent.Services:RatesParentSrv#setArrayFixed
+         * @methodOf ratesParent.Services:RatesParentSrv
+         * @description
+         * Almacena las tarifas "Fijo_Pangea" para validarlas
+         * tras el paso de cobertura
+         */
+        setArrayFixed(rates) {
+            let vm = this;
+
+            vm.arrayFixed = _.filter(rates, {groupName: 'Fijo_Pangea'});
+        }
+
+
+        /**
+         * @name ratesParent.Services:RatesParentSrv#setInitTab
+         * @methodOf ratesParent.Services:RatesParentSrv
+         * @description
+         * Devuelve el array de tarifas almacenadas tras
+         * pasar la cobertura
+         */
+        getArrayFixed() {
+            let vm = this;
+
+            return vm.arrayFixed;
         }
 
       }

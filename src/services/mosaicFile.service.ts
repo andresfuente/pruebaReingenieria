@@ -26,6 +26,9 @@ module OrangeFeSARQ.Services {
 
         private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
 
+        private GEOLOCATION_LOCAL: string = 'Geolocation-local';
+        private GEOLOCATION_CLIENT: string = 'Geolocation-client';
+
         /**
          * @name OrangeFeSARQ.Services:MosaicFileSrv
          * @description
@@ -211,8 +214,9 @@ module OrangeFeSARQ.Services {
 
             // Parametros para Renove
             if (params.commercialAction === 'renove') {
-                let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                commercialActIndex = srv.getSelectedCommercialAct(); 
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = srv.getSelectedCommercialAct();
+                clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
@@ -259,8 +263,8 @@ module OrangeFeSARQ.Services {
             }
 
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
+            _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
             // Metodo http nativo por bug en los filtros
             // return srv.httpService({
@@ -432,8 +436,8 @@ module OrangeFeSARQ.Services {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
-            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
+            _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
             params = {
                 channel: channel,
@@ -477,6 +481,9 @@ module OrangeFeSARQ.Services {
                 // Se seleccionan los parametros necesarios para la llamada a la OT
                 params.channel = '';
                 params.campaignName = campana_txt;
+                clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = srv.getSelectedCommercialAct();
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
                         if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)))) {
