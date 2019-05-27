@@ -12,6 +12,7 @@ module OrangeFeSARQ.Services {
     public linesUsageAPIUrl: string;
     public genericConstant: any;
     public subperfil;
+    public lineList = "lines-list";
 
     constructor(public $injector) {
       super($injector);
@@ -46,7 +47,7 @@ module OrangeFeSARQ.Services {
       vm.subperfil = null;
     }
 
-    getLineUsage(typeParam: string, dataUser: string, componentName: string = "lines-list"): any {
+    getLineUsage(typeParam: string, dataUser: string, componentName: string = this.lineList): any {
       let vm = this;
       let METHOD = 'linesUsage';
       let _search = {
@@ -71,7 +72,7 @@ module OrangeFeSARQ.Services {
         });
     }
 
-    getLineUsageAmena(typeParam: string, dataUser: string, componentName: string = "lines-list"): any {
+    getLineUsageAmena(typeParam: string, dataUser: string, componentName: string = this.lineList): any {
       let vm = this;
       let METHOD = 'linesUsage';
       let _search = {
@@ -96,7 +97,7 @@ module OrangeFeSARQ.Services {
         });
     }
 
-    getGroupedLinesUsage(typeParam: string, dataUser: string, componentName: string = "lines-list"): any {
+    getGroupedLinesUsage(typeParam: string, dataUser: string, componentName: string = this.lineList): any {
       let vm = this;
       let METHOD = 'groupedLinesUsage';
       let _search = {

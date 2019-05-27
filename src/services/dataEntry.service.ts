@@ -459,7 +459,7 @@ module OrangeFeSARQ.Services {
                         let selectedOptions: any = _.filter(sessionShoppingCart.cartItem, { 'ospSelected': true });
                         let auxPrimary = 'SC';
                         let auxSecundary = 'SecSC';
-
+                        let primarioOferta = 'primario oferta';
                         // Comprobamos que hay cartItem con la propiedad ospSelected a true, y cuántos hay
                         if (selectedOptions && selectedOptions.length > 0 && cont !== 'nLineas') {
                             for (let i = 0; i < selectedOptions.length; i++) {
@@ -595,7 +595,7 @@ module OrangeFeSARQ.Services {
                                     } else {
                                         primaryTerminalTypePrice = 'solo sim';
                                     }
-                                    vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                    vm.insertarCampo(dCC + ' ' + primarioOferta + numOferta,
                                         dDE + auxPrimary + numOferta, primaryTerminalTypePrice,
                                         contene,
                                         responseObj);
@@ -626,7 +626,7 @@ module OrangeFeSARQ.Services {
                                 } else if (cont === 'seguro') {
                                     // Terminal primario
                                     if (insurancePrimaryTerminal) {
-                                        vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                        vm.insertarCampo(dCC + ' ' + primarioOferta + numOferta,
                                             dDE + numOferta, 'seguro móvil',
                                             contene, responseObj);
                                     }
@@ -660,7 +660,7 @@ module OrangeFeSARQ.Services {
                                     vm.insertarCampo(dCC + ' ' + 'Secundario', dDE + 'Sec' + numOferta, 'si', contene, responseObj);
                                 } else {
                                     if (primaryTerminal) {
-                                        vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                        vm.insertarCampo(dCC + ' ' + primarioOferta + numOferta,
                                             dDE + auxPrimary + numOferta, primaryTerminal.product[cont],
                                             contene,
                                             responseObj);

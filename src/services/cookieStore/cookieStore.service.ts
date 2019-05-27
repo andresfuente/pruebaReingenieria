@@ -129,13 +129,13 @@ module OrangeFeSARQ.Services {
                                 vm.setCode(cvProduct, vm.msisdn);
                                 if (vm.utils.isFixedLine(vm.msisdn)) {
                                     if (response.line.lineaPrincipalMovil) {
-                                        let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
-                                        vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
+                                        let cvProductlineaPrincipalMovil = vm.searchCvProduct(response.line.lineaPrincipalMovil);
+                                        vm.setCode(cvProductlineaPrincipalMovil, response.line.lineaPrincipalMovil);
                                     }
                                 } else {
                                     if (response.line.lineaPrincipalFijo) {
-                                        let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
-                                        vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
+                                        let cvProductlineaPrincipalFijo = vm.searchCvProduct(response.line.lineaPrincipalFijo);
+                                        vm.setCode(cvProductlineaPrincipalFijo, response.line.lineaPrincipalFijo);
                                     }
                                 }
                             } else {

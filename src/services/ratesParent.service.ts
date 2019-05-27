@@ -21,6 +21,8 @@ module OrangeFeSARQ.Services {
 
         private tabGroupName: string;
         private arrayFixed: Array<any>;
+        public urlproductSpecificationv2View = '/productSpecificationv2View/OSP'
+        public urlproductOfferingv2View = '/productOfferingv2View/OSP'
 
         constructor(public $injector) {
             super($injector);
@@ -182,7 +184,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = srv.setHeaders();
 
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productSpecificationv2View/OSP',
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.urlproductSpecificationv2View,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -219,7 +221,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = srv.setHeaders();
 
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.urlproductOfferingv2View,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return ratesParent.Models.RateSVA.createSVAList(specificationData, response.data, customerSegment);
@@ -242,7 +244,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.urlproductSpecificationv2View,
                 { queryParams: params }, _headers)
                 .then((responseSpecification) => {
                     return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productOffering2View/OSP',
@@ -313,7 +315,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.urlproductSpecificationv2View,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -375,7 +377,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productOfferingv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.urlproductOfferingv2View,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -665,12 +667,17 @@ module OrangeFeSARQ.Services {
                 });
             }
 
+            validSFID = this.changeValidSFID(loginData, validAll, list, validSFID);
+
+            return validSFID;
+        }
+
+        private changeValidSFID(loginData: any, validAll: boolean, list: Object[], validSFID: boolean) {
             if (loginData && loginData.sfid) {
-                if (validAll || (list && list.length > 0 && _.find(list, {'value': loginData.sfid}))) {
+                if (validAll || (list && list.length > 0 && _.find(list, { 'value': loginData.sfid }))) {
                     validSFID = true;
                 }
             }
-
             return validSFID;
         }
 

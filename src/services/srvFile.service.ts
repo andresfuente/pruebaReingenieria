@@ -92,14 +92,7 @@ module OrangeFeSARQ.Services {
                     dataOT.creditLimit = clientData.creditLimitCapta.creditLimitAvailable;
                 }
 
-                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'primary_renew' ||
-                    commercialData[commercialActIndex].ospTerminalWorkflow === 'secondary_renew' ||
-                    commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
-                    dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
-                    if (dataOT.creditLimit && dataOT.creditLimit !== null){
-                        delete dataOT.creditLimit;
-                    }
-                }
+                this.deletecreditLimit(commercialData, commercialActIndex, dataOT);
 
                 srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
                     str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
@@ -114,6 +107,17 @@ module OrangeFeSARQ.Services {
 
                 srv.cachedTerminalName = str_id;
                 return srv.cachedTerminalPromise;
+            }
+        }
+
+        private deletecreditLimit(commercialData: any, commercialActIndex: number, dataOT: any) {
+            if (commercialData[commercialActIndex].ospTerminalWorkflow === 'primary_renew' ||
+                commercialData[commercialActIndex].ospTerminalWorkflow === 'secondary_renew' ||
+                commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
+                dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
+                if (dataOT.creditLimit && dataOT.creditLimit !== null) {
+                    delete dataOT.creditLimit;
+                }
             }
         }
 

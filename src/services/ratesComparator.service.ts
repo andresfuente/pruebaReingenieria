@@ -23,7 +23,8 @@ module OrangeFeSARQ.Services {
 
         public clientData;
         public shopInfo;
-
+        public geoLocal = 'Geolocation-local';
+        public geoClient = 'Geolocation-client';
         /**
          * @ngdoc method
          * @name ratesComparator.Services:RatesComparatorSrv#constructor
@@ -141,7 +142,7 @@ module OrangeFeSARQ.Services {
             // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set(this.geoLocal, vm.storeProvince ? vm.storeProvince : 'Madrid');
             _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
 
             let params = {
@@ -433,8 +434,8 @@ module OrangeFeSARQ.Services {
             }
 
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(this.geoLocal, vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set(this.geoClient, clientGeolocation.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -529,8 +530,8 @@ module OrangeFeSARQ.Services {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
-            _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(this.geoLocal, srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
+            _headers.set(this.geoClient, clientGeolocation.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
