@@ -76,6 +76,27 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
+         /*Consulta al productSpecification del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
+         */
+        //Cambio_Adaptacion_Jazztel JPA
+        getSpecificationDataJZ(productType: string, tarifa: string, promocion: string, paquete: string): ng.IPromise<{} | void> {
+            let vm = this;
+
+            let params = vm.setParamsJZ( productType, tarifa, promocion, paquete);
+
+            let _headers = vm.setHeaders();
+
+                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brandjz + '/productSpecificationv2View/OSP',
+                { queryParams: params }, _headers)
+                .then((response) => {
+                    return {
+                        specificationData: response.data
+                    };
+                })
+                .catch((error) => {
+                    throw error;
+                });
+        }
 
         /** @ngdoc method
          * @name ratesParent.Services:RatesParentSrv#getOfferingData
@@ -103,6 +124,28 @@ module OrangeFeSARQ.Services {
                 bucketId);
             let _headers = srv.setHeaders();
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
+                { queryParams: params }, _headers)
+                .then((response) => {
+                    let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
+                    rates.loadRates(specificationData, response.data, bucketId);
+
+                    return rates;
+                })
+                .catch((error) => {
+                    throw error;
+                });
+
+        }
+        
+        /* Consulta al productOffering del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
+         */
+        //Cambio_Adaptacion_Jazztel JPA
+        getOfferingDataJZ( productType: string, specificationData, tarifa: string, promocion: string, paquete: string,
+            bucketId?: string) {
+            let srv = this;
+            let params = srv.setParamsJZ(productType,tarifa, promocion, paquete);
+            let _headers = srv.setHeaders();
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brandjz + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -750,6 +793,21 @@ module OrangeFeSARQ.Services {
             if (!releatedRatesClient || releatedRatesClient === '') {
                 delete params.idParqueList;
             }
+
+            return params;
+        }
+
+        //Parametros de Jazztel
+        //Cambio_Adaptacion_Jazztel JPA
+        setParamsJZ(productType: string, Tarifa: string, Promocion: string, Paquete: string){
+            let vm = this;
+            
+            let params = {
+                productType: productType, // Tipo de producto (rate)
+                idCRMTarifa:Tarifa, //IDs de  las tarifas posibles de Jazztel
+                idCRMPromocion:Promocion, //IDs de  las promocion posibles de Jazztel
+                idCRMPaquete:Paquete //IDs de las paquete posibles de Jazztel
+            };
 
             return params;
         }
