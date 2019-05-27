@@ -70,7 +70,7 @@ module OrangeFeSARQ.Services {
         getEncryptURLToken(emailAdress: string, nameFirst: string, nameLast: string, compName: string, refresh: boolean = false) {
             let vm = this;
             let apiUrl: string = vm.genericConstant.token;
-
+            let li_pass: any = 'db846445891927ba';
             let _search: Object = {
                 queryParams: {
                     p_userid: emailAdress,
@@ -78,7 +78,7 @@ module OrangeFeSARQ.Services {
                     'p_email.addr': emailAdress,
                     'p_name.first': nameFirst,
                     'p_name.last': nameLast,
-                    p_li_passwd: 'db846445891927ba',
+                    p_li_passwd: li_pass,
                 },
                 urlParams: ['encryptUrlToken']
             };

@@ -25,8 +25,8 @@ module OrangeFeSARQ.Services {
                 // Creamos el store
                 .reduce((store, product) => {
                     // Buscamos al objeto que contiene msisdn
-                    const characteristic = product.productCharacteristic.find(characteristic => (
-                        characteristic.name === this.LAND_PHONE_NAME || characteristic.name === this.MOBILE_PHONE_NAME
+                    const characteristic = product.productCharacteristic.find(characteristicFind => (
+                        characteristicFind.name === this.LAND_PHONE_NAME || characteristicFind.name === this.MOBILE_PHONE_NAME
                     ));
                     // Buscamos el billingAccount de la línea
                     const billingAccount = customerView.billingAccount.find(account => (
