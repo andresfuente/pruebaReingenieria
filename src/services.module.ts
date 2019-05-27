@@ -83,7 +83,9 @@ module OrangeFeSARQ.Constant {
         .service('commercialCampaignsSrv', OrangeFeSARQ.Services.CommercialCampaignsSrv)
         .service('s8salesOrderSrv', OrangeFeSARQ.Services.s8salesOrderSrv)
         .service('repositorySrv', OrangeFeSARQ.Services.repositorySrv)
+        .service('callServiceSFIDSrv', OrangeFeSARQ.Services.callServiceSFIDSrv)
         /* .service('agreementSrv', OFC.Services.AgreementSrv) */
         .service('userDeviceSrv', OrangeFeSARQ.Services.UserDeviceSrv)
-        .service('getRolProfileSrv', OrangeFeSARQ.Services.getRolProfileSrv)
+        .service('eligibilitySrv', OrangeFeSARQ.Services.EligibilitySrv)
+        .service('getRolProfileSrv', OrangeFeSARQ.Services.getRolProfileSrv);
 }
