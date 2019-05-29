@@ -574,6 +574,7 @@ module OrangeFeSARQ.Services {
                 srv.genericConstant.brand + srv.genericConstant.changeRateListBusiness + msisdn,
                 { queryParams: params }, _headers, 'ratesParent')
                 .then((response) => {
+                    let respuesta;
                     if (response && response.data.error === undefined && response.data.productSpecification) {
                         productSpecification = response.data.productSpecification;
                         // Se recorre el array de tarifas disponibles para realizar el cambio
@@ -584,8 +585,11 @@ module OrangeFeSARQ.Services {
                                     element.id : element.id + ',';
                             }
                         });
-                        return ratesIdListString;
+                        respuesta = ratesIdListString;
+                    }else{
+                        respuesta = response;
                     }
+                    return respuesta;                    
                 })
                 .catch((error) => {
                     throw error;
@@ -619,6 +623,7 @@ module OrangeFeSARQ.Services {
             return srv.httpCacheGeth(srv.genericConstant.productCatalog + srv.genericConstant.changeRateList + originRate,
                 queryParamsObjet, _headers)
                 .then((response) => {
+                    let respuesta;
                     if (response && response.data.error === undefined && response.data.productSpecification) {
                         productSpecification = response.data.productSpecification;
                         // Se recorre el array de tarifas disponibles para realizar el cambio
@@ -627,8 +632,11 @@ module OrangeFeSARQ.Services {
                             ratesIdListString += (index === (productSpecification.length - 1)) ?
                                 element.id : element.id + ',';
                         });
-                        return ratesIdListString;
+                        respuesta = ratesIdListString;
+                    }else{
+                        respuesta = response;
                     }
+                    return respuesta;                    
                 })
                 .catch((error) => {
                     throw error;
