@@ -191,10 +191,6 @@ module OrangeFeSARQ.Services {
                 if (!vm.isFdcSite()) {
                     productItem.characteristic.push(
                         {
-                            name: 'codigoSAP',
-                            value: device.id
-                        },
-                        {
                             name: 'idReserva',
                             value: device.idReserva
                         }
@@ -349,10 +345,6 @@ module OrangeFeSARQ.Services {
 
                 if (!vm.isFdcSite()) {
                     productItem.characteristic.push(
-                        {
-                            name: 'codigoSAP',
-                            value: device.id
-                        },
                         {
                             name: 'idReserva',
                             value: device.idReserva
@@ -1234,10 +1226,6 @@ module OrangeFeSARQ.Services {
                 if (!vm.isFdcSite()) {
                     device.characteristic.push(
                         {
-                            name: 'codigoSAP',
-                            value: deviceReserve.id
-                        },
-                        {
                             name: 'idReserva',
                             value: deviceReserve.idReserva
                         }
@@ -1511,10 +1499,6 @@ module OrangeFeSARQ.Services {
 
                 if (!vm.isFdcSite()) {
                     productItem.characteristic.push(
-                        {
-                            name: 'codigoSAP',
-                            value: device.id
-                        },
                         {
                             name: 'idReserva',
                             value: device.idReserva
