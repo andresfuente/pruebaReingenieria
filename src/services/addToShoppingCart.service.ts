@@ -161,7 +161,7 @@ module OrangeFeSARQ.Services {
                 };
                 productItem.characteristic.push(imei);
 
-                if (!vm.isFdcSite()) {
+                if (!vm.isFdcSite() && device.idReserva) {
                     productItem.characteristic.push(
                         {
                             name: 'codigoSAP',
@@ -374,7 +374,7 @@ module OrangeFeSARQ.Services {
                 };
                 productItem.characteristic.push(imei);
 
-                if (!vm.isFdcSite()) {
+                if (!vm.isFdcSite() && device.idReserva) {
                     productItem.characteristic.push(
                         {
                             name: 'codigoSAP',
@@ -1258,7 +1258,7 @@ module OrangeFeSARQ.Services {
                 };
                 device.characteristic.push(imei);
 
-                if (!vm.isFdcSite()) {
+                if (!vm.isFdcSite() && deviceReserve.idReserva) {
                     device.characteristic.push(
                         {
                             name: 'codigoSAP',
@@ -1536,7 +1536,7 @@ module OrangeFeSARQ.Services {
                 };
                 productItem.characteristic.push(imei);
 
-                if (!vm.isFdcSite()) {
+                if (!vm.isFdcSite() && device.idReserva) {
                     productItem.characteristic.push(
                         {
                             name: 'codigoSAP',
