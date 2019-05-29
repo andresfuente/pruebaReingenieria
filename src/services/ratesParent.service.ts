@@ -574,7 +574,7 @@ module OrangeFeSARQ.Services {
                 srv.genericConstant.brand + srv.genericConstant.changeRateListBusiness + msisdn,
                 { queryParams: params }, _headers, 'ratesParent')
                 .then((response) => {
-                    if (response && response.data.error === null && response.data.productSpecification) {
+                    if (response && response.data.error === undefined && response.data.productSpecification) {
                         productSpecification = response.data.productSpecification;
                         // Se recorre el array de tarifas disponibles para realizar el cambio
                         productSpecification.forEach((element, index) => {
@@ -619,7 +619,7 @@ module OrangeFeSARQ.Services {
             return srv.httpCacheGeth(srv.genericConstant.productCatalog + srv.genericConstant.changeRateList + originRate,
                 queryParamsObjet, _headers)
                 .then((response) => {
-                    if (response && response.data.error === null && response.data.productSpecification) {
+                    if (response && response.data.error === undefined && response.data.productSpecification) {
                         productSpecification = response.data.productSpecification;
                         // Se recorre el array de tarifas disponibles para realizar el cambio
                         productSpecification.forEach((element, index) => {
