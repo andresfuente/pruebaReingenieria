@@ -488,18 +488,25 @@ module OrangeFeSARQ.Services {
             let svaCartItemList = [];
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
             let bucket;
 
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
+
                 if (rate.groupName === 'Convergente' && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 }
 
                 if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
                     commercialData[commercialActIndex].NACRateInShoppingCart = true;
+                }
+                //Seteamos el valor de SOHORateInShoppingCart cuando groupNme es movil, cuando typeService es movil y cuando el segmento es empresa
+                //TODO comprobar que se setea correctamente SOHORateInShoppingCart
+                if (rate.groupName === 'movil' && rate.typeService === 'movil' && clientData.ospCustomerSegment === 'empresa') {
+                    commercialData[commercialActIndex].SOHORateInShoppingCart = true;
                 }
 
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
@@ -633,7 +640,7 @@ module OrangeFeSARQ.Services {
 
             // Cambio de marca
 
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
             if (clientData && clientData.jazztelData && clientData.jazztelData.customer) {
                 let router = _.find(clientData.jazztelData.customer.product, (item: any) => {
                     return item.ospProductType === 'Equipo' && item.name.toLowerCase().indexOf("fibra") !== -1;
@@ -708,12 +715,12 @@ module OrangeFeSARQ.Services {
 
             let promoInformativeName = rate.recurringChargePeriodPromotion ? rate.recurringChargePeriodPromotion.split('|') : [];
             let promoInformativeValue = rate.descriptionPromotion ? rate.descriptionPromotion.split('|') : [];
-
             let arrayPromoInformative = _.zipWith(promoInformativeName, promoInformativeValue, (a, b) => {
                 return { name: a, value: b };
             });
 
             arrayPromoInformative = _.filter(arrayPromoInformative, { name: 'Información' });
+
 
             return arrayPromoInformative;
         }
@@ -1074,6 +1081,7 @@ module OrangeFeSARQ.Services {
             let commercialActId: number;
             let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
             let insurance;
             let bucket;
@@ -1089,9 +1097,13 @@ module OrangeFeSARQ.Services {
                 if (rate.groupName === 'Convergente' && rate.family === 'love') {
                     commercialData[commercialActIndex].loveRateInShoppingCart = true;
                 }
-
                 if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
                     commercialData[commercialActIndex].NACRateInShoppingCart = true;
+                }
+                //Seteamos el valor de SOHORateInShoppingCart cuando groupNme es movil, cuando typeService es movil y cuando el segmento es empresa
+                //TODO comprobar que se setea correctamente SOHORateInShoppingCart
+                if (rate.groupName === 'Mobile Only_NAC' && rate.typeService === 'movil' && clientData.ospCustomerSegment === 'empresa') {
+                    commercialData[commercialActIndex].SOHORateInShoppingCart = true;
                 }
 
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
@@ -1319,13 +1331,13 @@ module OrangeFeSARQ.Services {
 
             for (let i = 0; i < commercialData[commercialActIndex].terminals.length; i++) {
                 if (commercialData[commercialActIndex].terminals[i].bonusId) {
-
                     let params = {
                         commercialAction: '',
                         idSvaList: commercialData[commercialActIndex].terminals[i].bonusId,
                         isExistingCustomer: false,
                         segment: ''
                     };
+
                     let cv = JSON.parse(sessionStorage.getItem('cv'));
                     let clientData = JSON.parse(sessionStorage.getItem('clientData'));
                     let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
@@ -1338,6 +1350,7 @@ module OrangeFeSARQ.Services {
                     }
 
                     // Obtenemos el segmento
+                    //TODO El segmento de las tarifas SOHO tiene que ser Empresa
                     if (!clientData || clientData === null || clientData === undefined
                         || !clientData.ospCustomerSegment || clientData.ospCustomerSegment === '') {
                         params.segment = defaultData.ospCustomerSegment;
@@ -1886,7 +1899,7 @@ module OrangeFeSARQ.Services {
                 };
             } else {
                 if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
-                    priceAlteration =[{
+                    priceAlteration = [{
                         'name': sva.typePriceName ? sva.typePriceName : '',
                         'priceType': sva.priceType,
                         'applicationDuration': sva.applicationDuration,
@@ -2035,6 +2048,31 @@ module OrangeFeSARQ.Services {
             if (commercialData && commercialData.length) {
                 commercialData.forEach((commData) => {
                     if (commData.NACRateInShoppingCart) {
+                        response = true;
+                    }
+                });
+            }
+
+            return response;
+        }
+
+        /**
+ * @ngdoc method
+ * @name orangeFeSARQ.Services:AddToShoppingCartSrv#SOHORateInShoppingCart
+ * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+ * @return {boolean} true si se ha llegado al carrito con una tarifa SOHO
+ * @description
+ * Devuelve si se ha llegado al carrito con una tarifa SOHO
+ */
+        SOHORateInShoppingCart(): boolean {
+
+            let response: boolean = false;
+
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+
+            if (commercialData && commercialData.length) {
+                commercialData.forEach((commData) => {
+                    if (commData.SOHORateInShoppingCart) {
                         response = true;
                     }
                 });
