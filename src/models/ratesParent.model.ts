@@ -7,10 +7,8 @@ module ratesParent.Models {
         public promise: ng.IPromise<{}>;
         private customerSegment;
 
-
         public rateName: string; // Nombre de la pestaña
         public rates: Rate[] = []; /// Listado de tarifas
-
         constructor(deferred?: ng.IDeferred<{}>) {
             let vm = this;
             vm.status = 'loading';
@@ -20,23 +18,41 @@ module ratesParent.Models {
 
         loadRates(specificationData, offeringData, bucketInfo?) {
             let vm = this;
-            if (specificationData.productSpecification && offeringData.productOffering) {
-                specificationData.productSpecification.forEach(function (specification) {
-                    let productOffering = [];
-                    offeringData.productOffering.forEach(function (offering) {
-                        offering.bundledProductOffering.forEach(element => {
-                            if (element.id && element.name && element.name === 'bundleId') {
-                                if (specification.bundledProductSpecification[0].id === element.id) {
-                                    productOffering.push(offering);
-                                }
+            if (sessionStorage.getItem('pangea-brnad') === 'jazztel') {
+                if (specificationData.productSpecification && offeringData.productOffering) {
+                    specificationData.productSpecification.forEach(function (specification) {
+                        let productOffering = [];
+                        offeringData.productOffering.forEach(function (offering) {
+                            if (specification.bundledProductSpecification[0].id === offering.bundledProductOffering[1].id) {
+                                productOffering.push(offering);
                             }
                         });
+
+                        let rate: Rate = new Rate(specification, productOffering, bucketInfo);
+
+                        vm.rates.push(rate);
                     });
+                }
+            } else {
+                if (specificationData.productSpecification && offeringData.productOffering) {
+                    specificationData.productSpecification.forEach(function (specification) {
+                        let productOffering = [];
+                        offeringData.productOffering.forEach(function (offering) {
+                            offering.bundledProductOffering.forEach(element => {
+                                if (element.id && element.name && element.name === 'bundleId') {
+                                    if (specification.bundledProductSpecification[0].id === element.id) {
+                                        productOffering.push(offering);
+                                    }
+                                }
+                            });
+                        });
 
-                    let rate: Rate = new Rate(specification, productOffering, bucketInfo);
+                        let rate: Rate = new Rate(specification, productOffering, bucketInfo);
 
-                    vm.rates.push(rate);
-                });
+                        vm.rates.push(rate);
+                    });
+                }
+
             }
         }
 
@@ -81,7 +97,6 @@ module ratesParent.Models {
         public newRateConditions: boolean = false;
         public associatedLine: Array<Object>;
         public defaultLines: Array<Object>;
-        public info: RatePopupInfo;
 
         // Id Tech
 
@@ -119,10 +134,6 @@ module ratesParent.Models {
         // Atributos para NAC
         public bucket: RateBucket;
         public NACLines: Rate[] = [];
-        public POSTPONEDPAY = 'Pago aplazado';
-
-
-        public optionalFeatures: Array<OptionalFeature> = [];
 
         //Jazztel
         public characteristicJzz: RatesCharacteristicJzz[] = [];
@@ -172,21 +183,6 @@ module ratesParent.Models {
                         } else if (bucketInfo && rateData.ospGroupName === 'Convergente_NAC') {
                             this.bucket = new RateBucket('', bucketInfo, '', '', '', '');
                         }
-                        if (rateData.ospGroupName === 'Convergente_NAC' && element.ospCategory === 'optional' && element.ospId) {
-                            let optionalFeature: OptionalFeature = undefined;
-                            let img: string = '';
-                            if (element.attachment && element.attachment.href) {
-                                img = element.attachment.href
-                            }
-                            if (element.name === '#lineas#') {
-                                optionalFeature = new OptionalFeature(element.ospId, img, element.name);
-                            } else {
-                                optionalFeature = new OptionalFeature(element.ospId, img, element.name, element.productSpecSubcharacteristic);
-                            }
-                            if (!_.some(this.optionalFeatures, { ospId: element.ospId })) {
-                                this.optionalFeatures.push(optionalFeature);
-                            }
-                        }
                         //Se obtienen las caracteríticas para jazztel de forma provisional
                         if (element.name === 'LiteralTarifa') {
                             if (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length > 0 && element.productSpecCharacteristicValue[0].value) {
@@ -230,60 +226,58 @@ module ratesParent.Models {
 
                 for (let i in priceData) {
                     if (priceData.length > 0) {
+                        // if (priceData[i].isBundle || sessionStorage.getItem('pangea-brand') === 'jazztel') {
                         // Buscamos si afecta el revamp de tarifas Love 
-                        priceData[i].bundledProductOffering.forEach(element => {
-                            if (element && element.id === rateData.id) {
-                                // Comprobamos la fecha 
-                                let fechaServicio = priceData[i].validFor && priceData[i].validFor.endDateTime ? priceData[i].validFor.endDateTime : null;
-                                let fechaLocal: any = new Date();
-                                let fechaServicioTransf = new Date(fechaServicio);
-                                let fechaLocalTransf = new Date(fechaLocal);
-                                let urlNewConditions = priceData[i].attachment && priceData[i].attachment[0] && priceData[i].attachment[0].url ? priceData[i].attachment[0].url : '';
-                                // Si el string no es una fecha o si fechaSrv es null, undefined o vacio y fechaSrv es posterios a fecha local
-                                if (fechaServicioTransf && fechaServicioTransf > fechaLocalTransf && urlNewConditions) {
-                                    // Recogemos la info de fecha y url 
-                                    let infoNewConditions: RatePopupInfoDate =
-                                        new RatePopupInfoDate(priceData[i].validFor.endDateTime, priceData[i].attachment[0].url);
-                                    this.pupupInfoNewConditions.push(infoNewConditions);
-                                    this.newRateConditions = true;
-                                } else {
-                                    this.newRateConditions = false;
-                                }
+                        if (priceData[i].bundledProductOffering && priceData[i].bundledProductOffering[1] && priceData[i].bundledProductOffering[1].id === rateData.id) {
+                            // Comprobamos la fecha 
+                            let fechaServicio = priceData[i].validFor && priceData[i].validFor.endDateTime ? priceData[i].validFor.endDateTime : null;
+                            let fechaLocal: any = new Date();
+                            let fechaServicioTransf = new Date(fechaServicio);
+                            let fechaLocalTransf = new Date(fechaLocal);
+                            let urlNewConditions = priceData[i].attachment && priceData[i].attachment[0] && priceData[i].attachment[0].url ? priceData[i].attachment[0].url : '';
+                            // Si el string no es una fecha o si fechaSrv es null, undefined o vacio y fechaSrv es posterios a fecha local
+                            if (fechaServicioTransf && fechaServicioTransf > fechaLocalTransf && urlNewConditions) {
+                                // Recogemos la info de fecha y url 
+                                let infoNewConditions: RatePopupInfoDate =
+                                    new RatePopupInfoDate(priceData[i].validFor.endDateTime, priceData[i].attachment[0].url);
+                                this.pupupInfoNewConditions.push(infoNewConditions);
+                                this.newRateConditions = true;
+                            } else {
+                                this.newRateConditions = false;
+                            }
 
-                                // Recoger precios
-                                for (let j in priceData[i].productOfferingPrice) {
-                                    if (priceData[i].productOfferingPrice.length > 0) {
+                            // Recoger precios
+                            for (let j in priceData[i].productOfferingPrice) {
+                                if (priceData[i].productOfferingPrice.length > 0) {
 
-                                        let promotionalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                            return price.ospTaxRateName === 'Promo';
-                                        });
+                                    let promotionalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                        return price.ospTaxRateName === 'Promo';
+                                    });
 
-                                        let commercialPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                            return price.ospTaxRateName === 'SinPromo';
-                                        });
+                                    let commercialPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                        return price.ospTaxRateName === 'SinPromo';
+                                    });
 
 
-                                        // Precios tarifa con promociones
-                                        // if (promotionalPrice) {
-                                        //     this.taxRate = promotionalPrice.taxRate;
-                                        //     this.taxRateName = promotionalPrice.priceType;
-                                        //     this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
-                                        //     this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
-                                        // }
+                                    // Precios tarifa con promociones
+                                    // if (promotionalPrice) {
+                                    //     this.taxRate = promotionalPrice.taxRate;
+                                    //     this.taxRateName = promotionalPrice.priceType;
+                                    //     this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
+                                    //     this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
+                                    // }
 
-                                        if (commercialPrice) {
-                                            this.typePriceName = commercialPrice.ospTaxRateName;
-                                            this.taxRate = commercialPrice.taxRate;
-                                            this.taxRateName = commercialPrice.priceType;
-                                            this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
-                                            this.ratePrice = commercialPrice.dutyFreeAmount;
+                                    if (commercialPrice) {
+                                        this.typePriceName = commercialPrice.ospTaxRateName;
+                                        this.taxRate = commercialPrice.taxRate;
+                                        this.taxRateName = commercialPrice.priceType;
+                                        this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
+                                        this.ratePrice = commercialPrice.dutyFreeAmount;
 
-                                        }
                                     }
                                 }
                             }
-                        });
-
+                        }
                     }
                 }
 
@@ -313,6 +307,9 @@ module ratesParent.Models {
                 }
             }
             else {
+
+
+
                 this.rateSubName = rateData.ospTitulo;
                 this.rateDescription = rateData.description;
                 this.siebelId = rateData.id;
@@ -454,7 +451,7 @@ module ratesParent.Models {
                                             this.typePriceName = promotionalPrice.priceType;
                                             this.taxRate = promotionalPrice.taxRate;
                                             this.taxRateName = promotionalPrice.ospTaxRateName;
-                                            if (priceData[i].productOfferingPrice[j].priceType === this.POSTPONEDPAY) {
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
                                                 this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
                                                 this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
                                             } else {
@@ -479,7 +476,7 @@ module ratesParent.Models {
                                             this.typePriceName = precioFijo.priceType;
                                             this.taxRate = precioFijo.taxRate;
                                             this.taxRateName = precioFijo.ospTaxRateName;
-                                            if (priceData[i].productOfferingPrice[j].priceType === this.POSTPONEDPAY) {
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
                                                 this.ratePriceTaxIncluded = precioFijo.taxIncludedAmount;
                                                 this.ratePrice = precioFijo.dutyFreeAmount;
                                             } else {
@@ -490,7 +487,7 @@ module ratesParent.Models {
                                             this.typePriceName = commercialPrice.priceType;
                                             this.taxRate = commercialPrice.taxRate;
                                             this.taxRateName = commercialPrice.ospTaxRateName;
-                                            if (priceData[i].productOfferingPrice[j].priceType === this.POSTPONEDPAY) {
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
                                                 this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
                                                 this.ratePrice = commercialPrice.dutyFreeAmount;
                                             } else {
@@ -501,7 +498,7 @@ module ratesParent.Models {
                                             this.typePriceName = techSiebelProductBundlePrice.priceType;
                                             this.taxRate = techSiebelProductBundlePrice.taxRate;
                                             this.taxRateName = techSiebelProductBundlePrice.ospTaxRateName;
-                                            if (priceData[i].productOfferingPrice[j].priceType === this.POSTPONEDPAY) {
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
                                                 this.ratePriceTaxIncluded = techSiebelProductBundlePrice.taxIncludedAmount;
                                                 this.ratePrice = techSiebelProductBundlePrice.dutyFreeAmount;
                                             } else {
@@ -512,7 +509,7 @@ module ratesParent.Models {
                                             this.typePriceName = siebelPrice.priceType;
                                             this.taxRate = siebelPrice.taxRate;
                                             this.taxRateName = siebelPrice.ospTaxRateName;
-                                            if (priceData[i].productOfferingPrice[j].priceType === this.POSTPONEDPAY) {
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
                                                 this.ratePriceTaxIncluded = siebelPrice.taxIncludedAmount;
                                                 this.ratePrice = siebelPrice.dutyFreeAmount;
                                             } else {
@@ -523,7 +520,7 @@ module ratesParent.Models {
                                             this.typePriceName = ratePrice.priceType;
                                             this.taxRate = ratePrice.taxRate;
                                             this.taxRateName = ratePrice.ospTaxRateName;
-                                            if (priceData[i].productOfferingPrice[j].priceType === this.POSTPONEDPAY) {
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
                                                 this.ratePriceTaxIncluded = ratePrice.taxIncludedAmount;
                                                 this.ratePrice = ratePrice.dutyFreeAmount;
                                             } else {
@@ -534,7 +531,7 @@ module ratesParent.Models {
                                             this.typePriceName = techSiebelPrice.priceType;
                                             this.taxRate = techSiebelPrice.taxRate;
                                             this.taxRateName = techSiebelPrice.ospTaxRateName;
-                                            if (priceData[i].productOfferingPrice[j].priceType === this.POSTPONEDPAY) {
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
                                                 this.ratePriceTaxIncluded = techSiebelPrice.taxIncludedAmount;
                                                 this.ratePrice = techSiebelPrice.dutyFreeAmount;
                                             } else {
@@ -544,43 +541,54 @@ module ratesParent.Models {
                                         }
                                     }
                                 }
-                            } else {
-                                if (priceData[i].bundledProductOffering && _.find(priceData[i].bundledProductOffering, { 'id': rateData.id })) {
-                                    // Recoger info
-                                    let info1: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
-                                    this.pupupInfo.push(info1);
-                                }
+                            }
+                        } else {
+                            if (priceData[i].bundledProductOffering && _.find(priceData[i].bundledProductOffering, { 'id': rateData.id })) {
+                                // Recoger info
+                                let info1: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
+                                this.pupupInfo.push(info1);
                             }
                         }
                     }
+                }
 
-                    let descripcionCompleta = rateData.description + ((rateData.ospLargeDescription != null) ? ' <br/> ' + rateData.ospLargeDescription : "");
-                    let info2: RatePopupInfo = new RatePopupInfo('titulo', descripcionCompleta);
-                    this.pupupInfo.push(info2);
-                    // && rateData.productSpecCharacteristic[i].ospLargeDescription != null 
-                    for (let i in rateData.productSpecCharacteristic) {
-                        if (rateData.productSpecCharacteristic[i].ospCategory === 'highlight') {
-                            let info3: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
-                            this.pupupInfo.push(info3);
-                        }
+                let descripcionCompleta = rateData.description + ((rateData.ospLargeDescription != null) ? ' <br/> ' + rateData.ospLargeDescription : "");
+                let info2: RatePopupInfo = new RatePopupInfo('titulo', descripcionCompleta);
+                this.pupupInfo.push(info2);
+                // && rateData.productSpecCharacteristic[i].ospLargeDescription != null 
+                for (let i in rateData.productSpecCharacteristic) {
+                    if (rateData.productSpecCharacteristic[i].ospCategory === 'highlight') {
+                        let info3: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                        this.pupupInfo.push(info3);
                     }
-                    for (let i in rateData.productSpecCharacteristic) {
-                        if (rateData.productSpecCharacteristic[i].ospCategory === 'implicit') {
-                            let repetida = false;
-                            for (let j in this.pupupInfo) {
-                                if (rateData.productSpecCharacteristic[i].name === this.pupupInfo[j].name) {
-                                    repetida = true;
-                                }
+                }
+                for (let i in rateData.productSpecCharacteristic) {
+                    if (rateData.productSpecCharacteristic[i].ospCategory === 'implicit') {
+                        let repetida = false;
+                        for (let j in this.pupupInfo) {
+                            if (rateData.productSpecCharacteristic[i].name === this.pupupInfo[j].name) {
+                                repetida = true;
                             }
-                            if (!repetida) {
-                                let info4: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
-                                this.pupupInfo.push(info4);
-                            }
+                        }
+                        if (!repetida) {
+                            let info4: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                            this.pupupInfo.push(info4);
                         }
                     }
                 }
             }
         }
+
+
+
+
+
+
+
+
+
+
+
     }
 
     export class RatesProductBundle {
@@ -849,44 +857,6 @@ module ratesParent.Models {
             this.largeDescription = largeDesc;
             this.quantity = quantity;
             this.img = img;
-        }
-    }
-
-    export class OptionalFeature {
-        public ospId: string;
-        public img: string;
-        public name: string;
-        public subFeatures: Array<any> = [];
-
-        constructor(ospId: string, img: string, name: string, subFeatures?: Array<any>) {
-            this.ospId = ospId;
-            this.img = img;
-            this.name = name;
-            this.subFeatures = this.getSubFeatures(subFeatures);
-        }
-
-        getSubFeatures(subFeatures) {
-            let res = [];
-            _.forEach(subFeatures, (subFeature) => {
-                let img: string = '';
-                if (subFeature.attachment && subFeature.attachment.href) {
-                    img = subFeature.attachment.href
-                }
-                res.push(new SubFeature(subFeature.ospId, img, subFeature.name));
-            });
-            return res;
-        }
-    }
-
-    export class SubFeature {
-        public ospId: string;
-        public img: string;
-        public name: string;
-
-        constructor(ospId: string, img: string, name: string) {
-            this.ospId = ospId;
-            this.img = img;
-            this.name = name;
         }
     }
 }
