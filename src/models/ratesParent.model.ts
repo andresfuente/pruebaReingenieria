@@ -22,9 +22,14 @@ module ratesParent.Models {
                 specificationData.productSpecification.forEach(function (specification) {
                     let productOffering = [];
                     offeringData.productOffering.forEach(function (offering) {
-                        if (specification.id === offering.productSpecification.id ||
-                            specification.id === offering.bundledProductOffering[0].id) {
-                            productOffering.push(offering);
+                        if (offering.isBundle) {
+                            offering.bundledProductOffering.forEach(element => {
+
+                                if (specification.id && element.id && specification.id === element.id) {
+                                    productOffering.push(offering);
+                                }
+                                
+                            });
                         }
                     });
 
