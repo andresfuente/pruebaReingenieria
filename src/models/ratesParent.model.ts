@@ -38,13 +38,15 @@ module ratesParent.Models {
                     specificationData.productSpecification.forEach(function (specification) {
                         let productOffering = [];
                         offeringData.productOffering.forEach(function (offering) {
-                            offering.bundledProductOffering.forEach(element => {
-                                if (element.id && element.name && element.name === 'bundleId') {
-                                    if (specification.bundledProductSpecification[0].id === element.id) {
+                            if (offering.isBundle) {
+                                offering.bundledProductOffering.forEach(element => {
+
+                                    if (specification.id && element.id && specification.id === element.id) {
                                         productOffering.push(offering);
                                     }
-                                }
-                            });
+                                    
+                                });
+                            }
                         });
 
                         let rate: Rate = new Rate(specification, productOffering, bucketInfo);
