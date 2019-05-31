@@ -18,7 +18,7 @@ module ratesParent.Models {
 
         loadRates(specificationData, offeringData, bucketInfo?) {
             let vm = this;
-            if (sessionStorage.getItem('pangea-brnad') === 'jazztel') {
+            if (sessionStorage.getItem('pangea-brand') === 'jazztel') {
                 if (specificationData.productSpecification && offeringData.productOffering) {
                     specificationData.productSpecification.forEach(function (specification) {
                         let productOffering = [];
