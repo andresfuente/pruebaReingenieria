@@ -18,34 +18,57 @@ module ratesParent.Models {
 
         loadRates(specificationData, offeringData, bucketInfo?) {
             let vm = this;
+            if (sessionStorage.getItem('pangea-brand') === 'jazztel') {
+                if (specificationData.productSpecification && offeringData.productOffering) {
+                    specificationData.productSpecification.forEach(function (specification) {
+                        let productOffering = [];
+                        offeringData.productOffering.forEach(function (offering) {
+                            offering.bundledProductOffering.forEach(element => {
 
-            if (specificationData.productSpecification && offeringData.productOffering) {
-                specificationData.productSpecification.forEach(function (specification) {
-                    let productOffering = [];
-                    offeringData.productOffering.forEach(function (offering) {
-                        offering.bundledProductOffering.forEach(element => {
+                                if (element.name && element.name === 'bundleId') {
+                                    if (!element.id) {
+                                        element.id = offering.bundledProductOffering[0].id + '+' + offering.productSpecification.id + '+' + offering.productSpecification.ospProductNumber
+                                    }
 
-                            if (element.name && element.name === 'bundleId') {
-                                if (!element.id) {
-                                    element.id = offering.bundledProductOffering[0].id + '+' + offering.productSpecification.id + '+' + offering.productSpecification.ospProductNumber
+                                    if (!specification.bundledProductSpecification[0].id) {
+                                        specification.bundledProductSpecification[0].id = specification.ospMorganeCode + '+' + specification.ospExternalCode + '+' + specification.productNumber;
+
+                                    }
+
+                                    if (specification.bundledProductSpecification[0].id === element.id) {
+                                        productOffering.push(offering);
+                                    }
                                 }
+                            });
+                        });
 
-                                if (!specification.bundledProductSpecification[0].id) {
-                                    specification.bundledProductSpecification[0].id = specification.ospMorganeCode + '+' + specification.ospExternalCode + '+' + specification.productNumber;
+                        let rate: Rate = new Rate(specification, productOffering, bucketInfo);
 
-                                }
+                        vm.rates.push(rate);
+                    });
+                }
+            } else {
+                if (specificationData.productSpecification && offeringData.productOffering) {
+                    specificationData.productSpecification.forEach(function (specification) {
+                        let productOffering = [];
+                        offeringData.productOffering.forEach(function (offering) {
+                            if (offering.isBundle) {
+                                offering.bundledProductOffering.forEach(element => {
 
-                                if (specification.bundledProductSpecification[0].id === element.id) {
-                                    productOffering.push(offering);
-                                }
+                                    if (specification.id && element.id && specification.id === element.id) {
+                                        productOffering.push(offering);
+                                    }
+
+                                });
                             }
                         });
+
+                        let rate: Rate = new Rate(specification, productOffering, bucketInfo);
+
+                        vm.rates.push(rate);
                     });
+                }
 
-                    let rate: Rate = new Rate(specification, productOffering, bucketInfo);
-
-                    vm.rates.push(rate);
-                });
             }
         }
 
