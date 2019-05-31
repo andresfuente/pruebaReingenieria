@@ -10,6 +10,8 @@ module OrangeFeSARQ.Services {
     export class ShoppingCartSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
+         // Brand
+         private brand = sessionStorage.getItem('pangea-brand');
         constructor(public $injector) {
             super($injector);
             let vm = this;
@@ -103,12 +105,13 @@ module OrangeFeSARQ.Services {
          * @returns {object} Devuelve una promesa con el response.
          */
         putOspShoppingCart(body, id: string, componentName: string) {
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let vm = this;
 
             let _headers = vm.getParentSfid();
             let _search = {
                 body: body,
-                urlParams: ['ospShoppingCart', id]
+                urlParams: ['ospShoppingCart', (vm.brand && vm.brand === "jazztel" ? body.customer.id : id)]
             };
 
             return vm.httpPut(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
