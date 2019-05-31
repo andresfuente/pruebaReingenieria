@@ -23,11 +23,6 @@ module ratesParent.Models {
                     specificationData.productSpecification.forEach(function (specification) {
                         let productOffering = [];
                         offeringData.productOffering.forEach(function (offering) {
-<<<<<<< HEAD
-                            if (specification.bundledProductSpecification[0].id === offering.bundledProductOffering[1].id) {
-                                productOffering.push(offering);
-                            }
-=======
                             offering.bundledProductOffering.forEach(element => {
 
                                 if (element.name && element.name === 'bundleId') {
@@ -45,7 +40,6 @@ module ratesParent.Models {
                                     }
                                 }
                             });
->>>>>>> feature-develop-jazztel
                         });
 
                         let rate: Rate = new Rate(specification, productOffering, bucketInfo);
@@ -64,19 +58,11 @@ module ratesParent.Models {
                                     if (specification.id && element.id && specification.id === element.id) {
                                         productOffering.push(offering);
                                     }
-<<<<<<< HEAD
-                                    
-                                });
-                            }
-                        });
-
-=======
 
                                 });
                             }
                         });
 
->>>>>>> feature-develop-jazztel
                         let rate: Rate = new Rate(specification, productOffering, bucketInfo);
 
                         vm.rates.push(rate);
@@ -258,7 +244,6 @@ module ratesParent.Models {
                     if (priceData.length > 0) {
                         // if (priceData[i].isBundle || sessionStorage.getItem('pangea-brand') === 'jazztel') {
                         // Buscamos si afecta el revamp de tarifas Love 
-<<<<<<< HEAD
                         if (priceData[i].bundledProductOffering && priceData[i].bundledProductOffering[1] && priceData[i].bundledProductOffering[1].id === rateData.id) {
                             // Comprobamos la fecha 
                             let fechaServicio = priceData[i].validFor && priceData[i].validFor.endDateTime ? priceData[i].validFor.endDateTime : null;
@@ -309,61 +294,6 @@ module ratesParent.Models {
                                 }
                             }
                         }
-=======
-                        priceData[i].bundledProductOffering.forEach(element => {
-                            if (element && element.id === rateData.id) {
-                                // Comprobamos la fecha 
-                                let fechaServicio = priceData[i].validFor && priceData[i].validFor.endDateTime ? priceData[i].validFor.endDateTime : null;
-                                let fechaLocal: any = new Date();
-                                let fechaServicioTransf = new Date(fechaServicio);
-                                let fechaLocalTransf = new Date(fechaLocal);
-                                let urlNewConditions = priceData[i].attachment && priceData[i].attachment[0] && priceData[i].attachment[0].url ? priceData[i].attachment[0].url : '';
-                                // Si el string no es una fecha o si fechaSrv es null, undefined o vacio y fechaSrv es posterios a fecha local
-                                if (fechaServicioTransf && fechaServicioTransf > fechaLocalTransf && urlNewConditions) {
-                                    // Recogemos la info de fecha y url 
-                                    let infoNewConditions: RatePopupInfoDate =
-                                        new RatePopupInfoDate(priceData[i].validFor.endDateTime, priceData[i].attachment[0].url);
-                                    this.pupupInfoNewConditions.push(infoNewConditions);
-                                    this.newRateConditions = true;
-                                } else {
-                                    this.newRateConditions = false;
-                                }
-
-                                // Recoger precios
-                                for (let j in priceData[i].productOfferingPrice) {
-                                    if (priceData[i].productOfferingPrice.length > 0) {
-
-                                        let promotionalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                            return price.ospTaxRateName === 'Promo';
-                                        });
-
-                                        let commercialPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                            return price.ospTaxRateName === 'SinPromo';
-                                        });
-
-
-                                        // Precios tarifa con promociones
-                                        // if (promotionalPrice) {
-                                        //     this.taxRate = promotionalPrice.taxRate;
-                                        //     this.taxRateName = promotionalPrice.priceType;
-                                        //     this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
-                                        //     this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
-                                        // }
-
-                                        if (commercialPrice) {
-                                            this.typePriceName = commercialPrice.ospTaxRateName;
-                                            this.taxRate = commercialPrice.taxRate;
-                                            this.taxRateName = commercialPrice.priceType;
-                                            this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
-                                            this.ratePrice = commercialPrice.dutyFreeAmount;
-
-                                        }
-                                    }
-                                }
-                            }
-                        });
-
->>>>>>> feature-develop-jazztel
                     }
                 }
 

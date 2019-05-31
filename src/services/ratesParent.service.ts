@@ -69,11 +69,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-<<<<<<< HEAD
                 return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
-=======
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
->>>>>>> feature-develop-jazztel
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -365,42 +361,7 @@ module OrangeFeSARQ.Services {
             technologyList, defaultTechnology?: string, bucketId?: string) {
             let vm = this;
 
-<<<<<<< HEAD
             let params = vm.setParamsRenove(ratesList, technologyList, productType, clientSegment, defaultTechnology, bucketId);
-=======
-            let ratesString = '';
-            let technologyString = '';
-            if (ratesList) {
-                ratesString = vm.getRatesString(ratesList);
-            }
-            if (technologyList) {
-                technologyString = vm.getIdTechnologyString(technologyList);
-            }
-            let params = {
-                productType: productType, // Tipo de producto (rate)
-                segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
-                idOfertaComercialList: ratesString, // Listado de idBundle 
-                idTecnologiaList: technologyString, // Listado de id de tecnologia
-                actocomercial: 'renove',
-                defaultTechnology: defaultTechnology,
-                bucketId: bucketId
-            };
-            if (ratesString === '') {
-                delete params.idOfertaComercialList;
-            }
-
-            if (defaultTechnology || technologyString === '') {
-                delete params.idTecnologiaList;
-            }
-
-            if (!defaultTechnology) {
-                delete params.defaultTechnology
-            }
-
-            if (!bucketId) {
-                delete params.bucketId;
-            }
->>>>>>> feature-develop-jazztel
 
             let _headers = vm.setHeaders();
 
@@ -432,17 +393,7 @@ module OrangeFeSARQ.Services {
             specificationData, ratesList, technologyList, defaultTechnology?: string, bucketId?: string) {
             let vm = this;
 
-<<<<<<< HEAD
             let params = vm.setParamsRenove(ratesList, technologyList, productType, clientSegment, defaultTechnology, bucketId);
-=======
-            if (!defaultTechnology) {
-                delete params.defaultTechnology
-            }
-
-            if (!bucketId) {
-                delete params.bucketId;
-            }
->>>>>>> feature-develop-jazztel
 
             let _headers = vm.setHeaders();
 
