@@ -65,7 +65,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -76,17 +76,17 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
-         /*Consulta al productSpecification del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
-         */
+        /*Consulta al productSpecification del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
+        */
         //Cambio_Adaptacion_Jazztel JPA
-        getSpecificationDataJZ(productType: string, tarifa: string, promocion: string, paquete: string): ng.IPromise<{} | void> {
+        getSpecificationDataJZ(productType: string, category: string, tarifa?: string, promocion?: string, paquete?: string): ng.IPromise<{} | void> {
             let vm = this;
 
-            let params = vm.setParamsJZ( productType, tarifa, promocion, paquete);
+            let params = vm.setParamsJZ(productType, category, tarifa, promocion, paquete);
 
             let _headers = vm.setHeaders();
 
-                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brandjz + '/productSpecificationv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brandjz + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -97,6 +97,25 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
+        // mostrar tarifas de Jazztel sin cobertura
+        // getSpecificationDataJZWithoutCoverage(productType: string, category: string): ng.IPromise<{} | void> {
+        //     let vm = this;
+
+        //     let params = vm.setParamsJZWithoutCoverage(productType, category);
+
+        //     let _headers = vm.setHeaders();
+
+        //     return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brandjz + '/productSpecificationv2View/OSP',
+        //         { queryParams: params }, _headers)
+        //         .then((response) => {
+        //             return {
+        //                 specificationData: response.data
+        //             };
+        //         })
+        //         .catch((error) => {
+        //             throw error;
+        //         });
+        // }
 
         /** @ngdoc method
          * @name ratesParent.Services:RatesParentSrv#getOfferingData
@@ -136,14 +155,14 @@ module OrangeFeSARQ.Services {
                 });
 
         }
-        
+
         /* Consulta al productOffering del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
          */
         //Cambio_Adaptacion_Jazztel JPA
-        getOfferingDataJZ( productType: string, specificationData, tarifa: string, promocion: string, paquete: string,
+        getOfferingDataJZ(productType: string, specificationData, category:string, tarifa?: string, promocion?: string, paquete?: string,
             bucketId?: string) {
             let srv = this;
-            let params = srv.setParamsJZ(productType,tarifa, promocion, paquete);
+            let params = srv.setParamsJZ(productType,category, tarifa, promocion, paquete);
             let _headers = srv.setHeaders();
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brandjz + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
@@ -159,6 +178,7 @@ module OrangeFeSARQ.Services {
 
         }
 
+
         /** @ngdoc method
          * @name OrangeFeSARQ.Services:RatesParentSrv#getNameNAC
          * @methodOf ratesParent.Services:RatesParentSrv
@@ -172,7 +192,7 @@ module OrangeFeSARQ.Services {
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
-            if (clientData && clientData.ospCustomerSegment && clientData.ospCustomerSegment.toUpperCase()  === 'RESIDENCIAL' && clientData.surname) {
+            if (clientData && clientData.ospCustomerSegment && clientData.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL' && clientData.surname) {
                 name += 'Love ' + _.capitalize(clientData.surname);
 
                 if (clientData.secondSurname) {
@@ -220,7 +240,7 @@ module OrangeFeSARQ.Services {
                 commercialAction: commercialAction.toLowerCase(),
                 segment: segment,
                 isExistingCustomer: isExistingCustomer,
-                bundleId : idBundle
+                bundleId: idBundle
             };
 
             let _headers = srv.setHeaders();
@@ -257,7 +277,7 @@ module OrangeFeSARQ.Services {
                 commercialAction: commercialAction.toLowerCase(),
                 segment: segment,
                 isExistingCustomer: isExistingCustomer,
-                bundleId : idBundle
+                bundleId: idBundle
             };
 
             let _headers = srv.setHeaders();
@@ -318,7 +338,7 @@ module OrangeFeSARQ.Services {
          * para el renove primario segun los parámetros de entrada
          */
         getSpecificationRenewData(productType: string, clientSegment: string, ratesList,
-        technologyList, defaultTechnology?: string, bucketId?: string) {
+            technologyList, defaultTechnology?: string, bucketId?: string) {
             let vm = this;
 
             let ratesString = '';
@@ -346,7 +366,7 @@ module OrangeFeSARQ.Services {
                 delete params.idTecnologiaList;
             }
 
-            if (!defaultTechnology)  {
+            if (!defaultTechnology) {
                 delete params.defaultTechnology
             }
 
@@ -408,7 +428,7 @@ module OrangeFeSARQ.Services {
                 delete params.idTecnologiaList;
             }
 
-            if (!defaultTechnology)  {
+            if (!defaultTechnology) {
                 delete params.defaultTechnology
             }
 
@@ -709,7 +729,7 @@ module OrangeFeSARQ.Services {
             }
 
             if (loginData && loginData.sfid) {
-                if (validAll || (list && list.length > 0 && _.find(list, {'value': loginData.sfid}))) {
+                if (validAll || (list && list.length > 0 && _.find(list, { 'value': loginData.sfid }))) {
                     validSFID = true;
                 }
             }
@@ -722,7 +742,7 @@ module OrangeFeSARQ.Services {
          * @returns {string}
          * @description Obtiene la localización del cliente
          */
-        getClientGeolocation() : string {
+        getClientGeolocation(): string {
             let srv = this;
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
@@ -732,23 +752,23 @@ module OrangeFeSARQ.Services {
             let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+            if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
             return clientGeolocation;
         }
 
-/**
-         * @ngdoc method
-         * @description
-         * Añade los params
-         */
+        /**
+                 * @ngdoc method
+                 * @description
+                 * Añade los params
+                 */
 
         setParams(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
             ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string,
-            bucketId?: string){
+            bucketId?: string) {
             let vm = this;
             let technologyString = '';
             if (technologyList) {
@@ -770,15 +790,15 @@ module OrangeFeSARQ.Services {
                 bucketId: bucketId,
                 ospContractible: 'Y'
             };
-    
+
             if (!bucketId) {
                 delete params.bucketId;
             }
-    
+
             if (!pack) {
                 delete params.pack;
             }
-    
+
             // Si la categoria no es convergente se eliminan los parametros para la tecnologia
             if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC' && categoryParam !== 'Fijo_Pangea') || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
@@ -799,25 +819,48 @@ module OrangeFeSARQ.Services {
 
         //Parametros de Jazztel
         //Cambio_Adaptacion_Jazztel JPA
-        setParamsJZ(productType: string, Tarifa: string, Promocion: string, Paquete: string){
+        setParamsJZ(productType: string, Category: string, Tarifa?: string, Promocion?: string, Paquete?: string) {
             let vm = this;
-            
-            let params = {
+            let params;
+
+            params = {
                 productType: productType, // Tipo de producto (rate)
-                idCRMTarifa:Tarifa, //IDs de  las tarifas posibles de Jazztel
-                idCRMPromocion:Promocion, //IDs de  las promocion posibles de Jazztel
-                idCRMPaquete:Paquete //IDs de las paquete posibles de Jazztel
+                category: Category,//IDs de las categorias posibles de Jazztel
             };
+            if (Tarifa) {
+                params.idCRMTarifa = Tarifa
+            }
+            if (Promocion) {
+                params.idCRMPromocion = Promocion
+            }
+            if (Paquete) {
+                params.idCRMPaquete = Tarifa
+            }
+
+            // let params = {
+            //     productType: productType, // Tipo de producto (rate)
+            //     idCRMTarifa:Tarifa, //IDs de  las tarifas posibles de Jazztel
+            //     idCRMPromocion:Promocion, //IDs de  las promocion posibles de Jazztel
+            //     idCRMPaquete:Paquete ,//IDs de las paquete posibles de Jazztel
+            //     category:Category //IDs de las paquete posibles de Jazztel
+
+            // };
 
             return params;
         }
 
-/**
-         * @ngdoc method
-         * @description
-         * Añade las cabeceras
-         */
-        setHeaders(){
+        // setParamsJZWithoutCoverage(productType: string, category: string) {
+        //     let vm = this;
+
+        //     return params;
+        // }
+
+        /**
+                 * @ngdoc method
+                 * @description
+                 * Añade las cabeceras
+                 */
+        setHeaders() {
             let vm = this;
             let clientGeolocation = vm.getClientGeolocation();
             let _headers = new HashMap<string, string>();
@@ -851,7 +894,7 @@ module OrangeFeSARQ.Services {
 
             return vm.tabGroupName;
         }
-        
+
         /**
          * @name ratesParent.Services:RatesParentSrv#setParamsRenove
          * @methodOf ratesParent.Services:RatesParentSrv
@@ -891,7 +934,7 @@ module OrangeFeSARQ.Services {
                 delete params.idTecnologiaList;
             }
 
-            if (!defaultTechnology)  {
+            if (!defaultTechnology) {
                 delete params.defaultTechnology;
             }
 
@@ -912,7 +955,7 @@ module OrangeFeSARQ.Services {
         setArrayFixed(rates) {
             let vm = this;
 
-            vm.arrayFixed = _.filter(rates, {groupName: 'Fijo_Pangea'});
+            vm.arrayFixed = _.filter(rates, { groupName: 'Fijo_Pangea' });
         }
 
 
@@ -929,7 +972,7 @@ module OrangeFeSARQ.Services {
             return vm.arrayFixed;
         }
 
-      }
+    }
     angular.module('RatesParentSrv', [])
         .service('RatesParentSrv', OrangeFeSARQ.Services.RatesParentSrv);
 }

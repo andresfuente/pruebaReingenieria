@@ -18,12 +18,23 @@ module ratesParent.Models {
 
         loadRates(specificationData, offeringData, bucketInfo?) {
             let vm = this;
+
             if (specificationData.productSpecification && offeringData.productOffering) {
                 specificationData.productSpecification.forEach(function (specification) {
                     let productOffering = [];
                     offeringData.productOffering.forEach(function (offering) {
                         offering.bundledProductOffering.forEach(element => {
-                            if (element.id && element.name && element.name === 'bundleId') {
+
+                            if (element.name && element.name === 'bundleId') {
+                                if (!element.id) {
+                                    element.id = offering.bundledProductOffering[0].id + '+' + offering.productSpecification.id + '+' + offering.productSpecification.ospProductNumber
+                                }
+
+                                if (!specification.bundledProductSpecification[0].id) {
+                                    specification.bundledProductSpecification[0].id = specification.ospMorganeCode + '+' + specification.ospExternalCode + '+' + specification.productNumber;
+
+                                }
+
                                 if (specification.bundledProductSpecification[0].id === element.id) {
                                     productOffering.push(offering);
                                 }
@@ -227,20 +238,20 @@ module ratesParent.Models {
                                 } else {
                                     this.newRateConditions = false;
                                 }
-    
+
                                 // Recoger precios
                                 for (let j in priceData[i].productOfferingPrice) {
                                     if (priceData[i].productOfferingPrice.length > 0) {
-    
+
                                         let promotionalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
                                             return price.ospTaxRateName === 'Promo';
                                         });
-    
+
                                         let commercialPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
                                             return price.ospTaxRateName === 'SinPromo';
                                         });
-    
-    
+
+
                                         // Precios tarifa con promociones
                                         // if (promotionalPrice) {
                                         //     this.taxRate = promotionalPrice.taxRate;
@@ -248,20 +259,20 @@ module ratesParent.Models {
                                         //     this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
                                         //     this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
                                         // }
-    
+
                                         if (commercialPrice) {
                                             this.typePriceName = commercialPrice.ospTaxRateName;
                                             this.taxRate = commercialPrice.taxRate;
                                             this.taxRateName = commercialPrice.priceType;
                                             this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
                                             this.ratePrice = commercialPrice.dutyFreeAmount;
-    
+
                                         }
                                     }
                                 }
                             }
                         });
-                        
+
                     }
                 }
 
