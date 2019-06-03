@@ -21,6 +21,9 @@ module OrangeFeSARQ.Services {
 
         private tabGroupName: string;
         private arrayFixed: Array<any>;
+        public productSpecificationv2View = '/productSpecificationv2View/OSP';
+        public productOfferingv2View = '/productOfferingv2View/OSP';
+
 
         constructor(public $injector) {
             super($injector);
@@ -65,7 +68,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.productSpecificationv2View,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -102,7 +105,7 @@ module OrangeFeSARQ.Services {
                 ratesIdListString, releatedRatesClient, pack, type, defaultTechnology,
                 bucketId);
             let _headers = srv.setHeaders();
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.productOfferingv2View,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -182,7 +185,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = srv.setHeaders();
 
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productSpecificationv2View/OSP',
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.productSpecificationv2View,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -219,7 +222,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = srv.setHeaders();
 
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.productOfferingv2View,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return ratesParent.Models.RateSVA.createSVAList(specificationData, response.data, customerSegment);
@@ -242,7 +245,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.productSpecificationv2View,
                 { queryParams: params }, _headers)
                 .then((responseSpecification) => {
                     return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productOffering2View/OSP',
@@ -375,7 +378,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productOfferingv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.productOfferingv2View,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -647,23 +650,7 @@ module OrangeFeSARQ.Services {
 
             let loginData = JSON.parse(sessionStorage.getItem('loginData'));
 
-            if (OrangeFeSARQ.Controllers.ParentController.shared
-                && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
-                && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule) {
-                OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule.forEach(element => {
-                    if (element.compId === 'header_block_comp' && element.listOption) {
-                        element.listOption.forEach((option) => {
-                            if (option.name === 'defaultNac.options' && option.listOptionsLiteral) {
-                                if (_.size(option.listOptionsLiteral) !== 0) {
-                                    list = option.listOptionsLiteral
-                                } else {
-                                    validAll = true;
-                                }
-                            }
-                        })
-                    }
-                });
-            }
+            ({ list, validAll } = this.checkIsValid(list, validAll));
 
             if (loginData && loginData.sfid) {
                 if (validAll || (list && list.length > 0 && _.find(list, {'value': loginData.sfid}))) {
@@ -672,6 +659,28 @@ module OrangeFeSARQ.Services {
             }
 
             return validSFID;
+        }
+
+        private checkIsValid(list: Object[], validAll: boolean) {
+            if (OrangeFeSARQ.Controllers.ParentController.shared
+                && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
+                && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule) {
+                OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule.forEach(element => {
+                    if (element.compId === 'header_block_comp' && element.listOption) {
+                        element.listOption.forEach((option) => {
+                            if (option.name === 'defaultNac.options' && option.listOptionsLiteral) {
+                                if (_.size(option.listOptionsLiteral) !== 0) {
+                                    list = option.listOptionsLiteral;
+                                }
+                                else {
+                                    validAll = true;
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+            return { list, validAll };
         }
 
         /**

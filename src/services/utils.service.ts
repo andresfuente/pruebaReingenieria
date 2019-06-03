@@ -963,83 +963,7 @@ module OrangeFeSARQ.Services {
             });
 
             for (let i in mobileLines) {
-                if (mobileLines.length) {
-
-                    // Sacamos datos necesarios del customerView: rango, numero línea y fecha de activación
-                    let rateSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
-                        return characteristic.name === 'Código Tarifa Siebel';
-                    });
-                    let bundleSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
-                        return characteristic.name === 'Product Bundle Siebel';
-                    });
-                    let MSISDN = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
-                        return characteristic.name === 'MSISDN';
-                    });
-                    let startDate = mobileLines[i].startDate; // activacion tarifa
-
-                    // Buscamos en el productCatalog el resto de datos alineando las APIs con el "tmcode" (código de las tarifas)
-                    let isPack = false;
-                    let ratePC;
-                    let bucket;
-
-                    if (bundleSiebelCode && bundleSiebelCode.value) {
-                        ratePC = _.find(PC, (characteristic: any) => {
-                            return (characteristic.id === bundleSiebelCode.value);
-                        });
-                    }
-
-                    if (ratePC && ratePC.ospFraseComercial && ratePC.ospFraseComercial !== null) {// la linea ppal tiene que ser conv
-                        isPack = true;
-                    }
-
-                    if (ratePC && ratePC.productSpecCharacteristic && ratePC.productSpecCharacteristic.length > 0
-                        && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue.length > 0) {
-                        ranges = ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue[0].value;
-                    }
-
-                    if (ratePC && ratePC.ospGroupName && ratePC.ospGroupName.toUpperCase() === 'CONVERGENTE_NAC' && ratePC.productSpecCharacteristic) {
-                        bucket = _.find(ratePC.productSpecCharacteristic, {ospCategory:'BUCKET'});
-                        bucket = bucket && bucket.ospId ? bucket.ospId : '';
-                    }
-
-                    /* if (ratePC && ratePC.productSpecCharacteristic) {
-                        ranges = _.find(ratePC.productSpecCharacteristic, (spec: any) => {
-                            return spec.name === 'VALORNEGOCIO';
-                        });
-                    } */
-
-                    let info = {
-                        id2: (i + 1),
-                        msisdn: MSISDN ? MSISDN.value : '',
-                        id: 0,
-                        rateName: ratePC ? ratePC.name : '',
-                        rateGroupName: ratePC ? ratePC.ospGroupName : '',
-                        range: ranges ? ranges : '',
-                        startDate: startDate,
-                        siebelCode: rateSiebelCode ? rateSiebelCode.value : '',
-                        bundle: bundleSiebelCode ? bundleSiebelCode.value : '',
-                        pack: ratePC ? ratePC.ospFraseComercial : '',
-                        isPack: isPack,
-                        bucket: bucket
-                    };
-                    /* if (info.isPack) {
-                        let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                        if (!clientData) {
-                            clientData = {};
-                        }
-                        clientData.principalLine = {
-                            number: info.msisdn,
-                            siebelCode: info.siebelCode,
-                            pack: info.pack,
-                            bundle: info.bundle
-                        };
-                        sessionStorage.setItem('clientData', JSON.stringify(clientData));
-                    } */
-                    /* if(info.isPack === true) {
-                        lines.push(info);
-                    } */
-                    lines.push(info);
-                }
+                ranges = this.loopMobileLinesGetRanges(mobileLines, i, PC, ranges, lines);
             }
 
             // Por ultimo órdenamos nuestro array con éste órden de prioridad: rango > antigüedad > orden en el CV(id)
@@ -1068,6 +992,87 @@ module OrangeFeSARQ.Services {
                 orderLines2.push(info);
             }; */
             return lines;
+        }
+
+        private loopMobileLinesGetRanges(mobileLines: any[], i: string, PC: any, ranges: any, lines: any[]) {
+            if (mobileLines.length) {
+                // Sacamos datos necesarios del customerView: rango, numero línea y fecha de activación
+                let rateSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                    return characteristic.name === 'Código Tarifa Siebel';
+                });
+                let bundleSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                    return characteristic.name === 'Product Bundle Siebel';
+                });
+                let MSISDN = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                    return characteristic.name === 'MSISDN';
+                });
+                let startDate = mobileLines[i].startDate; // activacion tarifa
+                // Buscamos en el productCatalog el resto de datos alineando las APIs con el "tmcode" (código de las tarifas)
+                let ratePC;
+                let isPack;
+                let bucket;
+                ({ ratePC, isPack, bucket, ranges } = this.findInProductCatalog(bundleSiebelCode, PC, ranges));
+                /* if (ratePC && ratePC.productSpecCharacteristic) {
+                    ranges = _.find(ratePC.productSpecCharacteristic, (spec: any) => {
+                        return spec.name === 'VALORNEGOCIO';
+                    });
+                } */
+                let info = {
+                    id2: (i + 1),
+                    msisdn: MSISDN ? MSISDN.value : '',
+                    id: 0,
+                    rateName: ratePC ? ratePC.name : '',
+                    rateGroupName: ratePC ? ratePC.ospGroupName : '',
+                    range: ranges ? ranges : '',
+                    startDate: startDate,
+                    siebelCode: rateSiebelCode ? rateSiebelCode.value : '',
+                    bundle: bundleSiebelCode ? bundleSiebelCode.value : '',
+                    pack: ratePC ? ratePC.ospFraseComercial : '',
+                    isPack: isPack,
+                    bucket: bucket
+                };
+                /* if (info.isPack) {
+                    let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                    if (!clientData) {
+                        clientData = {};
+                    }
+                    clientData.principalLine = {
+                        number: info.msisdn,
+                        siebelCode: info.siebelCode,
+                        pack: info.pack,
+                        bundle: info.bundle
+                    };
+                    sessionStorage.setItem('clientData', JSON.stringify(clientData));
+                } */
+                /* if(info.isPack === true) {
+                    lines.push(info);
+                } */
+                lines.push(info);
+            }
+            return ranges;
+        }
+
+        private findInProductCatalog(bundleSiebelCode: any, PC: any, ranges: any) {
+            let isPack = false;
+            let ratePC;
+            let bucket;
+            if (bundleSiebelCode && bundleSiebelCode.value) {
+                ratePC = _.find(PC, (characteristic: any) => {
+                    return (characteristic.id === bundleSiebelCode.value);
+                });
+            }
+            if (ratePC && ratePC.ospFraseComercial && ratePC.ospFraseComercial !== null) { // la linea ppal tiene que ser conv
+                isPack = true;
+            }
+            if (ratePC && ratePC.productSpecCharacteristic && ratePC.productSpecCharacteristic.length > 0
+                && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue.length > 0) {
+                ranges = ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue[0].value;
+            }
+            if (ratePC && ratePC.ospGroupName && ratePC.ospGroupName.toUpperCase() === 'CONVERGENTE_NAC' && ratePC.productSpecCharacteristic) {
+                bucket = _.find(ratePC.productSpecCharacteristic, { ospCategory: 'BUCKET' });
+                bucket = bucket && bucket.ospId ? bucket.ospId : '';
+            }
+            return { ratePC, isPack, bucket, ranges };
         }
 
         /**
@@ -1193,6 +1198,17 @@ module OrangeFeSARQ.Services {
             storeRemedyObject = _.find(storeRemedyArray, { msisdn: msisdn }) ?
                 _.find(storeRemedyArray, { msisdn: msisdn }) : {};
 
+            ({ storeRemedy, filterObject } = this.findFilterObject(storeRemedyObject, storeRemedy, storeRemedyArray, filterObject, obj));
+            filterObject.name = obj.name;
+            filterObject.value = reason;
+            storeRemedy.push(filterObject);
+            storeRemedyObject = { msisdn: msisdn, request: storeRemedy };
+            storeRemedyArray.push(storeRemedyObject);
+            sessionStorageManager.removeEntry(storeName);
+            sessionStorageManager.setEntry(storeName, JSON.stringify(storeRemedyArray));
+        }
+
+        private findFilterObject(storeRemedyObject: any, storeRemedy: any[], storeRemedyArray: any[], filterObject: any, obj: Models.IObjName) {
             if (!_.isEmpty(storeRemedyObject)) {
                 storeRemedy = storeRemedyObject.request ? storeRemedyObject.request : [];
                 _.remove(storeRemedyArray, storeRemedyObject);
@@ -1210,13 +1226,7 @@ module OrangeFeSARQ.Services {
                     }
                 }
             }
-            filterObject.name = obj.name;
-            filterObject.value = reason;
-            storeRemedy.push(filterObject);
-            storeRemedyObject = { msisdn: msisdn, request: storeRemedy };
-            storeRemedyArray.push(storeRemedyObject);
-            sessionStorageManager.removeEntry(storeName);
-            sessionStorageManager.setEntry(storeName, JSON.stringify(storeRemedyArray));
+            return { storeRemedy, filterObject };
         }
 
         // Método que elimina todos los storage almacenados en el sessionStorage (Para que podamos usarlo todos,
