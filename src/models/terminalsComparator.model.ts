@@ -166,32 +166,36 @@ module terminalsComparator.Models {
         private setTerminalCharacteristics(OWCSOptions: any, responseOptions: any) {
             OWCSOptions.forEach(owcs => {
                 if (owcs.name) {
-                    let category = new Category();
-                    category.name = owcs.name;
-                    category.title = owcs.title;
-                    if (owcs.listOptionsLiteral) {
-                        owcs.listOptionsLiteral.forEach(optionLiteral => {
-                            let feature = new Feature();
-                            feature.label = optionLiteral.value;
-                            feature.value = '';
-                            responseOptions.forEach(y => {
-                                if (y.ospCharCategory && y.ospCharCategory === owcs.name) {
-                                    if (y.name && y.name === optionLiteral.name) {
-                                        if (y.characteristicValue[0].unitOfMeasure) {
-                                            feature.value = y.characteristicValue[0].value + ' ' + y.characteristicValue[0].unitOfMeasure;
-                                        }
-                                        else {
-                                            feature.value = y.characteristicValue[0].value;
-                                        }
-                                    }
-                                }
-                            });
-                            category.items.push(feature);
-                        });
-                    }
-                    this.features.push(category);
+                    this.generateNewCategory(owcs, responseOptions);
                 }
             });
+        }
+
+        private generateNewCategory(owcs: any, responseOptions: any) {
+            let category = new Category();
+            category.name = owcs.name;
+            category.title = owcs.title;
+            if (owcs.listOptionsLiteral) {
+                owcs.listOptionsLiteral.forEach(optionLiteral => {
+                    let feature = new Feature();
+                    feature.label = optionLiteral.value;
+                    feature.value = '';
+                    responseOptions.forEach(y => {
+                        if (y.ospCharCategory && y.ospCharCategory === owcs.name) {
+                            if (y.name && y.name === optionLiteral.name) {
+                                if (y.characteristicValue[0].unitOfMeasure) {
+                                    feature.value = y.characteristicValue[0].value + ' ' + y.characteristicValue[0].unitOfMeasure;
+                                }
+                                else {
+                                    feature.value = y.characteristicValue[0].value;
+                                }
+                            }
+                        }
+                    });
+                    category.items.push(feature);
+                });
+            }
+            this.features.push(category);
         }
     }
 

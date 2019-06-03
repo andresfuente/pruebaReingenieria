@@ -185,12 +185,7 @@ module ratesComparator.Models {
                     priceItem = new ratesComparator.Models.OrangeMosaicFileTerminalFileIPriceItem();
                     filePrice = new ratesComparator.Models.OrangeMosaicFileTerminalFilePrice();
                     // Id
-                    price.relatedProductOffering.forEach(item => {
-                        if ((price.priceType === 'inicial' && item.name === 'Cuota inicial') ||
-                            (price.priceType === 'cuota' && item.name === 'Cuota mensual')) {
-                            priceItem.id = item.id;
-                        }
-                    });
+                    this.setPriceItemId(price, priceItem);
                     if (price.Price) {
                         // Agregando precio sin impuesto
                         filePrice.dutyFreeAmount.unit = price.Price.currencyCode;
@@ -211,47 +206,64 @@ module ratesComparator.Models {
                     }
                     // Añadiendo el precio al arreglo de precios del terminal
                     this.itemPrice.push(priceItem);
-                    if (price.priceType && price.priceType === 'unico') {
-                        this.uniquePaid = price.Price.taxIncudedAmount;
-                        this.uniquePaidFree = price.Price.dutyFreeAmount;
-                    }
-                    if (price.priceType && price.priceType === 'inicial') {
-                        this.initialPrice = price.Price.taxIncudedAmount;
-                        this.initialPriceFree = price.Price.dutyFreeAmount;
-                    }
-                    if (price.priceType && price.priceType === 'cuota') {
-                        this.litDeadlines = price.applicationDuration;
-                        this.monthlyPrice = price.Price.taxIncudedAmount;
-                        this.monthlyPriceFree = price.Price.dutyFreeAmount;
-                        // Si se puede se calcula el precio total
-                        if (this.initialPrice !== undefined) {
-                            this.totalPrice = this.initialPrice + this.monthlyPrice * this.litDeadlines;
-                            this.totalPriceFree = this.initialPriceFree + this.monthlyPriceFree * this.litDeadlines;
-                        }
-                        else {
-                            this.totalPrice = this.monthlyPrice * this.litDeadlines;
-                            this.totalPriceFree = this.monthlyPriceFree * this.litDeadlines;
-                        }
-                    }
+                    this.calculateTotalPriceForPriceTypes(price);
                     this.savingPrice = this.uniquePaid - this.totalPrice;
                     this.savingPriceFree = this.uniquePaidFree - this.totalPriceFree;
                 });
                 // Logica para recoger el seguro de la OT
-                if (deviceOff.recommendedProductOffering) {
-                    deviceOff.recommendedProductOffering.forEach(recommended => {
-                        if (recommended.productOfferingPrice) {
-                            recommended.productOfferingPrice.forEach(price => {
-                                // Identificador para localizar el precio del seguro
-                                if (price.name === 'Precio del seguro movil') {
-                                    this.insurancePrice = price.price.taxIncudedAmount;
-                                    this.insurancePriceFree = price.price.dutyFreeAmount;
-                                }
-                            });
-                        }
-                    });
-                }
+                this.getSeguroOT(deviceOff);
             });
             return { priceItem, filePrice };
+        }
+
+        private calculateTotalPriceForPriceTypes(price: any) {
+            if (price.priceType && price.priceType === 'unico') {
+                this.uniquePaid = price.Price.taxIncudedAmount;
+                this.uniquePaidFree = price.Price.dutyFreeAmount;
+            }
+            if (price.priceType && price.priceType === 'inicial') {
+                this.initialPrice = price.Price.taxIncudedAmount;
+                this.initialPriceFree = price.Price.dutyFreeAmount;
+            }
+            if (price.priceType && price.priceType === 'cuota') {
+                this.litDeadlines = price.applicationDuration;
+                this.monthlyPrice = price.Price.taxIncudedAmount;
+                this.monthlyPriceFree = price.Price.dutyFreeAmount;
+                // Si se puede se calcula el precio total
+                if (this.initialPrice !== undefined) {
+                    this.totalPrice = this.initialPrice + this.monthlyPrice * this.litDeadlines;
+                    this.totalPriceFree = this.initialPriceFree + this.monthlyPriceFree * this.litDeadlines;
+                }
+                else {
+                    this.totalPrice = this.monthlyPrice * this.litDeadlines;
+                    this.totalPriceFree = this.monthlyPriceFree * this.litDeadlines;
+                }
+            }
+        }
+
+        private getSeguroOT(deviceOff: any) {
+            if (deviceOff.recommendedProductOffering) {
+                deviceOff.recommendedProductOffering.forEach(recommended => {
+                    if (recommended.productOfferingPrice) {
+                        recommended.productOfferingPrice.forEach(price => {
+                            // Identificador para localizar el precio del seguro
+                            if (price.name === 'Precio del seguro movil') {
+                                this.insurancePrice = price.price.taxIncudedAmount;
+                                this.insurancePriceFree = price.price.dutyFreeAmount;
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        private setPriceItemId(price: any, priceItem: OrangeMosaicFileTerminalFileIPriceItem) {
+            price.relatedProductOffering.forEach(item => {
+                if ((price.priceType === 'inicial' && item.name === 'Cuota inicial') ||
+                    (price.priceType === 'cuota' && item.name === 'Cuota mensual')) {
+                    priceItem.id = item.id;
+                }
+            });
         }
     }
 

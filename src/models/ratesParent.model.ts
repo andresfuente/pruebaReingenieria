@@ -182,168 +182,7 @@ module ratesParent.Models {
                 if (priceData.length > 0) {
                     if (priceData[i].isBundle) {
                         // Buscamos si afecta el revamp de tarifas Love 
-                        if (priceData[i].bundledProductOffering && priceData[i].bundledProductOffering[0] && priceData[i].bundledProductOffering[0].id === rateData.id) {
-                            // Comprobamos la fecha 
-                            let fechaServicio = priceData[i].validFor && priceData[i].validFor.endDateTime ? priceData[i].validFor.endDateTime : null;
-                            let fechaLocal: any = new Date();
-                            let fechaServicioTransf = new Date(fechaServicio);
-                            let fechaLocalTransf = new Date(fechaLocal);
-                            let urlNewConditions = priceData[i].attachment && priceData[i].attachment[0] && priceData[i].attachment[0].url ? priceData[i].attachment[0].url : '';
-                            // Si el string no es una fecha o si fechaSrv es null, undefined o vacio y fechaSrv es posterios a fecha local
-                            if (fechaServicioTransf && fechaServicioTransf > fechaLocalTransf && urlNewConditions) {
-                                // Recogemos la info de fecha y url 
-                                let infoNewConditions: RatePopupInfoDate = new RatePopupInfoDate(priceData[i].validFor.endDateTime, priceData[i].attachment[0].url);
-                                this.pupupInfoNewConditions.push(infoNewConditions);
-                                this.newRateConditions = true;
-                            }
-                            else {
-                                this.newRateConditions = false;
-                            }
-                            // Recoger precios
-                            for (let j in priceData[i].productOfferingPrice) {
-                                if (priceData[i].productOfferingPrice.length > 0) {
-                                    let promotionalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'promotionalCommercialPriceRate';
-                                    });
-                                    let commercialPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'commercialPriceRate';
-                                    });
-                                    let techSiebelProductBundlePrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'techSiebelProductBundlePriceRate';
-                                    });
-                                    let siebelPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'siebelPriceRate';
-                                    });
-                                    let ratePrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'priceRate';
-                                    });
-                                    let techniquePriceRate = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'techniquePriceRate';
-                                    });
-                                    let techSiebelPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'techSiebelPriceRate';
-                                    });
-                                    let productOfferingPriceAlteration = priceData[i].productOfferingPrice[j].
-                                        productOfferingPriceAlteration;
-                                    // Precio fijo para packEntry NAC
-                                    let precioFijo;
-                                    let arrayPromo;
-                                    if (productOfferingPriceAlteration && productOfferingPriceAlteration.price) {
-                                        if (productOfferingPriceAlteration.recurringChargePeriod) {
-                                            arrayPromo = productOfferingPriceAlteration.recurringChargePeriod.split('|');
-                                            if (arrayPromo && _.find(arrayPromo, (promo) => { return promo === 'Precio fijo'; })) {
-                                                precioFijo = productOfferingPriceAlteration.price;
-                                            }
-                                        }
-                                    }
-                                    // Precios tarifa con promociones
-                                    if (promotionalPrice) {
-                                        this.typePriceName = promotionalPrice.priceType;
-                                        this.taxRate = promotionalPrice.taxRate;
-                                        this.taxRateName = promotionalPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
-                                            this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
-                                        }
-                                        else {
-                                            this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
-                                            this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
-                                        }
-                                    }
-                                    else if (productOfferingPriceAlteration && !precioFijo) {
-                                        this.typePriceName = productOfferingPriceAlteration.priceType;
-                                        this.descriptionPromotion = productOfferingPriceAlteration.description;
-                                        this.applicationDuration = productOfferingPriceAlteration.applicationDuration;
-                                        this.recurringChargePeriodPromotion = productOfferingPriceAlteration.recurringChargePeriod;
-                                        if (productOfferingPriceAlteration.price && productOfferingPriceAlteration.price !== null) {
-                                            this.taxRate = productOfferingPriceAlteration.price.taxRate;
-                                            this.taxRateName = productOfferingPriceAlteration.price.ospTaxRateName;
-                                            this.ratePriceTaxIncludedPromotional = productOfferingPriceAlteration.price.taxIncludedAmount;
-                                            this.ratePricePromotional = productOfferingPriceAlteration.price.dutyFreeAmount;
-                                        }
-                                    }
-                                    // Precios tarifas sin promo
-                                    if (precioFijo) { // Prioritario el de packEntry
-                                        this.typePriceName = precioFijo.priceType;
-                                        this.taxRate = precioFijo.taxRate;
-                                        this.taxRateName = precioFijo.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = precioFijo.taxIncludedAmount;
-                                            this.ratePrice = precioFijo.dutyFreeAmount;
-                                        }
-                                        else {
-                                            this.rateOfferingPriceTaxInluded = precioFijo.taxIncludedAmount;
-                                            this.rateOfferingPrice = precioFijo.dutyFreeAmount;
-                                        }
-                                    }
-                                    else if (commercialPrice) {
-                                        this.typePriceName = commercialPrice.priceType;
-                                        this.taxRate = commercialPrice.taxRate;
-                                        this.taxRateName = commercialPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
-                                            this.ratePrice = commercialPrice.dutyFreeAmount;
-                                        }
-                                        else {
-                                            this.rateOfferingPriceTaxInluded = commercialPrice.taxIncludedAmount;
-                                            this.rateOfferingPrice = commercialPrice.dutyFreeAmount;
-                                        }
-                                    }
-                                    else if (techSiebelProductBundlePrice) {
-                                        this.typePriceName = techSiebelProductBundlePrice.priceType;
-                                        this.taxRate = techSiebelProductBundlePrice.taxRate;
-                                        this.taxRateName = techSiebelProductBundlePrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = techSiebelProductBundlePrice.taxIncludedAmount;
-                                            this.ratePrice = techSiebelProductBundlePrice.dutyFreeAmount;
-                                        }
-                                        else {
-                                            this.rateOfferingPriceTaxInluded = techSiebelProductBundlePrice.taxIncludedAmount;
-                                            this.rateOfferingPrice = techSiebelProductBundlePrice.dutyFreeAmount;
-                                        }
-                                    }
-                                    else if (siebelPrice) {
-                                        this.typePriceName = siebelPrice.priceType;
-                                        this.taxRate = siebelPrice.taxRate;
-                                        this.taxRateName = siebelPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = siebelPrice.taxIncludedAmount;
-                                            this.ratePrice = siebelPrice.dutyFreeAmount;
-                                        }
-                                        else {
-                                            this.rateOfferingPriceTaxInluded = siebelPrice.taxIncludedAmount;
-                                            this.rateOfferingPrice = siebelPrice.dutyFreeAmount;
-                                        }
-                                    }
-                                    else if (ratePrice) {
-                                        this.typePriceName = ratePrice.priceType;
-                                        this.taxRate = ratePrice.taxRate;
-                                        this.taxRateName = ratePrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = ratePrice.taxIncludedAmount;
-                                            this.ratePrice = ratePrice.dutyFreeAmount;
-                                        }
-                                        else {
-                                            this.rateOfferingPriceTaxInluded = ratePrice.taxIncludedAmount;
-                                            this.rateOfferingPrice = ratePrice.dutyFreeAmount;
-                                        }
-                                    }
-                                    else if (techSiebelPrice) {
-                                        this.typePriceName = techSiebelPrice.priceType;
-                                        this.taxRate = techSiebelPrice.taxRate;
-                                        this.taxRateName = techSiebelPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = techSiebelPrice.taxIncludedAmount;
-                                            this.ratePrice = techSiebelPrice.dutyFreeAmount;
-                                        }
-                                        else {
-                                            this.rateOfferingPriceTaxInluded = techSiebelPrice.taxIncludedAmount;
-                                            this.rateOfferingPrice = techSiebelPrice.dutyFreeAmount;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        this.checkRevampLove(priceData, i, rateData);
                     }
                     else {
                         if (priceData[i].bundledProductOffering && _.find(priceData[i].bundledProductOffering, { 'id': rateData.id })) {
@@ -354,6 +193,212 @@ module ratesParent.Models {
                     }
                 }
             }
+        }
+
+        private checkRevampLove(priceData: any, i: string, rateData: any) {
+            if (priceData[i].bundledProductOffering && priceData[i].bundledProductOffering[0] && priceData[i].bundledProductOffering[0].id === rateData.id) {
+                // Comprobamos la fecha 
+                let fechaServicio = priceData[i].validFor && priceData[i].validFor.endDateTime ? priceData[i].validFor.endDateTime : null;
+                let fechaLocal: any = new Date();
+                let fechaServicioTransf = new Date(fechaServicio);
+                let fechaLocalTransf = new Date(fechaLocal);
+                let urlNewConditions = priceData[i].attachment && priceData[i].attachment[0] && priceData[i].attachment[0].url ? priceData[i].attachment[0].url : '';
+                // Si el string no es una fecha o si fechaSrv es null, undefined o vacio y fechaSrv es posterios a fecha local
+                if (fechaServicioTransf && fechaServicioTransf > fechaLocalTransf && urlNewConditions) {
+                    // Recogemos la info de fecha y url 
+                    let infoNewConditions: RatePopupInfoDate = new RatePopupInfoDate(priceData[i].validFor.endDateTime, priceData[i].attachment[0].url);
+                    this.pupupInfoNewConditions.push(infoNewConditions);
+                    this.newRateConditions = true;
+                }
+                else {
+                    this.newRateConditions = false;
+                }
+                // Recoger precios
+                this.getPrices(priceData, i);
+            }
+        }
+
+        private getPrices(priceData: any, i: string) {
+            for (let j in priceData[i].productOfferingPrice) {
+                if (priceData[i].productOfferingPrice.length > 0) {
+                    let promotionalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                        return price.priceType === 'promotionalCommercialPriceRate';
+                    });
+                    let commercialPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                        return price.priceType === 'commercialPriceRate';
+                    });
+                    let techSiebelProductBundlePrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                        return price.priceType === 'techSiebelProductBundlePriceRate';
+                    });
+                    let siebelPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                        return price.priceType === 'siebelPriceRate';
+                    });
+                    let ratePrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                        return price.priceType === 'priceRate';
+                    });
+                    let techniquePriceRate = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                        return price.priceType === 'techniquePriceRate';
+                    });
+                    let techSiebelPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                        return price.priceType === 'techSiebelPriceRate';
+                    });
+                    let productOfferingPriceAlteration = priceData[i].productOfferingPrice[j].
+                        productOfferingPriceAlteration;
+                    // Precio fijo para packEntry NAC
+                    let precioFijo;
+                    let arrayPromo;
+                    ({ arrayPromo, precioFijo } = this.setPrecioFijoForNAC(productOfferingPriceAlteration, arrayPromo, precioFijo));
+                    // Precios tarifa con promociones
+                    this.getPromotionalPrice(promotionalPrice, priceData, i, j, productOfferingPriceAlteration, precioFijo);
+                    // Precios tarifas sin promo
+                    if (precioFijo) { // Prioritario el de packEntry
+                        this.setPricePrecioFijo(precioFijo, priceData, i, j);
+                    }
+                    else if (commercialPrice) {
+                        this.setPriceCommercialPrice(commercialPrice, priceData, i, j);
+                    }
+                    else if (techSiebelProductBundlePrice) {
+                        this.setPriceTechSiebelProductBundlePrice(techSiebelProductBundlePrice, priceData, i, j);
+                    }
+                    else if (siebelPrice) {
+                        this.setPriceSiebelPrice(siebelPrice, priceData, i, j);
+                    }
+                    else if (ratePrice) {
+                        this.setPriceRatePrice(ratePrice, priceData, i, j);
+                    }
+                    else if (techSiebelPrice) {
+                        this.setPriceTechSiebelPrice(techSiebelPrice, priceData, i, j);
+                    }
+                }
+            }
+        }
+
+        private setPriceTechSiebelPrice(techSiebelPrice: any, priceData: any, i: string, j: string) {
+            this.typePriceName = techSiebelPrice.priceType;
+            this.taxRate = techSiebelPrice.taxRate;
+            this.taxRateName = techSiebelPrice.ospTaxRateName;
+            if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
+                this.ratePriceTaxIncluded = techSiebelPrice.taxIncludedAmount;
+                this.ratePrice = techSiebelPrice.dutyFreeAmount;
+            }
+            else {
+                this.rateOfferingPriceTaxInluded = techSiebelPrice.taxIncludedAmount;
+                this.rateOfferingPrice = techSiebelPrice.dutyFreeAmount;
+            }
+        }
+
+        private setPriceRatePrice(ratePrice: any, priceData: any, i: string, j: string) {
+            this.typePriceName = ratePrice.priceType;
+            this.taxRate = ratePrice.taxRate;
+            this.taxRateName = ratePrice.ospTaxRateName;
+            if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
+                this.ratePriceTaxIncluded = ratePrice.taxIncludedAmount;
+                this.ratePrice = ratePrice.dutyFreeAmount;
+            }
+            else {
+                this.rateOfferingPriceTaxInluded = ratePrice.taxIncludedAmount;
+                this.rateOfferingPrice = ratePrice.dutyFreeAmount;
+            }
+        }
+
+        private setPriceSiebelPrice(siebelPrice: any, priceData: any, i: string, j: string) {
+            this.typePriceName = siebelPrice.priceType;
+            this.taxRate = siebelPrice.taxRate;
+            this.taxRateName = siebelPrice.ospTaxRateName;
+            if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
+                this.ratePriceTaxIncluded = siebelPrice.taxIncludedAmount;
+                this.ratePrice = siebelPrice.dutyFreeAmount;
+            }
+            else {
+                this.rateOfferingPriceTaxInluded = siebelPrice.taxIncludedAmount;
+                this.rateOfferingPrice = siebelPrice.dutyFreeAmount;
+            }
+        }
+
+        private setPriceTechSiebelProductBundlePrice(techSiebelProductBundlePrice: any, priceData: any, i: string, j: string) {
+            this.typePriceName = techSiebelProductBundlePrice.priceType;
+            this.taxRate = techSiebelProductBundlePrice.taxRate;
+            this.taxRateName = techSiebelProductBundlePrice.ospTaxRateName;
+            if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
+                this.ratePriceTaxIncluded = techSiebelProductBundlePrice.taxIncludedAmount;
+                this.ratePrice = techSiebelProductBundlePrice.dutyFreeAmount;
+            }
+            else {
+                this.rateOfferingPriceTaxInluded = techSiebelProductBundlePrice.taxIncludedAmount;
+                this.rateOfferingPrice = techSiebelProductBundlePrice.dutyFreeAmount;
+            }
+        }
+
+        private setPriceCommercialPrice(commercialPrice: any, priceData: any, i: string, j: string) {
+            this.typePriceName = commercialPrice.priceType;
+            this.taxRate = commercialPrice.taxRate;
+            this.taxRateName = commercialPrice.ospTaxRateName;
+            if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
+                this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
+                this.ratePrice = commercialPrice.dutyFreeAmount;
+            }
+            else {
+                this.rateOfferingPriceTaxInluded = commercialPrice.taxIncludedAmount;
+                this.rateOfferingPrice = commercialPrice.dutyFreeAmount;
+            }
+        }
+
+        private setPricePrecioFijo(precioFijo: any, priceData: any, i: string, j: string) {
+            this.typePriceName = precioFijo.priceType;
+            this.taxRate = precioFijo.taxRate;
+            this.taxRateName = precioFijo.ospTaxRateName;
+            if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
+                this.ratePriceTaxIncluded = precioFijo.taxIncludedAmount;
+                this.ratePrice = precioFijo.dutyFreeAmount;
+            }
+            else {
+                this.rateOfferingPriceTaxInluded = precioFijo.taxIncludedAmount;
+                this.rateOfferingPrice = precioFijo.dutyFreeAmount;
+            }
+        }
+
+        private getPromotionalPrice(promotionalPrice: any, priceData: any, i: string, j: string, productOfferingPriceAlteration: any, precioFijo: any) {
+            if (promotionalPrice) {
+                this.setPromotionalPriceRatePricePromotional(promotionalPrice, priceData, i, j);
+            }
+            else if (productOfferingPriceAlteration && !precioFijo) {
+                this.typePriceName = productOfferingPriceAlteration.priceType;
+                this.descriptionPromotion = productOfferingPriceAlteration.description;
+                this.applicationDuration = productOfferingPriceAlteration.applicationDuration;
+                this.recurringChargePeriodPromotion = productOfferingPriceAlteration.recurringChargePeriod;
+                if (productOfferingPriceAlteration.price && productOfferingPriceAlteration.price !== null) {
+                    this.taxRate = productOfferingPriceAlteration.price.taxRate;
+                    this.taxRateName = productOfferingPriceAlteration.price.ospTaxRateName;
+                    this.ratePriceTaxIncludedPromotional = productOfferingPriceAlteration.price.taxIncludedAmount;
+                    this.ratePricePromotional = productOfferingPriceAlteration.price.dutyFreeAmount;
+                }
+            }
+        }
+
+        private setPromotionalPriceRatePricePromotional(promotionalPrice: any, priceData: any, i: string, j: string) {
+            this.typePriceName = promotionalPrice.priceType;
+            this.taxRate = promotionalPrice.taxRate;
+            this.taxRateName = promotionalPrice.ospTaxRateName;
+            if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
+                this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
+                this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
+            }
+            else {
+                this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
+                this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
+            }
+        }
+
+        private setPrecioFijoForNAC(productOfferingPriceAlteration: any, arrayPromo: any, precioFijo: any) {
+            if (productOfferingPriceAlteration && productOfferingPriceAlteration.price) {
+                if (productOfferingPriceAlteration.recurringChargePeriod) {
+                    arrayPromo = productOfferingPriceAlteration.recurringChargePeriod.split('|');
+                    if (arrayPromo && _.find(arrayPromo, (promo) => { return promo === 'Precio fijo'; })) {
+                        precioFijo = productOfferingPriceAlteration.price;
+                    }
+                }
+            }
+            return { arrayPromo, precioFijo };
         }
 
         private findDefaultLines(rateData: any) {
@@ -559,80 +604,96 @@ module ratesParent.Models {
             let svaPriceItem: RatePriceItem = new RatePriceItem();
             let svaList: Array<RateSVA> = [];
             if (specificationData) {
-                specificationData.forEach(currentSVA => {
-                    sva = new RateSVA();
-                    currentSVA.id ? sva.id = currentSVA.id : sva.id = '';
-                    currentSVA.name ? sva.name = currentSVA.name : sva.name = '';
-                    currentSVA.description ? sva.description = currentSVA.description : sva.description = '';
-                    currentSVA.ospTitulo ? sva.title = currentSVA.ospTitulo : sva.title = '';
-                    sva.category = (currentSVA.ospGroupName ? currentSVA.ospGroupName.toLowerCase() : '');
-                    sva.subCategory = (currentSVA.ospTypeService ? currentSVA.ospTypeService.toLowerCase() : '');
-                    sva.childrenList = (currentSVA.ospExternalCode ? currentSVA.ospExternalCode : '');
-                    sva.href = (currentSVA.href ? currentSVA.href : '');
-                    sva.ospTv = (currentSVA.ospTv ? _.snakeCase(currentSVA.ospTv) : '');
-
-                    // Se estable el precio del SVA
-                    if (offeringData) {
-                        offeringData.productOffering.forEach(currentSVAOffering => {
-                            if (currentSVAOffering.productSpecification &&
-                                currentSVAOffering.productSpecification.id === currentSVA.id) {
-                                if (currentSVAOffering.productOfferingPrice) {
-                                    currentSVAOffering.productOfferingPrice.forEach(priceElement => {
-                                        svaPriceItem = new RatePriceItem();
-                                        
-                                        if (priceElement) {
-                                            let priceSVA: any = _.find(priceElement.price, { priceType: 'priceSva' });
-                                            let siebelPriceSva: any = _.find(priceElement.price, { priceType: 'siebelPriceSva' });
-
-                                            svaPriceItem.priceType = priceElement.priceTypeSVA ? priceElement.priceTypeSVA : 'Recurring';
-
-                                            if (priceSVA && priceSVA !== null) {
-                                                svaPriceItem.price.taxRate = priceSVA.taxRate;
-                                                svaPriceItem.price.ospTaxRateName = priceSVA.ospTaxRateName;
-                                                svaPriceItem.price.dutyFreeAmount.unit = priceSVA.currencyCode;
-                                                svaPriceItem.price.dutyFreeAmount.value = priceSVA.dutyFreeAmount;
-                                                svaPriceItem.price.taxIncludedAmount.value = priceSVA.taxIncludedAmount;
-                                                svaPriceItem.price.taxIncludedAmount.unit = priceSVA.currencyCode;
-                                            } else if (siebelPriceSva && siebelPriceSva !== null) {
-                                                svaPriceItem.price.taxRate = siebelPriceSva.taxRate;
-                                                svaPriceItem.price.ospTaxRateName = siebelPriceSva.ospTaxRateName;
-                                                svaPriceItem.price.dutyFreeAmount.unit = siebelPriceSva.currencyCode;
-                                                svaPriceItem.price.dutyFreeAmount.value = siebelPriceSva.dutyFreeAmount;
-                                                svaPriceItem.price.taxIncludedAmount.value = siebelPriceSva.taxIncludedAmount;
-                                                svaPriceItem.price.taxIncludedAmount.unit = siebelPriceSva.currencyCode;
-                                            }
-
-                                            if (customerSegment.toLocaleLowerCase() === 'residencial') {
-                                                sva.price = svaPriceItem.price.taxIncludedAmount.value;
-                                            } else {
-                                                sva.price = svaPriceItem.price.dutyFreeAmount.value;
-                                            }
-                                            sva.itemPrice.push(svaPriceItem);
-                                        }
-                                        // Precio promocionado
-                                        if (priceElement.productOfferingPriceAlteration) {
-                                            sva.typePriceName = priceElement.productOfferingPriceAlteration.priceType;
-                                            sva.descriptionPromotion = priceElement.productOfferingPriceAlteration.description;
-                                            sva.applicationDuration = priceElement.productOfferingPriceAlteration.applicationDuration;
-                                            if (priceElement.productOfferingPriceAlteration.price && priceElement.productOfferingPriceAlteration.price !== null) {
-                                                sva.taxRate = priceElement.productOfferingPriceAlteration.price.taxRate;
-                                                sva.taxRateName = priceElement.productOfferingPriceAlteration.
-                                                    price.ospTaxRateName;
-                                                sva.ratePriceTaxIncludedPromotional = priceElement.productOfferingPriceAlteration.
-                                                    price.taxIncludedAmount;
-                                                sva.ratePricePromotional = priceElement.productOfferingPriceAlteration.
-                                                    price.dutyFreeAmount;
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                        svaList.push(sva);
-                    }
-                });
+                ({ sva, svaPriceItem } = RateSVA.loopSpecificationData(specificationData, sva, offeringData, svaPriceItem, customerSegment, svaList));
             }
             return svaList;
+        }
+
+        private static loopSpecificationData(specificationData: any, sva: RateSVA, offeringData: any, svaPriceItem: RatePriceItem, customerSegment: any, svaList: RateSVA[]) {
+            specificationData.forEach(currentSVA => {
+                sva = new RateSVA();
+                currentSVA.id ? sva.id = currentSVA.id : sva.id = '';
+                currentSVA.name ? sva.name = currentSVA.name : sva.name = '';
+                currentSVA.description ? sva.description = currentSVA.description : sva.description = '';
+                currentSVA.ospTitulo ? sva.title = currentSVA.ospTitulo : sva.title = '';
+                sva.category = (currentSVA.ospGroupName ? currentSVA.ospGroupName.toLowerCase() : '');
+                sva.subCategory = (currentSVA.ospTypeService ? currentSVA.ospTypeService.toLowerCase() : '');
+                sva.childrenList = (currentSVA.ospExternalCode ? currentSVA.ospExternalCode : '');
+                sva.href = (currentSVA.href ? currentSVA.href : '');
+                sva.ospTv = (currentSVA.ospTv ? _.snakeCase(currentSVA.ospTv) : '');
+                // Se estable el precio del SVA
+                svaPriceItem = RateSVA.setSvaPriceItem(offeringData, currentSVA, svaPriceItem, customerSegment, sva, svaList);
+            });
+            return { sva, svaPriceItem };
+        }
+
+        private static setSvaPriceItem(offeringData: any, currentSVA: any, svaPriceItem: RatePriceItem, customerSegment: any, sva: RateSVA, svaList: RateSVA[]) {
+            if (offeringData) {
+                offeringData.productOffering.forEach(currentSVAOffering => {
+                    if (currentSVAOffering.productSpecification &&
+                        currentSVAOffering.productSpecification.id === currentSVA.id) {
+                        if (currentSVAOffering.productOfferingPrice) {
+                            svaPriceItem = RateSVA.createSvaPriceItems(currentSVAOffering, svaPriceItem, customerSegment, sva);
+                        }
+                    }
+                });
+                svaList.push(sva);
+            }
+            return svaPriceItem;
+        }
+
+        private static createSvaPriceItems(currentSVAOffering: any, svaPriceItem: RatePriceItem, customerSegment: any, sva: RateSVA) {
+            currentSVAOffering.productOfferingPrice.forEach(priceElement => {
+                svaPriceItem = new RatePriceItem();
+                if (priceElement) {
+                    let priceSVA: any = _.find(priceElement.price, { priceType: 'priceSva' });
+                    let siebelPriceSva: any = _.find(priceElement.price, { priceType: 'siebelPriceSva' });
+                    svaPriceItem.priceType = priceElement.priceTypeSVA ? priceElement.priceTypeSVA : 'Recurring';
+                    if (priceSVA && priceSVA !== null) {
+                        svaPriceItem.price.taxRate = priceSVA.taxRate;
+                        svaPriceItem.price.ospTaxRateName = priceSVA.ospTaxRateName;
+                        svaPriceItem.price.dutyFreeAmount.unit = priceSVA.currencyCode;
+                        svaPriceItem.price.dutyFreeAmount.value = priceSVA.dutyFreeAmount;
+                        svaPriceItem.price.taxIncludedAmount.value = priceSVA.taxIncludedAmount;
+                        svaPriceItem.price.taxIncludedAmount.unit = priceSVA.currencyCode;
+                    }
+                    else if (siebelPriceSva && siebelPriceSva !== null) {
+                        svaPriceItem.price.taxRate = siebelPriceSva.taxRate;
+                        svaPriceItem.price.ospTaxRateName = siebelPriceSva.ospTaxRateName;
+                        svaPriceItem.price.dutyFreeAmount.unit = siebelPriceSva.currencyCode;
+                        svaPriceItem.price.dutyFreeAmount.value = siebelPriceSva.dutyFreeAmount;
+                        svaPriceItem.price.taxIncludedAmount.value = siebelPriceSva.taxIncludedAmount;
+                        svaPriceItem.price.taxIncludedAmount.unit = siebelPriceSva.currencyCode;
+                    }
+                    if (customerSegment.toLocaleLowerCase() === 'residencial') {
+                        sva.price = svaPriceItem.price.taxIncludedAmount.value;
+                    }
+                    else {
+                        sva.price = svaPriceItem.price.dutyFreeAmount.value;
+                    }
+                    sva.itemPrice.push(svaPriceItem);
+                }
+                // Precio promocionado
+                RateSVA.casePromotionalPrice(priceElement, sva);
+            });
+            return svaPriceItem;
+        }
+
+        private static casePromotionalPrice(priceElement: any, sva: RateSVA) {
+            if (priceElement.productOfferingPriceAlteration) {
+                sva.typePriceName = priceElement.productOfferingPriceAlteration.priceType;
+                sva.descriptionPromotion = priceElement.productOfferingPriceAlteration.description;
+                sva.applicationDuration = priceElement.productOfferingPriceAlteration.applicationDuration;
+                if (priceElement.productOfferingPriceAlteration.price && priceElement.productOfferingPriceAlteration.price !== null) {
+                    sva.taxRate = priceElement.productOfferingPriceAlteration.price.taxRate;
+                    sva.taxRateName = priceElement.productOfferingPriceAlteration.
+                        price.ospTaxRateName;
+                    sva.ratePriceTaxIncludedPromotional = priceElement.productOfferingPriceAlteration.
+                        price.taxIncludedAmount;
+                    sva.ratePricePromotional = priceElement.productOfferingPriceAlteration.
+                        price.dutyFreeAmount;
+                }
+            }
         }
     }
 
