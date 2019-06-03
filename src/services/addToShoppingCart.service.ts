@@ -18,6 +18,7 @@ module OrangeFeSARQ.Services {
         public bucketId : string;
         public pressRateModifyButton : boolean;
         public shoppingCartAux;
+        public promoInformative;
 
         /**
          * @ngdoc method
@@ -50,37 +51,58 @@ module OrangeFeSARQ.Services {
         }
 
         getBundle() {
+            let vm = this;
+
             let cv = JSON.parse(sessionStorage.getItem('cv'));
-            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            let active = _.findIndex(commercialData, { 'ospIsSelected': true });
 
             let bundleId = '';
 
             if (cv && cv.product) {
                 for (let i = 0; i < cv.product.length; i++) {
                     if (cv.product[i].productCharacteristic) {
-                        let charMSISDN: any = _.find(cv.product[i].productCharacteristic, (char: any) => {
-                            if (char.name === 'MSISDN' && commercialData[active].serviceNumber === char.value) {
-                                return char;
-                            }
-                        });
+                        bundleId = vm.getCVBundleData(cv.product[i].productCharacteristic);
 
-                        if (charMSISDN) {
-                            let bundle: any = _.find(cv.product[i].productCharacteristic, (char: any) => {
-                                if (char.name === 'Product Bundle Siebel') {
-                                    return char;
-                                }
-                            });
-
-                            if (bundle && bundle.value) {
-                                bundleId = bundle.value;
-                                break;
-                            }
+                        if (bundleId) {
+                            break;
                         }
                     }
                 }
             }
+
             return bundleId;
+        }
+
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#getCVBundleData
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Busca la información relativa al bundle en el CV
+         */
+        getCVBundleData(productCharacteristic) {
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let active = _.findIndex(commercialData, { 'ospIsSelected': true });
+
+            let returnBundle: string = '';
+
+            let charMSISDN: any = _.find(productCharacteristic, (char: any) => {
+                if (char.name === 'MSISDN' && commercialData[active].serviceNumber === char.value) {
+                    return char;
+                }
+            });
+
+            let bundle: any = _.find(productCharacteristic, (char: any) => {
+                if (char.name === 'Product Bundle Siebel') {
+                    return char;
+                }
+            });
+
+            if (charMSISDN && bundle && bundle.value) {
+                returnBundle = bundle.value;
+            }
+
+            return returnBundle;
         }
 
         /**
@@ -396,9 +418,8 @@ module OrangeFeSARQ.Services {
                     sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
 
             } else {
-
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex: number = vm.getSelectedCommercialAct();
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = vm.getSelectedCommercialAct();
 
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].id) {
                     let commercialActId: number = Number(commercialData[commercialActIndex].id);
@@ -493,7 +514,7 @@ module OrangeFeSARQ.Services {
                     'type': 'tarifa'
                 }],
                 'place': [],
-                'characteristic': []
+                'characteristic': vm.informativePromo(rate)
             };
 
             let priceAlteration = [];
@@ -660,6 +681,28 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#informativePromo
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @description
+         * Añade las promos informativas al carrito
+         */
+        informativePromo(rate){
+            let vm = this;
+
+           let promoInformativeName = rate.recurringChargePeriodPromotion ? rate.recurringChargePeriodPromotion.split('|') : [];
+           let promoInformativeValue = rate.descriptionPromotion ? rate.descriptionPromotion.split('|') : [];
+
+           let arrayPromoInformative = _.zipWith(promoInformativeName,promoInformativeValue, (a, b) => {
+                return {name: a, value: b};
+           });
+           
+           arrayPromoInformative = _.filter(arrayPromoInformative, {name: 'Información'});
+
+           return arrayPromoInformative;
+           }
+
+        /**
+         * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#createAdditionalRateCartItem
          * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
          * @description
@@ -676,7 +719,7 @@ module OrangeFeSARQ.Services {
                     'type': 'tarifa'
                 }],
                 'place': [],
-                'characteristic': []
+                'characteristic': vm.informativePromo(rate)
             };
 
             let rateCartItemElement = {
@@ -801,7 +844,7 @@ module OrangeFeSARQ.Services {
                     'type': 'tarifa'
                 }],
                 'place': [],
-                'characteristic': []
+                'characteristic': vm.informativePromo(rate)
             };
 
             let priceAlteration = []
@@ -1082,6 +1125,7 @@ module OrangeFeSARQ.Services {
                     'productRelationship': [{
                         'type': 'tarifa'
                     }],
+                    'characteristic': vm.informativePromo(rate),
                     'place': []
                 },
                 'itemPrice': [
@@ -1429,6 +1473,46 @@ module OrangeFeSARQ.Services {
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
             };
 
+            rateCartItemElement = vm.obtainRateCartItemElement(commercialData, commercialActIndex);
+
+            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
+            cartItemElement = {
+                'id': cartItemElementId,
+                'cartItem': uniquePaid ? [deviceCartItemElement, rateCartItemElement] : [deviceCartItemElement, rateCartItemElement].concat(vapCartItems),
+                'action': 'New',
+                'cartItemRelationship': [{
+                    id: commercialActId
+                }],
+                'ospSelected': false,
+                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
+                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
+            };
+            // Añade seguro en caso de que se haya seleccionado
+            if (device.insuranceSiebelId) {
+                cartItemElement.cartItem.push(vm.createInsuranceCartItem(device, 'primary'));
+            }
+
+
+            // Añadir cartItem compromiso de permanencia CP
+            if (device.cpDescription && device.cpSiebel) {
+                cartItemElement.cartItem.push(vm.createCPCartItem(device));
+            }
+
+            if (shoppingCart !== null) {
+                shoppingCart.cartItem.push(cartItemElement);
+            } else {
+                shoppingCart = {
+                    'id': '',
+                    'cartItem': [cartItemElement],
+                    'customer': {}
+                };
+            }
+            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        }
+
+        obtainRateCartItemElement(commercialData, commercialActIndex){
+            let vm = this;
+            let rateCartItemElement;
             if (commercialData && commercialData[commercialActIndex]
                 && commercialData[commercialActIndex].ospTerminalWorkflow === 'secondary_renew'
                 && commercialData[commercialActIndex].ospCartItemType
@@ -1509,35 +1593,7 @@ module OrangeFeSARQ.Services {
                     'ospCartItemSubtype': ''
                 };
             }
-
-            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
-            cartItemElement = {
-                'id': cartItemElementId,
-                'cartItem': uniquePaid ? [deviceCartItemElement, rateCartItemElement] : [deviceCartItemElement, rateCartItemElement].concat(vapCartItems),
-                'action': 'New',
-                'cartItemRelationship': [{
-                    id: commercialActId
-                }],
-                'ospSelected': false,
-                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
-                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
-            };
-
-            // Añadir cartItem compromiso de permanencia CP
-            if (device.cpDescription && device.cpSiebel) {
-                cartItemElement.cartItem.push(vm.createCPCartItem(device));
-            }
-
-            if (shoppingCart !== null) {
-                shoppingCart.cartItem.push(cartItemElement);
-            } else {
-                shoppingCart = {
-                    'id': '',
-                    'cartItem': [cartItemElement],
-                    'customer': {}
-                };
-            }
-            sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+            return rateCartItemElement;
         }
 
         /**
@@ -1781,7 +1837,7 @@ module OrangeFeSARQ.Services {
                 };
             } else {
                 if (sva.ratePricePromotional || sva.ratePriceTaxIncludedPromotional) {
-                    let priceAlteration =[{
+                    priceAlteration =[{
                         'name': sva.typePriceName ? sva.typePriceName : '',
                         'priceType': sva.priceType,
                         'applicationDuration': sva.applicationDuration,

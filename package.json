@@ -1,7 +1,7 @@
 {
   "name": "orange-services",
   "title": "Orange-services",
-  "version": "1.54.2-SNAPSHOT",
+  "version": "1.57.1-SNAPSHOT.0",
   "description": "Contiene los servicios comunes no core.",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,9 @@
   },
   "author": "Jaime Cardona Villegas",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "node-sass": "^4.11.0"
+  },
   "devDependencies": {
     "angular": "~1.5.5",
     "angular-mocks": "1.6.2",

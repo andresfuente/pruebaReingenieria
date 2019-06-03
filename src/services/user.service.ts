@@ -43,15 +43,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let promise = vm.$q.defer();
 
-            if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
-                param = 'residential';
-            } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
-                param = 'business';
-            } else if (param === 'publicKey') {
-                param = 'telephoneNumber';
-            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))) {
-                param = 'residential';
-            }
+            param = vm.getParamsGetUser(param, clientId);
 
             let _search: Object = {
                 queryParams: {
@@ -61,35 +53,7 @@ module OrangeFeSARQ.Services {
 
             };
 
-            //TODO PRUEBA FASTDATA
-            // if(vm.genericConstant.site === 'FichaCliente' && window.location.hostname === 'fichadecliente-uat.int.si.orange.es'){
-                // switch (clientId){
-                    // case '24130682W':
-                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                        // break;
-                    // case '18000712S':
-                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                        // break;
-                    // case '26496966T':
-                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                        // break;
-                    // case '44138785Z':
-                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                        // break;
-                    // case '71558378L':
-                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                        // break;
-                    // case '05422521H':
-                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                        // break;
-                    // case '50185084G':
-                        // vm.clientAPIUrl = 'api/customerViewFastData/v1';
-                        // break;
-                    // default:
-                        // vm.clientAPIUrl = 'api/customerView/v1';
-                        // break;
-                // }
-            // }
+            
 
             vm.httpCacheGett(vm.clientAPIUrl, _search, componentName)
                 .then(
@@ -122,15 +86,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let promise = vm.$q.defer();
 
-            if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
-                param = 'residential';
-            } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
-                param = 'business';
-            } else if (param === 'publicKey') {
-                param = 'telephoneNumber';
-            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))) {
-                param = 'residential';
-            }
+            param = vm.getParamsGetUser(param, clientId);
 
             let _search: Object = {
                 queryParams: {
@@ -293,15 +249,8 @@ module OrangeFeSARQ.Services {
         getAmenaUser(param: string, clientId: string, componentName: string): any {
             let vm = this;
             let promise = vm.$q.defer();
-            if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
-                param = 'residential';
-            } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
-                param = 'business';
-            } else if (param === 'publicKey') {
-                param = 'telephoneNumber';
-            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))) {
-                param = 'residential';
-            }
+
+            param = vm.getParamsGetUser(param, clientId);
 
             let _search: Object = {
                 queryParams: {
@@ -387,5 +336,23 @@ module OrangeFeSARQ.Services {
 
                     });
         }
+
+        getParamsGetUser(param: string, clientId: string) : string {
+            let vm = this;
+
+            let returnParam = param;
+
+            if (param === 'individualPublicId' && vm.utils.isNif(clientId)) {
+                returnParam = 'residential';
+            } else if (param === 'individualPublicId' && vm.utils.isCif(clientId)) {
+                returnParam = 'business';
+            } else if (param === 'publicKey') {
+                returnParam = 'telephoneNumber';
+            } else if (param === 'individualPublicId' && (!vm.utils.isNif(clientId) && !vm.utils.isCif(clientId))) {
+                returnParam = 'residential';
+            }
+
+            return returnParam;
+        } 
     }
 }

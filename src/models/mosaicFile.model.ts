@@ -70,7 +70,9 @@ module mosaicFile.Models {
             });
             return variants;
         }
+
     }
+
     export class OrangeMosaicFileOWCS {
         public litPriceButton = '';
         public litMoreInfoButton = '';
@@ -188,7 +190,7 @@ module mosaicFile.Models {
         // CP
         public cpSiebel: string;
         public cpDescription: string;
-        public cpDuration : string;
+        public cpDuration: string;
 
         public icon: OrangeMosaicFileTerminalIcon[] = [];
 
@@ -232,28 +234,13 @@ module mosaicFile.Models {
 
             if (serviceData) {
                 // DEVICE STOCK (TLV)
-                if(serviceData.deviceStock && serviceData.deviceStock.length > 0) {
-                    this.realStockPeninsula = (serviceData.deviceStock[0].quantityInStock
-                                            && serviceData.deviceStock[0].stockType === 'real'
-                                            && serviceData.deviceStock[0].geographicSite.name === 'peninsula')
-                                            ? (serviceData.deviceStock[0].quantityInStock > 500
-                                            ? '+500' : serviceData.deviceStock[0].quantityInStock) : 0;
-                    this.virtualStockPeninsula = (serviceData.deviceStock[1].quantityInStock
-                                            && serviceData.deviceStock[1].stockType === 'virtual'
-                                            && serviceData.deviceStock[1].geographicSite.name === 'peninsula')
-                                            ? (serviceData.deviceStock[1].quantityInStock > 500
-                                            ? '+500' : serviceData.deviceStock[1].quantityInStock) : 0;
-                    this.realStockCanary = (serviceData.deviceStock[2].quantityInStock
-                                            && serviceData.deviceStock[2].stockType === 'real'
-                                            && serviceData.deviceStock[2].geographicSite.name === 'canarias')
-                                            ? (serviceData.deviceStock[2].quantityInStock > 500
-                                            ? '+500' : serviceData.deviceStock[2].quantityInStock) : 0;
-                    this.virtualStockCanary = (serviceData.deviceStock[3].quantityInStock
-                                            && serviceData.deviceStock[3].stockType === 'virtual'
-                                            && serviceData.deviceStock[3].geographicSite.name === 'canarias')
-                                            ? (serviceData.deviceStock[3].quantityInStock > 500
-                                            ? '+500' : serviceData.deviceStock[3].quantityInStock) : 0;
+                if (serviceData.deviceStock && serviceData.deviceStock.length > 0) {
+                    this.realStockPeninsula = this.getStockByTypeByPlace(serviceData, 'real', 'peninsula');
+                    this.virtualStockPeninsula = this.getStockByTypeByPlace(serviceData, 'virtual', 'peninsula');
+                    this.realStockCanary = this.getStockByTypeByPlace(serviceData, 'real', 'canarias');
+                    this.virtualStockCanary = this.getStockByTypeByPlace(serviceData, 'virtual', 'canarias');
                 }
+
                 // DEVICE SPECIFICATION
                 if (serviceData.deviceSpecification) {
                     this.name = serviceData.deviceSpecification.name ? serviceData.deviceSpecification.name : '';
@@ -271,58 +258,26 @@ module mosaicFile.Models {
                             if (image.href && image.type && image.type === 'Imagen') {
                                 this.imageGalery.push(image.href);
                             } else if (image.href && image.type && image.type === 'Video') {
-                                if(this.video.indexOf('mp4') === -1) {
+                                if (this.video.indexOf('mp4') === -1) {
                                     this.video = image.href;
                                 }
                             }
                         });
                     }
                     if (serviceData.deviceSpecification.characteristic && serviceData.deviceSpecification.characteristic.length) {
-                        let iconArray = [];
-                        serviceData.deviceSpecification.characteristic.forEach((characteristic, x) => {
+                        serviceData.deviceSpecification.characteristic.forEach((characteristic) => {
                             switch (characteristic.ospCharCategory) {
                                 case 'Color': {
-                                    if (characteristic.characteristicValue.length > 0) {
-                                        characteristic.characteristicValue.forEach((characteristicValue, z) => {
-                                            if (characteristicValue.valueType && characteristicValue.valueType === 'Hexadecimal' &&
-                                                characteristicValue.value) {
-                                                this.codColor = characteristicValue.value;
-                                            } else {
-                                                this.altColor = characteristicValue.value;
-                                            }
-                                        });
-                                    }
+                                    this.getColor(characteristic);
                                     break;
                                 }
                                 case 'compatibleServices': {
-                                    if (characteristic.characteristicValue && characteristic.characteristicValue.length) {
-                                        characteristic.characteristicValue.forEach((characteristicValue, z) => {
-                                            if (characteristicValue.value) {
-                                                let compatibleServices: OrangeMosaicFileTerminalCompatible =
-                                                    new OrangeMosaicFileTerminalCompatible(characteristicValue.value);
-                                                this.fileCompatible.push(compatibleServices);
-                                            }
-                                        });
-                                    }
+                                    this.getCompatibleServices(characteristic);
                                     break;
                                 }
                                 case 'highlightIcon': {
                                     // Si tiene attachment y dentro de este, href y ospAltText, se crea el terminalIcon
-                                    if (characteristic.characteristicAttachment && characteristic.characteristicAttachment.length > 0) {
-                                        if (characteristic.characteristicAttachment && characteristic.characteristicAttachment.length > 0) {
-                                            if (characteristic.characteristicAttachment &&
-                                                characteristic.characteristicAttachment.length > 0) {
-                                                characteristic.characteristicAttachment.forEach(function (characteristicAttachment, z) {
-                                                    if (characteristicAttachment.href && characteristicAttachment.ospAltText) {
-                                                        let terminalIcon = new OrangeMosaicFileTerminalIcon(characteristicAttachment.href,
-                                                            characteristicAttachment.ospAltText);
-                                                        iconArray.push(terminalIcon);
-                                                    }
-                                                });
-                                                this.icon = iconArray;
-                                            }
-                                        }
-                                    }
+                                    this.getHighlightIcon(characteristic);
                                     break;
                                 }
                                 case 'isMonthObjective': {
@@ -330,6 +285,8 @@ module mosaicFile.Models {
                                     break;
                                 }
                                 default: {
+                                    let child;
+
                                     // Se busca caracteristica de nivel 1
                                     let group = _.find(this.fileCharacteristic, { title: characteristic.description });
                                     // Si no existe
@@ -346,7 +303,6 @@ module mosaicFile.Models {
                                         }
                                         // Si tiene hijo, se crea y se añade al objeto de nivel 1
                                         if (characteristic.characteristicValue.length > 0) {
-                                            let objects;
                                             characteristic.characteristicValue.forEach((characteristicValue, z) => {
                                                 if (characteristic.name && characteristicValue.value) {
                                                     if (characteristicValue.value === 'true') {
@@ -355,26 +311,25 @@ module mosaicFile.Models {
                                                     let characteristicValueNew: OrangeMosaicFileTerminalCharacteristicsLvl2 =
                                                         new OrangeMosaicFileTerminalCharacteristicsLvl2(characteristic.name,
                                                             characteristicValue.value);
-                                                    let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
+                                                    let groupOWCS1 = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
-                                                    let child;
-                                                    if (groupOWCS && groupOWCS['listOptionsLiteral']) {
-                                                        child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
+                                                    if (groupOWCS1 && groupOWCS1['listOptionsLiteral']) {
+                                                        child = _.find(groupOWCS1['listOptionsLiteral'], { name: characteristic.name });
                                                     }
-                                                    if (groupOWCS && child) {
+                                                    if (groupOWCS1 && child) {
                                                         characteristicValueNew.name = child.value;
                                                         characteristicNew.subCharacteristicsList.push(characteristicValueNew);
                                                     }
                                                 }
                                             });
                                         }
-                                        let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
+                                        let groupOWCS2 = _.find(mosaicFileCompOWCSStore.listOption,
                                             { name: characteristic.ospCharCategory });
-                                        let child;
-                                        if (groupOWCS && groupOWCS['listOptionsLiteral']) {
-                                            child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
+
+                                        if (groupOWCS2 && groupOWCS2['listOptionsLiteral']) {
+                                            child = _.find(groupOWCS2['listOptionsLiteral'], { name: characteristic.name });
                                         }
-                                        if (groupOWCS && child) {
+                                        if (groupOWCS2 && child) {
                                             this.fileCharacteristic.push(characteristicNew);
                                         }
                                     } else { // Si existe
@@ -382,8 +337,6 @@ module mosaicFile.Models {
                                         if (characteristic.characteristicValue.length > 0) {
                                             characteristic.characteristicValue.forEach((characteristicValue, z) => {
                                                 if (characteristic.name && characteristicValue.value) {
-                                                    let objects;
-
                                                     if (characteristicValue.value === 'true') {
                                                         characteristicValue.value = 'Si';
                                                     } else if (characteristicValue.value === 'false') {
@@ -392,13 +345,13 @@ module mosaicFile.Models {
                                                     let characteristicValueNew: OrangeMosaicFileTerminalCharacteristicsLvl2 =
                                                         new OrangeMosaicFileTerminalCharacteristicsLvl2(characteristic.name,
                                                             characteristicValue.value);
-                                                    let groupOWCS = _.find(mosaicFileCompOWCSStore.listOption,
+                                                    let groupOWCS3 = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
-                                                    let child;
-                                                    if (groupOWCS && groupOWCS['listOptionsLiteral']) {
-                                                        child = _.find(groupOWCS['listOptionsLiteral'], { name: characteristic.name });
+
+                                                    if (groupOWCS3 && groupOWCS3['listOptionsLiteral']) {
+                                                        child = _.find(groupOWCS3['listOptionsLiteral'], { name: characteristic.name });
                                                     }
-                                                    if (groupOWCS && child) {
+                                                    if (groupOWCS3 && child) {
                                                         characteristicValueNew.name = child.value;
                                                         if (characteristicValueNew.name === 'Cámara trasera'
                                                             && characteristicValueNew.value === 'Si') {
@@ -535,9 +488,9 @@ module mosaicFile.Models {
                                                 if (deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k]) {
                                                     let cpCategory = null;
                                                     let bono = null;
-                                                    if (deviceOffering[i].deviceOfferingPrice[j].name === 'primario'){
+                                                    if (deviceOffering[i].deviceOfferingPrice[j].name === 'primario') {
                                                         cpCategory = _.find(deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].category, { 'name': 'CPT-CPC' });
-                                                    } else if (deviceOffering[i].deviceOfferingPrice[j].name === 'secundario'){
+                                                    } else if (deviceOffering[i].deviceOfferingPrice[j].name === 'secundario') {
                                                         cpCategory = _.find(deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].category, { 'name': 'CPD' });
                                                     }
                                                     if (cpCategory !== undefined) {
@@ -547,10 +500,10 @@ module mosaicFile.Models {
                                                         //break;
                                                     }
                                                     bono = _.find(deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].category, { 'name': 'bono' });
-                                                    if(bono !== null && bono !== undefined){
+                                                    if (bono !== null && bono !== undefined) {
                                                         this.bonusId = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].id;
                                                         this.bonusDesc = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].name;
-                                                    }else {
+                                                    } else {
                                                         delete this.bonusId;
                                                         delete this.bonusDesc;
                                                     }
@@ -565,8 +518,8 @@ module mosaicFile.Models {
                             // Seguro movil.
                             if (deviceOff.recommendedProductOffering && deviceOff.recommendedProductOffering.length) {
                                 if (deviceOff.recommendedProductOffering[0].name === 'Seguro movil') {
-                                     this.litInsurancePaid =
-                                            deviceOff.recommendedProductOffering[0].productOfferingPrice[0].price.dutyFreeAmount;
+                                    this.litInsurancePaid =
+                                        deviceOff.recommendedProductOffering[0].productOfferingPrice[0].price.dutyFreeAmount;
                                     this.insuranceSiebelId = deviceOff.recommendedProductOffering[0].id;
                                 }
                             }
@@ -579,13 +532,13 @@ module mosaicFile.Models {
                         this.saving = 0;
                     }
                 }
-                
-                if(commercialData[commercialActIndex].ospTerminalWorkflow) {
+
+                if (commercialData[commercialActIndex].ospTerminalWorkflow) {
                     // Renove prepago
                     if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'prepaid_renew') {
                         commercialData[commercialActIndex].prepaidProducts.forEach((product, i) => {
                             if (product.codSAP === serviceData.deviceSpecification.id) {
-                                product.offertDetails.forEach((offert, i) => {
+                                product.offertDetails.forEach((offert) => {
                                     let prepaidPrice = {
                                         valorRecarga: offert.valorRecarga,
                                         valorPuntos: offert.valorPuntos,
@@ -599,9 +552,9 @@ module mosaicFile.Models {
                     // Si es renove primario se guardan todas las tarifas asociadas
                     if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'primary_renew' ||
                         commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'best_renove') {
-                        serviceData.deviceOffering.forEach((deviceOff, x) => {
+                        serviceData.deviceOffering.forEach((deviceOff) => {
                             if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length) {
-                                deviceOff.deviceOfferingPrice.forEach((price, x) => {
+                                deviceOff.deviceOfferingPrice.forEach((price) => {
                                     if (price.relatedProductOffering && price.relatedProductOffering.length) {
                                         price.relatedProductOffering.forEach((product) => {
                                             if (product.isBundle) {
@@ -625,6 +578,91 @@ module mosaicFile.Models {
             }
         }
 
+        /**
+         * Se obtiene el stock de la respuesta del deviceCatalog segun el tipo y el lugar
+         * @param serviceData 
+         * @param stockType {valores: 'real','virtual'}
+         * @param stockPlace {valores: 'peninsula','canarias'}
+         */
+        private getStockByTypeByPlace(serviceData: any, stockType: string, stockPlace: string) {
+            let objectStock = _.find(serviceData.deviceStock, function (devStock: any) {
+                return devStock.stockType && devStock.stockType.toLowerCase() === stockType && devStock.geographicSite
+                    && devStock.geographicSite.name && devStock.geographicSite.name.toLocaleLowerCase() === stockPlace;
+            });
+            let stock = (objectStock && objectStock['quantityInStock'])
+                ? objectStock['quantityInStock'] > 500
+                    ? '+500' : objectStock['quantityInStock'] : 0;
+            return stock;
+        }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:mosaicFileSrv#getColor
+         * @param {Object} characteristic array de características de terminal
+         * @methodOf orangeFeSARQ.Services:mosaicFileSrv
+         * @description
+         * Obtiene la característica relativa al color
+         */
+        private getColor(characteristic) {
+            if (characteristic.characteristicValue && characteristic.characteristicValue.length > 0) {
+                characteristic.characteristicValue.forEach((characteristicValue) => {
+                    if (characteristicValue.valueType && characteristicValue.valueType === 'Hexadecimal' &&
+                        characteristicValue.value) {
+                        this.codColor = characteristicValue.value;
+                    } else {
+                        this.altColor = characteristicValue.value;
+                    }
+                });
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:mosaicFileSrv#getCompatibleServices
+         * @param {Object} characteristic array de características de terminal
+         * @methodOf orangeFeSARQ.Services:mosaicFileSrv
+         * @description
+         * Obtiene la característica relativa a los servicios compatibles
+         */
+        private getCompatibleServices(characteristic) {
+            if (characteristic.characteristicValue && characteristic.characteristicValue.length) {
+                characteristic.characteristicValue.forEach((characteristicValue, z) => {
+                    if (characteristicValue.value) {
+                        let compatibleServices: OrangeMosaicFileTerminalCompatible =
+                            new OrangeMosaicFileTerminalCompatible(characteristicValue.value);
+                        this.fileCompatible.push(compatibleServices);
+                    }
+                });
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:mosaicFileSrv#getHighlightIcon
+         * @param {Object} characteristic array de características de terminal
+         * @methodOf orangeFeSARQ.Services:mosaicFileSrv
+         * @description
+         * Obtiene la característica relativa al icono destacado
+         */
+        private getHighlightIcon(characteristic) {
+            let iconArray = [];
+
+            if (characteristic.characteristicAttachment && characteristic.characteristicAttachment.length > 0) {
+                if (characteristic.characteristicAttachment && characteristic.characteristicAttachment.length > 0) {
+                    if (characteristic.characteristicAttachment &&
+                        characteristic.characteristicAttachment.length > 0) {
+                        characteristic.characteristicAttachment.forEach(function (characteristicAttachment, z) {
+                            if (characteristicAttachment.href && characteristicAttachment.ospAltText) {
+                                let terminalIcon = new OrangeMosaicFileTerminalIcon(characteristicAttachment.href,
+                                    characteristicAttachment.ospAltText);
+                                iconArray.push(terminalIcon);
+                            }
+                        });
+                        this.icon = iconArray;
+                    }
+                }
+            }
+        }
     }
     export class OrangeMosaicFileTerminalCharacteristicsLvl1 {
         public image: string;

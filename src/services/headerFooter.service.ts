@@ -21,24 +21,24 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
             let _search: Object = {
-                queryParams: msisdn ? { realSalto: msisdn } : {},
-                urlParams: [vm.genericConstant.site, 'getHeaderFooter']
-
+                urlParams: [vm.genericConstant.site, 'getHeaderFooter'],
+                queryParams: msisdn ? { realSalto: msisdn } : {}
             };
 
             return vm.httpCacheGett(vm.genericConstant.getHeader, _search)
                 .then(
                 (successData) => {
                     let str: string = JSON.stringify(successData);
-                    successData = JSON.parse(str.replace(/"\/sites/g, '"sites'));
                     // Añadimos también Amena porque recogeremos las properties de GetConfiguration
-                    if (vm.genericConstant.site !== 'eCareResidencial' && vm.genericConstant.site !== 'eCareResidencialAmena') {
-                        OrangeFeSARQ.Controllers.ParentController.shared.properties =
-                            successData.data.properties;
+                    successData = JSON.parse(str.replace(/"\/sites/g, '"sites'));
+                    if (vm.genericConstant.site !== 'eCareResidencialAmena' && vm.genericConstant.site !== 'eCareResidencial' ) {
+                        OrangeFeSARQ.Controllers.ParentController.shared.properties = successData.data.properties;
                     }
+                    
                     return successData;
                 },
                 (errorData) => {
+
                     return errorData;
                 }
                 );

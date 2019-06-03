@@ -20,18 +20,7 @@ module OrangeFeSARQ.Models {
             this._infoURL = infoURL;
         }
 
-        get code(): number {
-            return this._code;
-        }
-
-        set code(value: number) {
-            this._code = value;
-        }
-
-        get title(): string {
-            return this._title;
-        }
-
+        
         set title(value: string) {
             this._title = value;
         }
@@ -48,8 +37,16 @@ module OrangeFeSARQ.Models {
             return this._description;
         }
 
-        set description(value: string) {
-            this._description = value;
+        get code(): number {
+            return this._code;
+        }
+
+        set code(value: number) {
+            this._code = value;
+        }
+
+        get title(): string {
+            return this._title;
         }
 
         get infoURL(): string {
@@ -58,6 +55,10 @@ module OrangeFeSARQ.Models {
 
         set infoURL(value: string) {
             this._infoURL = value;
+        }
+
+        set description(value: string) {
+            this._description = value;
         }
     }
 

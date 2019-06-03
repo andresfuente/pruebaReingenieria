@@ -185,12 +185,10 @@ module OrangeFeSARQ.Services {
                 );
         }
 
-        getParentSfid() {
-            let shopInfo;
-            let _headers ;
-            shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
-            if(shopInfo && shopInfo.parentSfid) {
-                _headers = new HashMap<string, string>();
+        getParentSfid(): HashMap<string, string> {
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
+            let _headers = new HashMap<string, string>();
+            if (shopInfo && shopInfo.parentSfid) {
                 _headers.set('parentSfid', shopInfo.parentSfid);
             }
             return _headers;

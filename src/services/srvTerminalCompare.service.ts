@@ -78,6 +78,7 @@ module OrangeFeSARQ.Services {
                 // Si ya existen 3 terminales seleccinados
                 if (vm.deviceContainerVolume() === 3) {
                     vm.$scope.$broadcast('cantSelectTerminal');
+                    return false;
                 } else if (vm.deviceContainerVolume() <= 2) {
                     // Si existen menos de 2 terminales seleccinados
                     vm.insertInDeviceContainer(deviceForSession);
@@ -117,12 +118,12 @@ module OrangeFeSARQ.Services {
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                 'description', 'litSubTitle', 'brand', 'priceType', 'payType', 'preSelectDiviceToRate', 'insuranceSiebelId', 'srcImage',
                 'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName',
-                'tipoPago', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc']);
+                'tipoPago', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc', 'litInsurancePaid']);
             if (device.renewRates !== undefined && device.renewRates) {
                 deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                     'description', 'litSubTitle', 'brand', 'priceType', 'payType', 'preSelectDiviceToRate', 'insuranceSiebelId', 'srcImage',
                     'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates', 'eSim',
-                    'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc']);
+                    'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc', 'litInsurancePaid']);
             }
 
             return deviceForSession;

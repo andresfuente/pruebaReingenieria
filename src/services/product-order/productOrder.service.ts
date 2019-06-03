@@ -161,16 +161,10 @@ module OrangeFeSARQ.Services {
         });
     }
 
-    fixedOrderCheckConv(brand: string, publicKey: string, lineCategory: string, orderType: string, provisionFlux: string, segment: string, componentName: string) {
+    fixedOrderCheckConv(body, componentName: string) {
       let vm = this;
       let _search: Object = {
-        queryParams: {
-          publicKey: publicKey,
-          lineCategory: lineCategory,
-          orderType: orderType,
-          provisionFlux: provisionFlux,
-          segment: segment
-        },
+        queryParams: body,
         urlParams: []
       };
 
@@ -203,7 +197,7 @@ module OrangeFeSARQ.Services {
 
       return vm.httpPost(vm.urlProductOrder, _search, componentName)
         .then(function (success) {
-          if (success.status == 202) {
+          if (success.status == 202 || success.status == 422) {
             return success;
           }
           else {
@@ -354,11 +348,11 @@ module OrangeFeSARQ.Services {
         .then((response) => {
           let _resp = response.data;
           let status = response.status;
+          if (status == 202 || status == 422 || status == 403) {
+            return response;
+          }
           if (_resp.error) {
             throw _resp.error;
-          }
-          if (status == 202) {
-            return response;
           }
           return _resp.productOrder;
         })
