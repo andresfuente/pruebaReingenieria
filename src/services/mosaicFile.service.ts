@@ -20,10 +20,14 @@ module OrangeFeSARQ.Services {
         private cache = {}; // Storage to prevent repeating calls to the API
         private storeProvince: string = '';
         private httpService;
+        public CHARACTERISTICCOLOR = 'characteristic.color';
 
         public isTLV: boolean;
 
         private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
+
+        private GEOLOCATION_LOCAL: string = 'Geolocation-local';
+        private GEOLOCATION_CLIENT: string = 'Geolocation-client';
 
         /**
          * @name OrangeFeSARQ.Services:MosaicFileSrv
@@ -120,8 +124,8 @@ module OrangeFeSARQ.Services {
 
             // Cabeceras
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
+            _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
             // ELIMINAR cuando se eliminen los select.
             // Establece el codigo de la tarifa segun lo seleccionado
@@ -193,7 +197,7 @@ module OrangeFeSARQ.Services {
                     'characteristic.screenData.groupData.screenSize.value',
                     'characteristic.memoryData.groupData.hardDisk.value',
                     'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                    'characteristic.color']);
+                    this.CHARACTERISTICCOLOR]);
             }
 
             // Parametros para Prepago   
@@ -210,8 +214,14 @@ module OrangeFeSARQ.Services {
 
             // Parametros para Renove
             if (params.commercialAction === 'renove') {
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = srv.getSelectedCommercialAct(); let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+                const color = 'characteristic.color';
+                const osType = 'characteristic.OSData.groupData.OStype.value';
+                const backCameraResolution = 'characteristic.cameraData.groupData.backCameraResolution.value';
+
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = srv.getSelectedCommercialAct();
+                clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
@@ -238,28 +248,27 @@ module OrangeFeSARQ.Services {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
                         'deviceOffering.category.name', 'purchaseOption', 'price.fee', 'totalPaymentRange',
-                        'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
+                        osType,
+                        'priceType', backCameraResolution,
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        color]);
                 } else {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
                         'purchaseOption', 'price.fee', 'totalPaymentRange', 'deviceOffering.category.name',
-                        'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
+                        osType,
+                        'priceType', backCameraResolution,
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        color]);
                 }
             }
 
-            
-            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
+            _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
             // Metodo http nativo por bug en los filtros
             // return srv.httpService({
@@ -431,8 +440,8 @@ module OrangeFeSARQ.Services {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
-            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
+            _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
             params = {
                 channel: channel,
@@ -476,9 +485,9 @@ module OrangeFeSARQ.Services {
                 // Se seleccionan los parametros necesarios para la llamada a la OT
                 params.channel = '';
                 params.campaignName = campana_txt;
-                let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = srv.getSelectedCommercialAct();
+                clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = srv.getSelectedCommercialAct();
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
                         if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)))) {
@@ -509,25 +518,23 @@ module OrangeFeSARQ.Services {
                     }
                 }
 
-                // Renove secundario al añadir secundario
-/* ***                if (commercialData[commercialActIndex].renewalType && commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove secundario' && commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secundario') {
-                    let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
-                    params.relatedProductOffering = (clientData.ospCustomerSegment && clientData.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') ? defaultData.idRateDefault : '';
-                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                // Renove primario al añadir secundario
+                else if (commercialData[commercialActIndex].renewalType &&
+                    commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove primario' && 
+                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secundario') {
+                        if (params.priceType) {
+                            params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType', 'deviceOffering.category.name']);
+                        } else {
+                            params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                        }
                 }
- */
+
                 if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
                     clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
                         if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
                             params.priceType = 'unico';
                         }
                     });
-                }
-                // Renove primario al añadir secundario
-                else if (commercialData[commercialActIndex].renewalType &&
-                    commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove primario' && 
-                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secundario') {
-                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
                 }
 
             }
@@ -968,7 +975,7 @@ module OrangeFeSARQ.Services {
             };
             let deferred = srv.$q.defer();
             let mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
-            return srv.httpCacheGeth(srv.genericConstant.getTerminalDetails, { queryParams: params }, headers, 'mosaicFileComp', true)
+            return srv.httpCacheGeth(srv.genericConstant.getTerminalDetails, { queryParams: params }, headers, 'mosaicFileComp', false)
                 .then((response) => {
                     // Si la respuesta es vacia se muestra el mensaje de error
                     if (response.data.length === 0) {

@@ -75,6 +75,14 @@ module OrangeFeSARQ.Services {
                 return false;
             }
         }
+        getAccount(bic, domiciliation, accountHolder, iban): any{
+            return {
+                bic: bic,
+                domiciliation: domiciliation,
+                accountHolder: accountHolder,
+                iban: iban
+            };
+        }
 
         /**
          * @ngdoc method
@@ -87,55 +95,25 @@ module OrangeFeSARQ.Services {
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
-            let info = {
-                bic: '',
-                domiciliation: '',
-                accountHolder: '',
-                iban: ''
-            };
+            let info = vm.getAccount('', '', '', '');
 
             if (clientData && clientData.billingInfo) {
                 if (clientData.billingInfo.bankName) {
                     switch (clientData.billingInfo.bankName) {
                         case 'La Caixa':
-                            info = {
-                                bic: '2100',
-                                domiciliation: '0000',
-                                accountHolder: '66',
-                                iban: '1234567890'
-                            };
+                            info = vm.getAccount('2100', '0000', '66', '1234567890');
                             break;
                         case 'Santander':
-                            info = {
-                                bic: '0049',
-                                domiciliation: '0000',
-                                accountHolder: '06',
-                                iban: '1234567890'
-                            };
+                            info = vm.getAccount('0049', '0000', '06', '1234567890');
                             break;
                         case 'BBVA':
-                            info = {
-                                bic: '0182',
-                                domiciliation: '0000',
-                                accountHolder: '96',
-                                iban: '1234567890'
-                            };
+                            info = vm.getAccount('0182', '0000', '96', '1234567890');
                             break;
                         case 'Bankia':
-                            info = {
-                                bic: '2038',
-                                domiciliation: '0000',
-                                accountHolder: '76',
-                                iban: '1234567890'
-                            };
+                            info = vm.getAccount('2038', '0000', '76', '1234567890');
                             break;
                         case 'Otros':
-                            info = {
-                                bic: '2013',
-                                domiciliation: '0000',
-                                accountHolder: '16',
-                                iban: '1234567890'
-                            };
+                            info = vm.getAccount('2013', '0000', '16', '1234567890');
                             break;
                         default:
                             break;
@@ -168,22 +146,22 @@ module OrangeFeSARQ.Services {
             // Recorro el archivo de mapeos (la parte de datos de cliente) para aplicar la lógica correspondiente
             // CLIENT DATA
             if (sessionClientData) {
-                _.each(mapeosDE.clientData, function (value) {
+                _.each(mapeosDE.clientData, function (valueCD) {
                     // Almaceno los valores en variables para no perderlos cuando cambie de ámbito
-                    let dCC = value.datoCc;
-                    let dDE = value.datoDe;
-                    let cont = value.sessionOrigin;
-                    let contene = value.contenedor;
-                    let defaultData = value.default;
+                    let dCC = valueCD.datoCc;
+                    let dDE = valueCD.datoDe;
+                    let cont = valueCD.sessionOrigin;
+                    let contene = valueCD.contenedor;
+                    let defaultData = valueCD.default;
 
                     let valueDep;
                     let lastObj;
                     let flagDep = false;
                     let flagEquiv = false;
 
-                    if (value.dependencias) { // Recorro el array de dependencias dentro del archivo de mapeos
+                    if (valueCD.dependencias) { // Recorro el array de dependencias dentro del archivo de mapeos
                         // Recorro las dependencias
-                        for (let i = 0; i <= value.dependencias.length; i++) {
+                        for (let i = 0; i <= valueCD.dependencias.length; i++) {
                             // Cuando es la primera iteracion coge el valor del sessionOrigin para sacarlo del session
                             if (sessionClientData[cont] === null ||
                                 sessionClientData[cont] === undefined) { // Si el valor esta vacio se rellena del mismo modo en <CONTENIDO>
@@ -195,8 +173,8 @@ module OrangeFeSARQ.Services {
                                     lastObj = valueDep;
                                 } else {
                                     // Cuando deja de ser la primera iteración recojo los siguientes valores en los siguientes niveles
-                                    if (lastObj[value.dependencias[i - 1]]) {
-                                        valueDep = lastObj[value.dependencias[i - 1]];
+                                    if (lastObj[valueCD.dependencias[i - 1]]) {
+                                        valueDep = lastObj[valueCD.dependencias[i - 1]];
                                         lastObj = valueDep;
                                     } else {
                                         valueDep = '';
@@ -242,7 +220,7 @@ module OrangeFeSARQ.Services {
                         flagDep = true;
                     }
                     // Recorro el array de equivalencias dentro del archivo de mapeos
-                    _.each(value.equivalencias, function (value) {
+                    _.each(valueCD.equivalencias, function (value) {
                         // Si existe valueDep creo un objeto que matcheo posteriormente con session
                         if (value.origen === sessionClientData[cont]) {
                             vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
@@ -260,9 +238,11 @@ module OrangeFeSARQ.Services {
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont]
                                 ? sessionClientData[cont] : defaultData, contene, responseObj);
                         } else if(dDE === 'idpetition'){ // MCM campos id petición
-                            sessionClientData.idpetition.forEach(element => {
-                                vm.insertarCampo(dCC, dDE, element, contene, responseObj);
-                            });
+                            if (sessionClientData.idpetition) {
+                                sessionClientData.idpetition.forEach(element => {
+                                    vm.insertarCampo(dCC, dDE, element, contene, responseObj);
+                                });
+                            }
                         } else {
                             // Flujo normal
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont]
@@ -275,21 +255,21 @@ module OrangeFeSARQ.Services {
 
             // LOGIN DATA
             if (sessionLoginData) {
-                _.each(mapeosDE.loginData, function (value) {
-                    let dCC = value.datoCc;
-                    let dDE = value.datoDe;
-                    let cont = value.sessionOrigin;
-                    let contene = value.contenedor;
-                    let defaultData = value.contenedor;
+                _.each(mapeosDE.loginData, function (valueLD) {
+                    let dCC = valueLD.datoCc;
+                    let dDE = valueLD.datoDe;
+                    let cont = valueLD.sessionOrigin;
+                    let contene = valueLD.contenedor;
+                    let defaultData = valueLD.contenedor;
                     let valueDep;
                     let lastObj;
                     let flagDep = false;
                     let flagEquiv = false;
 
                     // Recorro el array de dependencias dentro del archivo de mapeos
-                    if (value.dependencias) {
+                    if (valueLD.dependencias) {
                         // Recorro las dependencias
-                        for (let i = 0; i <= value.dependencias.length; i++) {
+                        for (let i = 0; i <= valueLD.dependencias.length; i++) {
                             // Cuando es la primera iteracion coge el valor del sessionOrigin para sacarlo del session
                             if (sessionLoginData[cont] === null) { // Si el valor esta vacio se rellena del mismo modo en <CONTENIDO>
                                 valueDep = '';
@@ -300,8 +280,8 @@ module OrangeFeSARQ.Services {
                                     lastObj = valueDep;
                                 } else {
                                     // Cuando deja de ser la primera iteración recojo los siguientes valores en los siguientes niveles
-                                    if (lastObj[value.dependencias[i - 1]]) {
-                                        valueDep = lastObj[value.dependencias[i - 1]];
+                                    if (lastObj[valueLD.dependencias[i - 1]]) {
+                                        valueDep = lastObj[valueLD.dependencias[i - 1]];
                                         lastObj = valueDep;
                                     } else {
                                         valueDep = '';
@@ -318,7 +298,7 @@ module OrangeFeSARQ.Services {
                     }
 
                     // Recorro el array de equivalencias dentro del archivo de mapeos
-                    _.each(value.equivalencias, function (value) {
+                    _.each(valueLD.equivalencias, function (value) {
                         // Si existe valueDep creo un objeto que matcheo posteriormente con session
                         if (value.origen === sessionLoginData[cont]) {
                             vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
@@ -335,21 +315,21 @@ module OrangeFeSARQ.Services {
 
             // PRESCORING DATA
             if (sessionPrescoring) {
-                _.each(mapeosDE.prescoring, function (value) {
-                    let dCC = value.datoCc;
-                    let dDE = value.datoDe;
-                    let cont = value.sessionOrigin;
-                    let contene = value.contenedor;
-                    let defaultData = value.default;
+                _.each(mapeosDE.prescoring, function (valuePre) {
+                    let dCC = valuePre.datoCc;
+                    let dDE = valuePre.datoDe;
+                    let cont = valuePre.sessionOrigin;
+                    let contene = valuePre.contenedor;
+                    let defaultData = valuePre.default;
                     let valueDep;
                     let lastObj;
                     let flagDep = false;
                     let flagEquiv = false;
 
                     // Recorro el array de dependencias dentro del archivo de mapeos
-                    if (value.dependencias) {
+                    if (valuePre.dependencias) {
                         // Recorro las dependencias
-                        for (let i = 0; i <= value.dependencias.length; i++) {
+                        for (let i = 0; i <= valuePre.dependencias.length; i++) {
                             // Cuando es la primera iteracion coge el valor del sessionOrigin para sacarlo del session
                             if (sessionPrescoring[cont] === null) { // Si el valor esta vacio se rellena del mismo modo en <CONTENIDO>
                                 valueDep = '';
@@ -360,8 +340,8 @@ module OrangeFeSARQ.Services {
                                     lastObj = valueDep;
                                 } else {
                                     // Cuando deja de ser la primera iteración recojo los siguientes valores en los siguientes niveles
-                                    if (lastObj[value.dependencias[i - 1]]) {
-                                        valueDep = lastObj[value.dependencias[i - 1]];
+                                    if (lastObj[valuePre.dependencias[i - 1]]) {
+                                        valueDep = lastObj[valuePre.dependencias[i - 1]];
                                         lastObj = valueDep;
                                     } else {
                                         valueDep = '';
@@ -391,7 +371,7 @@ module OrangeFeSARQ.Services {
                     }
 
                     // Recorro el array de equivalencias dentro del archivo de mapeos
-                    _.each(value.equivalencias, function (value) {
+                    _.each(valuePre.equivalencias, function (value) {
                         // Si existe valueDep creo un objeto que matcheo posteriormente con session
                         if (dDE === 'dtp_cont_don' && sessionPrescoring[cont][0].ospCartItemType.toUpperCase() === 'PORTABILIDAD'
                             && value.origen === sessionPrescoring[cont][0].originType) {
@@ -412,13 +392,13 @@ module OrangeFeSARQ.Services {
             // Recorro el archivo de mapeos (la parte de datos shoppingCart) para aplicar la lógica correspondiente
             // SHOPPINGCART DATA
             if (sessionShoppingCart) {
-                _.each(mapeosDE.shoppingCart, function (value) {
+                _.each(mapeosDE.shoppingCart, function (valueSC) {
                     // Almaceno los valores en variables para no perderlos cuando cambie de ámbito
-                    let dCC = value.datoCc;
-                    let dDE = value.datoDe;
-                    let cont = value.sessionOrigin;
-                    let contene = value.contenedor;
-                    let defaultData = value.default;
+                    let dCC = valueSC.datoCc;
+                    let dDE = valueSC.datoDe;
+                    let cont = valueSC.sessionOrigin;
+                    let contene = valueSC.contenedor;
+                    let defaultData = valueSC.default;
                     let valueDep;
                     let lastObj;
                     let typePrice;
@@ -427,9 +407,9 @@ module OrangeFeSARQ.Services {
                     let flagEquiv = false;
 
                     // Recorro el array de dependencias dentro del archivo de mapeos
-                    if (value.dependencias) {
+                    if (valueSC.dependencias) {
                         // Recorro las dependencias
-                        for (let i = 0; i < value.dependencias.length; i++) {
+                        for (let i = 0; i < valueSC.dependencias.length; i++) {
                             // Cuando es la primera iteracion coge el valor del sessionOrigin para sacarlo del session
                             if (i === 0) {
                                 // Recojo en la primera iteracion el primer nivel de profundidad
@@ -437,7 +417,7 @@ module OrangeFeSARQ.Services {
                                 lastObj = valueDep;
                             } else {
                                 // Cuando deja de ser la primera iteración recojo los siguientes valores en los siguientes niveles
-                                valueDep = lastObj[value.dependencias[i - 1]];
+                                valueDep = lastObj[valueSC.dependencias[i - 1]];
                                 lastObj = valueDep;
                             }
                         }
@@ -449,7 +429,7 @@ module OrangeFeSARQ.Services {
                         flagDep = true;
                     }
                     // Recorro el array de equivalencias dentro del archivo de mapeos
-                    _.each(value.equivalencias, (value) => {
+                    _.each(valueSC.equivalencias, (value) => {
                         // Si existe valueDep creo un objeto que matcheo posteriormente con session
                         if (value.origen === sessionShoppingCart[cont]) {
                             vm.insertarCampo(dCC, dDE, value.value ? value.value : defaultData, contene, responseObj);
@@ -463,7 +443,6 @@ module OrangeFeSARQ.Services {
                         let agrupation = '';
                         let numOferta = 1;
                         let selectedOptions: any = _.filter(sessionShoppingCart.cartItem, { 'ospSelected': true });
-                        let terminals;
                         let auxPrimary = 'SC';
                         let auxSecundary = 'SecSC';
 
