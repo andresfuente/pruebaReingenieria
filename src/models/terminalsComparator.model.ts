@@ -91,6 +91,79 @@ module terminalsComparator.Models {
             this.features = [];
 
             // Mapea las características de cada terminal
+            this.setTerminalCharacteristics(OWCSOptions, responseOptions);
+
+            if (terminal.stock) {
+                this.stock = terminal.stock;
+            }
+
+            if (terminal.IMEI) {
+                this.IMEI = terminal.IMEI;
+            }
+
+            let priceItem: terminalsComparator.Models.OrangeMosaicFileTerminalFileIPriceItem = new terminalsComparator.Models.OrangeMosaicFileTerminalFileIPriceItem();
+            let filePrice: terminalsComparator.Models.OrangeMosaicFileTerminalFilePrice = new terminalsComparator.Models.OrangeMosaicFileTerminalFilePrice();
+
+            this.setPrice(terminal, priceItem, filePrice);
+            
+        }
+
+
+        private setPrice(terminal: any, priceItem: OrangeMosaicFileTerminalFileIPriceItem, filePrice: OrangeMosaicFileTerminalFilePrice) {
+            if (terminal.itemPrice) {
+                // Array de precios
+                this.itemPrice = [];
+                this.loopItemPriceSettingPrice(terminal, priceItem, filePrice);
+            }
+            else {
+                this.error = true;
+            }
+        }
+
+        private loopItemPriceSettingPrice(terminal: any, priceItem: OrangeMosaicFileTerminalFileIPriceItem, filePrice: OrangeMosaicFileTerminalFilePrice) {
+            _.forEach(terminal.itemPrice, item => {
+                priceItem.id = item.id;
+                // Agregando precio sin impuesto
+                filePrice.dutyFreeAmount.unit = item.price.dutyFreeAmount.unit;
+                filePrice.dutyFreeAmount.value = item.price.dutyFreeAmount.value;
+                // Agregando precio con impuesto
+                filePrice.taxIncludedAmount.unit = item.price.taxIncludedAmount.unit;
+                filePrice.taxIncludedAmount.value = item.price.taxIncludedAmount.value;
+                // Recogiendo impuestos
+                filePrice.taxRate = item.taxRate;
+                filePrice.ospTaxRateName = item.ospTaxRateName;
+                // Creando el objeto item price
+                priceItem.priceType = item.priceType;
+                priceItem.price = filePrice;
+                // Añadiendo el precio al arreglo de precios del terminal
+                this.itemPrice.push(priceItem);
+                if (item.priceType && item.priceType === 'inicial') {
+                    this.initialPrice = item.price.taxIncludedAmount.value;
+                    this.initialPriceFree = item.price.dutyFreeAmount.value;
+                }
+                if (item.priceType && item.priceType === 'cuota') {
+                    priceItem.recurringChargePeriod = Number(item.recurringChargePeriod); // Duración de las cuotas
+                    this.litDeadlines = item.recurringChargePeriod;
+                    this.monthlyPrice = item.price.taxIncludedAmount.value;
+                    this.monthlyPriceFree = item.price.dutyFreeAmount.value;
+                    // Si se puede se calcula el precio total
+                    if (this.initialPrice !== undefined) {
+                        this.totalPrice = this.initialPrice + this.monthlyPrice * this.litDeadlines;
+                        this.totalPriceFree = this.initialPriceFree + this.monthlyPriceFree * this.litDeadlines;
+                    }
+                    else {
+                        this.totalPrice = this.monthlyPrice * this.litDeadlines;
+                        this.totalPriceFree = this.monthlyPriceFree * this.litDeadlines;
+                    }
+                }
+                if (item.priceType && item.priceType === 'unico') {
+                    this.uniquePaid = item.price.taxIncludedAmount.value;
+                    this.uniquePaidFree = item.price.dutyFreeAmount.value;
+                }
+            });
+        }
+
+        private setTerminalCharacteristics(OWCSOptions: any, responseOptions: any) {
             OWCSOptions.forEach(owcs => {
                 if (owcs.name) {
                     let category = new Category();
@@ -106,7 +179,8 @@ module terminalsComparator.Models {
                                     if (y.name && y.name === optionLiteral.name) {
                                         if (y.characteristicValue[0].unitOfMeasure) {
                                             feature.value = y.characteristicValue[0].value + ' ' + y.characteristicValue[0].unitOfMeasure;
-                                        } else {
+                                        }
+                                        else {
                                             feature.value = y.characteristicValue[0].value;
                                         }
                                     }
@@ -118,78 +192,7 @@ module terminalsComparator.Models {
                     this.features.push(category);
                 }
             });
-
-            if (terminal.stock) {
-                this.stock = terminal.stock;
-            }
-
-            if (terminal.IMEI) {
-                this.IMEI = terminal.IMEI;
-            }
-
-            let priceItem: terminalsComparator.Models.OrangeMosaicFileTerminalFileIPriceItem = new terminalsComparator.Models.OrangeMosaicFileTerminalFileIPriceItem();
-            let filePrice: terminalsComparator.Models.OrangeMosaicFileTerminalFilePrice = new terminalsComparator.Models.OrangeMosaicFileTerminalFilePrice();
-
-            if (terminal.itemPrice) {
-                // Array de precios
-                this.itemPrice = [];
-                
-                _.forEach(terminal.itemPrice, item => {
-
-                    priceItem.id = item.id;
-
-                    // Agregando precio sin impuesto
-                    filePrice.dutyFreeAmount.unit = item.price.dutyFreeAmount.unit;
-                    filePrice.dutyFreeAmount.value = item.price.dutyFreeAmount.value;
-
-                    // Agregando precio con impuesto
-                    filePrice.taxIncludedAmount.unit = item.price.taxIncludedAmount.unit;
-                    filePrice.taxIncludedAmount.value = item.price.taxIncludedAmount.value;
-
-                    // Recogiendo impuestos
-                    filePrice.taxRate = item.taxRate;
-                    filePrice.ospTaxRateName = item.ospTaxRateName;
-
-                    // Creando el objeto item price
-                    priceItem.priceType = item.priceType;
-                    priceItem.price = filePrice;
-
-                    // Añadiendo el precio al arreglo de precios del terminal
-                    this.itemPrice.push(priceItem);
-
-                    if (item.priceType && item.priceType === 'inicial') {
-                        this.initialPrice = item.price.taxIncludedAmount.value;
-                        this.initialPriceFree = item.price.dutyFreeAmount.value;
-                    }
-
-                    if (item.priceType && item.priceType === 'cuota') {
-                        priceItem.recurringChargePeriod = Number(item.recurringChargePeriod); // Duración de las cuotas
-                        this.litDeadlines = item.recurringChargePeriod;
-                        this.monthlyPrice = item.price.taxIncludedAmount.value;
-                        this.monthlyPriceFree = item.price.dutyFreeAmount.value;
-                        // Si se puede se calcula el precio total
-                        if (this.initialPrice !== undefined) {
-                            this.totalPrice = this.initialPrice + this.monthlyPrice * this.litDeadlines;
-                            this.totalPriceFree = this.initialPriceFree + this.monthlyPriceFree * this.litDeadlines;
-                        } else {
-                            this.totalPrice = this.monthlyPrice * this.litDeadlines;
-                            this.totalPriceFree = this.monthlyPriceFree * this.litDeadlines;
-                        }
-                    }
-
-                    if (item.priceType && item.priceType === 'unico') {
-                        this.uniquePaid = item.price.taxIncludedAmount.value;
-                        this.uniquePaidFree = item.price.dutyFreeAmount.value;
-                    }
-                    
-                });
-
-            } else {
-                this.error = true;
-            }
-            
         }
-
     }
 
 }

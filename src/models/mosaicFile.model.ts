@@ -234,347 +234,375 @@ module mosaicFile.Models {
 
             if (serviceData) {
                 // DEVICE STOCK (TLV)
-                if (serviceData.deviceStock && serviceData.deviceStock.length > 0) {
-                    this.realStockPeninsula = this.getStockByTypeByPlace(serviceData, 'real', 'peninsula');
-                    this.virtualStockPeninsula = this.getStockByTypeByPlace(serviceData, 'virtual', 'peninsula');
-                    this.realStockCanary = this.getStockByTypeByPlace(serviceData, 'real', 'canarias');
-                    this.virtualStockCanary = this.getStockByTypeByPlace(serviceData, 'virtual', 'canarias');
-                }
+                this.setDeviceStock(serviceData);
 
                 // DEVICE SPECIFICATION
-                if (serviceData.deviceSpecification) {
-                    this.name = serviceData.deviceSpecification.name ? serviceData.deviceSpecification.name : '';
-                    this.id = serviceData.deviceSpecification.id ? serviceData.deviceSpecification.id : '';
-                    this.litTitle = serviceData.deviceSpecification.brand ? serviceData.deviceSpecification.brand : '';
-                    this.fileDescription.text = serviceData.deviceSpecification.ospLargeDescription ?
-                        serviceData.deviceSpecification.ospLargeDescription : ''; // Cambiar en un futuro por ospFullDescription
-                    this.litSubTitle = serviceData.deviceSpecification.description ? serviceData.deviceSpecification.description : '';
-                    this.srcImage = serviceData.deviceSpecification.attachment.length ?
-                        serviceData.deviceSpecification.attachment[0].href : '';
-
-                    if (serviceData.deviceSpecification.attachment && serviceData.deviceSpecification.attachment.length) {
-                        this.video = '';
-                        serviceData.deviceSpecification.attachment.forEach((image, i) => {
-                            if (image.href && image.type && image.type === 'Imagen') {
-                                this.imageGalery.push(image.href);
-                            } else if (image.href && image.type && image.type === 'Video') {
-                                if (this.video.indexOf('mp4') === -1) {
-                                    this.video = image.href;
-                                }
-                            }
-                        });
-                    }
-                    if (serviceData.deviceSpecification.characteristic && serviceData.deviceSpecification.characteristic.length) {
-                        serviceData.deviceSpecification.characteristic.forEach((characteristic) => {
-                            switch (characteristic.ospCharCategory) {
-                                case 'Color': {
-                                    this.getColor(characteristic);
-                                    break;
-                                }
-                                case 'compatibleServices': {
-                                    this.getCompatibleServices(characteristic);
-                                    break;
-                                }
-                                case 'highlightIcon': {
-                                    // Si tiene attachment y dentro de este, href y ospAltText, se crea el terminalIcon
-                                    this.getHighlightIcon(characteristic);
-                                    break;
-                                }
-                                case 'isMonthObjective': {
-                                    this.litOutstanding = characteristic.description;
-                                    break;
-                                }
-                                default: {
-                                    let child;
-
-                                    // Se busca caracteristica de nivel 1
-                                    let group = _.find(this.fileCharacteristic, { title: characteristic.description });
-                                    // Si no existe
-                                    if (!group) {
-                                        // Se crea el nivel 1
-                                        let characteristicNew: OrangeMosaicFileTerminalCharacteristicsLvl1 =
-                                            new OrangeMosaicFileTerminalCharacteristicsLvl1;
-                                        if (characteristic.characteristicAttachment && characteristic.characteristicAttachment.length > 0 &&
-                                            characteristic.characteristicAttachment[0].href) {
-                                            characteristicNew.image = characteristic.characteristicAttachment[0].href;
-                                        }
-                                        if (characteristic.description) {
-                                            characteristicNew.title = characteristic.description;
-                                        }
-                                        // Si tiene hijo, se crea y se añade al objeto de nivel 1
-                                        if (characteristic.characteristicValue.length > 0) {
-                                            characteristic.characteristicValue.forEach((characteristicValue, z) => {
-                                                if (characteristic.name && characteristicValue.value) {
-                                                    if (characteristicValue.value === 'true') {
-                                                        characteristicValue.value = 'Si';
-                                                    } else if (characteristicValue.value === 'false') { characteristicValue.value = 'No'; }
-                                                    let characteristicValueNew: OrangeMosaicFileTerminalCharacteristicsLvl2 =
-                                                        new OrangeMosaicFileTerminalCharacteristicsLvl2(characteristic.name,
-                                                            characteristicValue.value);
-                                                    let groupOWCS1 = _.find(mosaicFileCompOWCSStore.listOption,
-                                                        { name: characteristic.ospCharCategory });
-                                                    if (groupOWCS1 && groupOWCS1['listOptionsLiteral']) {
-                                                        child = _.find(groupOWCS1['listOptionsLiteral'], { name: characteristic.name });
-                                                    }
-                                                    if (groupOWCS1 && child) {
-                                                        characteristicValueNew.name = child.value;
-                                                        characteristicNew.subCharacteristicsList.push(characteristicValueNew);
-                                                    }
-                                                }
-                                            });
-                                        }
-                                        let groupOWCS2 = _.find(mosaicFileCompOWCSStore.listOption,
-                                            { name: characteristic.ospCharCategory });
-
-                                        if (groupOWCS2 && groupOWCS2['listOptionsLiteral']) {
-                                            child = _.find(groupOWCS2['listOptionsLiteral'], { name: characteristic.name });
-                                        }
-                                        if (groupOWCS2 && child) {
-                                            this.fileCharacteristic.push(characteristicNew);
-                                        }
-                                    } else { // Si existe
-                                        // Si hay hijo, se añade al objeto
-                                        if (characteristic.characteristicValue.length > 0) {
-                                            characteristic.characteristicValue.forEach((characteristicValue, z) => {
-                                                if (characteristic.name && characteristicValue.value) {
-                                                    if (characteristicValue.value === 'true') {
-                                                        characteristicValue.value = 'Si';
-                                                    } else if (characteristicValue.value === 'false') {
-                                                        characteristicValue.value = 'No';
-                                                    }
-                                                    let characteristicValueNew: OrangeMosaicFileTerminalCharacteristicsLvl2 =
-                                                        new OrangeMosaicFileTerminalCharacteristicsLvl2(characteristic.name,
-                                                            characteristicValue.value);
-                                                    let groupOWCS3 = _.find(mosaicFileCompOWCSStore.listOption,
-                                                        { name: characteristic.ospCharCategory });
-
-                                                    if (groupOWCS3 && groupOWCS3['listOptionsLiteral']) {
-                                                        child = _.find(groupOWCS3['listOptionsLiteral'], { name: characteristic.name });
-                                                    }
-                                                    if (groupOWCS3 && child) {
-                                                        characteristicValueNew.name = child.value;
-                                                        if (characteristicValueNew.name === 'Cámara trasera'
-                                                            && characteristicValueNew.value === 'Si') {
-                                                            backCamera = true;
-                                                        }
-                                                        if (characteristicValueNew.name === 'Cámara frontal'
-                                                            && characteristicValueNew.value === 'Si') {
-                                                            frontCamera = true;
-                                                        }
-
-                                                        group.subCharacteristicsList.push(characteristicValueNew);
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-
-                        });
-                    }
-                    // CARACTERISTICAS OWCS
-                    let fileCharacteristicTemp: OrangeMosaicFileTerminalCharacteristicsLvl1[] = [];
-                    if (mosaicFileCompOWCSStore && mosaicFileCompOWCSStore.listOption && mosaicFileCompOWCSStore.listOption.length > 0) {
-                        mosaicFileCompOWCSStore.listOption.forEach((optionOWCS, z) => {
-                            this.fileCharacteristic.forEach((characteristic, y) => {
-                                if (optionOWCS.title === characteristic.title) {
-                                    let fileCharacteristicLVL2Temp: OrangeMosaicFileTerminalCharacteristicsLvl2[] = [];
-                                    optionOWCS.listOptionsLiteral.forEach((optionOWCSChield, j) => {
-                                        characteristic.subCharacteristicsList.forEach((characteristicChield, k) => {
-                                            if (optionOWCSChield.value === characteristicChield.name) {
-                                                if ((characteristicChield.name === 'Resolución de la cámara trasera' && backCamera)
-                                                    || (characteristicChield.name === 'Resolución de la cámara frontal' &&
-                                                        frontCamera) || (characteristicChield.name !== 'Resolución de la cámara trasera'
-                                                            && characteristicChield.name !== 'Resolución de la cámara frontal')) {
-                                                    fileCharacteristicLVL2Temp.push(characteristicChield);
-                                                }
-                                            }
-
-                                        });
-                                    });
-                                    characteristic.subCharacteristicsList = fileCharacteristicLVL2Temp;
-                                    fileCharacteristicTemp.push(characteristic);
-                                }
-                            });
-                        });
-                    }
-                    this.fileCharacteristic = fileCharacteristicTemp;
-                }
+                this.setDeviceSpecification(serviceData, backCamera, frontCamera, mosaicFileCompOWCSStore);
 
                 // DEVICE OFFERING
-                if (serviceData.deviceOffering && serviceData.deviceOffering.length) {
-                    let deviceOffering = serviceData.deviceOffering;
-                    // ID del modelo del terminal
-                    this.siebelId = deviceOffering[0].id;
+                this.setDeviceOffering(serviceData, priceItem, filePrice, priceName, ospCustomerSegment);
 
-                    // Si existe el offeringPrice y no esta vacio
-                    if (deviceOffering && deviceOffering.length > 0) {
-                        // Se recorre todo el array de precios
-                        serviceData.deviceOffering.forEach((deviceOff, x) => {
-                            if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length > 0) {
-                                deviceOff.deviceOfferingPrice.forEach((price, i) => {
+                this.setRenove(commercialData, commercialActIndex, serviceData);
 
-                                    /* Precios del terminal */
-                                    priceItem = new OrangeMosaicFileTerminalFileIPriceItem();
-                                    filePrice = new OrangeMosaicFileTerminalFilePrice();
+            }
+        }
 
-                                    // Id
-                                    price.relatedProductOffering.forEach(item => {
-                                        if ((price.priceType === 'inicial' && item.name === 'Cuota inicial') ||
-                                            (price.priceType === 'cuota' && item.name === 'Cuota mensual')) {
-                                            priceItem.id = item.id;
+        private setRenove(commercialData: any, commercialActIndex: number, serviceData: any) {
+            if (commercialData[commercialActIndex].ospTerminalWorkflow) {
+                // Renove prepago
+                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'prepaid_renew') {
+                    commercialData[commercialActIndex].prepaidProducts.forEach((product, i) => {
+                        if (product.codSAP === serviceData.deviceSpecification.id) {
+                            product.offertDetails.forEach((offert) => {
+                                let prepaidPrice = {
+                                    valorRecarga: offert.valorRecarga,
+                                    valorPuntos: offert.valorPuntos,
+                                    valorEruros: offert.valorEruros
+                                };
+                                this.prepaidRenewPrices.push(prepaidPrice);
+                            });
+                        }
+                    });
+                }
+                // Si es renove primario se guardan todas las tarifas asociadas
+                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'primary_renew' ||
+                    commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'best_renove') {
+                    serviceData.deviceOffering.forEach((deviceOff) => {
+                        if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length) {
+                            deviceOff.deviceOfferingPrice.forEach((price) => {
+                                if (price.relatedProductOffering && price.relatedProductOffering.length) {
+                                    price.relatedProductOffering.forEach((product) => {
+                                        if (product.isBundle) {
+                                            let rate = {
+                                                name: product.name,
+                                                bundleId: product.id
+                                            };
+                                            let isInRenewRates = _.find(this.renewRates, { siebelId: rate.bundleId });
+                                            if (!isInRenewRates) {
+                                                this.renewRates.push(rate);
+                                            }
                                         }
                                     });
-                                    if (price.Price) {
-                                        // Agregando precio sin impuesto
-                                        filePrice.dutyFreeAmount.unit = price.Price.currencyCode;
-                                        filePrice.dutyFreeAmount.value = price.Price.dutyFreeAmount;
-                                        // Agregando precio con impuesto
-                                        filePrice.taxIncludedAmount.unit = price.Price.currencyCode;
-                                        filePrice.taxIncludedAmount.value = price.Price.taxIncudedAmount; // Corregir
-                                        // Recogiendo impuestos
-                                        filePrice.taxRate = price.Price.taxRate;
-                                        filePrice.ospTaxRateName = price.Price.ospTaxRateName;
-                                        // Creando el objeto item price
-                                        priceItem.priceType = price.priceType;
-                                        priceItem.price = filePrice;
-                                    }
-                                    // Duracion de las cuotas
-                                    if (price.priceType === 'cuota') {
-                                        priceItem.recurringChargePeriod = Number(price.applicationDuration);
-                                    }
-                                    // Añadiendo el precio al arreglo de precios del terminal
-                                    this.itemPrice.push(priceItem);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        }
 
-                                    if (price.name === priceName) {
-                                        if (price.priceType && price.priceType === 'inicial') {
-                                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
-                                                this.initialPaid = price.Price.taxIncudedAmount;
-                                            } else {
-                                                this.initialPaid = price.Price.dutyFreeAmount;
+        private setDeviceOffering(serviceData: any, priceItem: OrangeMosaicFileTerminalFileIPriceItem, filePrice: OrangeMosaicFileTerminalFilePrice, priceName: string, ospCustomerSegment: string) {
+            if (serviceData.deviceOffering && serviceData.deviceOffering.length) {
+                let deviceOffering = serviceData.deviceOffering;
+                // ID del modelo del terminal
+                this.siebelId = deviceOffering[0].id;
+                // Si existe el offeringPrice y no esta vacio
+                if (deviceOffering && deviceOffering.length > 0) {
+                    // Se recorre todo el array de precios
+                    serviceData.deviceOffering.forEach((deviceOff, x) => {
+                        ({ priceItem, filePrice } = this.setDeviceOfferingPrice(deviceOff, priceItem, filePrice, priceName, ospCustomerSegment));
+                        // Añadir CP Primario y Secundario
+                        this.addCPPrimarySecondary(deviceOffering);
+                        // Seguro movil.
+                        if (deviceOff.recommendedProductOffering && deviceOff.recommendedProductOffering.length) {
+                            if (deviceOff.recommendedProductOffering[0].name === 'Seguro movil') {
+                                this.litInsurancePaid =
+                                    deviceOff.recommendedProductOffering[0].productOfferingPrice[0].price.dutyFreeAmount;
+                                this.insuranceSiebelId = deviceOff.recommendedProductOffering[0].id;
+                            }
+                        }
+                    });
+                }
+                // Si se puede se calcula el ahorro    
+                if (this.litDeadlines && this.litPrice && this.uniquePaid) {
+                    this.saving = this.uniquePaid - this.totalPaid;
+                }
+                else { // No se puede calcular el ahorro
+                    this.saving = 0;
+                }
+            }
+        }
+
+        private setDeviceSpecification(serviceData: any, backCamera: boolean, frontCamera: boolean, mosaicFileCompOWCSStore: any) {
+            if (serviceData.deviceSpecification) {
+                this.name = serviceData.deviceSpecification.name ? serviceData.deviceSpecification.name : '';
+                this.id = serviceData.deviceSpecification.id ? serviceData.deviceSpecification.id : '';
+                this.litTitle = serviceData.deviceSpecification.brand ? serviceData.deviceSpecification.brand : '';
+                this.fileDescription.text = serviceData.deviceSpecification.ospLargeDescription ?
+                    serviceData.deviceSpecification.ospLargeDescription : ''; // Cambiar en un futuro por ospFullDescription
+                this.litSubTitle = serviceData.deviceSpecification.description ? serviceData.deviceSpecification.description : '';
+                this.srcImage = serviceData.deviceSpecification.attachment.length ?
+                    serviceData.deviceSpecification.attachment[0].href : '';
+                this.setDeviceVideoAndImage(serviceData);
+                ({ backCamera, frontCamera } = this.getDeviceCharacteristics(serviceData, mosaicFileCompOWCSStore, backCamera, frontCamera));
+                // CARACTERISTICAS OWCS
+                this.getOWCSCharacteristics(mosaicFileCompOWCSStore, backCamera, frontCamera);
+            }
+        }
+
+        private setDeviceOfferingPrice(deviceOff: any, priceItem: OrangeMosaicFileTerminalFileIPriceItem, filePrice: OrangeMosaicFileTerminalFilePrice, priceName: string, ospCustomerSegment: string) {
+            if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length > 0) {
+                deviceOff.deviceOfferingPrice.forEach((price, i) => {
+                    /* Precios del terminal */
+                    priceItem = new OrangeMosaicFileTerminalFileIPriceItem();
+                    filePrice = new OrangeMosaicFileTerminalFilePrice();
+                    // Id
+                    price.relatedProductOffering.forEach(item => {
+                        if ((price.priceType === 'inicial' && item.name === 'Cuota inicial') ||
+                            (price.priceType === 'cuota' && item.name === 'Cuota mensual')) {
+                            priceItem.id = item.id;
+                        }
+                    });
+                    if (price.Price) {
+                        // Agregando precio sin impuesto
+                        filePrice.dutyFreeAmount.unit = price.Price.currencyCode;
+                        filePrice.dutyFreeAmount.value = price.Price.dutyFreeAmount;
+                        // Agregando precio con impuesto
+                        filePrice.taxIncludedAmount.unit = price.Price.currencyCode;
+                        filePrice.taxIncludedAmount.value = price.Price.taxIncudedAmount; // Corregir
+                        // Recogiendo impuestos
+                        filePrice.taxRate = price.Price.taxRate;
+                        filePrice.ospTaxRateName = price.Price.ospTaxRateName;
+                        // Creando el objeto item price
+                        priceItem.priceType = price.priceType;
+                        priceItem.price = filePrice;
+                    }
+                    // Duracion de las cuotas
+                    if (price.priceType === 'cuota') {
+                        priceItem.recurringChargePeriod = Number(price.applicationDuration);
+                    }
+                    // Añadiendo el precio al arreglo de precios del terminal
+                    this.itemPrice.push(priceItem);
+                    if (price.name === priceName) {
+                        if (price.priceType && price.priceType === 'inicial') {
+                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
+                                this.initialPaid = price.Price.taxIncudedAmount;
+                            }
+                            else {
+                                this.initialPaid = price.Price.dutyFreeAmount;
+                            }
+                        }
+                        if (price.priceType && price.priceType === 'cuota') {
+                            this.litDeadlines = price.applicationDuration;
+                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
+                                this.litPrice = price.Price.taxIncudedAmount;
+                            }
+                            else {
+                                this.litPrice = price.Price.dutyFreeAmount;
+                            }
+                            // Si se puede se calcula el precio total
+                            if (this.initialPaid !== undefined) {
+                                this.totalPaid = this.initialPaid + this.litPrice * this.litDeadlines;
+                            }
+                        }
+                        if (price.priceType && price.priceType === 'unico') {
+                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
+                                this.uniquePaid = price.Price.taxIncudedAmount;
+                            }
+                            else {
+                                this.uniquePaid = price.Price.dutyFreeAmount;
+                            }
+                        }
+                    }
+                });
+            }
+            return { priceItem, filePrice };
+        }
+
+        private getDeviceCharacteristics(serviceData: any, mosaicFileCompOWCSStore: any, backCamera: boolean, frontCamera: boolean) {
+            if (serviceData.deviceSpecification.characteristic && serviceData.deviceSpecification.characteristic.length) {
+                serviceData.deviceSpecification.characteristic.forEach((characteristic) => {
+                    switch (characteristic.ospCharCategory) {
+                        case 'Color': {
+                            this.getColor(characteristic);
+                            break;
+                        }
+                        case 'compatibleServices': {
+                            this.getCompatibleServices(characteristic);
+                            break;
+                        }
+                        case 'highlightIcon': {
+                            // Si tiene attachment y dentro de este, href y ospAltText, se crea el terminalIcon
+                            this.getHighlightIcon(characteristic);
+                            break;
+                        }
+                        case 'isMonthObjective': {
+                            this.litOutstanding = characteristic.description;
+                            break;
+                        }
+                        default: {
+                            let child;
+                            // Se busca caracteristica de nivel 1
+                            let group = _.find(this.fileCharacteristic, { title: characteristic.description });
+                            // Si no existe
+                            if (!group) {
+                                // Se crea el nivel 1
+                                let characteristicNew: OrangeMosaicFileTerminalCharacteristicsLvl1 = new OrangeMosaicFileTerminalCharacteristicsLvl1;
+                                if (characteristic.characteristicAttachment && characteristic.characteristicAttachment.length > 0 &&
+                                    characteristic.characteristicAttachment[0].href) {
+                                    characteristicNew.image = characteristic.characteristicAttachment[0].href;
+                                }
+                                if (characteristic.description) {
+                                    characteristicNew.title = characteristic.description;
+                                }
+                                // Si tiene hijo, se crea y se añade al objeto de nivel 1
+                                if (characteristic.characteristicValue.length > 0) {
+                                    characteristic.characteristicValue.forEach((characteristicValue, z) => {
+                                        if (characteristic.name && characteristicValue.value) {
+                                            if (characteristicValue.value === 'true') {
+                                                characteristicValue.value = 'Si';
+                                            }
+                                            else if (characteristicValue.value === 'false') {
+                                                characteristicValue.value = 'No';
+                                            }
+                                            let characteristicValueNew: OrangeMosaicFileTerminalCharacteristicsLvl2 = new OrangeMosaicFileTerminalCharacteristicsLvl2(characteristic.name, characteristicValue.value);
+                                            let groupOWCS1 = _.find(mosaicFileCompOWCSStore.listOption, { name: characteristic.ospCharCategory });
+                                            if (groupOWCS1 && groupOWCS1['listOptionsLiteral']) {
+                                                child = _.find(groupOWCS1['listOptionsLiteral'], { name: characteristic.name });
+                                            }
+                                            if (groupOWCS1 && child) {
+                                                characteristicValueNew.name = child.value;
+                                                characteristicNew.subCharacteristicsList.push(characteristicValueNew);
                                             }
                                         }
-                                        if (price.priceType && price.priceType === 'cuota') {
-                                            this.litDeadlines = price.applicationDuration;
-                                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
-                                                this.litPrice = price.Price.taxIncudedAmount;
-                                            } else {
-                                                this.litPrice = price.Price.dutyFreeAmount;
+                                    });
+                                }
+                                let groupOWCS2 = _.find(mosaicFileCompOWCSStore.listOption, { name: characteristic.ospCharCategory });
+                                if (groupOWCS2 && groupOWCS2['listOptionsLiteral']) {
+                                    child = _.find(groupOWCS2['listOptionsLiteral'], { name: characteristic.name });
+                                }
+                                if (groupOWCS2 && child) {
+                                    this.fileCharacteristic.push(characteristicNew);
+                                }
+                            }
+                            else { // Si existe
+                                // Si hay hijo, se añade al objeto
+                                if (characteristic.characteristicValue.length > 0) {
+                                    characteristic.characteristicValue.forEach((characteristicValue, z) => {
+                                        if (characteristic.name && characteristicValue.value) {
+                                            if (characteristicValue.value === 'true') {
+                                                characteristicValue.value = 'Si';
                                             }
-                                            // Si se puede se calcula el precio total
-                                            if (this.initialPaid !== undefined) {
-                                                this.totalPaid = this.initialPaid + this.litPrice * this.litDeadlines;
+                                            else if (characteristicValue.value === 'false') {
+                                                characteristicValue.value = 'No';
+                                            }
+                                            let characteristicValueNew: OrangeMosaicFileTerminalCharacteristicsLvl2 = new OrangeMosaicFileTerminalCharacteristicsLvl2(characteristic.name, characteristicValue.value);
+                                            let groupOWCS3 = _.find(mosaicFileCompOWCSStore.listOption, { name: characteristic.ospCharCategory });
+                                            if (groupOWCS3 && groupOWCS3['listOptionsLiteral']) {
+                                                child = _.find(groupOWCS3['listOptionsLiteral'], { name: characteristic.name });
+                                            }
+                                            if (groupOWCS3 && child) {
+                                                characteristicValueNew.name = child.value;
+                                                if (characteristicValueNew.name === 'Cámara trasera'
+                                                    && characteristicValueNew.value === 'Si') {
+                                                    backCamera = true;
+                                                }
+                                                if (characteristicValueNew.name === 'Cámara frontal'
+                                                    && characteristicValueNew.value === 'Si') {
+                                                    frontCamera = true;
+                                                }
+                                                group.subCharacteristicsList.push(characteristicValueNew);
                                             }
                                         }
-                                        if (price.priceType && price.priceType === 'unico') {
-                                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
-                                                this.uniquePaid = price.Price.taxIncudedAmount;
-                                            } else {
-                                                this.uniquePaid = price.Price.dutyFreeAmount;
-                                            }
+                                    });
+                                }
+                            }
+                            break;
+                        }
+                    }
+                });
+            }
+            return { backCamera, frontCamera };
+        }
+
+        private setDeviceStock(serviceData: any) {
+            if (serviceData.deviceStock && serviceData.deviceStock.length > 0) {
+                this.realStockPeninsula = this.getStockByTypeByPlace(serviceData, 'real', 'peninsula');
+                this.virtualStockPeninsula = this.getStockByTypeByPlace(serviceData, 'virtual', 'peninsula');
+                this.realStockCanary = this.getStockByTypeByPlace(serviceData, 'real', 'canarias');
+                this.virtualStockCanary = this.getStockByTypeByPlace(serviceData, 'virtual', 'canarias');
+            }
+        }
+
+        private setDeviceVideoAndImage(serviceData: any) {
+            if (serviceData.deviceSpecification.attachment && serviceData.deviceSpecification.attachment.length) {
+                this.video = '';
+                serviceData.deviceSpecification.attachment.forEach((image, i) => {
+                    if (image.href && image.type && image.type === 'Imagen') {
+                        this.imageGalery.push(image.href);
+                    }
+                    else if (image.href && image.type && image.type === 'Video') {
+                        if (this.video.indexOf('mp4') === -1) {
+                            this.video = image.href;
+                        }
+                    }
+                });
+            }
+        }
+
+        private getOWCSCharacteristics(mosaicFileCompOWCSStore: any, backCamera: boolean, frontCamera: boolean) {
+            let fileCharacteristicTemp: OrangeMosaicFileTerminalCharacteristicsLvl1[] = [];
+            if (mosaicFileCompOWCSStore && mosaicFileCompOWCSStore.listOption && mosaicFileCompOWCSStore.listOption.length > 0) {
+                mosaicFileCompOWCSStore.listOption.forEach((optionOWCS, z) => {
+                    this.fileCharacteristic.forEach((characteristic, y) => {
+                        if (optionOWCS.title === characteristic.title) {
+                            let fileCharacteristicLVL2Temp: OrangeMosaicFileTerminalCharacteristicsLvl2[] = [];
+                            optionOWCS.listOptionsLiteral.forEach((optionOWCSChield, j) => {
+                                characteristic.subCharacteristicsList.forEach((characteristicChield, k) => {
+                                    if (optionOWCSChield.value === characteristicChield.name) {
+                                        if ((characteristicChield.name === 'Resolución de la cámara trasera' && backCamera)
+                                            || (characteristicChield.name === 'Resolución de la cámara frontal' &&
+                                                frontCamera) || (characteristicChield.name !== 'Resolución de la cámara trasera'
+                                                    && characteristicChield.name !== 'Resolución de la cámara frontal')) {
+                                            fileCharacteristicLVL2Temp.push(characteristicChield);
                                         }
                                     }
                                 });
-                            }
+                            });
+                            characteristic.subCharacteristicsList = fileCharacteristicLVL2Temp;
+                            fileCharacteristicTemp.push(characteristic);
+                        }
+                    });
+                });
+            }
+            this.fileCharacteristic = fileCharacteristicTemp;
+        }
 
-                            // Añadir CP Primario y Secundario
-                            for (let i = 0; i < deviceOffering.length; i++) {
-                                if (deviceOffering[i].deviceOfferingPrice && deviceOffering[i].deviceOfferingPrice.length !== 0) {
-                                    for (let j = 0; j < deviceOffering[i].deviceOfferingPrice.length; j++) {
-                                        if (deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering && deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering.length !== 0) {
-                                            for (let k = 0; k < deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering.length; k++) {
-                                                if (deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k]) {
-                                                    let cpCategory = null;
-                                                    let bono = null;
-                                                    if (deviceOffering[i].deviceOfferingPrice[j].name === 'primario') {
-                                                        cpCategory = _.find(deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].category, { 'name': 'CPT-CPC' });
-                                                    } else if (deviceOffering[i].deviceOfferingPrice[j].name === 'secundario') {
-                                                        cpCategory = _.find(deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].category, { 'name': 'CPD' });
-                                                    }
-                                                    if (cpCategory !== undefined) {
-                                                        this.cpSiebel = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].id;
-                                                        this.cpDuration = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].productOfferingTerm[0].duration;
-                                                        this.cpDescription = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].name;
-                                                        //break;
-                                                    }
-                                                    bono = _.find(deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].category, { 'name': 'bono' });
-                                                    if (bono !== null && bono !== undefined) {
-                                                        this.bonusId = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].id;
-                                                        this.bonusDesc = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].name;
-                                                    } else {
-                                                        delete this.bonusId;
-                                                        delete this.bonusDesc;
-                                                    }
-                                                }
-                                            }
-                                        }
-
+        private addCPPrimarySecondary(deviceOffering: any) {
+            for (let i = 0; i < deviceOffering.length; i++) {
+                if (deviceOffering[i].deviceOfferingPrice && deviceOffering[i].deviceOfferingPrice.length !== 0) {
+                    for (let j = 0; j < deviceOffering[i].deviceOfferingPrice.length; j++) {
+                        if (deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering && deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering.length !== 0) {
+                            for (let k = 0; k < deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering.length; k++) {
+                                if (deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k]) {
+                                    let cpCategory = null;
+                                    let bono = null;
+                                    if (deviceOffering[i].deviceOfferingPrice[j].name === 'primario') {
+                                        cpCategory = _.find(deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].category, { 'name': 'CPT-CPC' });
+                                    }
+                                    else if (deviceOffering[i].deviceOfferingPrice[j].name === 'secundario') {
+                                        cpCategory = _.find(deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].category, { 'name': 'CPD' });
+                                    }
+                                    if (cpCategory !== undefined) {
+                                        this.cpSiebel = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].id;
+                                        this.cpDuration = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].productOfferingTerm[0].duration;
+                                        this.cpDescription = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].name;
+                                        //break;
+                                    }
+                                    bono = _.find(deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].category, { 'name': 'bono' });
+                                    if (bono !== null && bono !== undefined) {
+                                        this.bonusId = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].id;
+                                        this.bonusDesc = deviceOffering[i].deviceOfferingPrice[j].relatedProductOffering[k].name;
+                                    }
+                                    else {
+                                        delete this.bonusId;
+                                        delete this.bonusDesc;
                                     }
                                 }
                             }
-
-                            // Seguro movil.
-                            if (deviceOff.recommendedProductOffering && deviceOff.recommendedProductOffering.length) {
-                                if (deviceOff.recommendedProductOffering[0].name === 'Seguro movil') {
-                                    this.litInsurancePaid =
-                                        deviceOff.recommendedProductOffering[0].productOfferingPrice[0].price.dutyFreeAmount;
-                                    this.insuranceSiebelId = deviceOff.recommendedProductOffering[0].id;
-                                }
-                            }
-                        });
-                    }
-                    // Si se puede se calcula el ahorro    
-                    if (this.litDeadlines && this.litPrice && this.uniquePaid) {
-                        this.saving = this.uniquePaid - this.totalPaid;
-                    } else { // No se puede calcular el ahorro
-                        this.saving = 0;
+                        }
                     }
                 }
-
-                if (commercialData[commercialActIndex].ospTerminalWorkflow) {
-                    // Renove prepago
-                    if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'prepaid_renew') {
-                        commercialData[commercialActIndex].prepaidProducts.forEach((product, i) => {
-                            if (product.codSAP === serviceData.deviceSpecification.id) {
-                                product.offertDetails.forEach((offert) => {
-                                    let prepaidPrice = {
-                                        valorRecarga: offert.valorRecarga,
-                                        valorPuntos: offert.valorPuntos,
-                                        valorEruros: offert.valorEruros
-                                    }
-                                    this.prepaidRenewPrices.push(prepaidPrice);
-                                });
-                            }
-                        });
-                    }
-                    // Si es renove primario se guardan todas las tarifas asociadas
-                    if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'primary_renew' ||
-                        commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'best_renove') {
-                        serviceData.deviceOffering.forEach((deviceOff) => {
-                            if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length) {
-                                deviceOff.deviceOfferingPrice.forEach((price) => {
-                                    if (price.relatedProductOffering && price.relatedProductOffering.length) {
-                                        price.relatedProductOffering.forEach((product) => {
-                                            if (product.isBundle) {
-                                                let rate = {
-                                                    name: product.name,
-                                                    bundleId: product.id
-                                                }
-                                                let isInRenewRates = _.find(this.renewRates, { siebelId: rate.bundleId });
-                                                if (!isInRenewRates) {
-                                                    this.renewRates.push(rate);
-                                                }
-                                            }
-                                        })
-                                    }
-                                });
-                            }
-                        });
-                    }
-                }
-
             }
         }
 
