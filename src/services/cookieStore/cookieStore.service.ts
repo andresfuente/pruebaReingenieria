@@ -124,30 +124,7 @@ module OrangeFeSARQ.Services {
                 vm.hootSrv.getMainLine(vm.genericConstant.brand, document, vm.genericConstant.site, vm.compName)
                     .then((response) => {
                         if (response && response.line) {
-                            if (vm.msisdn) {
-                                let cvProduct = vm.searchCvProduct(vm.msisdn);
-                                vm.setCode(cvProduct, vm.msisdn);
-                                if (vm.utils.isFixedLine(vm.msisdn)) {
-                                    if (response.line.lineaPrincipalMovil) {
-                                        let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
-                                        vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
-                                    }
-                                } else {
-                                    if (response.line.lineaPrincipalFijo) {
-                                        let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
-                                        vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
-                                    }
-                                }
-                            } else {
-                                if (response.line.lineaPrincipalMovil) {
-                                    let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
-                                    vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
-                                }
-                                if (response.line.lineaPrincipalFijo) {
-                                    let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
-                                    vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
-                                }
-                            }
+                            this.setCodeCvProduct(vm, response);
                         }
                     });
             } else {
@@ -159,6 +136,35 @@ module OrangeFeSARQ.Services {
                         }
                     }
                 );
+            }
+        }
+
+        private setCodeCvProduct(vm: this, response: any) {
+            if (vm.msisdn) {
+                let cvProduct = vm.searchCvProduct(vm.msisdn);
+                vm.setCode(cvProduct, vm.msisdn);
+                if (vm.utils.isFixedLine(vm.msisdn)) {
+                    if (response.line.lineaPrincipalMovil) {
+                        let cvProductlineaPrincipalMovil = vm.searchCvProduct(response.line.lineaPrincipalMovil);
+                        vm.setCode(cvProductlineaPrincipalMovil, response.line.lineaPrincipalMovil);
+                    }
+                }
+                else {
+                    if (response.line.lineaPrincipalFijo) {
+                        let cvProductlineaPrincipalFijo = vm.searchCvProduct(response.line.lineaPrincipalFijo);
+                        vm.setCode(cvProductlineaPrincipalFijo, response.line.lineaPrincipalFijo);
+                    }
+                }
+            }
+            else {
+                if (response.line.lineaPrincipalMovil) {
+                    let cvProductlineaPrincipalMovil = vm.searchCvProduct(response.line.lineaPrincipalMovil);
+                    vm.setCode(cvProductlineaPrincipalMovil, response.line.lineaPrincipalMovil);
+                }
+                if (response.line.lineaPrincipalFijo) {
+                    let cvProductlineaPrincipalFijo = vm.searchCvProduct(response.line.lineaPrincipalFijo);
+                    vm.setCode(cvProductlineaPrincipalFijo, response.line.lineaPrincipalFijo);
+                }
             }
         }
 
@@ -263,30 +269,43 @@ module OrangeFeSARQ.Services {
                 let servicesList = response.product;
                 let ORANGETV = 'orange tv'; // Servicio de orange tv
                 let TRANQUILIDAD = 'oc1b'; // Activado servicio de tranquilidad
-                for (let i = 0; i < servicesList.length; i++) {
-                    let service = servicesList[i];
-                    let serviceName: string;
-                    // La respuesta varia para fijo y movil 
-                    if (vm.utils.isFixedLine(msisdn)) {
-                        serviceName = service.description;
-                    } else {
-                        for (let k = 0; k < service.productSpecification.length && !serviceName; k++) {
-                            let productSpec = service.productSpecification[k];
-                            if (productSpec.id) {
-                                serviceName = productSpec.id;
-                            }
-                        }
-                    }
-
-                    // TV
-                    let regex = new RegExp(ORANGETV, 'gi'); // g para que sea global, i - para que no sea sensible a mayusculas/minusculas
-                    if (!cookieObj.tv) { cookieObj.tv = regex.test(serviceName) ? 1 : 0; }
-                    // Tranquilidad 
-                    regex = new RegExp(TRANQUILIDAD, 'gi'); // g para que sea global, i - para que no sea sensible a mayusculas/minusculas
-                    if (!cookieObj.oc) { cookieObj.oc = regex.test(serviceName) ? 1 : 0; }
-                }
+                this.loopServiceListForGetServiceName(servicesList, vm, msisdn, ORANGETV, cookieObj, TRANQUILIDAD);
             }
             vm.setParams(cookieObj, cvProduct, msisdn, code);
+        }
+
+        private loopServiceListForGetServiceName(servicesList: any, vm: this, msisdn: string, ORANGETV: string, cookieObj: any, TRANQUILIDAD: string) {
+            for (let i = 0; i < servicesList.length; i++) {
+                let service = servicesList[i];
+                let serviceName: string;
+                // La respuesta varia para fijo y movil 
+                if (vm.utils.isFixedLine(msisdn)) {
+                    serviceName = service.description;
+                }
+                else {
+                    serviceName = this.loopProductSpecificationForGetServiceName(service, serviceName);
+                }
+                // TV
+                let regex = new RegExp(ORANGETV, 'gi'); // g para que sea global, i - para que no sea sensible a mayusculas/minusculas
+                if (!cookieObj.tv) {
+                    cookieObj.tv = regex.test(serviceName) ? 1 : 0;
+                }
+                // Tranquilidad 
+                regex = new RegExp(TRANQUILIDAD, 'gi'); // g para que sea global, i - para que no sea sensible a mayusculas/minusculas
+                if (!cookieObj.oc) {
+                    cookieObj.oc = regex.test(serviceName) ? 1 : 0;
+                }
+            }
+        }
+
+        private loopProductSpecificationForGetServiceName(service: any, serviceName: string) {
+            for (let k = 0; k < service.productSpecification.length && !serviceName; k++) {
+                let productSpec = service.productSpecification[k];
+                if (productSpec.id) {
+                    serviceName = productSpec.id;
+                }
+            }
+            return serviceName;
         }
 
         /**
@@ -463,26 +482,31 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let SOLODATOS = 'ONLYDATA';
             let ACTIVO = 'SI';
-
+            let response: boolean = false;
             if (vm.productCatalogStore.specification) {
                 let fixed = vm.utils.isFixedLine(msisdn);
                 let specSearch = fixed ? 'ospMorganeCode' : 'ospExternalCode';
 
                 let spec = vm.productCatalogStore.getCatalogSpecificationByTmcode(code, specSearch);
-                if (spec) {
-                    for (let i = 0; i < spec.productSpecCharacteristic.length; i++) {
-                        if (spec.productSpecCharacteristic[i].name === SOLODATOS) {
-                            for (let j = 0; j < spec.productSpecCharacteristic[i].productSpecCharacteristicValue.length; j++) {
-                                if (spec.productSpecCharacteristic[i].productSpecCharacteristicValue[j].value === ACTIVO) {
-                                    return true;
-                                }
+                response = this.checkSoloDatos(spec, SOLODATOS, ACTIVO, response);
+            }
+
+            return response;
+        }
+
+        private checkSoloDatos(spec: any, SOLODATOS: string, ACTIVO: string, response: boolean) {
+            if (spec) {
+                for (let i = 0; i < spec.productSpecCharacteristic.length; i++) {
+                    if (spec.productSpecCharacteristic[i].name === SOLODATOS) {
+                        for (let j = 0; j < spec.productSpecCharacteristic[i].productSpecCharacteristicValue.length; j++) {
+                            if (spec.productSpecCharacteristic[i].productSpecCharacteristicValue[j].value === ACTIVO) {
+                                response = true;
                             }
                         }
                     }
                 }
             }
-
-            return false;
+            return response;
         }
     }
 }
