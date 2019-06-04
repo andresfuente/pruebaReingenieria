@@ -76,16 +76,10 @@ module OrangeFeSARQ.Services {
          */
         getSelectedCommercialAct(): number {
             let commercialData = [];
-            let index;
             commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            index =  _.findIndex(commercialData, function(currentCommercialAct){
+            return _.findIndex(commercialData, function(currentCommercialAct){
                 return currentCommercialAct.ospIsSelected  === true;
             });
-            if (index === -1) {
-                return 0;
-            } else {
-                return index;
-            }
         }
 
 
