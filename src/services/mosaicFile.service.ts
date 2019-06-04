@@ -166,8 +166,9 @@ module OrangeFeSARQ.Services {
                 ospOpenSearch: search,
                 profile: profileBinding,
                 segment: clientSegment,
-                'deviceOffering.category.name': priceNameBinding
             };
+
+            params[this.categoryName] = priceNameBinding;
 
             if (filters && filters.length) {
                 filters.forEach((filtersParam, index) => {
@@ -477,9 +478,10 @@ module OrangeFeSARQ.Services {
                 riskLevel: riskLevel,
                 relatedProductOffering: relatedProductOffering,
                 profile: profileBinding,
-                'deviceOffering.category.name': priceNameBinding,
                 priceType: priceType
             };
+
+            params[this.categoryName] = priceNameBinding;
 
             // Parametros para Terminal Libre sin Servicio 
             params = this.getParamsTerminalLibre(relatedProductOffering, params);
