@@ -720,107 +720,125 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
             if (type) {
-                switch (type) {
-                    case 'mobile':
-                        pattern = /^[67]{8}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'fixed':
-                        pattern = /^[89]{8}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'telephone':
-                        pattern = /^[6-9]\d{8}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'cp':
-                        pattern = /^[0-9]{5}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'mail':
-                        pattern = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]{5,30}$/;
-                        pattern2 = /^[\s\S]{0,40}$/;
-                        status = this.checkStatus2PaternAnd(pattern, value, pattern2, status);
-                        break;
-                    case 'ccc':
-                        pattern = /^[0-9]\d{3}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'iban':
-                        pattern1 = /^\d{4}\s\d{4}\s\d{2}\s\d{10}$/;
-                        pattern2 = /^[0-9]{20}$/;
-                        status = this.checkStatus2PaternOr(pattern1, value, pattern2, status);
-                        break;
-                    case 'text40':
-                        pattern = /^[a-zñA-ZÑ0-9\s]{5,40}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'text20':
-                        pattern = /^[a-zA-Z\s]{5,20}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'num2':
-                        pattern = /^[0-9]{0,2}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'num3':
-                        pattern = /^[0-9]{0,3}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'alfNum':
-                        pattern = /^[a-zA-Z0-9]{0,5}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'nif':
-                        pattern = /^[0-9]{8}[a-zA-Z]$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'nie':
-                        pattern = /^[xyzXYZ][0-9]{7}[a-zA-Z]$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'passport':
-                        status = true;
-                        break;
-                    case 'cif':
-                        // pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
-                        pattern = /^[abehABEH]{1}[0-9]{8}$/;
-                        pattern1 = /^[kpqsKPQS]{1}[0-9]{7}[a-jA-J]$/;
-                        pattern2 = /^[cdfgjlmnruvwCDFGJLMNRUVW]{1}[0-9]{7}[0-9a-jA-J]$/;
-                        status = this.checkStatus3PaternOr(pattern, value, pattern1, pattern2, status);
-                        break;
-                    case 'TNC':
-                        status = this.checkStatusTNC(vm, value, status);
-                        break;
-                    case 'TNNCP':
-                        status = this.checkStatusTNNCP(vm, value, status);
-                        break;
-                    case 'NNCP':
-                        status = this.checkStatusNNCP(vm, value, status);
-                        break;
-                    case 'NC':
-                        status = this.checkStatusNC(vm, value, status);
-                        break;
-                    case 'pass':
-                        pattern = /^.{6,8}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'num4':
-                        pattern = /^[0-9]\d{2,5}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    case 'num68':
-                        pattern = /^[0-9]{6,8}$/;
-                        status = this.checkStatus(pattern, value, status);
-                        break;
-                    default:
-                        break;
+                status = this.getStatus(type, status, vm, value);
+                ({ pattern, status } = this.getStatusPattern(type, pattern, status, value));
+                if (!status) {
+                    switch (type) {
+
+                        case 'mail':
+                            pattern = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]{5,30}$/;
+                            pattern2 = /^[\s\S]{0,40}$/;
+                            status = this.checkStatus2PaternAnd(pattern, value, pattern2, status);
+                            break;
+                        case 'ccc':
+                            pattern = /^[0-9]\d{3}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'iban':
+                            pattern1 = /^\d{4}\s\d{4}\s\d{2}\s\d{10}$/;
+                            pattern2 = /^[0-9]{20}$/;
+                            status = this.checkStatus2PaternOr(pattern1, value, pattern2, status);
+                            break;
+                        case 'text40':
+                            pattern = /^[a-zñA-ZÑ0-9\s]{5,40}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'text20':
+                            pattern = /^[a-zA-Z\s]{5,20}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'num2':
+                            pattern = /^[0-9]{0,2}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'num3':
+                            pattern = /^[0-9]{0,3}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'alfNum':
+                            pattern = /^[a-zA-Z0-9]{0,5}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'nif':
+                            pattern = /^[0-9]{8}[a-zA-Z]$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'nie':
+                            pattern = /^[xyzXYZ][0-9]{7}[a-zA-Z]$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'passport':
+                            status = true;
+                            break;
+                        case 'cif':
+                            // pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
+                            pattern = /^[abehABEH]{1}[0-9]{8}$/;
+                            pattern1 = /^[kpqsKPQS]{1}[0-9]{7}[a-jA-J]$/;
+                            pattern2 = /^[cdfgjlmnruvwCDFGJLMNRUVW]{1}[0-9]{7}[0-9a-jA-J]$/;
+                            status = this.checkStatus3PaternOr(pattern, value, pattern1, pattern2, status);
+                            break;
+
+                        case 'pass':
+                            pattern = /^.{6,8}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'num4':
+                            pattern = /^[0-9]\d{2,5}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'num68':
+                            pattern = /^[0-9]{6,8}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             return status;
         };
 
 
+
+        private getStatusPattern(type: string, pattern: any, status: boolean, value: string) {
+            if (type === 'mobile' || type == 'fixed' || type == 'telephone' || type == 'cp') {
+                if (type === 'mobile') {
+                    pattern = /^[67]{8}$/;
+                    status = this.checkStatus(pattern, value, status);
+                }
+                else if (type == 'fixed') {
+                    pattern = /^[89]{8}$/;
+                    status = this.checkStatus(pattern, value, status);
+                }
+                else if (type == 'telephone') {
+                    pattern = /^[6-9]\d{8}$/;
+                    status = this.checkStatus(pattern, value, status);
+                }
+                else if (type == 'cp') {
+                    pattern = /^[0-9]{5}$/;
+                    status = this.checkStatus(pattern, value, status);
+                }
+            }
+            return { pattern, status };
+        }
+
+        private getStatus(type: string, status: boolean, vm: this, value: string) {
+            if (type === 'TNC' || type == 'TNNCP' || type == 'NNCP' || type == 'NC') {
+                if (type === 'TNC') {
+                    status = this.checkStatusTNC(vm, value, status);
+                }
+                else if (type == 'TNNCP') {
+                    status = this.checkStatusTNNCP(vm, value, status);
+                }
+                else if (type == 'NNCP') {
+                    status = this.checkStatusNNCP(vm, value, status);
+                }
+                else if (type == 'NC') {
+                    status = this.checkStatusNC(vm, value, status);
+                }
+            }
+            return status;
+        }
 
         private checkStatusNC(vm: this, value: string, status: boolean) {
             if (vm.validateForm('nif', value) || vm.validateForm('cif', value)) {
