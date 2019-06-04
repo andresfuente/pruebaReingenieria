@@ -7,9 +7,6 @@ module OrangeFeSARQ.Services {
     private _specification: any;
     private _offering: any;
     private _listRates: any;
-    private ratelove: boolean = false;
-    private priceAndLove: any = {};
-
 
     get specification(): any {
       return this._specification;

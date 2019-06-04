@@ -20,7 +20,6 @@ module OrangeFeSARQ.Services {
         private cache = {}; // Storage to prevent repeating calls to the API
         private storeProvince: string = '';
         private httpService;
-        public CHARACTERISTICCOLOR = 'characteristic.color';
 
         public isTLV: boolean;
 
@@ -131,10 +130,10 @@ module OrangeFeSARQ.Services {
             clientGeolocation = this.setClientGeolocation(currentBillingAddress, clientGeolocation);
 
             // Cabeceras
-            let _headers = new HashMap<string, string>();
-            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
-            _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
-
+            let headers = {
+                'Geolocation-local': srv.storeProvince.toUpperCase(),
+                'Geolocation-client': clientGeolocation.toUpperCase()
+            };
             // ELIMINAR cuando se eliminen los select.
             // Establece el codigo de la tarifa segun lo seleccionado
             let codTarifa = '';

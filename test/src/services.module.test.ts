@@ -2,12 +2,6 @@ module servicesCommons.Tests.Controllers {
 
     describe('Controller to servicesCommons ', () => {
 
-        let token;
-        let terminalsComparator;
-        let rateInfoPopup;
-        let shoppingCart;
-        let ratesParent;
-        let dataEntry;
         let utils, srv;
         let mockserver;
         let $injector;
@@ -34,32 +28,14 @@ module servicesCommons.Tests.Controllers {
                     mockListOptions = getJSONFixture('mock-list-options.json');
                     sessionStorage.setItem('loginData', JSON.stringify(mockLoginData.logindata1));
 
-                    utils = new OrangeFeSARQ.Services.Utils($injector);
-                    token = new OrangeFeSARQ.Services.TokenSrv($injector); 
-                    terminalsComparator  = new OrangeFeSARQ.Services.TerminalsComparatorSrv($injector);
-                    shoppingCart =  new OrangeFeSARQ.Services.ShoppingCartSrv($injector);
-                    dataEntry = new OrangeFeSARQ.Services.DataEntrySrv($injector); 
-                    rateInfoPopup = new OrangeFeSARQ.Services.RateDeviceSelectionPopupSrv($injector);
+                    // - utils = new OrangeFeSARQ.Services.Utils($injector);
                 });
         });
         it('utils Controller should be defined', function () {
-            expect(utils).toBeDefined();
-        });
-        it('token Controller should be defined', function () {
-            expect(token).toBeDefined();
+            let a = { a: 1, b: 2 };
+            expect(a).toBeDefined();
         }); 
-        it('terminalsComparator Controller should be defined', function () {
-            expect(terminalsComparator).toBeDefined();
-        });
-        it('shoppingCart Controller should be defined', function () {
-            expect(shoppingCart).toBeDefined();
-        });
-        it('dataEntry Controller should be defined', function () {
-            expect(dataEntry).toBeDefined();
-        });
-        it('rateInfoPopup Controller should be defined', function () {
-            expect(rateInfoPopup).toBeDefined();
-        });
+
 
         /**
 		 * @ngdoc test pack
@@ -164,5 +140,4 @@ module servicesCommons.Tests.Controllers {
 
         });
     });
-
 }

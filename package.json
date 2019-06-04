@@ -1,7 +1,7 @@
 {
   "name": "orange-services",
   "title": "Orange-services",
-  "version": "1.57.1-SNAPSHOT.0",
+  "version": "1.60.9",
   "description": "Contiene los servicios comunes no core.",
   "main": "index.js",
   "scripts": {
@@ -61,5 +61,3 @@
     "orange-notification-center": "1.18.0"
   }
 }
-
-  "version": "1.60.0-SNAPSHOT.0",

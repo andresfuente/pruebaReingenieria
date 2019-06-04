@@ -18,16 +18,6 @@ module OrangeFeSARQ.Services {
             vm.genericConstant = $injector.get('genericConstant');
         }
 
-        checkParam(param, _search) {
-            if (param === 'Line') {
-                _search.queryParams.productBucket = 'line';
-                
-            } else if (param === 'Bonus') {
-                
-                _search.queryParams.productBucket = 'bonus';
-            }
-        }
-
         getBalanceByMsisdn(msisdn: string, param: string, componentName: string = 'more-megas-comp'): any {
             let vm = this;
             let _search: any;
@@ -41,8 +31,14 @@ module OrangeFeSARQ.Services {
                 urlParams: [vm.genericConstant.brand, 'usageReport', 'OSP']
 
             };
-            vm.checkParam(param, _search);
 
+            if (param === 'Line') {
+                _search.queryParams.productBucket = 'line';
+                
+            } else if (param === 'Bonus') {
+                
+                _search.queryParams.productBucket = 'bonus';
+            }
             return vm.httpCacheGett(vm.bucketBalanceAPIUrl, _search, componentName)
                 .then(function (response) {
                     return response.data;
@@ -63,9 +59,18 @@ module OrangeFeSARQ.Services {
                     'onlyActive':vm.genericConstant.onlyActive
                 },
                 urlParams: [vm.genericConstant.brand, 'usageReport', 'OSP']
-            };            
-            vm.checkParam(param, _search);
+            };
 
+            if (param === 'Line') {
+                _search.queryParams.productBucket = 'line';
+                // - vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceLineAPIUrl;
+            } else if (param === 'Bonus') {
+                /*_search.queryParams.productBucket = 'bonus';
+                vm.bucketBalanceAPIUrl = vm.genericConstant.bucketBalanceBonusAPIUrl;
+                _search = {};
+                TO-DO: para llamar a la api*/
+                _search.queryParams.productBucket = 'bonus';
+            }
             return vm.httpCacheGett(vm.bucketBalanceAPIUrl, _search, componentName)
                 .then(function (response) {
                     return response.data;

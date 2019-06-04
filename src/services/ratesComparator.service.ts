@@ -11,8 +11,6 @@ module OrangeFeSARQ.Services {
     export class RatesComparatorSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
-        public GEOLOCATION_LOCAL = 'Geolocation-local';
-        public GEOLOCATION_CLIENT = 'Geolocation-client';
         // Inject vars
         private spinnerBlockSrv;
 
@@ -451,12 +449,12 @@ module OrangeFeSARQ.Services {
          */
         getClientType(siebelId: string) {
             let vm = this;
-            let typeRtc = '2'; // Por defecto es el valor que se devuelve
+            let type = '2'; // Por defecto es el valor que se devuelve
 
-            let customerView = sessionStorage.getItem('cv');
+            let cv = sessionStorage.getItem('cv');
 
-            if (!customerView || customerView === null || customerView === undefined) {
-                let comData = JSON.parse(sessionStorage.getItem('commercialData'));
+            if (!cv || cv === null || cv === undefined) {
+                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
                 // Buscamos el tipo de esta tarifa en commercial data
                 if (commercialData && commercialData.length > 0) {
@@ -466,11 +464,11 @@ module OrangeFeSARQ.Services {
                 vm.getSession();
 
                 if (vm.clientData && vm.clientData.clientType) {
-                    typeRtc = vm.clientData.clientType;
+                    type = vm.clientData.clientType;
                 }
             }
 
-            return typeRtc;
+            return type;
         }
 
         private getTypeCommercialData(commercialData: any, siebelId: string, type: string) {
@@ -585,10 +583,12 @@ module OrangeFeSARQ.Services {
             // CABECERA HASHMAP
             vm.setCustomerData();
             vm.setStoreProvince();
+            let srv = this;
+            vm.getSession();
 
             let shopGeolocation = vm.shopInfo && vm.shopInfo.province ? vm.shopInfo.province : 'Madrid';
             let clientGeolocation = vm.clientData && vm.clientData.generalAddress && vm.clientData.generalAddress.city ? vm.clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
-            const currentBillingAddress = vm.billingAccountStore.getCurrentBillingAddress()
+            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
@@ -691,8 +691,8 @@ module OrangeFeSARQ.Services {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
-            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
+            _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
+            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)

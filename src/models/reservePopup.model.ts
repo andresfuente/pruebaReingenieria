@@ -8,6 +8,5 @@ declare module reservePopupSrv.Models {
         visible: boolean;
         closeEnabled: boolean;
         terminals: any;
-        isContratacion: boolean;
     }
 }

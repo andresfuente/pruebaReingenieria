@@ -46,8 +46,6 @@ module OrangeFeSARQ.Constant {
       loyalty: 'api/loyalty/v1',
       getAgrement :  'api/agreementManagement/v1',
       shoppingCart: 'api/shoppingCart/v1',
-      salesManagement: 'openapi/salesManagement/v1/salesLead',
-
 
       // Xnet Url
       xnetUrl: 'vpt2/additionalProductsProAction.do?',
