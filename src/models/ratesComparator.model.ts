@@ -157,8 +157,8 @@ module ratesComparator.Models {
                 this.IMEI = terminal.IMEI;
             }
 
-            let priceItem: ratesComparator.Models.OrangeMosaicFileTerminalFileIPriceItem;
-            let filePrice: ratesComparator.Models.OrangeMosaicFileTerminalFilePrice;
+            let priceItemRtc: ratesComparator.Models.OrangeMosaicFileTerminalFileIPriceItem;
+            let filePriceRtc: ratesComparator.Models.OrangeMosaicFileTerminalFilePrice;
 
             ({ priceItem, filePrice } = this.setPrice(priceData, priceItem, filePrice));
         }

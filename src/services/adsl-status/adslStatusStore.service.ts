@@ -204,29 +204,7 @@ module OrangeFeSARQ.Services {
                                 vm.personalPage = response.adslStatus.personalPage;
                                 vm.ftpUser = response.adslStatus.ftpUser;
                                 vm.ftpAcces = response.adslStatus.ftpAcces;
-                                let obj = {
-                                    internetUser: vm.internetUser,
-                                    state: vm.state,
-                                    stateDesc: vm.stateDesc,
-                                    phone: vm.phone,
-                                    encapsulated: vm.encapsulated,
-                                    multiplexion: vm.multiplexion,
-                                    vpi: vm.vpi,
-                                    vci: vm.vci,
-                                    userName: vm.userName,
-                                    adslPassword: vm.adslPassword,
-                                    dhcp: vm.dhcp,
-                                    ipFija: vm.ipFija,
-                                    smtpServer: vm.smtpServer,
-                                    popServer: vm.popServer,
-                                    email: vm.email,
-                                    emailPassword: vm.emailPassword,
-                                    realm: vm.realm,
-                                    organization: vm.organization,
-                                    personalPage: vm.personalPage,
-                                    ftpUser: vm.ftpUser,
-                                    ftpAcces: vm.ftpAcces,
-                                };
+                                let obj = vm.objStatus();
                                 vm.freeStore();
                                 return obj;
                             })
@@ -252,57 +230,13 @@ module OrangeFeSARQ.Services {
                                 vm.personalPage = null;
                                 vm.ftpUser = null;
                                 vm.ftpAcces = null;
-                                let obj = {
-                                    internetUser: vm.internetUser,
-                                    state: vm.state,
-                                    stateDesc: vm.stateDesc,
-                                    phone: vm.phone,
-                                    encapsulated: vm.encapsulated,
-                                    multiplexion: vm.multiplexion,
-                                    vpi: vm.vpi,
-                                    vci: vm.vci,
-                                    userName: vm.userName,
-                                    adslPassword: vm.adslPassword,
-                                    dhcp: vm.dhcp,
-                                    ipFija: vm.ipFija,
-                                    smtpServer: vm.smtpServer,
-                                    popServer: vm.popServer,
-                                    email: vm.email,
-                                    emailPassword: vm.emailPassword,
-                                    realm: vm.realm,
-                                    organization: vm.organization,
-                                    personalPage: vm.personalPage,
-                                    ftpUser: vm.ftpUser,
-                                    ftpAcces: vm.ftpAcces,
-                                };
+                                let obj = vm.objStatus();
                                 vm.freeStore();
                                 // - this._callingStatus = false;
                                 return obj;
                             });
                     } else {
-                        let obj = {
-                            internetUser: vm.internetUser,
-                            state: vm.state,
-                            stateDesc: vm.stateDesc,
-                            phone: vm.phone,
-                            encapsulated: vm.encapsulated,
-                            multiplexion: vm.multiplexion,
-                            vpi: vm.vpi,
-                            vci: vm.vci,
-                            userName: vm.userName,
-                            adslPassword: vm.adslPassword,
-                            dhcp: vm.dhcp,
-                            ipFija: vm.ipFija,
-                            smtpServer: vm.smtpServer,
-                            popServer: vm.popServer,
-                            email: vm.email,
-                            emailPassword: vm.emailPassword,
-                            realm: vm.realm,
-                            organization: vm.organization,
-                            personalPage: vm.personalPage,
-                            ftpUser: vm.ftpUser,
-                            ftpAcces: vm.ftpAcces,
-                        };
+                        let obj = vm.objStatus();
                         vm.freeStore();
                         // - this._callingStatus = false;
                         return vm.$q.resolve(obj);
@@ -314,6 +248,34 @@ module OrangeFeSARQ.Services {
             } else {
                 return vm.$q.reject(null);
             }
+        }
+
+        objStatus() {
+            let vm = this;
+            let obj = {
+                internetUser: vm.internetUser,
+                state: vm.state,
+                stateDesc: vm.stateDesc,
+                phone: vm.phone,
+                encapsulated: vm.encapsulated,
+                multiplexion: vm.multiplexion,
+                vpi: vm.vpi,
+                vci: vm.vci,
+                userName: vm.userName,
+                adslPassword: vm.adslPassword,
+                dhcp: vm.dhcp,
+                ipFija: vm.ipFija,
+                smtpServer: vm.smtpServer,
+                popServer: vm.popServer,
+                email: vm.email,
+                emailPassword: vm.emailPassword,
+                realm: vm.realm,
+                organization: vm.organization,
+                personalPage: vm.personalPage,
+                ftpUser: vm.ftpUser,
+                ftpAcces: vm.ftpAcces,
+            };
+            return obj;
         }
     }
 }

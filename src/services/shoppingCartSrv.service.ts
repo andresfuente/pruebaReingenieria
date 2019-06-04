@@ -35,6 +35,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let _headers = vm.getParentSfid();
             body = vm.conditionalJazztel(body);
+            body = vm.checkProductOfferingID(body);
             let _search = {
                 body: {
                     ospCartItemReqPost: [
@@ -58,6 +59,28 @@ module OrangeFeSARQ.Services {
         }
 
         /**
+         * 
+         * @param body  
+         */
+        checkProductOfferingID(body) {
+            if (body && body.cartItem && _.isArray(body.cartItem) && !_.isEmpty(body.cartItem)) {
+                _.forEach(body.cartItem, (element) => {
+                    if (!element.productOffering) {
+                        element.productOffering = {
+                            "id": element.id,
+                            "href": null,
+                            "name": null,
+                            "category": [],
+                            "isBundle": null,
+                            "attributes": []
+                        }
+                    }
+                });
+            }
+            return body;
+        }
+
+        /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services.ShoppingCartSrv#conditionalJazztel
          * @param {Object} body datos de shoppingCart
@@ -66,21 +89,21 @@ module OrangeFeSARQ.Services {
          * Agrega una caracteristica en caso de ser cliente jazztel
          * @returns {object} Devuelve el body de la llamada
          */
-        conditionalJazztel(body){
+        conditionalJazztel(body) {
             let loginData = JSON.parse(sessionStorage.getItem('loginData'));
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
-            if(clientData && clientData.jazztelData){
-                if(body && body.cartItem && _.isArray(body.cartItem) && !_.isEmpty(body.cartItem)){
+            if (clientData && clientData.jazztelData) {
+                if (body && body.cartItem && _.isArray(body.cartItem) && !_.isEmpty(body.cartItem)) {
                     let characteristic = {
                         "name": "Aplicable Cambio Marca",
                         "value": "YES"
                     };
-                    _.forEach(body.cartItem, (element) =>{
-                        if(element.product && element.product.characteristic){
+                    _.forEach(body.cartItem, (element) => {
+                        if (element.product && element.product.characteristic) {
                             element.product.characteristic.push(characteristic);
                             return false;
-                        }else if(element.product && !element.product.characteristic){
+                        } else if (element.product && !element.product.characteristic) {
                             element.product.characteristic = [];
                             element.product.characteristic.push(characteristic);
                             return false;
@@ -244,7 +267,7 @@ module OrangeFeSARQ.Services {
         renameNACRates(shoppingCart: any, clientName: Array<string>) {
             let vm = this;
 
-            let newName : string = '';
+            let newName: string = '';
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
             // Formateamos el nombre (usando todos los elementos que se pasen)
@@ -255,9 +278,9 @@ module OrangeFeSARQ.Services {
                 shoppingCart.cartItem.forEach(opt => {
                     if (opt.cartItem) {
                         opt.cartItem.forEach(cartItem => {
-                            if (cartItem && cartItem.product && cartItem.product.productRelationship && cartItem.product.productRelationship[0] 
-                            && cartItem.product.productRelationship[0].type === 'tarifa') {
-                                let comm : any = _.find(commercialData, {id: Math.floor(opt.id)});
+                            if (cartItem && cartItem.product && cartItem.product.productRelationship && cartItem.product.productRelationship[0]
+                                && cartItem.product.productRelationship[0].type === 'tarifa') {
+                                let comm: any = _.find(commercialData, { id: Math.floor(opt.id) });
 
                                 // Revisamos las tarifas para renombrar únicamente las LOVE NAC principales (movil_fijo)
                                 this.checkRatesForRename(comm, cartItem, newName);

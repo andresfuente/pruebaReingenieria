@@ -18,20 +18,57 @@ module ratesParent.Models {
 
         loadRates(specificationData, offeringData, bucketInfo?) {
             let vm = this;
-            if (specificationData.productSpecification && offeringData.productOffering) {
-                specificationData.productSpecification.forEach(function (specification) {
-                    let productOffering = [];
-                    offeringData.productOffering.forEach(function (offering) {
-                        if (specification.id === offering.productSpecification.id ||
-                            specification.id === offering.bundledProductOffering[0].id) {
-                            productOffering.push(offering);
-                        }
+            if (sessionStorage.getItem('pangea-brand') === 'jazztel') {
+                if (specificationData.productSpecification && offeringData.productOffering) {
+                    specificationData.productSpecification.forEach(function (specification) {
+                        let productOffering = [];
+                        offeringData.productOffering.forEach(function (offering) {
+                            offering.bundledProductOffering.forEach(element => {
+
+                                if (element.name && element.name === 'bundleId') {
+                                    if (!element.id) {
+                                        element.id = offering.bundledProductOffering[0].id + '+' + offering.productSpecification.id + '+' + offering.productSpecification.ospProductNumber
+                                    }
+
+                                    if (!specification.bundledProductSpecification[0].id) {
+                                        specification.bundledProductSpecification[0].id = specification.ospMorganeCode + '+' + specification.ospExternalCode + '+' + specification.productNumber;
+
+                                    }
+
+                                    if (specification.bundledProductSpecification[0].id === element.id) {
+                                        productOffering.push(offering);
+                                    }
+                                }
+                            });
+                        });
+
+                        let rate: Rate = new Rate(specification, productOffering, bucketInfo);
+
+                        vm.rates.push(rate);
                     });
+                }
+            } else {
+                if (specificationData.productSpecification && offeringData.productOffering) {
+                    specificationData.productSpecification.forEach(function (specification) {
+                        let productOffering = [];
+                        offeringData.productOffering.forEach(function (offering) {
+                            if (offering.isBundle) {
+                                offering.bundledProductOffering.forEach(element => {
 
-                    let rate: Rate = new Rate(specification, productOffering, bucketInfo);
+                                    if (specification.id && element.id && specification.id === element.id) {
+                                        productOffering.push(offering);
+                                    }
 
-                    vm.rates.push(rate);
-                });
+                                });
+                            }
+                        });
+
+                        let rate: Rate = new Rate(specification, productOffering, bucketInfo);
+
+                        vm.rates.push(rate);
+                    });
+                }
+
             }
         }
 
@@ -116,24 +153,18 @@ module ratesParent.Models {
         // Pago Aplazado
         public pagoAplazado: any = 'Pago Aplazado'
 
-        constructor(rateData, priceData, bucketInfo?) {
-            this.rateSubName = rateData.ospTitulo;
-            this.rateDescription = rateData.description;
-            this.siebelId = rateData.id;
-            this.groupName = rateData.ospGroupName;
-            this.typeService = rateData.ospTypeService;
+        //Jazztel
+        public characteristicJzz: RatesCharacteristicJzz[] = [];
 
-            // Inicializamos a 0 los precios auxiliares del pack NAC
-            this.nacPrice = 0;
-            this.nacPriceTaxIncluded = 0;
-            this.nacPricePromotional = 0;
-            this.nacPriceTaxIncludedPromotional = 0;
+        constructor(rateData, priceData, bucketInfo?) {
+
 
             // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
             this.checkIdIdTechDiferences(rateData);
 
-            this.pack = (typeof (rateData.ospFraseComercial) !== 'undefined' && rateData.ospFraseComercial !== null) ?
-                rateData.ospFraseComercial : '';
+                if (!rateData.id) {
+                    rateData.id = rateData.bundledProductSpecification[0].id;
+                }
 
             this.loopProductSpecCharacteristicSettingProductBundleOrBucket(rateData, bucketInfo);
             // Se obtienen los Id's de los SVA de la tarifa
@@ -160,18 +191,18 @@ module ratesParent.Models {
                     let info3: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
                     this.pupupInfo.push(info3);
                 }
-            }
-            for (let i in rateData.productSpecCharacteristic) {
-                if (rateData.productSpecCharacteristic[i].ospCategory === 'implicit') {
-                    let repetida = false;
-                    for (let j in this.pupupInfo) {
-                        if (rateData.productSpecCharacteristic[i].name === this.pupupInfo[j].name) {
-                            repetida = true;
+                for (let i in rateData.productSpecCharacteristic) {
+                    if (rateData.productSpecCharacteristic[i].ospCategory === 'implicit') {
+                        let repetida = false;
+                        for (let j in this.pupupInfo) {
+                            if (rateData.productSpecCharacteristic[i].name === this.pupupInfo[j].name) {
+                                repetida = true;
+                            }
                         }
-                    }
-                    if (!repetida) {
-                        let info4: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
-                        this.pupupInfo.push(info4);
+                        if (!repetida) {
+                            let info4: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                            this.pupupInfo.push(info4);
+                        }
                     }
                 }
             }
@@ -494,6 +525,13 @@ module ratesParent.Models {
         }
     }
 
+    export class RatesCharacteristicJzz {
+        public description: string;
+
+        constructor(description: string) {
+            this.description = description;
+        }
+    }
     export class RatePopupInfo {
         public name: string;
         public description: string;

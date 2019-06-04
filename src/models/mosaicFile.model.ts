@@ -216,7 +216,11 @@ module mosaicFile.Models {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = _.findIndex(commercialData, function (currentCommercialAct: any) {
                 return currentCommercialAct.ospIsSelected === true;
-            });
+            });            
+            if(commercialActIndex < 0) {
+                commercialActIndex = commercialData.length - 1;
+            }
+            
             // Banderas para controlar las opciones de la cámara
             let backCamera = false;
             let frontCamera = false;
