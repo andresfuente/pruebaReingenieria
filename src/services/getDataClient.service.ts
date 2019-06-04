@@ -37,33 +37,15 @@ module OrangeFeSARQ.Services {
 
             return vm.httpCacheGett(vm.genericConstant.getDataClient, _search)
                 .then(
-                    (response) => {
-                        // Lleno el customerViewStore
-                        if (response.data && response.data.user) {
-                            // Eliminamos los 34 en los telefonos
-                            let msisdn = response.data.user.user;
-                            if ((/^34/).test(msisdn) &&
-                                !(/[a-z A-Z]/).test(msisdn) &&
-                                msisdn.length === 11) {
-                                response.data.user.user = msisdn.replace(/^34/, '');
-                            }
-                            vm.customerViewStore.loginData = response.data.user;
-                            if (vm.customerViewStore.info) {
-                                vm.customerViewStore.loginData.allLines = vm.getAllLines();
-                            } else {
-                                // watch
-                                vm.$scope.$watch(
-                                    () => vm.customerViewStore.info,
-                                    (newValue, oldValue) => {
-                                        if (newValue !== oldValue && newValue !== null) {
-                                            vm.customerViewStore.loginData.allLines = vm.getAllLines();
-                                        }
-                                    }
-                                );
-                            }
-                            return response.data.user;
-                        } else {
-                            throw response.data;
+                (response) => {
+                    // Lleno el customerViewStore
+                    if (response.data && response.data.user) {
+                        // Eliminamos los 34 en los telefonos
+						let msisdnresponse = response.data.user.user;
+                        if ((/^34/).test(msisdnresponse) &&
+                         !(/[a-z A-Z]/).test(msisdnresponse) && 
+                        msisdnresponse.length === 11) {
+                                response.data.user.user = msisdnresponse.replace(/^34/, '');
                         }
                     },
                     (errorData) => {

@@ -29,6 +29,16 @@ module OrangeFeSARQ.Services {
         private GEOLOCATION_LOCAL: string = 'Geolocation-local';
         private GEOLOCATION_CLIENT: string = 'Geolocation-client';
 
+        public ostypeValue =  'characteristic.OSData.groupData.OStype.value';
+        public backCameraResolutionValue =  'characteristic.cameraData.groupData.backCameraResolution.value';
+        public screenSizeValue = 'characteristic.screenData.groupData.screenSize.value';
+        public hardDiskValue =  'characteristic.memoryData.groupData.hardDisk.value'
+        public batteryDurationInConversationValue =  'characteristic.batteryData.groupData.batteryDurationInConversation.value';
+        public characteristicColor =  'characteristic.color';
+        public categoryName = 'deviceOffering.category.name'
+
+
+
         /**
          * @name OrangeFeSARQ.Services:MosaicFileSrv
          * @description
@@ -118,9 +128,7 @@ module OrangeFeSARQ.Services {
             let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
-            if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
-                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
-            }
+            clientGeolocation = this.setClientGeolocation(currentBillingAddress, clientGeolocation);
 
             // Cabeceras
             let _headers = new HashMap<string, string>();
@@ -142,18 +150,9 @@ module OrangeFeSARQ.Services {
                     break;
             }
             // Establece el nivel de riego
-            if (riskLevel === 'bajo') {
-                riskLevel += ',medio,alto';
-            } else if (riskLevel === 'medio') {
-                riskLevel += ',alto';
-            }
+            riskLevel = this.setRisckLevel(riskLevel);
             // Establece el segmento del cliente
-            let clientSegment = '';
-            if (ospCustomerSegmentBinding.toUpperCase() === 'RESIDENCIAL') {
-                clientSegment = 'Residencial';
-            } else {
-                clientSegment = 'Empresas';
-            }
+            let clientSegment = this.setClientSegment(ospCustomerSegmentBinding);
 
             params = {
                 channel: channel,
@@ -168,8 +167,9 @@ module OrangeFeSARQ.Services {
                 ospOpenSearch: search,
                 profile: profileBinding,
                 segment: clientSegment,
-                'deviceOffering.category.name': priceNameBinding
             };
+
+            params[this.categoryName] = priceNameBinding;
 
             if (filters && filters.length) {
                 filters.forEach((filtersParam, index) => {
@@ -190,14 +190,14 @@ module OrangeFeSARQ.Services {
                 params.channel = 'eShopRES';
                 // Se seleccionan los parametros necesarios para la llamada a la OT 
                 params = _.pick(params, ['channel', 'isExistingCustomer', 'limit', 'segment',
-                    'offset', 'commercialAction', 'deviceOffering.category.name', 'sort', 'relatedProductOffering',
+                    'offset', 'commercialAction', this.categoryName, 'sort', 'relatedProductOffering',
                     'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee', 'totalPaymentRange',
-                    'characteristic.OSData.groupData.OStype.value',
-                    'characteristic.cameraData.groupData.backCameraResolution.value',
-                    'characteristic.screenData.groupData.screenSize.value',
-                    'characteristic.memoryData.groupData.hardDisk.value',
-                    'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                    this.CHARACTERISTICCOLOR]);
+                    this.ostypeValue,
+                    this.backCameraResolutionValue,
+                    this.screenSizeValue,
+                    this.hardDiskValue,
+                    this.batteryDurationInConversationValue,
+                    this.characteristicColor]);
             }
 
             // Parametros para Prepago   
@@ -213,60 +213,9 @@ module OrangeFeSARQ.Services {
             }
 
             // Parametros para Renove
-            if (params.commercialAction === 'renove') {
+            ({ params, commercialData, commercialActIndex, clientData } = this.getParamsForRenove(params, commercialData, commercialActIndex, srv, clientData, campana_txt));
 
-                const color = 'characteristic.color';
-                const osType = 'characteristic.OSData.groupData.OStype.value';
-                const backCameraResolution = 'characteristic.cameraData.groupData.backCameraResolution.value';
-
-                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                commercialActIndex = srv.getSelectedCommercialAct();
-                clientData = JSON.parse(sessionStorage.getItem('clientData'));
-
-                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
-                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
-                        if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N') || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
-                            params.priceType = 'unico';
-                        }
-                    });
-                }
-
-                params.channel = '';
-                params.campaignName = campana_txt;
-
-                /* params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
-                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
-                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
-                        'characteristic.screenData.groupData.screenSize.value',
-                        'characteristic.memoryData.groupData.hardDisk.value',
-                        'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']); */
-
-                // Se seleccionan los parametros necesarios para la llamada a la OT
-                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
-                    params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
-                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
-                        'deviceOffering.category.name', 'purchaseOption', 'price.fee', 'totalPaymentRange',
-                        osType,
-                        'priceType', backCameraResolution,
-                        'characteristic.screenData.groupData.screenSize.value',
-                        'characteristic.memoryData.groupData.hardDisk.value',
-                        'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        color]);
-                } else {
-                    params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
-                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
-                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'deviceOffering.category.name',
-                        osType,
-                        'priceType', backCameraResolution,
-                        'characteristic.screenData.groupData.screenSize.value',
-                        'characteristic.memoryData.groupData.hardDisk.value',
-                        'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        color]);
-                }
-            }
-
+            let _headers = new HashMap<string, string>();
             _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
             _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
@@ -306,6 +255,84 @@ module OrangeFeSARQ.Services {
                 .catch((error) => {
                     throw error;
                 });
+        }
+
+        private getParamsForRenove(params: any, commercialData: any, commercialActIndex: number, srv: this, clientData: any, campana_txt: string) {
+            if (params.commercialAction === 'renove') {
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = srv.getSelectedCommercialAct();
+                clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
+                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
+                        if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N') || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
+                            params.priceType = 'unico';
+                        }
+                    });
+                }
+                params.channel = '';
+                params.campaignName = campana_txt;
+                /* params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
+                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
+                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'characteristic.OSData.groupData.OStype.value',
+                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
+                        'characteristic.screenData.groupData.screenSize.value',
+                        'characteristic.memoryData.groupData.hardDisk.value',
+                        'characteristic.batteryData.groupData.batteryDurationInConversation.value',
+                        'characteristic.color']); */
+                // Se seleccionan los parametros necesarios para la llamada a la OT
+                if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
+                    params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
+                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
+                        this.categoryName, 'purchaseOption', 'price.fee', 'totalPaymentRange',
+                        this.ostypeValue,
+                        'priceType', this.ostypeValue,
+                        this.backCameraResolutionValue,
+                        this.screenSizeValue,
+                        this.hardDiskValue,
+                        this.batteryDurationInConversationValue,
+                        this.characteristicColor]);
+                }
+                else {
+                    params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
+                        'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
+                        'purchaseOption', 'price.fee', 'totalPaymentRange', this.categoryName,
+                        this.ostypeValue,
+                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
+                        'characteristic.screenData.groupData.screenSize.value',
+                        'characteristic.memoryData.groupData.hardDisk.value',
+                        'characteristic.batteryData.groupData.batteryDurationInConversation.value',
+                        'characteristic.color']);
+                }
+            }
+            return { params, commercialData, commercialActIndex, clientData };
+        }
+
+        private setClientSegment(ospCustomerSegmentBinding: string) {
+            let clientSegment = '';
+            if (ospCustomerSegmentBinding.toUpperCase() === 'RESIDENCIAL') {
+                clientSegment = 'Residencial';
+            }
+            else {
+                clientSegment = 'Empresas';
+            }
+            return clientSegment;
+        }
+
+        private setRisckLevel(riskLevel: string) {
+            if (riskLevel === 'bajo') {
+                riskLevel += ',medio,alto';
+            }
+            else if (riskLevel === 'medio') {
+                riskLevel += ',alto';
+            }
+            return riskLevel;
+        }
+
+        private setClientGeolocation(currentBillingAddress: any, clientGeolocation: any) {
+            if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
+                clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase();
+            }
+            return clientGeolocation;
         }
 
         /**
@@ -442,7 +469,7 @@ module OrangeFeSARQ.Services {
 
             _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
             _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
-
+            
             params = {
                 channel: channel,
                 isExistingCustomer: isExistingCustomer,
@@ -452,92 +479,19 @@ module OrangeFeSARQ.Services {
                 riskLevel: riskLevel,
                 relatedProductOffering: relatedProductOffering,
                 profile: profileBinding,
-                'deviceOffering.category.name': priceNameBinding,
                 priceType: priceType
             };
 
+            params[this.categoryName] = priceNameBinding;
+
             // Parametros para Terminal Libre sin Servicio 
-            if (relatedProductOffering === '1-CWOOG9') {
-                params.channel = 'eShopRES';
-                // Se seleccionan los parametros necesarios para la llamada a la OT
-                params = _.pick(params, ['channel', 'isExistingCustomer', 'modelId',
-                    'relatedProductOffering', 'commercialAction']);
-            }
+            params = this.getParamsTerminalLibre(relatedProductOffering, params);
 
             // Parametros para Prepago   
-            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            let commercialActIndex = srv.getSelectedCommercialAct();
-
-            if (commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
-                if (commercialAction) {
-                    if (commercialAction.toLowerCase() === 'portabilidad') {
-                        delete params.portabilityOrigin;
-                    }
-                }
-            }
-
-            if (creditLimit !== undefined && creditLimit !== null) {
-                params.creditLimit = Math.round(creditLimit);
-            }
+            let { commercialData, commercialActIndex } = this.getParamsPrepago(srv, commercialAction, params, creditLimit);
 
             // Parametros para Renove   
-            if (params.commercialAction === 'renove') {
-                // Se seleccionan los parametros necesarios para la llamada a la OT
-                params.channel = '';
-                params.campaignName = campana_txt;
-                clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                commercialActIndex = srv.getSelectedCommercialAct();
-                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
-                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
-                        if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)))) {
-                            params.priceType = 'unico';
-                        }
-                    });
-                }
-
-                // Renove pimaraio
-                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew' ||
-                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'best_renove') {
-                    if (!params.priceType) {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
-                    } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId','priceType','deviceOffering.category.name']);
-                    }
-                }
-
-                // Renove secundario
-                else if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
-                    if (clientData && clientData.creditLimitRenove && ( clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)) {
-                        params.priceType = 'unico';
-                    }
-                    if (!params.priceType) {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
-                    } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType','deviceOffering.category.name']);
-                    }
-                }
-
-                // Renove primario al añadir secundario
-                else if (commercialData[commercialActIndex].renewalType &&
-                    commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove primario' && 
-                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secundario') {
-                        if (params.priceType) {
-                            params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType', 'deviceOffering.category.name']);
-                        } else {
-                            params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
-                        }
-                }
-
-                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
-                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
-                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
-                            params.priceType = 'unico';
-                        }
-                    });
-                }
-
-            }
+            ({ params, clientData, commercialData, commercialActIndex } = this.paramsForRenove(params, campana_txt, clientData, commercialData, commercialActIndex, srv));
 
             if (riskLevel === 'bajo') {
                 riskLevel += ',medio,alto';
@@ -594,6 +548,78 @@ module OrangeFeSARQ.Services {
             // Se devuelve la informacion del terminal
             return mosaicTerminal;
         }
+        private paramsForRenove(params: any, campana_txt: string, clientData: any, commercialData: any, commercialActIndex: number, srv: this) {
+            if (params.commercialAction === 'renove') {
+                // Se seleccionan los parametros necesarios para la llamada a la OT
+                params.channel = '';
+                params.campaignName = campana_txt;
+                clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = srv.getSelectedCommercialAct();
+                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
+                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
+                        if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)))) {
+                            params.priceType = 'unico';
+                        }
+                    });
+                }
+                // Renove pimaraio
+                params = this.getParamsForRenovePrimSecond(commercialData, commercialActIndex, params, clientData);
+            }
+            return { params, clientData, commercialData, commercialActIndex };
+        }
+
+        private getParamsForRenovePrimSecond(commercialData: any, commercialActIndex: number, params: any, clientData: any) {
+            if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew' ||
+                commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'best_renove') {
+                if (!params.priceType) {
+                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
+                }
+                else {
+                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'priceType', this.categoryName]);
+                }
+            }
+            // Renove secundario
+            else if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
+                if (clientData && clientData.creditLimitRenove && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)) {
+                    params.priceType = 'unico';
+                }
+                if (!params.priceType) {
+                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                }
+                else {
+                    params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType', this.categoryName]);
+                }
+            }
+            return params;
+        }
+
+        private getParamsPrepago(srv: this, commercialAction: string, params: any, creditLimit: number) {
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let commercialActIndex = srv.getSelectedCommercialAct();
+            if (commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
+                if (commercialAction) {
+                    if (commercialAction.toLowerCase() === 'portabilidad') {
+                        delete params.portabilityOrigin;
+                    }
+                }
+            }
+            if (creditLimit !== undefined && creditLimit !== null) {
+                params.creditLimit = Math.round(creditLimit);
+            }
+            return { commercialData, commercialActIndex };
+        }
+
+        private getParamsTerminalLibre(relatedProductOffering: string, params: any) {
+            if (relatedProductOffering === '1-CWOOG9') {
+                params.channel = 'eShopRES';
+                // Se seleccionan los parametros necesarios para la llamada a la OT
+                params = _.pick(params, ['channel', 'isExistingCustomer', 'modelId',
+                    'relatedProductOffering', 'commercialAction']);
+            }
+            return params;
+        }
+
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:MosaicFileSrv#getMosaicData
@@ -739,49 +765,76 @@ module OrangeFeSARQ.Services {
             }
             // Si el segmento y/o el tipo de acto está en el clientData, lo recogemos
             if (clientData) {
-                if (clientData.ospCustomerSegment) {
-                    segment = clientData.ospCustomerSegment;
-                } else {
-                    segment = defaultData.ospCustomerSegment;
-                }
+                segment = this.getClientSegment(clientData, segment, defaultData);
 
-                if (commercialData) {
-                    let comm: any = _.find(commercialData, { 'ospIsSelected': true });
-
-                    if (comm && comm.ospCartItemSubtype) {
-                        cartItemSubType = comm.ospCartItemSubtype;
-                    } else {
-                        cartItemSubType = defaultData.ospCartItemSubType;
-                    }
-                } else {
-                    cartItemSubType = defaultData.ospCartItemSubType;
-                }
+                cartItemSubType = this.getCartItemSubType(commercialData, cartItemSubType, defaultData);
 
                 if (cartItemSubType.toUpperCase() === 'POSPAGO') {
                     if (segment.toUpperCase() === 'RESIDENCIAL') {
-                        if (defaultData.relatedTypeResidential.toUpperCase() === 'MOVIL_FIJO') {
-                            defaultData.isExistingCustomer = '2';
-                        } else {
-                            defaultData.isExistingCustomer = '0';
-                        }
+                        this.setRelatedTypeResidentialisExistingCustomer(defaultData);
                     } else { // Caso empresa o autonomo
-                        if (defaultData.relatedTypeBusiness.toUpperCase() === 'MOVIL_FIJO') {
-                            defaultData.isExistingCustomer = '2';
-                        } else {
-                            defaultData.isExistingCustomer = '0';
-                        }
+                        this.setRelatedTypeBusinessExistingCustomer(defaultData);
                     }
                 } else { // Prepago
-                    if (defaultData.relatedTypePrepaid.toUpperCase() === 'MOVIL_FIJO') {
-                        defaultData.isExistingCustomer = '2';
-                    } else {
-                        defaultData.isExistingCustomer = '0';
-                    }
+                    this.setPrepagoisExistingCustomer(defaultData);
                 }
             }
 
             return defaultData;
         }
+        private setPrepagoisExistingCustomer(defaultData: mosaicFile.Models.DataOT) {
+            if (defaultData.relatedTypePrepaid.toUpperCase() === 'MOVIL_FIJO') {
+                defaultData.isExistingCustomer = '2';
+            }
+            else {
+                defaultData.isExistingCustomer = '0';
+            }
+        }
+
+        private setRelatedTypeBusinessExistingCustomer(defaultData: mosaicFile.Models.DataOT) {
+            if (defaultData.relatedTypeBusiness.toUpperCase() === 'MOVIL_FIJO') {
+                defaultData.isExistingCustomer = '2';
+            }
+            else {
+                defaultData.isExistingCustomer = '0';
+            }
+        }
+
+        private setRelatedTypeResidentialisExistingCustomer(defaultData: mosaicFile.Models.DataOT) {
+            if (defaultData.relatedTypeResidential.toUpperCase() === 'MOVIL_FIJO') {
+                defaultData.isExistingCustomer = '2';
+            }
+            else {
+                defaultData.isExistingCustomer = '0';
+            }
+        }
+
+        private getCartItemSubType(commercialData: any, cartItemSubType: string, defaultData: mosaicFile.Models.DataOT) {
+            if (commercialData) {
+                let comm: any = _.find(commercialData, { 'ospIsSelected': true });
+                if (comm && comm.ospCartItemSubtype) {
+                    cartItemSubType = comm.ospCartItemSubtype;
+                }
+                else {
+                    cartItemSubType = defaultData.ospCartItemSubType;
+                }
+            }
+            else {
+                cartItemSubType = defaultData.ospCartItemSubType;
+            }
+            return cartItemSubType;
+        }
+
+        private getClientSegment(clientData: any, segment: string, defaultData: mosaicFile.Models.DataOT) {
+            if (clientData.ospCustomerSegment) {
+                segment = clientData.ospCustomerSegment;
+            }
+            else {
+                segment = defaultData.ospCustomerSegment;
+            }
+            return segment;
+        }
+
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:MosaicFileSrv#getDefaultDataOT
@@ -809,69 +862,13 @@ module OrangeFeSARQ.Services {
             //dataOT.stateOrProvince = 'Madrid'; // REMOVER
 
             // Si los datos de clientes se encuentran en el session storage
-            if (clientData) {
-                // Tipo de cliente
-                if (sessionStorage.getItem('cv') && clientData.clientType) { // Existente
-                    dataOT.isExistingCustomer = clientData.clientType;
-                }
-                // Segmento
-                if (clientData.ospCustomerSegment && clientData.ospCustomerSegment.length > 0) {
-                    dataOT.ospCustomerSegment = clientData.ospCustomerSegment;
-                }
-                // Provincia                
-                if (clientData.postalContact && clientData.postalContact.stateOrProvince &&
-                    clientData.postalContact.stateOrProvince.length > 0) {
-                    dataOT.stateOrProvince = clientData.postalContact.stateOrProvince;
-                }
-
-                if (vm.creditLimitSrv.isValidSFIDNMC() && clientData && clientData.creditLimitCapta && clientData.creditLimitCapta.creditLimitAvailable !== null) {
-                    dataOT.creditLimit = clientData.creditLimitCapta.creditLimitAvailable;
-                }
-            }
+            this.checkSessionStorageClients(clientData, dataOT, vm);
 
             // Si los datos del acto comercial se encuentran en el session storage
-            if (commercialData && commercialActIndex !== -1) {
-                // Tipo de Contrato
-                if (commercialData[commercialActIndex].originType && commercialData[commercialActIndex].originType.length > 0) {
-                    dataOT.ospCartItemSubType = commercialData[commercialActIndex].ospCartItemSubtype;
-                    dataOT.originType = commercialData[commercialActIndex].originType;
-                }
-                // Identificador del acto comercial
-                if (commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.length > 0) {
-                    dataOT.ospCartItemType = commercialData[commercialActIndex].ospCartItemType;
-                }
-                // Tarifa
-                if (commercialData[commercialActIndex].rates && commercialData[commercialActIndex].rates.length > 0) {
-                    // Ordena las tarifas en orden descendiente segun su precio
-                    if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
-                        rates = _.sortBy(commercialData[commercialActIndex].rates, ['taxIncludedPrice']);
-                        rates.reverse();
-                        // Obtenemos la tarifa con mayor valor
-                        if (commercialData[commercialActIndex].ospCartItemSubtype &&
-                            commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
-                            dataOT.relatedRatePrepaid = rates[0].siebelId;
-                            dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRatePrepaid);
-                        } else {
-                            dataOT.relatedRateResidential = rates[0].siebelId;
-                            dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRateResidential);
-                        }
-                    } else {
-                        rates = _.sortBy(commercialData[commercialActIndex].rates, ['taxeFreePrice']);
-                        rates.reverse();
-                        // Obtenemos la tarifa con mayor valor
-                        dataOT.relatedRateBusiness = rates[0].siebelId;
-                        dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRateBusiness);
-                    }
-                }
-            }
+            rates = this.checkSessionStorageCommercialData(commercialData, commercialActIndex, dataOT, rates, vm);
 
             // Si los datos de prescoring se encuentran en el session storage
-            if (prescoring) {
-                // Riesgo de Credito
-                if (prescoring.creditRiskRating && prescoring.creditRiskRating.length > 0) {
-                    dataOT.creditRiskRating = prescoring.creditRiskRating;
-                }
-            }
+            this.checkSessionStoragePrescoring(prescoring, dataOT);
 
             if (commercialData[commercialActIndex].ospTerminalWorkflow) {
                 switch (commercialData[commercialActIndex].ospTerminalWorkflow) {
@@ -926,10 +923,105 @@ module OrangeFeSARQ.Services {
                     default: dataOT.priceName = 'primario';
                 }
             }
+            this.emptyOriginType(commercialData, commercialActIndex, dataOT);
+            return dataOT;
+        }
+
+        private emptyOriginType(commercialData: any, commercialActIndex: any, dataOT: mosaicFile.Models.DataOT) {
             if (commercialData[commercialActIndex].ospCartItemType === 'migracion') {
                 dataOT.originType = '';
             }
-            return dataOT;
+        }
+
+        private checkSessionStoragePrescoring(prescoring: any, dataOT: mosaicFile.Models.DataOT) {
+            if (prescoring) {
+                // Riesgo de Credito
+                if (prescoring.creditRiskRating && prescoring.creditRiskRating.length > 0) {
+                    dataOT.creditRiskRating = prescoring.creditRiskRating;
+                }
+            }
+        }
+
+        private checkSessionStorageCommercialData(commercialData: any, commercialActIndex: any, dataOT: mosaicFile.Models.DataOT, rates: any[], vm: this) {
+            if (commercialData && commercialActIndex !== -1) {
+                // Tipo de Contrato
+                this.getContractType(commercialData, commercialActIndex, dataOT);
+                // Identificador del acto comercial
+                this.getCommercialActIndex(commercialData, commercialActIndex, dataOT);
+                // Tarifa
+                rates = this.getRate(commercialData, commercialActIndex, dataOT, rates, vm);
+            }
+            return rates;
+        }
+
+        private checkSessionStorageClients(clientData: any, dataOT: mosaicFile.Models.DataOT, vm: this) {
+            if (clientData) {
+                // Tipo de cliente
+                if (sessionStorage.getItem('cv') && clientData.clientType) { // Existente
+                    dataOT.isExistingCustomer = clientData.clientType;
+                }
+                // Segmento
+                this.getSegment(clientData, dataOT);
+                // Provincia                
+                this.getProvince(clientData, dataOT, vm);
+            }
+        }
+
+        private getSegment(clientData: any, dataOT: mosaicFile.Models.DataOT) {
+            if (clientData.ospCustomerSegment && clientData.ospCustomerSegment.length > 0) {
+                dataOT.ospCustomerSegment = clientData.ospCustomerSegment;
+            }
+        }
+
+        private getProvince(clientData: any, dataOT: mosaicFile.Models.DataOT, vm: this) {
+            if (clientData.postalContact && clientData.postalContact.stateOrProvince &&
+                clientData.postalContact.stateOrProvince.length > 0) {
+                dataOT.stateOrProvince = clientData.postalContact.stateOrProvince;
+            }
+            if (vm.creditLimitSrv.isValidSFIDNMC() && clientData && clientData.creditLimitCapta && clientData.creditLimitCapta.creditLimitAvailable !== null) {
+                dataOT.creditLimit = clientData.creditLimitCapta.creditLimitAvailable;
+            }
+        }
+
+        private getRate(commercialData: any, commercialActIndex: any, dataOT: mosaicFile.Models.DataOT, rates: any[], vm: this) {
+            if (commercialData[commercialActIndex].rates && commercialData[commercialActIndex].rates.length > 0) {
+                // Ordena las tarifas en orden descendiente segun su precio
+                if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
+                    rates = _.sortBy(commercialData[commercialActIndex].rates, ['taxIncludedPrice']);
+                    rates.reverse();
+                    // Obtenemos la tarifa con mayor valor
+                    if (commercialData[commercialActIndex].ospCartItemSubtype &&
+                        commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
+                        dataOT.relatedRatePrepaid = rates[0].siebelId;
+                        dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRatePrepaid);
+                    }
+                    else {
+                        dataOT.relatedRateResidential = rates[0].siebelId;
+                        dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRateResidential);
+                    }
+                }
+                else {
+                    rates = _.sortBy(commercialData[commercialActIndex].rates, ['taxeFreePrice']);
+                    rates.reverse();
+                    // Obtenemos la tarifa con mayor valor
+                    dataOT.relatedRateBusiness = rates[0].siebelId;
+                    dataOT.isExistingCustomer = vm.getClientType(dataOT.relatedRateBusiness);
+                }
+            }
+            return rates;
+        }
+
+        private getCommercialActIndex(commercialData: any, commercialActIndex: any, dataOT: mosaicFile.Models.DataOT) {
+            if (commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.length > 0) {
+                dataOT.ospCartItemType = commercialData[commercialActIndex].ospCartItemType;
+            }
+        }
+
+        private getContractType(commercialData: any, commercialActIndex: any, dataOT: mosaicFile.Models.DataOT) {
+            if (commercialData[commercialActIndex].originType && commercialData[commercialActIndex].originType.length > 0) {
+                dataOT.ospCartItemSubType = commercialData[commercialActIndex].ospCartItemSubtype;
+                dataOT.originType = commercialData[commercialActIndex].originType;
+            }
         }
 
         /**
@@ -1070,35 +1162,49 @@ module OrangeFeSARQ.Services {
                 if (commercialData && commercialData.length > 0) {
                     let currentAct: any = _.find(commercialData, { 'ospIsSelected': true });
 
-                    if (currentAct !== null && currentAct.rates && currentAct.rates.length > 0) {
-                        let movilFijoRate: any = _.find(currentAct.rates, function (rate: any) {
-                            if (rate.siebelId === siebelId && rate.typeService.toUpperCase() === 'MOVIL_FIJO') {
-                                return rate;
-                            }
-                        });
-
-                        // Todas las tarifas que no sean movil_fijo van con un 0
-                        let movilRate: any = _.find(currentAct.rates, function (rate: any) {
-                            if (rate.siebelId === siebelId && rate.typeService.toUpperCase() !== 'MOVIL_FIJO') {
-                                return rate;
-                            }
-                        });
-
-                        if (movilFijoRate !== undefined && movilFijoRate !== null) {
-                            type = '2';
-                        } else if (movilRate !== undefined && movilRate !== null) {
-                            type = '0';
-                        }
-                    }
+                    type = this.getType(currentAct, siebelId, type);
                 }
             } else {
                 let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
-                if (clientData && clientData.clientType) {
-                    type = clientData.clientType;
-                }
+                type = this.setClientDataType(clientData, type);
             }
 
+            return type;
+        }
+
+        private getType(currentAct: any, siebelId: string, type: string) {
+            if (currentAct !== null && currentAct.rates && currentAct.rates.length > 0) {
+                let movilFijoRate: any = _.find(currentAct.rates, function (rate: any) {
+                    if (rate.siebelId === siebelId && rate.typeService.toUpperCase() === 'MOVIL_FIJO') {
+                        return rate;
+                    }
+                });
+                // Todas las tarifas que no sean movil_fijo van con un 0
+                let movilRate: any = _.find(currentAct.rates, function (rate: any) {
+                    if (rate.siebelId === siebelId && rate.typeService.toUpperCase() !== 'MOVIL_FIJO') {
+                        return rate;
+                    }
+                });
+                type = this.setType(movilFijoRate, type, movilRate);
+            }
+            return type;
+        }
+
+        private setClientDataType(clientData: any, type: string) {
+            if (clientData && clientData.clientType) {
+                type = clientData.clientType;
+            }
+            return type;
+        }
+
+        private setType(movilFijoRate: any, type: string, movilRate: any) {
+            if (movilFijoRate !== undefined && movilFijoRate !== null) {
+                type = '2';
+            }
+            else if (movilRate !== undefined && movilRate !== null) {
+                type = '0';
+            }
             return type;
         }
     }

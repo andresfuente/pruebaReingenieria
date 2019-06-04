@@ -35,25 +35,7 @@ module OrangeFeSARQ.Services {
             let loginData = JSON.parse(sessionStorage.getItem('loginData'));
             let cv = JSON.parse(sessionStorage.getItem('cv'));
 
-            if (OrangeFeSARQ.Controllers.ParentController.shared
-                && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
-                && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule) {
-                OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule.forEach(element => {
-                    if (element.compId === 'header_block_comp') {
-                        element.listOption.forEach(option => {
-                            if (option.name === 'defaultNmc.options' && option.listOptionsLiteral) {
-                                if (_.size(option.listOptionsLiteral) !== 0) {
-                                    option.listOptionsLiteral.forEach(literal => {
-                                        list.push(literal.value);
-                                    });
-                                } else {
-                                    validAll = true;
-                                }
-                            }
-                        });
-                    }
-                });
-            }
+            validAll = this.checkValidAll(list, validAll);
 
 
             if (loginData && loginData.sfid && loginData.sfid !== null) {
@@ -68,6 +50,30 @@ module OrangeFeSARQ.Services {
 
             return false;
         }
+        private checkValidAll(list: any, validAll: boolean) {
+            if (OrangeFeSARQ.Controllers.ParentController.shared
+                && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
+                && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule) {
+                OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule.forEach(element => {
+                    if (element.compId === 'header_block_comp') {
+                        element.listOption.forEach(option => {
+                            if (option.name === 'defaultNmc.options' && option.listOptionsLiteral) {
+                                if (_.size(option.listOptionsLiteral) !== 0) {
+                                    option.listOptionsLiteral.forEach(literal => {
+                                        list.push(literal.value);
+                                    });
+                                }
+                                else {
+                                    validAll = true;
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+            return validAll;
+        }
+
         /**
          * 
          */
@@ -88,52 +94,72 @@ module OrangeFeSARQ.Services {
             let sessionClientData = JSON.parse(sessionStorage.getItem('clientData'));
 
             if (sessionClientData) {
-                if (search === 'UMBRAL') {
-                    let umbral = vm.getCreditRisk(search, response);
-                    if (umbral !== undefined && umbral !== null) {
-                        sessionClientData.creditLimitRenove = {
-                            'umbral': umbral
-                        }
-                    }
-                } else if (search === 'PRESCORING') {
-                    let creditLimit = vm.getCreditRisk(search, response);
-                    if (creditLimit !== undefined && creditLimit !== null) {
-                        if (creditLimit > 0) {
-                            sessionClientData.creditLimitCapta = {
-                                'creditLimitAvailable': creditLimit,
-                                'staticCreditLimit': creditLimit,
-                                'upperCreditLimit': false
-                            }
-                        } else {
-                            sessionClientData.creditLimitCapta = {
-                                'creditLimitAvailable': creditLimit,
-                                'staticCreditLimit': 0,
-                                'upperCreditLimit': true
-                            }
-                        }
-                    }
-                } else if (search === 'RENOVE' && sessionClientData.creditLimitRenove) {
-                    let creditLimit = vm.getCreditRisk(search, response);
-                    if (creditLimit !== undefined && creditLimit !== null) {
-                        if (creditLimit < 0) {
-                            
-                            sessionClientData.creditLimitRenove.creditLimitAvailable = creditLimit;
-                            sessionClientData.creditLimitRenove.staticCreditLimit = 0;
-                            sessionClientData.creditLimitRenove.umbral = 0;
-                            sessionClientData.creditLimitRenove.upperCreditLimit = true;
-                            sessionClientData.creditLimitRenove.upperUmbral = true;
-                        } else {
-                            sessionClientData.creditLimitRenove.creditLimitAvailable = creditLimit;
-                            sessionClientData.creditLimitRenove.staticCreditLimit = creditLimit;
-                        }
-                    } else {
-                        if (!vm.isFdcSite()) {
-                            delete sessionClientData.creditLimitRenove;
-                        }
-                    }
-                }
+                this.chceckSessionClientDataTypes(search, vm, response, sessionClientData);
             }
             sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
+        }
+
+        private chceckSessionClientDataTypes(search: string, vm: this, response: any, sessionClientData: any) {
+            if (search === 'UMBRAL') {
+                this.setSessionClientDataUmbral(vm, search, response, sessionClientData);
+            }
+            else if (search === 'PRESCORING') {
+                this.setSessionClientDataPrescoring(vm, search, response, sessionClientData);
+            }
+            else if (search === 'RENOVE' && sessionClientData.creditLimitRenove) {
+                this.setSessionClientDataRenove(vm, search, response, sessionClientData);
+            }
+        }
+
+        private setSessionClientDataRenove(vm: this, search: string, response: any, sessionClientData: any) {
+            let creditLimit = vm.getCreditRisk(search, response);
+            if (creditLimit !== undefined && creditLimit !== null) {
+                if (creditLimit < 0) {
+                    sessionClientData.creditLimitRenove.creditLimitAvailable = creditLimit;
+                    sessionClientData.creditLimitRenove.staticCreditLimit = 0;
+                    sessionClientData.creditLimitRenove.umbral = 0;
+                    sessionClientData.creditLimitRenove.upperCreditLimit = true;
+                    sessionClientData.creditLimitRenove.upperUmbral = true;
+                }
+                else {
+                    sessionClientData.creditLimitRenove.creditLimitAvailable = creditLimit;
+                    sessionClientData.creditLimitRenove.staticCreditLimit = creditLimit;
+                }
+            }
+            else {
+                if (!vm.isFdcSite()) {
+                    delete sessionClientData.creditLimitRenove;
+                }
+            }
+        }
+
+        private setSessionClientDataPrescoring(vm: this, search: string, response: any, sessionClientData: any) {
+            let creditLimit = vm.getCreditRisk(search, response);
+            if (creditLimit !== undefined && creditLimit !== null) {
+                if (creditLimit > 0) {
+                    sessionClientData.creditLimitCapta = {
+                        'creditLimitAvailable': creditLimit,
+                        'staticCreditLimit': creditLimit,
+                        'upperCreditLimit': false
+                    };
+                }
+                else {
+                    sessionClientData.creditLimitCapta = {
+                        'creditLimitAvailable': creditLimit,
+                        'staticCreditLimit': 0,
+                        'upperCreditLimit': true
+                    };
+                }
+            }
+        }
+
+        private setSessionClientDataUmbral(vm: this, search: string, response: any, sessionClientData: any) {
+            let umbral = vm.getCreditRisk(search, response);
+            if (umbral !== undefined && umbral !== null) {
+                sessionClientData.creditLimitRenove = {
+                    'umbral': umbral
+                };
+            }
         }
 
         /**
@@ -150,36 +176,58 @@ module OrangeFeSARQ.Services {
             let saldoEncontrado = false;
 
             if (search && response) {
-                if (search === 'UMBRAL') { // customerView
-                    if (response.customer && response.customer.customerCharacteristic && _.size(response.customer.customerCharacteristic) !== 0) {
-                        let existLimitCredit: any = _.find(response.customer.customerCharacteristic, { 'name': 'umbralOrange' });
-                        if (existLimitCredit && existLimitCredit.value !== null && 
-                            parseInt(existLimitCredit.value) >= 0 ) {
-                            limit = parseInt(existLimitCredit.value, 10);
+                ({ limit, saldoEncontrado } = this.limitDiferentsSearchTypes(search, response, limit, saldoEncontrado));
+            }
+            return limit;
+        }
+
+        private limitDiferentsSearchTypes(search: string, response: any, limit: any, saldoEncontrado: boolean) {
+            if (search === 'UMBRAL') { // customerView
+                limit = this.getLimitUmbral(response, limit);
+            }
+            else if (search === 'PRESCORING') { // cliente nuevo y existente del prescoring
+                limit = this.getLimitPrescoring(response, limit);
+            }
+            else if (search === 'RENOVE') { // campañas
+                ({ saldoEncontrado, limit } = this.getLimitRenove(response, saldoEncontrado, limit));
+            }
+            return { limit, saldoEncontrado };
+        }
+
+        private getLimitRenove(response: any, saldoEncontrado: boolean, limit: any) {
+            if (response) {
+                response.forEach(campaign => {
+                    campaign.campaignNum.forEach(element2 => {
+                        if (element2.wcs && element2.wcs.typeRenove && (element2.wcs.typeRenove === "Renove primario" || element2.wcs.typeRenove === "Renove secundario") && !saldoEncontrado) {
+                            if (campaign.saldoDisponible !== null && parseInt(campaign.saldoDisponible) >= 0) {
+                                limit = parseInt(campaign.saldoDisponible, 10);
+                                saldoEncontrado = true;
+                            }
                         }
-                    }
-                } else if (search === 'PRESCORING') { // cliente nuevo y existente del prescoring
-                    if (response.customer && response.customer.ospCustomerSalesProfile && response.customer.ospCustomerSalesProfile[0]
-                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo
-                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0]
-                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount
-                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount !== null
-                        && parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount) >= 0 ) {
-                        limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
-                    }
-                } else if (search === 'RENOVE') { // campañas
-                    if (response) {
-                        response.forEach(campaign => {// Sacar el valor del primer renove
-                            campaign.campaignNum.forEach(element2 => {
-                                if (element2.wcs && element2.wcs.typeRenove && (element2.wcs.typeRenove === "Renove primario" || element2.wcs.typeRenove === "Renove secundario") && !saldoEncontrado) {
-                                    if (campaign.saldoDisponible !== null && parseInt(campaign.saldoDisponible) >= 0 ) {
-                                        limit = parseInt(campaign.saldoDisponible, 10);
-                                        saldoEncontrado = true;
-                                    }
-                                }
-                            });
-                        });
-                    }
+                    });
+                });
+            }
+            return { saldoEncontrado, limit };
+        }
+
+        private getLimitPrescoring(response: any, limit: any) {
+            if (response.customer && response.customer.ospCustomerSalesProfile && response.customer.ospCustomerSalesProfile[0]
+                && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo
+                && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0]
+                && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount
+                && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount !== null
+                && parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount) >= 0) {
+                limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
+            }
+            return limit;
+        }
+
+        private getLimitUmbral(response: any, limit: any) {
+            if (response.customer && response.customer.customerCharacteristic && _.size(response.customer.customerCharacteristic) !== 0) {
+                let existLimitCredit: any = _.find(response.customer.customerCharacteristic, { 'name': 'umbralOrange' });
+                if (existLimitCredit && existLimitCredit.value !== null &&
+                    parseInt(existLimitCredit.value) >= 0) {
+                    limit = parseInt(existLimitCredit.value, 10);
                 }
             }
             return limit;
@@ -199,24 +247,7 @@ module OrangeFeSARQ.Services {
                 sessionClientData.creditLimitRenove.linesWithVAP = [];
                 if (campaigns) {
                     let ventaAPlazos: string;
-                    campaigns.forEach(line => {
-                        let linesWithVAP: any = {};
-                        if (line.campaignNum && _.size(line.campaignNum) !== 0) {
-                            line.campaignNum.forEach(campaign => {
-                                if (campaign.wcs && (_.camelCase(campaign.wcs.typeRenove) === owcsCampaign || _.camelCase(campaign.wcs.typeRenove) === owcsCampaignSecundario)) {
-                                    ventaAPlazos = campaign.ventaAPlazos;
-                                    if (!ventaAPlazos || ventaAPlazos === 'null') {
-                                        ventaAPlazos = 'N';
-                                    }
-                                    linesWithVAP = {
-                                        'line': line.idUser,
-                                        'ventaAPlazos': ventaAPlazos
-                                    }
-                                    sessionClientData.creditLimitRenove.linesWithVAP.push(linesWithVAP);
-                                }
-                            });
-                        }
-                    });
+                    ventaAPlazos = this.getVentaAPlazos(campaigns, owcsCampaign, owcsCampaignSecundario, ventaAPlazos, sessionClientData);
                 }
             }
 
@@ -224,6 +255,28 @@ module OrangeFeSARQ.Services {
                 sessionClientData.creditLimitRenove.linesWithVAP = _.uniqBy(sessionClientData.creditLimitRenove.linesWithVAP, 'line');
                 sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
             }
+        }
+
+        private getVentaAPlazos(campaigns: any, owcsCampaign: string, owcsCampaignSecundario: string, ventaAPlazos: string, sessionClientData: any) {
+            campaigns.forEach(line => {
+                let linesWithVAP: any = {};
+                if (line.campaignNum && _.size(line.campaignNum) !== 0) {
+                    line.campaignNum.forEach(campaign => {
+                        if (campaign.wcs && (_.camelCase(campaign.wcs.typeRenove) === owcsCampaign || _.camelCase(campaign.wcs.typeRenove) === owcsCampaignSecundario)) {
+                            ventaAPlazos = campaign.ventaAPlazos;
+                            if (!ventaAPlazos || ventaAPlazos === 'null') {
+                                ventaAPlazos = 'N';
+                            }
+                            linesWithVAP = {
+                                'line': line.idUser,
+                                'ventaAPlazos': ventaAPlazos
+                            };
+                            sessionClientData.creditLimitRenove.linesWithVAP.push(linesWithVAP);
+                        }
+                    });
+                }
+            });
+            return ventaAPlazos;
         }
 
         /**
@@ -245,34 +298,47 @@ module OrangeFeSARQ.Services {
             if (sessionClientData && sessionClientData.creditLimitRenove && sessionClientData.creditLimitRenove.creditLimitAvailable !== null) {
                 sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
             }
+            ({ priceVapsCapta, priceVapsRenove } = this.getPriceVapsCaptaAndRenove(sessionShopingCart, priceVapsCapta, priceVapsRenove, sessionClientData));
+
+            vm.calculateCreditLimitForActs(sessionClientData, priceVapsCapta, priceVapsRenove);
+            sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
+        }
+
+        private getPriceVapsCaptaAndRenove(sessionShopingCart: any, priceVapsCapta: number, priceVapsRenove: number, sessionClientData: any) {
             sessionShopingCart.cartItem.forEach(option => {
                 if (option.ospSelected && !(option.ospSelectable && option.ospSelectable === 'error')) {
                     option.cartItem.forEach(element => {
                         if (element.product && element.product.productRelationship && element.product.productRelationship.length > 0) {
-                            if (_.find(element.product.productRelationship, { 'type': 'VAP' })) {
-                                element.itemPrice.forEach(item => {
-                                    if (item.priceType === 'cuota' && option.ospCartItemType !== 'renove') {
-                                        priceVapsCapta += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
-                                    } else if (item.priceType === 'cuota' && option.ospCartItemType === 'renove') {
-                                        priceVapsRenove += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
-                                    }
-                                });
-                            } else if (_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType !== 'renove') {
-                                if (sessionClientData && sessionClientData.creditLimitCapta && sessionClientData.creditLimitCapta.creditLimitAvailable !== null) {
-                                    sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit;
-                                }
-                            } else if (_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType === 'renove') {
-                                if (sessionClientData && sessionClientData.creditLimitRenove && sessionClientData.creditLimitRenove.creditLimitAvailable !== null) {
-                                    sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
-                                }
-                            }
+                            ({ priceVapsCapta, priceVapsRenove } = this.calculateCreditLimitForActsTypes(element, option, priceVapsCapta, priceVapsRenove, sessionClientData));
                         }
                     });
                 }
             });
+            return { priceVapsCapta, priceVapsRenove };
+        }
 
-            vm.calculateCreditLimitForActs(sessionClientData, priceVapsCapta, priceVapsRenove);
-            sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
+        private calculateCreditLimitForActsTypes(element: any, option: any, priceVapsCapta: number, priceVapsRenove: number, sessionClientData: any) {
+            if (_.find(element.product.productRelationship, { 'type': 'VAP' })) {
+                element.itemPrice.forEach(item => {
+                    if (item.priceType === 'cuota' && option.ospCartItemType !== 'renove') {
+                        priceVapsCapta += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
+                    }
+                    else if (item.priceType === 'cuota' && option.ospCartItemType === 'renove') {
+                        priceVapsRenove += item.price.dutyFreeAmount.value * item.recurringChargePeriod;
+                    }
+                });
+            }
+            else if (_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType !== 'renove') {
+                if (sessionClientData && sessionClientData.creditLimitCapta && sessionClientData.creditLimitCapta.creditLimitAvailable !== null) {
+                    sessionClientData.creditLimitCapta.creditLimitAvailable = sessionClientData.creditLimitCapta.staticCreditLimit;
+                }
+            }
+            else if (_.find(element.product.productRelationship, { 'type': 'terminal' }) && option.ospCartItemType === 'renove') {
+                if (sessionClientData && sessionClientData.creditLimitRenove && sessionClientData.creditLimitRenove.creditLimitAvailable !== null) {
+                    sessionClientData.creditLimitRenove.creditLimitAvailable = sessionClientData.creditLimitRenove.staticCreditLimit;
+                }
+            }
+            return { priceVapsCapta, priceVapsRenove };
         }
 
         /**

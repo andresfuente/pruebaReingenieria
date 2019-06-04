@@ -271,10 +271,12 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          if (error && error.data)
+          if (error && error.data) {
             return error.data;
-          else
+          }
+          else {
             return error;
+          }
         });
     }
 
@@ -313,10 +315,12 @@ module OrangeFeSARQ.Services {
           return _resp;
         })
         .catch(function (error) {
-          if (error && error.data)
+          if (error && error.data) {
             return error.data;
-          else
+          }
+          else {
             return error;
+          }
         });
     }
 
@@ -357,10 +361,12 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          if (error && error.data)
+          if (error && error.data) {
             return error.data;
-          else
+          }
+          else {
             return error;
+          }
         });
     }
 
@@ -394,10 +400,12 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          if (error && error.data)
+          if (error && error.data) {
             return error.data;
-          else
+          }
+          else {
             return error;
+          }
         });
     }
 
@@ -423,10 +431,12 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          if (error && error.data)
+          if (error && error.data) {
             return error.data;
-          else
+          }
+          else {
             return error;
+          }
         });
     }
 
@@ -471,10 +481,12 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          if (error && error.data)
+          if (error && error.data) {
             return error.data;
-          else
+          }
+          else {
             return error;
+          }
         });
     }
     getChangeFee(msisdn: string, componentName: string, id: string) {
@@ -534,10 +546,12 @@ module OrangeFeSARQ.Services {
           return _resp.productOrder;
         })
         .catch(function (error) {
-          if (error && error.data)
+          if (error && error.data) {
             return error.data;
-          else
+          }
+          else {
             return error;
+          }
         });
     }
 

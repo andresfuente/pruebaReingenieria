@@ -271,17 +271,7 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
             // Formateamos el nombre (usando todos los elementos que se pasen)
-            if (clientName) {
-                for (let i = 0; i < clientName.length; i++) {
-                    if (clientName[i]) {
-                        if (i === 0) {
-                            newName += clientName[i];
-                        } else {
-                            newName += ' ' + clientName[i];
-                        }
-                    }
-                }
-            }
+            newName = this.formatName(clientName, newName);
 
             // Renombramos tarifas NAC para guardar 
             if (commercialData && shoppingCart && shoppingCart.cartItem) {
@@ -293,17 +283,7 @@ module OrangeFeSARQ.Services {
                                 let comm: any = _.find(commercialData, { id: Math.floor(opt.id) });
 
                                 // Revisamos las tarifas para renombrar únicamente las LOVE NAC principales (movil_fijo)
-                                if (comm && comm.rates) {
-                                    let rate: any = _.find(comm.rates, { 'siebelId': cartItem.id });
-
-                                    if (rate && rate.type === 'Convergente_NAC' && rate.typeService === 'movil_fijo' && cartItem.product.name) {
-                                        if (newName) { // Si hay aprovechamiento, se pintan los apellidos
-                                            cartItem.product.name = 'Love ' + newName;
-                                        } else { // Si no hay aprvechamiento, se pinta "Love"
-                                            cartItem.product.name = 'Love';
-                                        }
-                                    }
-                                }
+                                this.checkRatesForRename(comm, cartItem, newName);
                             }
                         });
                     }
@@ -311,6 +291,36 @@ module OrangeFeSARQ.Services {
             }
 
             return shoppingCart;
+        }
+
+        private checkRatesForRename(comm: any, cartItem: any, newName: string) {
+            if (comm && comm.rates) {
+                let rate: any = _.find(comm.rates, { 'siebelId': cartItem.id });
+                if (rate && rate.type === 'Convergente_NAC' && rate.typeService === 'movil_fijo' && cartItem.product.name) {
+                    if (newName) { // Si hay aprovechamiento, se pintan los apellidos
+                        cartItem.product.name = 'Love ' + newName;
+                    }
+                    else { // Si no hay aprvechamiento, se pinta "Love"
+                        cartItem.product.name = 'Love';
+                    }
+                }
+            }
+        }
+
+        private formatName(clientName: string[], newName: string) {
+            if (clientName) {
+                for (let i = 0; i < clientName.length; i++) {
+                    if (clientName[i]) {
+                        if (i === 0) {
+                            newName += clientName[i];
+                        }
+                        else {
+                            newName += ' ' + clientName[i];
+                        }
+                    }
+                }
+            }
+            return newName;
         }
     }
 

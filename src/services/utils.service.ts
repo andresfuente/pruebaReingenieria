@@ -128,9 +128,9 @@ module OrangeFeSARQ.Services {
 
             return userService.getUser(searchUrl, value)
                 .then(
-                (response) => {
-                    return response;
-                }
+                    (response) => {
+                        return response;
+                    }
                 )
                 .catch(function (error) {
                     return error;
@@ -396,6 +396,7 @@ module OrangeFeSARQ.Services {
                 let sizeProducts = products.length;
                 let found = false;
                 let i = 0;
+                let response;
                 while (i < sizeProducts && !found) {
                     // Si estoy buscando el id
                     //verifico si el producto es relativo a una línea prepago, pospago o fijo
@@ -403,23 +404,31 @@ module OrangeFeSARQ.Services {
                         let sizePC = products[i].productCharacteristic.length;
                         if (products[i].productCharacteristic && sizePC > 0) {
 
-                            let productCh = products[i].productCharacteristic;
-                            let sizeCh = productCh.length;
-                            // Recorro el product caracteristic de este producto
-                            let it = 0;
-                            while (it < sizeCh && !found) {
-                                if (productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
-                                    found = true;
-                                    return products[i].ospProductType;
-                                }
-                                ++it;
-                            }
+                            ({ found, response } = this.recorrerProductCharacteristic(products, i, found, msisdn, response));
                         }
                     }
                     ++i;
                 }
+                if (found) {
+                    return response;
+                }
             }
             return null;
+        }
+
+        private recorrerProductCharacteristic(products: any, i: number, found: boolean, msisdn: string, response: any) {
+            let productCh = products[i].productCharacteristic;
+            let sizeCh = productCh.length;
+            // Recorro el product caracteristic de este producto
+            let it = 0;
+            while (it < sizeCh && !found) {
+                if (productCh[it].name && productCh[it].name === 'MSISDN' && productCh[it].value === msisdn) {
+                    found = true;
+                    response = products[i].ospProductType;
+                }
+                ++it;
+            }
+            return { found, response };
         }
 
         fillOwcsStores(layoutMetaData: any) {
@@ -716,169 +725,183 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
             if (type) {
-                switch (type) {
-                    case 'mobile':
-                        pattern = /^[67]{8}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
+                status = this.getStatus(type, status, vm, value);
+                ({ pattern, status } = this.getStatusPattern(type, pattern, status, value));
+                if (!status) {
+                    switch (type) {
 
-                    case 'fixed':
-                        pattern = /^[89]{8}$/;
-                        if (pattern.test(value)) {
+                        case 'mail':
+                            pattern = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]{5,30}$/;
+                            pattern2 = /^[\s\S]{0,40}$/;
+                            status = this.checkStatus2PaternAnd(pattern, value, pattern2, status);
+                            break;
+                        case 'ccc':
+                            pattern = /^[0-9]\d{3}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'iban':
+                            pattern1 = /^\d{4}\s\d{4}\s\d{2}\s\d{10}$/;
+                            pattern2 = /^[0-9]{20}$/;
+                            status = this.checkStatus2PaternOr(pattern1, value, pattern2, status);
+                            break;
+                        case 'text40':
+                            pattern = /^[a-zñA-ZÑ0-9\s]{5,40}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'text20':
+                            pattern = /^[a-zA-Z\s]{5,20}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'num2':
+                            pattern = /^[0-9]{0,2}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'num3':
+                            pattern = /^[0-9]{0,3}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'alfNum':
+                            pattern = /^[a-zA-Z0-9]{0,5}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'nif':
+                            pattern = /^[0-9]{8}[a-zA-Z]$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'nie':
+                            pattern = /^[xyzXYZ][0-9]{7}[a-zA-Z]$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'passport':
                             status = true;
-                        }
-                        break;
+                            break;
+                        case 'cif':
+                            // pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
+                            pattern = /^[abehABEH]{1}[0-9]{8}$/;
+                            pattern1 = /^[kpqsKPQS]{1}[0-9]{7}[a-jA-J]$/;
+                            pattern2 = /^[cdfgjlmnruvwCDFGJLMNRUVW]{1}[0-9]{7}[0-9a-jA-J]$/;
+                            status = this.checkStatus3PaternOr(pattern, value, pattern1, pattern2, status);
+                            break;
 
-                    case 'telephone':
-                        pattern = /^[6-9]\d{8}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-
-                    case 'cp':
-                        pattern = /^[0-9]{5}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-
-                    case 'mail':
-                        pattern = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]{5,30}$/;
-                        pattern2 = /^[\s\S]{0,40}$/;
-                        if (pattern.test(value) && pattern2.test(value)) {
-                            status = true;
-                        }
-                        break;
-
-                    case 'ccc':
-                        pattern = /^[0-9]\d{3}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-
-                    case 'iban':
-                        pattern1 = /^\d{4}\s\d{4}\s\d{2}\s\d{10}$/;
-                        pattern2 = /^[0-9]{20}$/;
-                        if (pattern1.test(value) || pattern2.test(value)) {
-                            status = true;
-                        }
-                        break;
-
-                    case 'text40':
-                        pattern = /^[a-zñA-ZÑ0-9\s]{5,40}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-
-                    case 'text20':
-                        pattern = /^[a-zA-Z\s]{5,20}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-
-                    case 'num2':
-                        pattern = /^[0-9]{0,2}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-
-                    case 'num3':
-                        pattern = /^[0-9]{0,3}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-
-                    case 'alfNum':
-                        pattern = /^[a-zA-Z0-9]{0,5}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-                    case 'nif':
-                        pattern = /^[0-9]{8}[a-zA-Z]$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-                    case 'nie':
-                        pattern = /^[xyzXYZ][0-9]{7}[a-zA-Z]$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-                    case 'passport':
-                        status = true;
-
-                        break;
-                    case 'cif':
-                        // pattern = /^[abcdefghjnpqrsuvvwABCDEFGHJNPQRSUVVW][0-9]{8}$/;
-                        pattern = /^[abehABEH]{1}[0-9]{8}$/;
-                        pattern1 = /^[kpqsKPQS]{1}[0-9]{7}[a-jA-J]$/;
-                        pattern2 = /^[cdfgjlmnruvwCDFGJLMNRUVW]{1}[0-9]{7}[0-9a-jA-J]$/;
-                        if (pattern.test(value) || pattern1.test(value) || pattern2.test(value)) {
-                            status = true;
-                        }
-                        break;
-                    case 'TNC':
-                        if (vm.validateForm('telephone', value) || vm.validateForm('nif', value) || vm.validateForm('cif', value)) {
-                            status = true;
-                        }
-                        break;
-                    case 'TNNCP':
-                        if (vm.validateForm('telephone', value) || vm.validateForm('nif', value) || vm.validateForm('cif', value)
-                            || vm.validateForm('nie', value) || vm.validateForm('passport', value)) {
-                            status = true;
-                        }
-                        break;
-                    case 'NNCP':
-                        if (vm.validateForm('nif', value) || vm.validateForm('cif', value)
-                            || vm.validateForm('nie', value) || vm.validateForm('passport', value)) {
-                            status = true;
-                        }
-                        break;
-                    case 'NC':
-                        if (vm.validateForm('nif', value) || vm.validateForm('cif', value)) {
-                            status = true;
-                        }
-                        break;
-                    case 'pass':
-                        pattern = /^.{6,8}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-                    case 'num4':
-                        pattern = /^[0-9]\d{2,5}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-                    case 'num68':
-                        pattern = /^[0-9]{6,8}$/;
-                        if (pattern.test(value)) {
-                            status = true;
-                        }
-                        break;
-
-                    default:
-                        break;
+                        case 'pass':
+                            pattern = /^.{6,8}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'num4':
+                            pattern = /^[0-9]\d{2,5}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        case 'num68':
+                            pattern = /^[0-9]{6,8}$/;
+                            status = this.checkStatus(pattern, value, status);
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            } else {
-                status = false;
             }
-
             return status;
         };
 
 
+
+        private getStatusPattern(type: string, pattern: any, status: boolean, value: string) {
+            if (type === 'mobile' || type == 'fixed' || type == 'telephone' || type == 'cp') {
+                if (type === 'mobile') {
+                    pattern = /^[67]{8}$/;
+                    status = this.checkStatus(pattern, value, status);
+                }
+                else if (type == 'fixed') {
+                    pattern = /^[89]{8}$/;
+                    status = this.checkStatus(pattern, value, status);
+                }
+                else if (type == 'telephone') {
+                    pattern = /^[6-9]\d{8}$/;
+                    status = this.checkStatus(pattern, value, status);
+                }
+                else if (type == 'cp') {
+                    pattern = /^[0-9]{5}$/;
+                    status = this.checkStatus(pattern, value, status);
+                }
+            }
+            return { pattern, status };
+        }
+
+        private getStatus(type: string, status: boolean, vm: this, value: string) {
+            if (type === 'TNC' || type == 'TNNCP' || type == 'NNCP' || type == 'NC') {
+                if (type === 'TNC') {
+                    status = this.checkStatusTNC(vm, value, status);
+                }
+                else if (type == 'TNNCP') {
+                    status = this.checkStatusTNNCP(vm, value, status);
+                }
+                else if (type == 'NNCP') {
+                    status = this.checkStatusNNCP(vm, value, status);
+                }
+                else if (type == 'NC') {
+                    status = this.checkStatusNC(vm, value, status);
+                }
+            }
+            return status;
+        }
+
+        private checkStatusNC(vm: this, value: string, status: boolean) {
+            if (vm.validateForm('nif', value) || vm.validateForm('cif', value)) {
+                status = true;
+            }
+            return status;
+        }
+
+        private checkStatusNNCP(vm: this, value: string, status: boolean) {
+            if (vm.validateForm('nif', value) || vm.validateForm('cif', value)
+                || vm.validateForm('nie', value) || vm.validateForm('passport', value)) {
+                status = true;
+            }
+            return status;
+        }
+
+        private checkStatusTNNCP(vm: this, value: string, status: boolean) {
+            if (vm.validateForm('telephone', value) || vm.validateForm('nif', value) || vm.validateForm('cif', value)
+                || vm.validateForm('nie', value) || vm.validateForm('passport', value)) {
+                status = true;
+            }
+            return status;
+        }
+
+        private checkStatusTNC(vm: this, value: string, status: boolean) {
+            if (vm.validateForm('telephone', value) || vm.validateForm('nif', value) || vm.validateForm('cif', value)) {
+                status = true;
+            }
+            return status;
+        }
+
+        private checkStatus3PaternOr(pattern: any, value: string, pattern1: any, pattern2: any, status: boolean) {
+            if (pattern.test(value) || pattern1.test(value) || pattern2.test(value)) {
+                status = true;
+            }
+            return status;
+        }
+
+        private checkStatus2PaternOr(pattern1: any, value: string, pattern2: any, status: boolean) {
+            if (pattern1.test(value) || pattern2.test(value)) {
+                status = true;
+            }
+            return status;
+        }
+
+        private checkStatus2PaternAnd(pattern: any, value: string, pattern2: any, status: boolean) {
+            if (pattern.test(value) && pattern2.test(value)) {
+                status = true;
+            }
+            return status;
+        }
+
+        private checkStatus(pattern: any, value: string, status: boolean) {
+            if (pattern.test(value)) {
+                status = true;
+            }
+            return status;
+        }
 
 		/**
          * @ngdoc method
@@ -968,83 +991,7 @@ module OrangeFeSARQ.Services {
             });
 
             for (let i in mobileLines) {
-                if (mobileLines.length) {
-
-                    // Sacamos datos necesarios del customerView: rango, numero línea y fecha de activación
-                    let rateSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
-                        return characteristic.name === 'Código Tarifa Siebel';
-                    });
-                    let bundleSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
-                        return characteristic.name === 'Product Bundle Siebel';
-                    });
-                    let MSISDN = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
-                        return characteristic.name === 'MSISDN';
-                    });
-                    let startDate = mobileLines[i].startDate; // activacion tarifa
-
-                    // Buscamos en el productCatalog el resto de datos alineando las APIs con el "tmcode" (código de las tarifas)
-                    let isPack = false;
-                    let ratePC;
-                    let bucket;
-
-                    if (bundleSiebelCode && bundleSiebelCode.value) {
-                        ratePC = _.find(PC, (characteristic: any) => {
-                            return (characteristic.id === bundleSiebelCode.value);
-                        });
-                    }
-
-                    if (ratePC && ratePC.ospFraseComercial && ratePC.ospFraseComercial !== null) {// la linea ppal tiene que ser conv
-                        isPack = true;
-                    }
-
-                    if (ratePC && ratePC.productSpecCharacteristic && ratePC.productSpecCharacteristic.length > 0
-                        && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue.length > 0) {
-                        ranges = ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue[0].value;
-                    }
-
-                    if (ratePC && ratePC.ospGroupName && ratePC.ospGroupName.toUpperCase() === 'CONVERGENTE_NAC' && ratePC.productSpecCharacteristic) {
-                        bucket = _.find(ratePC.productSpecCharacteristic, {ospCategory:'BUCKET'});
-                        bucket = bucket && bucket.ospId ? bucket.ospId : '';
-                    }
-
-                    /* if (ratePC && ratePC.productSpecCharacteristic) {
-                        ranges = _.find(ratePC.productSpecCharacteristic, (spec: any) => {
-                            return spec.name === 'VALORNEGOCIO';
-                        });
-                    } */
-
-                    let info = {
-                        id2: (i + 1),
-                        msisdn: MSISDN ? MSISDN.value : '',
-                        id: 0,
-                        rateName: ratePC ? ratePC.name : '',
-                        rateGroupName: ratePC ? ratePC.ospGroupName : '',
-                        range: ranges ? ranges : '',
-                        startDate: startDate,
-                        siebelCode: rateSiebelCode ? rateSiebelCode.value : '',
-                        bundle: bundleSiebelCode ? bundleSiebelCode.value : '',
-                        pack: ratePC ? ratePC.ospFraseComercial : '',
-                        isPack: isPack,
-                        bucket: bucket
-                    };
-                    /* if (info.isPack) {
-                        let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                        if (!clientData) {
-                            clientData = {};
-                        }
-                        clientData.principalLine = {
-                            number: info.msisdn,
-                            siebelCode: info.siebelCode,
-                            pack: info.pack,
-                            bundle: info.bundle
-                        };
-                        sessionStorage.setItem('clientData', JSON.stringify(clientData));
-                    } */
-                    /* if(info.isPack === true) {
-                        lines.push(info);
-                    } */
-                    lines.push(info);
-                }
+                ranges = this.loopMobileLinesGetRanges(mobileLines, i, PC, ranges, lines);
             }
 
             // Por ultimo órdenamos nuestro array con éste órden de prioridad: rango > antigüedad > orden en el CV(id)
@@ -1073,6 +1020,87 @@ module OrangeFeSARQ.Services {
                 orderLines2.push(info);
             }; */
             return lines;
+        }
+
+        private loopMobileLinesGetRanges(mobileLines: any[], i: string, PC: any, ranges: any, lines: any[]) {
+            if (mobileLines.length) {
+                // Sacamos datos necesarios del customerView: rango, numero línea y fecha de activación
+                let rateSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                    return characteristic.name === 'Código Tarifa Siebel';
+                });
+                let bundleSiebelCode = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                    return characteristic.name === 'Product Bundle Siebel';
+                });
+                let MSISDN = _.find(mobileLines[i].productCharacteristic, (characteristic: any) => {
+                    return characteristic.name === 'MSISDN';
+                });
+                let startDate = mobileLines[i].startDate; // activacion tarifa
+                // Buscamos en el productCatalog el resto de datos alineando las APIs con el "tmcode" (código de las tarifas)
+                let ratePC;
+                let isPack;
+                let bucket;
+                ({ ratePC, isPack, bucket, ranges } = this.findInProductCatalog(bundleSiebelCode, PC, ranges));
+                /* if (ratePC && ratePC.productSpecCharacteristic) {
+                    ranges = _.find(ratePC.productSpecCharacteristic, (spec: any) => {
+                        return spec.name === 'VALORNEGOCIO';
+                    });
+                } */
+                let info = {
+                    id2: (i + 1),
+                    msisdn: MSISDN ? MSISDN.value : '',
+                    id: 0,
+                    rateName: ratePC ? ratePC.name : '',
+                    rateGroupName: ratePC ? ratePC.ospGroupName : '',
+                    range: ranges ? ranges : '',
+                    startDate: startDate,
+                    siebelCode: rateSiebelCode ? rateSiebelCode.value : '',
+                    bundle: bundleSiebelCode ? bundleSiebelCode.value : '',
+                    pack: ratePC ? ratePC.ospFraseComercial : '',
+                    isPack: isPack,
+                    bucket: bucket
+                };
+                /* if (info.isPack) {
+                    let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                    if (!clientData) {
+                        clientData = {};
+                    }
+                    clientData.principalLine = {
+                        number: info.msisdn,
+                        siebelCode: info.siebelCode,
+                        pack: info.pack,
+                        bundle: info.bundle
+                    };
+                    sessionStorage.setItem('clientData', JSON.stringify(clientData));
+                } */
+                /* if(info.isPack === true) {
+                    lines.push(info);
+                } */
+                lines.push(info);
+            }
+            return ranges;
+        }
+
+        private findInProductCatalog(bundleSiebelCode: any, PC: any, ranges: any) {
+            let isPack = false;
+            let ratePC;
+            let bucket;
+            if (bundleSiebelCode && bundleSiebelCode.value) {
+                ratePC = _.find(PC, (characteristic: any) => {
+                    return (characteristic.id === bundleSiebelCode.value);
+                });
+            }
+            if (ratePC && ratePC.ospFraseComercial && ratePC.ospFraseComercial !== null) { // la linea ppal tiene que ser conv
+                isPack = true;
+            }
+            if (ratePC && ratePC.productSpecCharacteristic && ratePC.productSpecCharacteristic.length > 0
+                && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue && ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue.length > 0) {
+                ranges = ratePC.productSpecCharacteristic[0].productSpecCharacteristicValue[0].value;
+            }
+            if (ratePC && ratePC.ospGroupName && ratePC.ospGroupName.toUpperCase() === 'CONVERGENTE_NAC' && ratePC.productSpecCharacteristic) {
+                bucket = _.find(ratePC.productSpecCharacteristic, { ospCategory: 'BUCKET' });
+                bucket = bucket && bucket.ospId ? bucket.ospId : '';
+            }
+            return { ratePC, isPack, bucket, ranges };
         }
 
         /**
@@ -1189,15 +1217,31 @@ module OrangeFeSARQ.Services {
                 vm.storeRemedyObject = _.find(vm.storeRemedyArray, { msisdn: msisdn }) ?
                 _.find(vm.storeRemedyArray, { msisdn: msisdn }) : {};
 
-            if (!_.isEmpty(vm.storeRemedyObject)) {
-                vm.storeRemedy = vm.storeRemedyObject.request ? vm.storeRemedyObject.request : [];
-                _.remove(vm.storeRemedyArray, vm.storeRemedyObject);
-                if (!_.isEmpty(vm.storeRemedy)) {
-                    vm.filterObject = _.find(vm.storeRemedy, obj) ? _.find(vm.storeRemedy, obj) : {};
-                    if (!_.isEmpty(vm.filterObject)) {
-                        _.remove(vm.storeRemedy, vm.filterObject);
-                        if (vm.filterObject.name === 'reason2') {
-                            _.remove(vm.storeRemedy, { name: 'reason3' });
+            storeRemedyArray = sessionStorageManager.getEntry(storeName) ?
+                JSON.parse(sessionStorageManager.getEntry(storeName)) : [];
+            storeRemedyObject = _.find(storeRemedyArray, { msisdn: msisdn }) ?
+                _.find(storeRemedyArray, { msisdn: msisdn }) : {};
+
+            ({ storeRemedy, filterObject } = this.findFilterObject(storeRemedyObject, storeRemedy, storeRemedyArray, filterObject, obj));
+            filterObject.name = obj.name;
+            filterObject.value = reason;
+            storeRemedy.push(filterObject);
+            storeRemedyObject = { msisdn: msisdn, request: storeRemedy };
+            storeRemedyArray.push(storeRemedyObject);
+            sessionStorageManager.removeEntry(storeName);
+            sessionStorageManager.setEntry(storeName, JSON.stringify(storeRemedyArray));
+        }
+
+        private findFilterObject(storeRemedyObject: any, storeRemedy: any[], storeRemedyArray: any[], filterObject: any, obj: Models.IObjName) {
+            if (!_.isEmpty(storeRemedyObject)) {
+                storeRemedy = storeRemedyObject.request ? storeRemedyObject.request : [];
+                _.remove(storeRemedyArray, storeRemedyObject);
+                if (!_.isEmpty(storeRemedy)) {
+                    filterObject = _.find(storeRemedy, obj) ? _.find(storeRemedy, obj) : {};
+                    if (!_.isEmpty(filterObject)) {
+                        _.remove(storeRemedy, filterObject);
+                        if (filterObject.name === 'reason2') {
+                            _.remove(storeRemedy, { name: 'reason3' });
                         }
                         if (vm.filterObject.name === 'reason1') {
                             _.remove(vm.storeRemedy, { name: 'reason2' });
@@ -1206,13 +1250,7 @@ module OrangeFeSARQ.Services {
                     }
                 }
             }
-            vm.filterObject.name = obj.name;
-            vm.filterObject.value = reason;
-            vm.storeRemedy.push(vm.filterObject);
-            vm.storeRemedyObject = { msisdn: msisdn, request: vm.storeRemedy };
-            vm.storeRemedyArray.push(vm.storeRemedyObject);
-            vm.sessionStorageManager.removeEntry(storeName);
-            vm.sessionStorageManager.setEntry(storeName, JSON.stringify(vm.storeRemedyArray));
+            return { storeRemedy, filterObject };
         }
 
         initRequestStorage(msisdn: string, storeName: string): void {

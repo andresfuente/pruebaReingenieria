@@ -28,6 +28,8 @@ module OrangeFeSARQ.Services {
         public clientData;
         public shopInfo;
         public principalNumber;
+        public geoLocal = 'Geolocation-local';
+        public geoClient = 'Geolocation-client';
 
         /**
          * @ngdoc method
@@ -147,8 +149,8 @@ module OrangeFeSARQ.Services {
             // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
-            _headers.set(vm.GEOLOCATION_LOCAL, vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set(vm.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
+            _headers.set(this.geoLocal, vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set(this.geoClient, clientGeolocation.toUpperCase());
 
             let commercialData;
             let commercialActIndex;
@@ -178,27 +180,9 @@ module OrangeFeSARQ.Services {
 
 
             // Prepago   
-            if (sessionStorage.getItem('commercialData')) {
-                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                commercialActIndex = vm.getSelectedCommercialAct();
-                if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemSubtype && commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
-                    if (commercialAction === 'portabilidad') {
-                        delete params.portabilityOrigin;
-                    }
-                }
-            }
+            ({ commercialData, commercialActIndex } = this.getCommercialPrepago(commercialData, commercialActIndex, vm, commercialAction, params));
             // Cliente existente para Renove   
-            if (sessionStorage.getItem('commercialData')) {
-                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                commercialActIndex = vm.getSelectedCommercialAct();
-                if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.toLowerCase() === 'renove' && vm.typeMulticomparatorRenove) {
-                    delete params.isExistingCustomer;
-                    delete params.portabilityOrigin;
-                    delete params.riskLevel;
-                    delete params.profile;
-                    delete params.creditLimit;
-                }
-            }
+            ({ commercialData, commercialActIndex } = this.getClientRenove(commercialData, commercialActIndex, vm, params));
             if (isSecondaryRenew || vm.checkCampaignType(commercialData, commercialActIndex)) {
                 delete params['deviceOffering.category.name'];
             }
@@ -236,6 +220,34 @@ module OrangeFeSARQ.Services {
                 return data;
             });
         }
+        private getClientRenove(commercialData: any, commercialActIndex: any, vm: this, params: any) {
+            if (sessionStorage.getItem('commercialData')) {
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = vm.getSelectedCommercialAct();
+                if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.toLowerCase() === 'renove' && vm.typeMulticomparatorRenove) {
+                    delete params.isExistingCustomer;
+                    delete params.portabilityOrigin;
+                    delete params.riskLevel;
+                    delete params.profile;
+                    delete params.creditLimit;
+                }
+            }
+            return { commercialData, commercialActIndex };
+        }
+
+        private getCommercialPrepago(commercialData: any, commercialActIndex: any, vm: this, commercialAction: string, params: any) {
+            if (sessionStorage.getItem('commercialData')) {
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = vm.getSelectedCommercialAct();
+                if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemSubtype && commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
+                    if (commercialAction === 'portabilidad') {
+                        delete params.portabilityOrigin;
+                    }
+                }
+            }
+            return { commercialData, commercialActIndex };
+        }
+
         /**
         * @ngdoc method
         * @name ratesComparator.Services:RatesComparatorSrv#checkCampaignType
@@ -251,15 +263,7 @@ module OrangeFeSARQ.Services {
                 && commercialData[commercialActIndex].bestRenoveInfo && commercialData[commercialActIndex].bestRenoveInfo.length){
                     let bestRenove = commercialData[commercialActIndex].bestRenoveInfo
                     bestRenove.forEach(renove => {
-                        if (renove.campaigns && renove.campaigns.length){
-                            renove.campaigns.forEach(campaign => {
-                                if (campaign.cod !== undefined && campaign.cod !== null){
-                                    if (campaign.typeRenew && campaign.typeRenew === 'Renove secundario') {
-                                        value = true;
-                                    }
-                                }
-                            });
-                        }
+                        value = this.setValueRenove(renove, value);
                         
                     });
                 }
@@ -267,6 +271,19 @@ module OrangeFeSARQ.Services {
 
             return value;
         }
+        private setValueRenove(renove: any, value: boolean) {
+            if (renove.campaigns && renove.campaigns.length) {
+                renove.campaigns.forEach(campaign => {
+                    if (campaign.cod !== undefined && campaign.cod !== null) {
+                        if (campaign.typeRenew && campaign.typeRenew === 'Renove secundario') {
+                            value = true;
+                        }
+                    }
+                });
+            }
+            return value;
+        }
+
         /**
         * @ngdoc method
         * @name ratesComparator.Services:RatesComparatorSrv#checkBucketID
@@ -309,15 +326,20 @@ module OrangeFeSARQ.Services {
                 if (cartItems.ospSelected) {
                     if (cartItems.cartItem && cartItems.cartItem.length && cartItems.cartItem.length > 0) {
                         for (let i = 0; i < cartItems.cartItem.length; i++) {
-                            let cartItem = cartItems.cartItem[i];
-                            if (cartItem.product && cartItem.product.productRelationship && cartItem.product.productRelationship.length && cartItem.product.productRelationship.length > 0) {
-                                for (let j = 0; j < cartItem.product.productRelationship.length; j++) {
-                                    if (cartItem.product.productRelationship[j].type && cartItem.product.productRelationship[j].type === 'bucket') {
-                                        idBucket = cartItem.id;
-                                    }
-                                }
-                            }
+                            idBucket = this.getIdBucket(cartItems, i, idBucket);
                         }
+                    }
+                }
+            }
+            return idBucket;
+        }
+
+        private getIdBucket(cartItems: any, i: number, idBucket: string) {
+            let cartItem = cartItems.cartItem[i];
+            if (cartItem.product && cartItem.product.productRelationship && cartItem.product.productRelationship.length && cartItem.product.productRelationship.length > 0) {
+                for (let j = 0; j < cartItem.product.productRelationship.length; j++) {
+                    if (cartItem.product.productRelationship[j].type && cartItem.product.productRelationship[j].type === 'bucket') {
+                        idBucket = cartItem.id;
                     }
                 }
             }
@@ -347,8 +369,8 @@ module OrangeFeSARQ.Services {
                     } else if (commercial.serviceNumber === "" && number === vm.principalNumber) {
                         value = true;
                     }
-                    commercial.rates.forEach(rate => {
-                        if (commercial.ospIsSelected && rate && rate.groupName && rate.groupName !== "Convergente_NAC") {
+                    commercial.rates.forEach(rateLoop => {
+                        if (commercial.ospIsSelected && rateLoop && rateLoop.groupName && rateLoop.groupName !== "Convergente_NAC") {
                             value = true;
                         }
                     });
@@ -437,28 +459,8 @@ module OrangeFeSARQ.Services {
                 let comData = JSON.parse(sessionStorage.getItem('commercialData'));
 
                 // Buscamos el tipo de esta tarifa en commercial data
-                if (comData && comData.length > 0) {
-                    let currentActRtc: any = _.find(comData, { 'ospIsSelected': true });
-
-                    if (currentActRtc !== null && currentActRtc.rates && currentActRtc.rates.length > 0) {
-                        let tarifaMovilFijo: any = _.find(currentActRtc.rates, function (rateMF: any) {
-                            if (rateMF.siebelId === siebelId && rateMF.typeService.toUpperCase() === 'MOVIL_FIJO') {
-                                return rateMF;
-                            }
-                        });
-
-                        let tarifaMovil: any = _.find(currentActRtc.rates, function (rateM: any) {
-                            if (rateM.siebelId === siebelId && rateM.typeService.toUpperCase() !== 'MOVIL_FIJO') {
-                                return rateM;
-                            }
-                        });
-
-                        if (tarifaMovilFijo !== undefined && tarifaMovilFijo !== null) {
-                            typeRtc = '2';
-                        } else if (tarifaMovil !== undefined && tarifaMovil !== null) {
-                            typeRtc = '0';
-                        }
-                    }
+                if (commercialData && commercialData.length > 0) {
+                    type = this.getTypeCommercialData(commercialData, siebelId, type);
                 }
             } else {
                 vm.getSession();
@@ -469,6 +471,29 @@ module OrangeFeSARQ.Services {
             }
 
             return typeRtc;
+        }
+
+        private getTypeCommercialData(commercialData: any, siebelId: string, type: string) {
+            let currentAct: any = _.find(commercialData, { 'ospIsSelected': true });
+            if (currentAct !== null && currentAct.rates && currentAct.rates.length > 0) {
+                let movilFijoRate: any = _.find(currentAct.rates, function (rate: any) {
+                    if (rate.siebelId === siebelId && rate.typeService.toUpperCase() === 'MOVIL_FIJO') {
+                        return rate;
+                    }
+                });
+                let movilRate: any = _.find(currentAct.rates, function (rate: any) {
+                    if (rate.siebelId === siebelId && rate.typeService.toUpperCase() !== 'MOVIL_FIJO') {
+                        return rate;
+                    }
+                });
+                if (movilFijoRate !== undefined && movilFijoRate !== null) {
+                    type = '2';
+                }
+                else if (movilRate !== undefined && movilRate !== null) {
+                    type = '0';
+                }
+            }
+            return type;
         }
 
         /**
@@ -554,8 +579,8 @@ module OrangeFeSARQ.Services {
 
             // CABECERA PANGEA
             // let _headers = {
-            //     'Geolocation-local': vm.storeProvince.toUpperCase(),
-            //     'Geolocation-client': vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
+            //     this.geoLocal: vm.storeProvince.toUpperCase(),
+            //     this.geoClient: vm.customerProvince ? vm.customerProvince.toUpperCase() : vm.storeProvince.toUpperCase()
             // };
             // CABECERA HASHMAP
             vm.setCustomerData();
@@ -570,8 +595,8 @@ module OrangeFeSARQ.Services {
             }
 
             let _headers = new HashMap<string, string>();
-            _headers.set(vm.GEOLOCATION_LOCAL, vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set(vm.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
+            _headers.set(this.geoLocal, vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set(this.geoClient, clientGeolocation.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
