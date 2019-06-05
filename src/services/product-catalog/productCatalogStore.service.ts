@@ -304,7 +304,7 @@ module OrangeFeSARQ.Services {
     isLove(element: any, currency: string = 'eur', priceType: string = 'pago único'): any {
       let vm = this;
       vm.ratelove = true;
-      vm.getProductPrice(element, currency, priceType);
+      return vm.getProductPrice(element, currency, priceType);
     }
   }
 }
