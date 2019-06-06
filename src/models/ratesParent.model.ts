@@ -18,20 +18,57 @@ module ratesParent.Models {
 
         loadRates(specificationData, offeringData, bucketInfo?) {
             let vm = this;
-            if (specificationData.productSpecification && offeringData.productOffering) {
-                specificationData.productSpecification.forEach(function (specification) {
-                    let productOffering = [];
-                    offeringData.productOffering.forEach(function (offering) {
-                        if (specification.id === offering.productSpecification.id ||
-                            specification.id === offering.bundledProductOffering[0].id) {
-                            productOffering.push(offering);
-                        }
+            if (sessionStorage.getItem('pangea-brand') === 'jazztel') {
+                if (specificationData.productSpecification && offeringData.productOffering) {
+                    specificationData.productSpecification.forEach(function (specification) {
+                        let productOffering = [];
+                        offeringData.productOffering.forEach(function (offering) {
+                            offering.bundledProductOffering.forEach(element => {
+
+                                if (element.name && element.name === 'bundleId') {
+                                    if (!element.id) {
+                                        element.id = offering.bundledProductOffering[0].id + '+' + offering.productSpecification.id + '+' + offering.productSpecification.ospProductNumber
+                                    }
+
+                                    if (!specification.bundledProductSpecification[0].id) {
+                                        specification.bundledProductSpecification[0].id = specification.ospMorganeCode + '+' + specification.ospExternalCode + '+' + specification.productNumber;
+
+                                    }
+
+                                    if (specification.bundledProductSpecification[0].id === element.id) {
+                                        productOffering.push(offering);
+                                    }
+                                }
+                            });
+                        });
+
+                        let rate: Rate = new Rate(specification, productOffering, bucketInfo);
+
+                        vm.rates.push(rate);
                     });
+                }
+            } else {
+                if (specificationData.productSpecification && offeringData.productOffering) {
+                    specificationData.productSpecification.forEach(function (specification) {
+                        let productOffering = [];
+                        offeringData.productOffering.forEach(function (offering) {
+                            if (offering.isBundle) {
+                                offering.bundledProductOffering.forEach(element => {
 
-                    let rate: Rate = new Rate(specification, productOffering, bucketInfo);
+                                    if (specification.id && element.id && specification.id === element.id) {
+                                        productOffering.push(offering);
+                                    }
 
-                    vm.rates.push(rate);
-                });
+                                });
+                            }
+                        });
+
+                        let rate: Rate = new Rate(specification, productOffering, bucketInfo);
+
+                        vm.rates.push(rate);
+                    });
+                }
+
             }
         }
 
@@ -114,99 +151,100 @@ module ratesParent.Models {
         public bucket: RateBucket;
         public NACLines: Rate[] = [];
 
-        public optionalFeatures: Array<OptionalFeature> = []; 
-        private pagoAplazado: any = 'Pago aplazado';
+        //Jazztel
+        public characteristicJzz: RatesCharacteristicJzz[] = [];
 
         constructor(rateData, priceData, bucketInfo?) {
-            this.rateSubName = rateData.ospTitulo;
-            this.rateDescription = rateData.description;
-            this.siebelId = rateData.id;
-            this.groupName = rateData.ospGroupName;
-            this.typeService = rateData.ospTypeService;
 
-            // Inicializamos a 0 los precios auxiliares del pack NAC
-            this.nacPrice = 0;
-            this.nacPriceTaxIncluded = 0;
-            this.nacPricePromotional = 0;
-            this.nacPriceTaxIncludedPromotional = 0;
 
-            // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
-            if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
-                this.ospTecnology = rateData.ospTecnology;
-            }
+            if (sessionStorage.getItem('pangea-brand') === 'jazztel') {
+                this.rateSubName = rateData.ospTitulo;
+                this.rateDescription = rateData.description;
+                this.siebelId = rateData.id ? rateData.id : rateData.bundledProductSpecification && rateData.bundledProductSpecification[0].id;
 
-            this.pack = (typeof (rateData.ospFraseComercial) !== 'undefined' && rateData.ospFraseComercial !== null) ?
-                rateData.ospFraseComercial : '';
+                if (!rateData.id) {
+                    rateData.id = rateData.bundledProductSpecification[0].id;
+                }
 
-            if (rateData.productSpecCharacteristic) {
-                rateData.productSpecCharacteristic.forEach(element => {
-                    if (element.ospCategory === 'highlight' || element.name === 'CARACTERISTICATECNOLOGIA') {
-                        let raProductBundle = new RatesProductBundle(element.attachment ? element.attachment.href : '',
-                            element.name,
-                            element.ospCategory,
-                            element.description,
-                            element.productSpecSubcharacteristic);
-                        this.productBundle.push(raProductBundle);
-                    }
+                this.groupName = rateData.ospGroupName;
+                this.typeService = rateData.ospTypeService;
 
-                    if (element.ospCategory === 'BUCKET' && element.ospId) {
-                        this.bucket = new RateBucket(element.name, element.ospId, element.ospOrden, element.ospLargeDescription, element.description, element.ospImagen);
-                    } else if (bucketInfo && rateData.ospGroupName === 'Convergente_NAC') {
-                        this.bucket = new RateBucket('', bucketInfo, '', '', '', '');
-                    }
-                    if (rateData.ospGroupName === 'Convergente_NAC' && element.ospCategory === 'optional' && element.ospId) {
-                        let optionalFeature: OptionalFeature = undefined;
-                        let img: string = '';
-                        if (element.attachment && element.attachment.href){
-                            img = element.attachment.href
+                // Inicializamos a 0 los precios auxiliares del pack NAC
+                this.nacPrice = 0;
+                this.nacPriceTaxIncluded = 0;
+                this.nacPricePromotional = 0;
+                this.nacPriceTaxIncludedPromotional = 0;
+
+                // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
+                if (rateData.ospTecnology) {
+                    this.ospTecnology = rateData.ospTecnology;
+                }
+
+                this.pack = (typeof (rateData.ospFraseComercial) !== 'undefined' && rateData.ospFraseComercial !== null) ?
+                    rateData.ospFraseComercial : '';
+
+                if (rateData.productSpecCharacteristic) {
+                    rateData.productSpecCharacteristic.forEach(element => {
+                        if (element.ospCategory === 'highlight' || element.name === 'CARACTERISTICATECNOLOGIA') {
+                            let raProductBundle = new RatesProductBundle(element.attachment ? element.attachment.href : '',
+                                element.name,
+                                element.ospCategory,
+                                element.description,
+                                element.productSpecSubcharacteristic);
+                            this.productBundle.push(raProductBundle);
                         }
-                        if (element.name === '#lineas#') {
-                            optionalFeature = new OptionalFeature(element.ospId, img, element.name);
-                        } else {
-                            optionalFeature = new OptionalFeature(element.ospId, img, element.name, element.productSpecSubcharacteristic);
-                        }        
-                        if (!_.some(this.optionalFeatures, {ospId: element.ospId})) {
-                            this.optionalFeatures.push(optionalFeature);
+
+                        if (element.ospCategory === 'BUCKET' && element.ospId) {
+                            this.bucket = new RateBucket(element.name, element.ospId, element.ospOrden, element.ospLargeDescription, element.description, element.ospImagen);
+                        } else if (bucketInfo && rateData.ospGroupName === 'Convergente_NAC') {
+                            this.bucket = new RateBucket('', bucketInfo, '', '', '', '');
                         }
-                    }
-                });
-            }
-            // Se obtienen los Id's de los SVA de la tarifa
-            if (rateData.productSpecificationRelationship) {
-                rateData.productSpecificationRelationship.forEach(element => {
-                    if (element.type.toLowerCase() === 'sva' && element.id !== '') {
-                        this.relatedSVAList === '' ? this.relatedSVAList = this.relatedSVAList.concat(element.id) :
-                            this.relatedSVAList = this.relatedSVAList.concat(',' + element.id);
-                    }
+                        //Se obtienen las caracteríticas para jazztel de forma provisional
+                        if (element.name === 'LiteralTarifa') {
+                            if (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length > 0 && element.productSpecCharacteristicValue[0].value) {
+                                let characteristicJazztelRate = new RatesCharacteristicJzz(element.productSpecCharacteristicValue[0].value);
+                                this.characteristicJzz.push(characteristicJazztelRate);
+                            }
+                        }
 
-                    if (element.type.toLowerCase() === 'implicitsva' && element.id !== '') {
-                        this.implicitSVAList === '' ? this.implicitSVAList = this.implicitSVAList.concat(element.id) :
-                            this.implicitSVAList = this.implicitSVAList.concat(',' + element.id);
-                    }
-                });
-            }
+                    });
+                }
+                // Se obtienen los Id's de los SVA de la tarifa
+                if (rateData.productSpecificationRelationship) {
+                    rateData.productSpecificationRelationship.forEach(element => {
+                        if (element.type.toLowerCase() === 'sva' && element.id !== '') {
+                            this.relatedSVAList === '' ? this.relatedSVAList = this.relatedSVAList.concat(element.id) :
+                                this.relatedSVAList = this.relatedSVAList.concat(',' + element.id);
+                        }
 
-            // Buscamos lineas asociadas en productSpecificationRelationship del rate 
-            let associatedLine = [];
-            associatedLine = _.filter(rateData.productSpecificationRelationship, { type: 'associatedLine' });
+                        if (element.type.toLowerCase() === 'implicitsva' && element.id !== '') {
+                            this.implicitSVAList === '' ? this.implicitSVAList = this.implicitSVAList.concat(element.id) :
+                                this.implicitSVAList = this.implicitSVAList.concat(',' + element.id);
+                        }
+                    });
+                }
 
-            if (associatedLine !== undefined && associatedLine.length !== 0) {
-                this.associatedLine = associatedLine;
-            }
+                // Buscamos lineas asociadas en productSpecificationRelationship del rate 
+                let associatedLine = [];
+                associatedLine = _.filter(rateData.productSpecificationRelationship, { type: 'associatedLine' });
 
-            // Buscamos líneas por defecto para packs
-            let defaultLines = [];
-            defaultLines = _.filter(rateData.productSpecificationRelationship, { type: 'defaultLine' });
+                if (associatedLine !== undefined && associatedLine.length !== 0) {
+                    this.associatedLine = associatedLine;
+                }
 
-            if (defaultLines && defaultLines.length > 0) {
-                this.defaultLines = defaultLines;
-            }
+                // Buscamos líneas por defecto para packs
+                let defaultLines = [];
+                defaultLines = _.filter(rateData.productSpecificationRelationship, { type: 'defaultLine' });
 
-            for (let i in priceData) {
-                if (priceData.length > 0) {
-                    if (priceData[i].isBundle) {
+                if (defaultLines && defaultLines.length > 0) {
+                    this.defaultLines = defaultLines;
+                }
+
+                for (let i in priceData) {
+                    if (priceData.length > 0) {
+                        // if (priceData[i].isBundle || sessionStorage.getItem('pangea-brand') === 'jazztel') {
                         // Buscamos si afecta el revamp de tarifas Love 
-                        if (priceData[i].bundledProductOffering && priceData[i].bundledProductOffering[0] && priceData[i].bundledProductOffering[0].id === rateData.id) {
+                        if (priceData[i].bundledProductOffering && priceData[i].bundledProductOffering[1] && priceData[i].bundledProductOffering[1].id === rateData.id) {
                             // Comprobamos la fecha 
                             let fechaServicio = priceData[i].validFor && priceData[i].validFor.endDateTime ? priceData[i].validFor.endDateTime : null;
                             let fechaLocal: any = new Date();
@@ -227,177 +265,346 @@ module ratesParent.Models {
                             // Recoger precios
                             for (let j in priceData[i].productOfferingPrice) {
                                 if (priceData[i].productOfferingPrice.length > 0) {
+
                                     let promotionalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'promotionalCommercialPriceRate';
+                                        return price.ospTaxRateName === 'Promo';
                                     });
+
                                     let commercialPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'commercialPriceRate';
-                                    });
-                                    let techSiebelProductBundlePrice = _.find(priceData[i].productOfferingPrice[j].price,
-                                        function (price: any) {
-                                            return price.priceType === 'techSiebelProductBundlePriceRate';
-                                        });
-                                    let siebelPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'siebelPriceRate';
-                                    });
-                                    let ratePrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'priceRate';
-                                    });
-                                    let techniquePriceRate = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'techniquePriceRate';
-                                    });
-                                    let techSiebelPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.priceType === 'techSiebelPriceRate';
+                                        return price.ospTaxRateName === 'SinPromo';
                                     });
 
-                                    let productOfferingPriceAlteration = priceData[i].productOfferingPrice[j].
-                                        productOfferingPriceAlteration;
-
-                                    // Precio fijo para packEntry NAC
-                                    let precioFijo;
-                                    let arrayPromo;
-
-                                    if (productOfferingPriceAlteration && productOfferingPriceAlteration.price) {
-                                        if (productOfferingPriceAlteration.recurringChargePeriod) {
-                                            arrayPromo = productOfferingPriceAlteration.recurringChargePeriod.split('|');
-
-                                            if (arrayPromo && _.find(arrayPromo, (promo) => {return promo === 'Precio fijo'})) {
-                                                precioFijo = productOfferingPriceAlteration.price;
-                                            }
-                                        }
-                                    }
 
                                     // Precios tarifa con promociones
-                                    if (promotionalPrice) {
-                                        this.typePriceName = promotionalPrice.priceType;
-                                        this.taxRate = promotionalPrice.taxRate;
-                                        this.taxRateName = promotionalPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
-                                            this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
-                                        } else {
-                                            this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
-                                            this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
-                                        }
-                                    } else if (productOfferingPriceAlteration && !precioFijo) {
-                                        this.typePriceName = productOfferingPriceAlteration.priceType;
-                                        this.descriptionPromotion = productOfferingPriceAlteration.description;
-                                        this.applicationDuration = productOfferingPriceAlteration.applicationDuration;
-                                        this.recurringChargePeriodPromotion = productOfferingPriceAlteration.recurringChargePeriod;
-                                        if (productOfferingPriceAlteration.price && productOfferingPriceAlteration.price !== null) {
-                                            this.taxRate = productOfferingPriceAlteration.price.taxRate;
-                                            this.taxRateName = productOfferingPriceAlteration.price.ospTaxRateName;
-                                            this.ratePriceTaxIncludedPromotional = productOfferingPriceAlteration.price.taxIncludedAmount;
-                                            this.ratePricePromotional = productOfferingPriceAlteration.price.dutyFreeAmount;
-                                        }
-                                    }
+                                    // if (promotionalPrice) {
+                                    //     this.taxRate = promotionalPrice.taxRate;
+                                    //     this.taxRateName = promotionalPrice.priceType;
+                                    //     this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
+                                    //     this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
+                                    // }
 
-                                    // Precios tarifas sin promo
-                                    if (precioFijo) { // Prioritario el de packEntry
-                                        this.typePriceName = precioFijo.priceType;
-                                        this.taxRate = precioFijo.taxRate;
-                                        this.taxRateName = precioFijo.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = precioFijo.taxIncludedAmount;
-                                            this.ratePrice = precioFijo.dutyFreeAmount;
-                                        } else {
-                                            this.rateOfferingPriceTaxInluded = precioFijo.taxIncludedAmount;
-                                            this.rateOfferingPrice = precioFijo.dutyFreeAmount;
-                                        }
-                                    } else if (commercialPrice) {
-                                        this.typePriceName = commercialPrice.priceType;
+                                    if (commercialPrice) {
+                                        this.typePriceName = commercialPrice.ospTaxRateName;
                                         this.taxRate = commercialPrice.taxRate;
-                                        this.taxRateName = commercialPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
-                                            this.ratePrice = commercialPrice.dutyFreeAmount;
-                                        } else {
-                                            this.rateOfferingPriceTaxInluded = commercialPrice.taxIncludedAmount;
-                                            this.rateOfferingPrice = commercialPrice.dutyFreeAmount;
-                                        }
-                                    } else if (techSiebelProductBundlePrice) {
-                                        this.typePriceName = techSiebelProductBundlePrice.priceType;
-                                        this.taxRate = techSiebelProductBundlePrice.taxRate;
-                                        this.taxRateName = techSiebelProductBundlePrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = techSiebelProductBundlePrice.taxIncludedAmount;
-                                            this.ratePrice = techSiebelProductBundlePrice.dutyFreeAmount;
-                                        } else {
-                                            this.rateOfferingPriceTaxInluded = techSiebelProductBundlePrice.taxIncludedAmount;
-                                            this.rateOfferingPrice = techSiebelProductBundlePrice.dutyFreeAmount;
-                                        }
-                                    } else if (siebelPrice) {
-                                        this.typePriceName = siebelPrice.priceType;
-                                        this.taxRate = siebelPrice.taxRate;
-                                        this.taxRateName = siebelPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = siebelPrice.taxIncludedAmount;
-                                            this.ratePrice = siebelPrice.dutyFreeAmount;
-                                        } else {
-                                            this.rateOfferingPriceTaxInluded = siebelPrice.taxIncludedAmount;
-                                            this.rateOfferingPrice = siebelPrice.dutyFreeAmount;
-                                        }
-                                    } else if (ratePrice) {
-                                        this.typePriceName = ratePrice.priceType;
-                                        this.taxRate = ratePrice.taxRate;
-                                        this.taxRateName = ratePrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = ratePrice.taxIncludedAmount;
-                                            this.ratePrice = ratePrice.dutyFreeAmount;
-                                        } else {
-                                            this.rateOfferingPriceTaxInluded = ratePrice.taxIncludedAmount;
-                                            this.rateOfferingPrice = ratePrice.dutyFreeAmount;
-                                        }
-                                    } else if (techSiebelPrice) {
-                                        this.typePriceName = techSiebelPrice.priceType;
-                                        this.taxRate = techSiebelPrice.taxRate;
-                                        this.taxRateName = techSiebelPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === this.pagoAplazado) {
-                                            this.ratePriceTaxIncluded = techSiebelPrice.taxIncludedAmount;
-                                            this.ratePrice = techSiebelPrice.dutyFreeAmount;
-                                        } else {
-                                            this.rateOfferingPriceTaxInluded = techSiebelPrice.taxIncludedAmount;
-                                            this.rateOfferingPrice = techSiebelPrice.dutyFreeAmount;
-                                        }
+                                        this.taxRateName = commercialPrice.priceType;
+                                        this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
+                                        this.ratePrice = commercialPrice.dutyFreeAmount;
+
                                     }
                                 }
                             }
                         }
-                    } else {
-                        if (priceData[i].bundledProductOffering && _.find(priceData[i].bundledProductOffering, { 'id': rateData.id })) {
-                            // Recoger info
-                            let info1: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
-                            this.pupupInfo.push(info1);
-                        }
                     }
                 }
-            }
 
-            let descripcionCompleta = rateData.description + ((rateData.ospLargeDescription != null) ? ' <br/> ' + rateData.ospLargeDescription : "");
-            let info2: RatePopupInfo = new RatePopupInfo('titulo', descripcionCompleta);
-            this.pupupInfo.push(info2);
-            // && rateData.productSpecCharacteristic[i].ospLargeDescription != null 
-            for (let i in rateData.productSpecCharacteristic) {
-                if (rateData.productSpecCharacteristic[i].ospCategory === 'highlight') {
-                    let info3: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
-                    this.pupupInfo.push(info3);
+                let descripcionCompleta = rateData.description + ((rateData.ospLargeDescription != null) ? ' <br/> ' + rateData.ospLargeDescription : "");
+                let info2: RatePopupInfo = new RatePopupInfo('titulo', descripcionCompleta);
+                this.pupupInfo.push(info2);
+                // && rateData.productSpecCharacteristic[i].ospLargeDescription != null 
+                for (let i in rateData.productSpecCharacteristic) {
+                    if (rateData.productSpecCharacteristic[i].ospCategory === 'highlight') {
+                        let info3: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                        this.pupupInfo.push(info3);
+                    }
                 }
-            }
-            for (let i in rateData.productSpecCharacteristic) {
-                if (rateData.productSpecCharacteristic[i].ospCategory === 'implicit') {
-                    let repetida = false;
-                    for (let j in this.pupupInfo) {
-                        if (rateData.productSpecCharacteristic[i].name === this.pupupInfo[j].name) {
-                            repetida = true;
+                for (let i in rateData.productSpecCharacteristic) {
+                    if (rateData.productSpecCharacteristic[i].ospCategory === 'implicit') {
+                        let repetida = false;
+                        for (let j in this.pupupInfo) {
+                            if (rateData.productSpecCharacteristic[i].name === this.pupupInfo[j].name) {
+                                repetida = true;
+                            }
+                        }
+                        if (!repetida) {
+                            let info4: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                            this.pupupInfo.push(info4);
                         }
                     }
-                    if (!repetida) {
-                        let info4: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
-                        this.pupupInfo.push(info4);
+                }
+            }
+            else {
+
+
+
+                this.rateSubName = rateData.ospTitulo;
+                this.rateDescription = rateData.description;
+                this.siebelId = rateData.id;
+
+
+                this.groupName = rateData.ospGroupName;
+                this.typeService = rateData.ospTypeService;
+
+                // Inicializamos a 0 los precios auxiliares del pack NAC
+                this.nacPrice = 0;
+                this.nacPriceTaxIncluded = 0;
+                this.nacPricePromotional = 0;
+                this.nacPriceTaxIncludedPromotional = 0;
+
+                // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
+                if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
+                    this.ospTecnology = rateData.ospTecnology;
+                }
+
+                this.pack = (typeof (rateData.ospFraseComercial) !== 'undefined' && rateData.ospFraseComercial !== null) ?
+                    rateData.ospFraseComercial : '';
+
+                if (rateData.productSpecCharacteristic) {
+                    rateData.productSpecCharacteristic.forEach(element => {
+                        if (element.ospCategory === 'highlight' || element.name === 'CARACTERISTICATECNOLOGIA') {
+                            let raProductBundle = new RatesProductBundle(element.attachment ? element.attachment.href : '',
+                                element.name,
+                                element.ospCategory,
+                                element.description,
+                                element.productSpecSubcharacteristic);
+                            this.productBundle.push(raProductBundle);
+                        }
+
+                        if (element.ospCategory === 'BUCKET' && element.ospId) {
+                            this.bucket = new RateBucket(element.name, element.ospId, element.ospOrden, element.ospLargeDescription, element.description, element.ospImagen);
+                        } else if (bucketInfo && rateData.ospGroupName === 'Convergente_NAC') {
+                            this.bucket = new RateBucket('', bucketInfo, '', '', '', '');
+                        }
+                    });
+                }
+                // Se obtienen los Id's de los SVA de la tarifa
+                if (rateData.productSpecificationRelationship) {
+                    rateData.productSpecificationRelationship.forEach(element => {
+                        if (element.type.toLowerCase() === 'sva' && element.id !== '') {
+                            this.relatedSVAList === '' ? this.relatedSVAList = this.relatedSVAList.concat(element.id) :
+                                this.relatedSVAList = this.relatedSVAList.concat(',' + element.id);
+                        }
+
+                        if (element.type.toLowerCase() === 'implicitsva' && element.id !== '') {
+                            this.implicitSVAList === '' ? this.implicitSVAList = this.implicitSVAList.concat(element.id) :
+                                this.implicitSVAList = this.implicitSVAList.concat(',' + element.id);
+                        }
+                    });
+                }
+
+                // Buscamos lineas asociadas en productSpecificationRelationship del rate 
+                let associatedLine = [];
+                associatedLine = _.filter(rateData.productSpecificationRelationship, { type: 'associatedLine' });
+
+                if (associatedLine !== undefined && associatedLine.length !== 0) {
+                    this.associatedLine = associatedLine;
+                }
+
+                // Buscamos líneas por defecto para packs
+                let defaultLines = [];
+                defaultLines = _.filter(rateData.productSpecificationRelationship, { type: 'defaultLine' });
+
+                if (defaultLines && defaultLines.length > 0) {
+                    this.defaultLines = defaultLines;
+                }
+
+                for (let i in priceData) {
+                    if (priceData.length > 0) {
+                        if (priceData[i].isBundle) {
+                            // Buscamos si afecta el revamp de tarifas Love 
+                            if (priceData[i].bundledProductOffering && priceData[i].bundledProductOffering[0] && priceData[i].bundledProductOffering[0].id === rateData.id) {
+                                // Comprobamos la fecha 
+                                let fechaServicio = priceData[i].validFor && priceData[i].validFor.endDateTime ? priceData[i].validFor.endDateTime : null;
+                                let fechaLocal: any = new Date();
+                                let fechaServicioTransf = new Date(fechaServicio);
+                                let fechaLocalTransf = new Date(fechaLocal);
+                                let urlNewConditions = priceData[i].attachment && priceData[i].attachment[0] && priceData[i].attachment[0].url ? priceData[i].attachment[0].url : '';
+                                // Si el string no es una fecha o si fechaSrv es null, undefined o vacio y fechaSrv es posterios a fecha local
+                                if (fechaServicioTransf && fechaServicioTransf > fechaLocalTransf && urlNewConditions) {
+                                    // Recogemos la info de fecha y url 
+                                    let infoNewConditions: RatePopupInfoDate =
+                                        new RatePopupInfoDate(priceData[i].validFor.endDateTime, priceData[i].attachment[0].url);
+                                    this.pupupInfoNewConditions.push(infoNewConditions);
+                                    this.newRateConditions = true;
+                                } else {
+                                    this.newRateConditions = false;
+                                }
+
+                                // Recoger precios
+                                for (let j in priceData[i].productOfferingPrice) {
+                                    if (priceData[i].productOfferingPrice.length > 0) {
+                                        let promotionalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                            return price.priceType === 'promotionalCommercialPriceRate';
+                                        });
+                                        let commercialPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                            return price.priceType === 'commercialPriceRate';
+                                        });
+                                        let techSiebelProductBundlePrice = _.find(priceData[i].productOfferingPrice[j].price,
+                                            function (price: any) {
+                                                return price.priceType === 'techSiebelProductBundlePriceRate';
+                                            });
+                                        let siebelPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                            return price.priceType === 'siebelPriceRate';
+                                        });
+                                        let ratePrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                            return price.priceType === 'priceRate';
+                                        });
+                                        let techniquePriceRate = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                            return price.priceType === 'techniquePriceRate';
+                                        });
+                                        let techSiebelPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                            return price.priceType === 'techSiebelPriceRate';
+                                        });
+
+                                        let productOfferingPriceAlteration = priceData[i].productOfferingPrice[j].
+                                            productOfferingPriceAlteration;
+
+                                        // Precio fijo para packEntry NAC
+                                        let precioFijo;
+                                        let arrayPromo;
+
+                                        if (productOfferingPriceAlteration && productOfferingPriceAlteration.price) {
+                                            if (productOfferingPriceAlteration.recurringChargePeriod) {
+                                                arrayPromo = productOfferingPriceAlteration.recurringChargePeriod.split('|');
+
+                                                if (arrayPromo && _.find(arrayPromo, (promo) => { return promo === 'Precio fijo' })) {
+                                                    precioFijo = productOfferingPriceAlteration.price;
+                                                }
+                                            }
+                                        }
+
+                                        // Precios tarifa con promociones
+                                        if (promotionalPrice) {
+                                            this.typePriceName = promotionalPrice.priceType;
+                                            this.taxRate = promotionalPrice.taxRate;
+                                            this.taxRateName = promotionalPrice.ospTaxRateName;
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                                this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
+                                                this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
+                                            } else {
+                                                this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
+                                                this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
+                                            }
+                                        } else if (productOfferingPriceAlteration && !precioFijo) {
+                                            this.typePriceName = productOfferingPriceAlteration.priceType;
+                                            this.descriptionPromotion = productOfferingPriceAlteration.description;
+                                            this.applicationDuration = productOfferingPriceAlteration.applicationDuration;
+                                            this.recurringChargePeriodPromotion = productOfferingPriceAlteration.recurringChargePeriod;
+                                            if (productOfferingPriceAlteration.price && productOfferingPriceAlteration.price !== null) {
+                                                this.taxRate = productOfferingPriceAlteration.price.taxRate;
+                                                this.taxRateName = productOfferingPriceAlteration.price.ospTaxRateName;
+                                                this.ratePriceTaxIncludedPromotional = productOfferingPriceAlteration.price.taxIncludedAmount;
+                                                this.ratePricePromotional = productOfferingPriceAlteration.price.dutyFreeAmount;
+                                            }
+                                        }
+
+                                        // Precios tarifas sin promo
+                                        if (precioFijo) { // Prioritario el de packEntry
+                                            this.typePriceName = precioFijo.priceType;
+                                            this.taxRate = precioFijo.taxRate;
+                                            this.taxRateName = precioFijo.ospTaxRateName;
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                                this.ratePriceTaxIncluded = precioFijo.taxIncludedAmount;
+                                                this.ratePrice = precioFijo.dutyFreeAmount;
+                                            } else {
+                                                this.rateOfferingPriceTaxInluded = precioFijo.taxIncludedAmount;
+                                                this.rateOfferingPrice = precioFijo.dutyFreeAmount;
+                                            }
+                                        } else if (commercialPrice) {
+                                            this.typePriceName = commercialPrice.priceType;
+                                            this.taxRate = commercialPrice.taxRate;
+                                            this.taxRateName = commercialPrice.ospTaxRateName;
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                                this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
+                                                this.ratePrice = commercialPrice.dutyFreeAmount;
+                                            } else {
+                                                this.rateOfferingPriceTaxInluded = commercialPrice.taxIncludedAmount;
+                                                this.rateOfferingPrice = commercialPrice.dutyFreeAmount;
+                                            }
+                                        } else if (techSiebelProductBundlePrice) {
+                                            this.typePriceName = techSiebelProductBundlePrice.priceType;
+                                            this.taxRate = techSiebelProductBundlePrice.taxRate;
+                                            this.taxRateName = techSiebelProductBundlePrice.ospTaxRateName;
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                                this.ratePriceTaxIncluded = techSiebelProductBundlePrice.taxIncludedAmount;
+                                                this.ratePrice = techSiebelProductBundlePrice.dutyFreeAmount;
+                                            } else {
+                                                this.rateOfferingPriceTaxInluded = techSiebelProductBundlePrice.taxIncludedAmount;
+                                                this.rateOfferingPrice = techSiebelProductBundlePrice.dutyFreeAmount;
+                                            }
+                                        } else if (siebelPrice) {
+                                            this.typePriceName = siebelPrice.priceType;
+                                            this.taxRate = siebelPrice.taxRate;
+                                            this.taxRateName = siebelPrice.ospTaxRateName;
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                                this.ratePriceTaxIncluded = siebelPrice.taxIncludedAmount;
+                                                this.ratePrice = siebelPrice.dutyFreeAmount;
+                                            } else {
+                                                this.rateOfferingPriceTaxInluded = siebelPrice.taxIncludedAmount;
+                                                this.rateOfferingPrice = siebelPrice.dutyFreeAmount;
+                                            }
+                                        } else if (ratePrice) {
+                                            this.typePriceName = ratePrice.priceType;
+                                            this.taxRate = ratePrice.taxRate;
+                                            this.taxRateName = ratePrice.ospTaxRateName;
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                                this.ratePriceTaxIncluded = ratePrice.taxIncludedAmount;
+                                                this.ratePrice = ratePrice.dutyFreeAmount;
+                                            } else {
+                                                this.rateOfferingPriceTaxInluded = ratePrice.taxIncludedAmount;
+                                                this.rateOfferingPrice = ratePrice.dutyFreeAmount;
+                                            }
+                                        } else if (techSiebelPrice) {
+                                            this.typePriceName = techSiebelPrice.priceType;
+                                            this.taxRate = techSiebelPrice.taxRate;
+                                            this.taxRateName = techSiebelPrice.ospTaxRateName;
+                                            if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                                this.ratePriceTaxIncluded = techSiebelPrice.taxIncludedAmount;
+                                                this.ratePrice = techSiebelPrice.dutyFreeAmount;
+                                            } else {
+                                                this.rateOfferingPriceTaxInluded = techSiebelPrice.taxIncludedAmount;
+                                                this.rateOfferingPrice = techSiebelPrice.dutyFreeAmount;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            if (priceData[i].bundledProductOffering && _.find(priceData[i].bundledProductOffering, { 'id': rateData.id })) {
+                                // Recoger info
+                                let info1: RatePopupInfo = new RatePopupInfo(priceData[i].name, priceData[i].description);
+                                this.pupupInfo.push(info1);
+                            }
+                        }
+                    }
+                }
+
+                let descripcionCompleta = rateData.description + ((rateData.ospLargeDescription != null) ? ' <br/> ' + rateData.ospLargeDescription : "");
+                let info2: RatePopupInfo = new RatePopupInfo('titulo', descripcionCompleta);
+                this.pupupInfo.push(info2);
+                // && rateData.productSpecCharacteristic[i].ospLargeDescription != null 
+                for (let i in rateData.productSpecCharacteristic) {
+                    if (rateData.productSpecCharacteristic[i].ospCategory === 'highlight') {
+                        let info3: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                        this.pupupInfo.push(info3);
+                    }
+                }
+                for (let i in rateData.productSpecCharacteristic) {
+                    if (rateData.productSpecCharacteristic[i].ospCategory === 'implicit') {
+                        let repetida = false;
+                        for (let j in this.pupupInfo) {
+                            if (rateData.productSpecCharacteristic[i].name === this.pupupInfo[j].name) {
+                                repetida = true;
+                            }
+                        }
+                        if (!repetida) {
+                            let info4: RatePopupInfo = new RatePopupInfo(rateData.productSpecCharacteristic[i].name, rateData.productSpecCharacteristic[i].ospLargeDescription);
+                            this.pupupInfo.push(info4);
+                        }
                     }
                 }
             }
         }
+
+
+
+
+
+
+
+
+
+
+
     }
 
     export class RatesProductBundle {
@@ -438,6 +645,13 @@ module ratesParent.Models {
         }
     }
 
+    export class RatesCharacteristicJzz {
+        public description: string;
+
+        constructor(description: string) {
+            this.description = description;
+        }
+    }
     export class RatePopupInfo {
         public name: string;
         public description: string;
@@ -568,7 +782,7 @@ module ratesParent.Models {
                                 if (currentSVAOffering.productOfferingPrice) {
                                     currentSVAOffering.productOfferingPrice.forEach(priceElement => {
                                         svaPriceItem = new RatePriceItem();
-                                        
+
                                         if (priceElement) {
                                             let priceSVA: any = _.find(priceElement.price, { priceType: 'priceSva' });
                                             let siebelPriceSva: any = _.find(priceElement.price, { priceType: 'siebelPriceSva' });
@@ -651,7 +865,7 @@ module ratesParent.Models {
         public largeDescription: string;
         public quantity: string
         public img: string;
-        
+
         constructor(name: string, id: string, shortDesc: string, largeDesc: string, quantity: string, img: string) {
             this.name = name;
             this.id = id;
@@ -659,44 +873,6 @@ module ratesParent.Models {
             this.largeDescription = largeDesc;
             this.quantity = quantity;
             this.img = img;
-        }
-    }
-
-    export class OptionalFeature {
-        public ospId: string;
-        public img: string;
-        public name: string;
-        public subFeatures: Array<any> = [];
-        
-        constructor(ospId: string, img: string, name: string, subFeatures?: Array<any>) {
-            this.ospId = ospId;
-            this.img = img;
-            this.name = name;
-            this.subFeatures = this.getSubFeatures(subFeatures);
-        }
-
-        getSubFeatures(subFeatures) {
-            let res = [];
-            _.forEach(subFeatures, (subFeature) => {
-                let img: string = '';
-                if (subFeature.attachment && subFeature.attachment.href){
-                    img = subFeature.attachment.href
-                }
-                res.push(new SubFeature(subFeature.ospId, img, subFeature.name));
-            });
-            return res;
-        }
-    }
-
-    export class SubFeature {
-        public ospId: string;
-        public img: string;
-        public name: string;
-
-        constructor(ospId: string, img: string, name: string) {
-            this.ospId = ospId;
-            this.img = img;
-            this.name = name;
         }
     }
 }

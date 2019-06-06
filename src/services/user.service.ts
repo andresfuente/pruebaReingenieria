@@ -53,8 +53,6 @@ module OrangeFeSARQ.Services {
 
             };
 
-            
-
             vm.httpCacheGett(vm.clientAPIUrl, _search, componentName)
                 .then(
                     (response) => {
@@ -306,7 +304,7 @@ module OrangeFeSARQ.Services {
                         && response.data.customer.characteristic[0].value) {
                             promise.resolve(response);
                     } else {
-                        promise.resolve(response);
+                        promise.resolve(false);
                     }
                 })
                 .catch(function (error) {

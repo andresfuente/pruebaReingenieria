@@ -112,6 +112,27 @@ module reservePopup.Services {
 
         /**
          * @ngdoc method
+         * @name reservePopup.Services.ReservePopupSrv#showReservePopup
+         * @methodOf reservePopup.Services.ReservePopupSrv
+         * @param {Array} terminals terminales a mostrar
+         * Muestra el popup de reserva para contratacion
+         */
+        showReservePopupContratacion(terminals): void {
+            let vm = this;
+
+            vm.refreshShoppingCart = false;
+            vm.reservePopupSrvVars = <reservePopupSrv.Models.IReservePopupVarsModel>{
+                size: '',
+                visible: true,
+                closeEnabled: true,
+                terminals: terminals,
+                isContratacion: true
+            };
+            
+        }
+
+        /**
+         * @ngdoc method
          * @name reservePopup.Services.ReservePopupSrv#hideReservePopup
          * @methodOf reservePopup.Services.ReservePopupSrv
          * @param {Array} terminals terminales a mostrar
