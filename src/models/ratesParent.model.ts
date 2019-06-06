@@ -115,7 +115,7 @@ module ratesParent.Models {
         public defaultLines: Array<Object>;
 
         // Id Tech
-
+        public typeTecnology;
         public ospTecnology: string;
 
         // Estructura que contiene la fibra y las linea con sus respectivos iconos
@@ -150,6 +150,10 @@ module ratesParent.Models {
         // Atributos para NAC
         public bucket: RateBucket;
         public NACLines: Rate[] = [];
+
+        //Netflix
+        public isNetflix: boolean;
+        public NetflixRate: Rate;
 
         //Jazztel
         public characteristicJzz: RatesCharacteristicJzz[] = [];
@@ -323,9 +327,6 @@ module ratesParent.Models {
                 }
             }
             else {
-
-
-
                 this.rateSubName = rateData.ospTitulo;
                 this.rateDescription = rateData.description;
                 this.siebelId = rateData.id;
@@ -341,9 +342,7 @@ module ratesParent.Models {
                 this.nacPriceTaxIncludedPromotional = 0;
 
                 // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
-                if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
-                    this.ospTecnology = rateData.ospTecnology;
-                }
+                this.checkIdIdTechDiferences(rateData);
 
                 this.pack = (typeof (rateData.ospFraseComercial) !== 'undefined' && rateData.ospFraseComercial !== null) ?
                     rateData.ospFraseComercial : '';
@@ -593,17 +592,22 @@ module ratesParent.Models {
                     }
                 }
             }
+
+            
+            this.checkIsNetflixRate(rateData);
         }
 
+        private checkIsNetflixRate(rateData: any){
+            this.isNetflix = _.find(rateData.productSpecCharacteristic, { 'name' : 'Netflix'}) ? true : false;
+        }
 
-
-
-
-
-
-
-
-
+        private checkIdIdTechDiferences(rateData: any) {
+            if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
+                this.ospTecnology = rateData.ospTecnology;
+                let caracteristic : any = _.find(rateData.productSpecCharacteristic, { 'name' : 'CARACTERISTICATECNOLOGIA'});
+                this.typeTecnology = caracteristic.ospCategory;
+            }
+        }
 
     }
 
