@@ -72,6 +72,7 @@ module OrangeFeSARQ.Services {
                 return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
+                    vm.mockPPM(response);
                     return {
                         specificationData: response.data
                     };
@@ -937,6 +938,29 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
             return vm.arrayFixed;
+        }
+
+        mockPPM(response) {
+            let vm = this;
+            let isPangea = vm.genericConstant.site === 'FCUPdV';
+            if (isPangea && response && response.data && response.data.productSpecification) {
+                _.forEach(response.data.productSpecification, element => {
+                    let existLADatos = _.some(element.productSpecificationRelationship, {id:'1-2MDAMC', type:'associatedLine'});
+                    let existLAPPM = _.some(element.productSpecificationRelationship, {id:'1-2WC4A7', type:'associatedLine'});
+                    if (existLADatos && !existLAPPM) { //existe LA Datos y no existe LA PPM
+                        element.productSpecificationRelationship.push({ // Añade LA PPM
+                            id:'1-2WC4A7',
+                            type:'associatedLine'
+                        });
+                    }
+                    
+                });
+                let ppm:any = _.find(response.data.productSpecification, {id:'1-2WC4A7'});
+                if (ppm) {
+                    ppm.name = 'Línea Smartphone 0 cént/min';
+                    ppm.ospTitulo = 'Smartphone 0 cént/min';
+                }   
+            }
         }
 
     }
