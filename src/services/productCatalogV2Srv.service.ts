@@ -10,8 +10,9 @@ module OrangeFeSARQ.Services {
      */
     export class ProductCatalogV2Srv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
-        public productOfferingv2ViewOSP = 'productOfferingv2View/OSP';
-        public productSpecificationv2ViewOSP = 'productSpecificationv2View/OSP';
+
+        public PRODUCTOFFERING2VIEW = 'productOfferingv2View/OSP';
+
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:ProductCatalogV2Srv#constructor
@@ -56,7 +57,7 @@ module OrangeFeSARQ.Services {
                     productType,
                     idTecnologiaList,
                 },
-                urlParams: [vm.genericConstant.brand, this.productOfferingv2ViewOSP]
+                urlParams: [vm.genericConstant.brand, vm.PRODUCTOFFERING2VIEW]
             };
 
             return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, componentName)
@@ -94,7 +95,7 @@ module OrangeFeSARQ.Services {
                     idOfertaComercialList: idOfertaComercialList,
                     ospContractible: 'Y'
                 },
-                urlParams: [vm.genericConstant.brand, this.productSpecificationv2ViewOSP]
+                urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
             };
 
             return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, componentName)
@@ -118,7 +119,7 @@ module OrangeFeSARQ.Services {
                     isExistingCustomer: true,
                     segment: segment
                 },
-                urlParams: [vm.genericConstant.brand, this.productSpecificationv2ViewOSP]
+                urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
             };
 
             return vm.httpCacheGett(vm.genericConstant.productCatalog, _search)
@@ -152,7 +153,7 @@ module OrangeFeSARQ.Services {
                     isExistingCustomer: isExistingCustomer,
                     bundleId: idBundle
                 },
-                urlParams: [vm.genericConstant.brand, this.productOfferingv2ViewOSP]
+                urlParams: [vm.genericConstant.brand, vm.PRODUCTOFFERING2VIEW]
             };
 
             return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, componentName)
@@ -186,7 +187,7 @@ module OrangeFeSARQ.Services {
                     isExistingCustomer: isExistingCustomer,
                     bundleId: idBundle
                 },
-                urlParams: [vm.genericConstant.brand, this.productSpecificationv2ViewOSP]
+                urlParams: [vm.genericConstant.brand, 'productSpecificationv2View/OSP']
             };
 
             return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, componentName)
@@ -212,7 +213,7 @@ module OrangeFeSARQ.Services {
 
             let _search = {
                 queryParams: queryParams,
-                urlParams: [vm.genericConstant.brand, this.productOfferingv2ViewOSP]
+                urlParams: [vm.genericConstant.brand, vm.PRODUCTOFFERING2VIEW]
             };
 
             return vm.httpCacheGett(vm.genericConstant.productCatalog, _search, compName, refresh)
