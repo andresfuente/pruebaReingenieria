@@ -7,23 +7,23 @@ module OrangeFeSARQ.Services {
            * @description
            * Servicio para lanzar el lead a Orange bank
            */
-          export class orangeBankSalesSrv extends OrangeFeSARQ.Services.ParentService {
+          export class OrangeBankSalesSrv extends OrangeFeSARQ.Services.ParentService {
               static $inject = ["$injector"];
   
               // Injection vars
               public informationCenter: OrangeFeSARQ.Services.InformationCenterSrv;
   
               constructor(public $injector) {
-              super($injector);
-              let vm = this;
-  
-              vm.setInjections($injector);
+                super($injector);
+                let vm = this;
+    
+                vm.setInjections($injector);
               }
   
               setInjections($injector) {
-              let vm = this;
-  
-              vm.informationCenter = $injector.get("InformationCenterSrv");
+                let vm = this;
+    
+                vm.informationCenter = $injector.get("InformationCenterSrv");
               }
   
               /**
