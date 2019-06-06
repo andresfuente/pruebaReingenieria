@@ -942,7 +942,7 @@ module OrangeFeSARQ.Services {
 
         mockPPM(response) {
             let vm = this;
-            let isPangea = vm.genericConstant.site === 'FCUPdV';
+            let isPangea = vm.genericConstant && vm.genericConstant.site && vm.genericConstant.site === 'FCUPdV';
             if (isPangea && response && response.data && response.data.productSpecification) {
                 _.forEach(response.data.productSpecification, element => {
                     let existLADatos = _.some(element.productSpecificationRelationship, {id:'1-2MDAMC', type:'associatedLine'});
