@@ -397,34 +397,31 @@ module OrangeFeSARQ.Services {
                 }
 
                 if (currentRate.siebelId === rate.siebelId && rate.NACLines) {
-                    this.loopNACLinesSetRates(rate);
+                    rate.NACLines.forEach((line) => {
+                        if (line.ratePrice !== undefined) {
+                            rate.nacPrice += line.ratePrice;
+                        }
+
+                        if (line.ratePriceTaxIncluded !== undefined) {
+                            rate.nacPriceTaxIncluded += line.ratePriceTaxIncluded;
+                        }
+
+                        if (line.ratePricePromotional !== undefined) {
+                            rate.nacPricePromotional += line.ratePricePromotional;
+                        } else if (line.ratePrice !== undefined) {
+                            rate.nacPricePromotional += line.ratePrice;
+                        }
+
+                        if (line.ratePriceTaxIncludedPromotional !== undefined) {
+                            rate.nacPriceTaxIncludedPromotional += line.ratePriceTaxIncludedPromotional;
+                        } else if (line.ratePriceTaxIncluded !== undefined) {
+                            rate.nacPriceTaxIncludedPromotional += line.ratePriceTaxIncluded;
+                        }
+                    });
                 }
             });
 
             vm.putRatesInSessionStorage();
-        }
-
-        private loopNACLinesSetRates(rate: any) {
-            rate.NACLines.forEach((line) => {
-                if (line.ratePrice !== undefined) {
-                    rate.nacPrice += line.ratePrice;
-                }
-                if (line.ratePriceTaxIncluded !== undefined) {
-                    rate.nacPriceTaxIncluded += line.ratePriceTaxIncluded;
-                }
-                if (line.ratePricePromotional !== undefined) {
-                    rate.nacPricePromotional += line.ratePricePromotional;
-                }
-                else if (line.ratePrice !== undefined) {
-                    rate.nacPricePromotional += line.ratePrice;
-                }
-                if (line.ratePriceTaxIncludedPromotional !== undefined) {
-                    rate.nacPriceTaxIncludedPromotional += line.ratePriceTaxIncludedPromotional;
-                }
-                else if (line.ratePriceTaxIncluded !== undefined) {
-                    rate.nacPriceTaxIncludedPromotional += line.ratePriceTaxIncluded;
-                }
-            });
         }
 
         /**

@@ -78,7 +78,11 @@ module OrangeFeSARQ.Services {
                     dataOT.profile = localStorage.getItem('rol').toLocaleUpperCase();
                 }
                 // Se define el tipo de tarifa dependiendo del segmento del cliente
-                relatedProductOffering = this.getRelatedProductOffering(dataOT, relatedProductOffering);
+                if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
+                    relatedProductOffering = dataOT.relatedRateResidential;
+                } else {
+                    relatedProductOffering = dataOT.relatedRateBusiness;
+                }
 
                 if (dataOT.creditRiskRating === 'bajo' || dataOT.creditRiskRating === 'medio') {
                     dataOT.creditRiskRating += ',alto';
@@ -111,16 +115,6 @@ module OrangeFeSARQ.Services {
                 srv.cachedTerminalName = str_id;
                 return srv.cachedTerminalPromise;
             }
-        }
-
-        private getRelatedProductOffering(dataOT: any, relatedProductOffering: any) {
-            if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
-                relatedProductOffering = dataOT.relatedRateResidential;
-            }
-            else {
-                relatedProductOffering = dataOT.relatedRateBusiness;
-            }
-            return relatedProductOffering;
         }
 
         /* Datos del color */

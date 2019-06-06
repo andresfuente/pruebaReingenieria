@@ -7,6 +7,9 @@ module OrangeFeSARQ.Services {
     private _specification: any;
     private _offering: any;
     private _listRates: any;
+    private ratelove: boolean = false;
+    private priceAndLove: any = {};
+
 
     get specification(): any {
       return this._specification;
@@ -210,7 +213,51 @@ module OrangeFeSARQ.Services {
 
 
 
+		/**
+    * @ngdoc method
+    * @name OrangeFeSARQ.Services:ProductCatalogStore#getProductPrice
+    * @methodOf OrangeFeSARQ.Services:ProductCatalogStore
+    * @param {any} element: Elemento specification u offering para buscar
+    * @param {string} currency: Moneda buscada
+    * @param {string} priceType: Tipo de pago
+    * @return {any} Devuelve el objeto de precio el producto
+    * @description
+    * Recoge
+    */
+    getProductPrice(element: any, currency: string = 'eur', priceType: string = 'pago único'): any {
+      let vm = this;
+      let product: any;
+      if (element && element.productNumber) {
+        product = vm.getCatalogOfferingByTmcode(element.productNumber, 'ospProductNumber')
+      } else if (element && element.productSpecification && element.productSpecification.productNumber) {
+        product = element;
+      }
 
+      if (product && product.productOfferingPrice) {
+        let productPricesList = product.productOfferingPrice;
+        for (let i = 0; i < productPricesList.length; i++) {
+          let productPrice = productPricesList[i];
+          if (productPrice && productPrice.priceType && productPrice.priceType.toLowerCase() === priceType) {
+            let pricesList = productPrice.price;
+            for (let j = 0; j < pricesList.length; j++) {
+              let price = pricesList[j];
+              if (price.currencyCode && price.currencyCode.toLowerCase() === currency.toLowerCase()) {
+                /* taxIncludedAmount 	-- Precio con Iva
+								 * dutyFreeAmount 		-- Precio sin iva (quitando iva al anterior)
+                 * taxAmount 					-- Valor de impuestos que aplican*/
+                if (vm.ratelove) {
+                  vm.priceAndLove.price = price.taxIncludedAmount;// Precio de la tarifa con IVA
+                  vm.priceAndLove.isLove = price.priceType === 'changeRate';// Es tarifa LOVE si el priceType es changeRate
+                  return vm.priceAndLove;
+                }
+                return price.taxIncludedAmount;
+              }
+            }
+          }
+        }
+      }
+      return undefined;
+    }
 
     /**
     * @ngdoc method
@@ -256,76 +303,8 @@ module OrangeFeSARQ.Services {
     */
     isLove(element: any, currency: string = 'eur', priceType: string = 'pago único'): any {
       let vm = this;
-      let product: any;
-      let priceAndLove: any;
-      product = this.getProductByElement(element, product, vm);
-
-      if (product && product.productOfferingPrice) {
-        let productPricesList = product.productOfferingPrice;
-        for (let i = 0; i < productPricesList.length; i++) {
-          let productPrice = productPricesList[i];
-          if (productPrice && productPrice.priceType && productPrice.priceType.toLowerCase() === priceType) {
-            let pricesList = productPrice.price;
-            for (let j = 0; j < pricesList.length; j++) {
-              let price = pricesList[j];
-              priceAndLove = {};
-              if (price.currencyCode && price.currencyCode.toLowerCase() === currency.toLowerCase()) {
-                priceAndLove.price = price.taxIncludedAmount;// Precio de la tarifa con IVA
-                priceAndLove.isLove = price.priceType === 'changeRate';// Es tarifa LOVE si el priceType es changeRate
-                return priceAndLove;
-              }
-            }
-          }
-        }
-      }
-      return undefined;
-    }
-
-    /**
-    * @ngdoc method
-    * @name OrangeFeSARQ.Services:ProductCatalogStore#getProductPrice
-    * @methodOf OrangeFeSARQ.Services:ProductCatalogStore
-    * @param {any} element: Elemento specification u offering para buscar
-    * @param {string} currency: Moneda buscada
-    * @param {string} priceType: Tipo de pago
-    * @return {any} Devuelve el objeto de precio el producto
-    * @description
-    * Recoge
-    */
-    getProductPrice(element: any, currency: string = 'eur', priceType: string = 'pago único'): any {
-      let vm = this;
-      let product: any;
-      product = this.getProductByElement(element, product, vm);
-
-      if (product && product.productOfferingPrice) {
-        let productPricesList = product.productOfferingPrice;
-        for (let i = 0; i < productPricesList.length; i++) {
-          let productPrice = productPricesList[i];
-          if (productPrice && productPrice.priceType && productPrice.priceType.toLowerCase() === priceType) {
-            let pricesList = productPrice.price;
-            for (let j = 0; j < pricesList.length; j++) {
-              let price = pricesList[j];
-              if (price.currencyCode && price.currencyCode.toLowerCase() === currency.toLowerCase()) {
-                /* taxIncludedAmount 	-- Precio con Iva
-                 * dutyFreeAmount 		-- Precio sin iva (quitando iva al anterior)
-                 * taxAmount 					-- Valor de impuestos que aplican*/
-                return price.taxIncludedAmount;
-              }
-            }
-          }
-        }
-      }
-      return undefined;
-    }
-
-    private getProductByElement(element: any, product: any, vm: this) {
-      if (element && element.productNumber) {
-        product = vm.getCatalogOfferingByTmcode(element.productNumber, 'ospProductNumber');
-      }
-      else if (element && element.productSpecification && element.productSpecification.productNumber) {
-        product = element;
-      }
-      return product;
+      vm.ratelove = true;
+      vm.getProductPrice(element, currency, priceType);
     }
   }
 }
