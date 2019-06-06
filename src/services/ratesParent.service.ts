@@ -595,7 +595,7 @@ module OrangeFeSARQ.Services {
                 { queryParams: params }, _headers, 'ratesParent')
                 .then((response) => {
                     let respuesta;
-                    if (response && response.data.error === undefined && response.data.productSpecification) {
+                    if (response && !response.data.error && response.data.productSpecification) {
                         productSpecification = response.data.productSpecification;
                         // Se recorre el array de tarifas disponibles para realizar el cambio
                         productSpecification.forEach((element, index) => {
@@ -644,7 +644,7 @@ module OrangeFeSARQ.Services {
                 queryParamsObjet, _headers)
                 .then((response) => {
                     let respuesta;
-                    if (response && response.data.error === undefined && response.data.productSpecification) {
+                    if (response && !response.data.error && response.data.productSpecification) {
                         productSpecification = response.data.productSpecification;
                         // Se recorre el array de tarifas disponibles para realizar el cambio
                         productSpecification.forEach((element, index) => {
