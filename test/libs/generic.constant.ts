@@ -48,7 +48,6 @@ module OrangeFeSARQ.Constant {
       shoppingCart: 'api/shoppingCart/v1',
       salesManagement: 'openapi/salesManagement/v1',
 
-
       // Xnet Url
       xnetUrl: 'vpt2/additionalProductsProAction.do?',
       xnetLineInformation: 'api/xnetLineInformation/v1',
