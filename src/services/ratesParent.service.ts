@@ -151,8 +151,9 @@ module OrangeFeSARQ.Services {
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
+                    srv.mockPPMOffering(response);
                     rates.loadRates(specificationData, response.data, bucketId);
-
+                    
                     return rates;
                 })
                 .catch((error) => {
@@ -960,6 +961,24 @@ module OrangeFeSARQ.Services {
                     ppm.name = 'Línea Smartphone 0 cént/min';
                     ppm.ospTitulo = 'Smartphone 0 cént/min';
                 }   
+            }
+        }
+
+        mockPPMOffering(response) {
+            let vm = this;
+            let isPangea = vm.genericConstant && vm.genericConstant.site && vm.genericConstant.site === 'FCUPdV';
+            if (isPangea && response && response.data && response.data.productOffering) {
+                let datos:any = _.find(response.data.productOffering, (element:any) => {
+                    return _.find(element.bundledProductOffering, {id:'1-2MDAMC'});
+                });
+                let ppm:any = _.find(response.data.productOffering, (element:any) => {
+                    return _.find(element.bundledProductOffering, {id:'1-2WC4A7'});
+                });
+
+                if (datos && datos.productOfferingPrice[0] && ppm.productOfferingPrice[0].price && 
+                    ppm && ppm.productOfferingPrice[0] && ppm.productOfferingPrice[0].price) {
+                        ppm.productOfferingPrice[0].price = datos.productOfferingPrice[0].price;
+                }
             }
         }
 
