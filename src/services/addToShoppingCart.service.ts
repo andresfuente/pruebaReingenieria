@@ -2285,7 +2285,7 @@ module OrangeFeSARQ.Services {
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
         }
-        /*
+        */
         
         isFdcSite() {
             const loginData = JSON.parse(sessionStorage.getItem('loginData'));
