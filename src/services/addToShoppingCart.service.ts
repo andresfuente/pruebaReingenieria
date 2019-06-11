@@ -119,15 +119,25 @@ module OrangeFeSARQ.Services {
             let cartItemElementId: number;
             let lastCartItemId: number;
             let commercialActId: number;
-            let shoppingCart;
-            let commercialData;
-            let commercialActIndex;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            let commercialActIndex = vm.getSelectedCommercialAct();;
 
             // Se obtiene el ID del acto comercial que se esta modificando
             // Se comprueba si existe algun dispositivo TSS en el shopping cart que se este modificando
             // Se eliminan los TSS del acto comercial existentes en el shopping cart
             // Se obtiene el id del ultimo elmento del cart item del shopping cart
-            vm.getComercialActs();
+
+            if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
+                commercialActId = Number(commercialData[commercialActIndex].id);
+            }
+            if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
+                commercialData[commercialActIndex].ospIsSelected) {
+                shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
+                commercialData[commercialActIndex].isCompletedAC = false;
+                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
+            }
+            lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
             productItem = {
                 'href': device.srcImage,
@@ -1339,7 +1349,6 @@ module OrangeFeSARQ.Services {
                     };
 
                     let cv = JSON.parse(sessionStorage.getItem('cv'));
-                    let clientData = JSON.parse(sessionStorage.getItem('clientData'));
                     let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
 
                     // Obtenemos si es cliente existente
@@ -2239,7 +2248,8 @@ module OrangeFeSARQ.Services {
             return isPromo;
         }
 
-        getComercialActs(){
+        /*
+        getComercialActs() {
             let vm = this;
             let lastCartItemId: number;
             let commercialActId: number;
@@ -2259,6 +2269,7 @@ module OrangeFeSARQ.Services {
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
         }
+        /*
         
         isFdcSite() {
             const loginData = JSON.parse(sessionStorage.getItem('loginData'));
