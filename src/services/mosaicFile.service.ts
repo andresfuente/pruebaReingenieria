@@ -112,7 +112,16 @@ module OrangeFeSARQ.Services {
 
             let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
             let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
-            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
+            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress();
+            const geolocationLocal = 'Geolocation-local';
+            const geolocationClient = 'Geolocation-client';
+            const characteristic = 'characteristic.cameraData.groupData.backCameraResolution.value';
+            const osData = 'characteristic.OSData.groupData.OStype.value';
+            const screenData = 'characteristic.screenData.groupData.screenSize.value';
+            const memoryData = 'characteristic.memoryData.groupData.hardDisk.value';
+            const batteryData= 'characteristic.batteryData.groupData.batteryDurationInConversation.value';
+            const color = 'characteristic.color';
+
 
             if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
@@ -188,17 +197,18 @@ module OrangeFeSARQ.Services {
                 params = _.pick(params, ['channel', 'isExistingCustomer', 'limit', 'segment',
                     'offset', 'commercialAction', 'deviceOffering.category.name', 'sort', 'relatedProductOffering',
                     'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee', 'totalPaymentRange',
-                    'characteristic.OSData.groupData.OStype.value',
-                    'characteristic.cameraData.groupData.backCameraResolution.value',
-                    'characteristic.screenData.groupData.screenSize.value',
-                    'characteristic.memoryData.groupData.hardDisk.value',
-                    'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                    'characteristic.color']);
+                    osData,
+                    characteristic,
+                    screenData,
+                    memoryData,
+                    batteryData,
+                    color]);
             }
 
             // Parametros para Prepago   
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = srv.getSelectedCommercialAct();
+
 
             if (commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
                 if (commercialAction) {
@@ -238,28 +248,28 @@ module OrangeFeSARQ.Services {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
                         'deviceOffering.category.name', 'purchaseOption', 'price.fee', 'totalPaymentRange',
-                        'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
-                        'characteristic.screenData.groupData.screenSize.value',
-                        'characteristic.memoryData.groupData.hardDisk.value',
-                        'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        osData,
+                        'priceType', characteristic,
+                        screenData,
+                        memoryData,
+                        batteryData,
+                        color]);
                 } else {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
                         'purchaseOption', 'price.fee', 'totalPaymentRange', 'deviceOffering.category.name',
-                        'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
-                        'characteristic.screenData.groupData.screenSize.value',
-                        'characteristic.memoryData.groupData.hardDisk.value',
-                        'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        osData,
+                        'priceType', characteristic,
+                        screenData,
+                        memoryData,
+                        batteryData,
+                        color]);
                 }
             }
 
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(geolocationLocal, srv.storeProvince.toUpperCase());
+            _headers.set(geolocationClient, clientGeolocation.toUpperCase());
 
             // Metodo http nativo por bug en los filtros
             // return srv.httpService({
@@ -493,19 +503,19 @@ module OrangeFeSARQ.Services {
                     if (!params.priceType) {
                         params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
                     } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId','priceType','deviceOffering.category.name']);
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'priceType', 'deviceOffering.category.name']);
                     }
                 }
 
                 // Renove secundario
                 else if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
-                    if (clientData && clientData.creditLimitRenove && ( clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)) {
+                    if (clientData && clientData.creditLimitRenove && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)) {
                         params.priceType = 'unico';
                     }
                     if (!params.priceType) {
                         params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
                     } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType','deviceOffering.category.name']);
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType', 'deviceOffering.category.name']);
                     }
                 }
 

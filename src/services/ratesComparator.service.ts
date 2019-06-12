@@ -23,6 +23,8 @@ module OrangeFeSARQ.Services {
 
         public clientData;
         public shopInfo;
+        public geolocationLocal;
+        public geolocationClient;
 
         /**
          * @ngdoc method
@@ -35,6 +37,8 @@ module OrangeFeSARQ.Services {
         constructor(public $injector) {
             super($injector);
             let vm = this;
+            vm.geolocationLocal = 'Geolocation-local';
+            vm.geolocationClient = 'Geolocation-client';
             vm.setInjections($injector);
             vm.getSession();
         }
@@ -141,8 +145,8 @@ module OrangeFeSARQ.Services {
             // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(vm.geolocationLocal, vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set(vm.geolocationClient, clientGeolocation.toUpperCase());
 
             let params = {
                 channel: channel,
@@ -433,8 +437,8 @@ module OrangeFeSARQ.Services {
             }
 
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(vm.geolocationLocal, vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set(vm.geolocationClient, clientGeolocation.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -466,6 +470,7 @@ module OrangeFeSARQ.Services {
             contractType: string, commercialAction: string, isExistingCustomer: string, specificationData, technologyList,
             ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string, bucketId?: string) {
             let srv = this;
+            let vm = this;
             let technologyString = '';
             let ratesString = '';
             if (ratesIdListString) {
@@ -529,8 +534,8 @@ module OrangeFeSARQ.Services {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
-            _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(vm.geolocationLocal, srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
+            _headers.set(vm.geolocationClient, clientGeolocation.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
