@@ -72,7 +72,7 @@ module OrangeFeSARQ.Services {
                 return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
-                    vm.mockPPM(response);
+                    //vm.mockPPM(response);
                     return {
                         specificationData: response.data
                     };
@@ -151,7 +151,7 @@ module OrangeFeSARQ.Services {
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
-                    srv.mockPPMOffering(response);
+                    //srv.mockPPMOffering(response);
                     rates.loadRates(specificationData, response.data, bucketId);
                     
                     return rates;
