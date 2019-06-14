@@ -267,14 +267,8 @@ module OrangeFeSARQ.Services {
                 }
             }
 
-<<<<<<< HEAD
-            
-            _headers.set('Geolocation-local', srv.storeProvince.toUpperCase());
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
-=======
             _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
             _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
->>>>>>> develop
 
             // Metodo http nativo por bug en los filtros
             // return srv.httpService({
