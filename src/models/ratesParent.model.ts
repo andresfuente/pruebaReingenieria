@@ -116,8 +116,9 @@ module ratesParent.Models {
 
         // Id Tech
 
-        public ospTecnology: string;
-
+        public ospTecnology: string;  
+        public typeTecnology;      
+        
         // Estructura que contiene la fibra y las linea con sus respectivos iconos
         public productBundle: RatesProductBundle[] = [];
         public rateOfferingPrice: number; // Precio de la tarifa
@@ -137,31 +138,34 @@ module ratesParent.Models {
         // Promocion
         public ratePriceTaxIncludedPromotional;
         public ratePricePromotional;
-
+        
         public nacPriceTaxIncluded: number;
         public nacPrice: number;
         public nacPriceTaxIncludedPromotional: number;
         public nacPricePromotional: number;
-
+        
         public descriptionPromotion;
         public applicationDuration;
         public recurringChargePeriodPromotion: string; // Tipo de promoción
-
+        
         // Atributos para NAC
         public bucket: RateBucket;
         public NACLines: Rate[] = [];
-
+        
+        //Netflix
+        public NetflixRate: Rate;
+        public isNetflix: boolean;
         //Jazztel
         public characteristicJzz: RatesCharacteristicJzz[] = [];
-
+        
         constructor(rateData, priceData, bucketInfo?) {
-
-
+            
+            
             if (sessionStorage.getItem('pangea-brand') === 'jazztel') {
                 this.rateSubName = rateData.ospTitulo;
                 this.rateDescription = rateData.description;
                 this.siebelId = rateData.id ? rateData.id : rateData.bundledProductSpecification && rateData.bundledProductSpecification[0].id;
-
+                
                 if (!rateData.id) {
                     rateData.id = rateData.bundledProductSpecification[0].id;
                 }
@@ -323,9 +327,6 @@ module ratesParent.Models {
                 }
             }
             else {
-
-
-
                 this.rateSubName = rateData.ospTitulo;
                 this.rateDescription = rateData.description;
                 this.siebelId = rateData.id;
@@ -343,6 +344,9 @@ module ratesParent.Models {
                 // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
                 if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
                     this.ospTecnology = rateData.ospTecnology;
+                    let caracteristic : any = _.find(rateData.productSpecCharacteristic, { 'name' : 'CARACTERISTICATECNOLOGIA'});
+                    this.typeTecnology = caracteristic.ospCategory;
+
                 }
 
                 this.pack = (typeof (rateData.ospFraseComercial) !== 'undefined' && rateData.ospFraseComercial !== null) ?
@@ -592,10 +596,15 @@ module ratesParent.Models {
                         }
                     }
                 }
+
+                this.checkIsNetflixRate(rateData);
             }
         }
 
 
+        private checkIsNetflixRate(rateData: any){
+            this.isNetflix = _.find(rateData.productSpecCharacteristic, { 'name' : 'Netflix'}) ? true : false;
+        }
 
 
 
