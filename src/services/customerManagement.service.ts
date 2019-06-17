@@ -16,6 +16,9 @@ module OrangeFeSARQ.Services {
 
         private url: string;
 
+        // jazztel
+        private brand: any = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand') : 'orange';
+
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:CustomerManagementSrv#constructor
@@ -126,15 +129,29 @@ module OrangeFeSARQ.Services {
         checkBlacklist(body, comp: string) {
             let vm = this;
 
-            let _search: Object = {
-                queryParams: {
-                    typeRequest: 1,
-                    numberRequiredLines: 1,
-                    blackList: true
-                },
-                urlParams: ['customer'],
-                body: body
-            };
+            let _search: Object;
+            if(vm.brand!=='jazztel'){
+                _search={
+                    queryParams: {
+                        typeRequest: 1,
+                        numberRequiredLines: 1,
+                        blackList: true
+                    },
+                    urlParams: ['customer'],
+                    body: body
+                };
+            }else{
+                _search={
+                    queryParams: {
+                        typeRequest: 1,
+                        numberRequiredLines: 1,
+                        blackList: false
+                    },
+                    urlParams: ['checkSalesProfile'],
+                    body: body
+                };
+            }
+           
 
             return vm.httpPostFull(vm.genericConstant.customerManagement, _search, comp)
                 .then(function (response) {
