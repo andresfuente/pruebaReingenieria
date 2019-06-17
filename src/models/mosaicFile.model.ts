@@ -162,6 +162,7 @@ module mosaicFile.Models {
         public litSubTitle: string;
         public litPrice: number;
         public siebelId: string;
+        public category: string;
         public initialPaid: number;
         public uniquePaid: number;
         public totalPaid: number;
@@ -418,6 +419,7 @@ module mosaicFile.Models {
             }
         }
 
+<<<<<<< HEAD
         private checkPriceTypeUnico(price: any, ospCustomerSegment: string) {
             if (price.priceType && price.priceType === 'unico') {
                 if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
@@ -428,6 +430,84 @@ module mosaicFile.Models {
                 }
             }
         }
+=======
+                // DEVICE OFFERING
+                if (serviceData.deviceOffering && serviceData.deviceOffering.length) {
+                    let deviceOffering = serviceData.deviceOffering;
+                    // ID del modelo del terminal
+                    this.siebelId = deviceOffering[0].id;
+                    this.category = deviceOffering[0].category[0].name
+
+                    // Si existe el offeringPrice y no esta vacio
+                    if (deviceOffering && deviceOffering.length > 0) {
+                        // Se recorre todo el array de precios
+                        serviceData.deviceOffering.forEach((deviceOff, x) => {
+                            if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length > 0) {
+                                deviceOff.deviceOfferingPrice.forEach((price, i) => {
+
+                                    /* Precios del terminal */
+                                    priceItem = new OrangeMosaicFileTerminalFileIPriceItem();
+                                    filePrice = new OrangeMosaicFileTerminalFilePrice();
+
+                                    // Id
+                                    price.relatedProductOffering.forEach(item => {
+                                        if ((price.priceType === 'inicial' && item.name === 'Cuota inicial') ||
+                                            (price.priceType === 'cuota' && item.name === 'Cuota mensual')) {
+                                            priceItem.id = item.id;
+                                        }
+                                    });
+                                    if (price.Price) {
+                                        // Agregando precio sin impuesto
+                                        filePrice.dutyFreeAmount.unit = price.Price.currencyCode;
+                                        filePrice.dutyFreeAmount.value = price.Price.dutyFreeAmount;
+                                        // Agregando precio con impuesto
+                                        filePrice.taxIncludedAmount.unit = price.Price.currencyCode;
+                                        filePrice.taxIncludedAmount.value = price.Price.taxIncudedAmount; // Corregir
+                                        // Recogiendo impuestos
+                                        filePrice.taxRate = price.Price.taxRate;
+                                        filePrice.ospTaxRateName = price.Price.ospTaxRateName;
+                                        // Creando el objeto item price
+                                        priceItem.priceType = price.priceType;
+                                        priceItem.price = filePrice;
+                                    }
+                                    // Duracion de las cuotas
+                                    if (price.priceType === 'cuota') {
+                                        priceItem.recurringChargePeriod = Number(price.applicationDuration);
+                                    }
+                                    // Añadiendo el precio al arreglo de precios del terminal
+                                    this.itemPrice.push(priceItem);
+
+                                    if (price.name === priceName) {
+                                        if (price.priceType && price.priceType === 'inicial') {
+                                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
+                                                this.initialPaid = price.Price.taxIncudedAmount;
+                                            } else {
+                                                this.initialPaid = price.Price.dutyFreeAmount;
+                                            }
+                                        }
+                                        if (price.priceType && price.priceType === 'cuota') {
+                                            this.litDeadlines = price.applicationDuration;
+                                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
+                                                this.litPrice = price.Price.taxIncudedAmount;
+                                            } else {
+                                                this.litPrice = price.Price.dutyFreeAmount;
+                                            }
+                                            // Si se puede se calcula el precio total
+                                            if (this.initialPaid !== undefined) {
+                                                this.totalPaid = this.initialPaid + this.litPrice * this.litDeadlines;
+                                            }
+                                        }
+                                        if (price.priceType && price.priceType === 'unico') {
+                                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
+                                                this.uniquePaid = price.Price.taxIncudedAmount;
+                                            } else {
+                                                this.uniquePaid = price.Price.dutyFreeAmount;
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+>>>>>>> 231bca26059df90c211150aad255d01e8d02f502
 
         private checkPriceTypeInitial(price: any, ospCustomerSegment: string) {
             if (price.priceType && price.priceType === 'inicial') {

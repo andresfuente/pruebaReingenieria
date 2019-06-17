@@ -71,6 +71,10 @@ module OrangeFeSARQ.Services {
                 return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.productSpecificationv2View,
                 { queryParams: params }, _headers)
                 .then((response) => {
+<<<<<<< HEAD
+=======
+                    //vm.mockPPM(response);
+>>>>>>> 231bca26059df90c211150aad255d01e8d02f502
                     return {
                         specificationData: response.data
                     };
@@ -105,7 +109,34 @@ module OrangeFeSARQ.Services {
                 ratesIdListString, releatedRatesClient, pack, type, defaultTechnology,
                 bucketId);
             let _headers = srv.setHeaders();
+<<<<<<< HEAD
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.productOfferingv2View,
+=======
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + srv.LITPRODUCTOFFERING,
+                { queryParams: params }, _headers)
+                .then((response) => {
+                    let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
+                    //srv.mockPPMOffering(response);
+                    rates.loadRates(specificationData, response.data, bucketId);
+                    
+                    return rates;
+                })
+                .catch((error) => {
+                    throw error;
+                });
+
+        }
+
+        /* Consulta al productOffering del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
+         */
+        //Cambio_Adaptacion_Jazztel JPA
+        getOfferingDataJZ(productType: string, specificationData, category:string, tarifa?: string, promocion?: string, paquete?: string,
+            bucketId?: string) {
+            let srv = this;
+            let params = srv.setParamsJZ(productType,category, tarifa, promocion, paquete);
+            let _headers = srv.setHeaders();
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brandjz + '/productOfferingv2View/OSP',
+>>>>>>> 231bca26059df90c211150aad255d01e8d02f502
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();

@@ -80,6 +80,13 @@ module OrangeFeSARQ.Constant {
         .service('localStorageManager', OrangeFeSARQ.Services.LocalStorageManager)
         .service('customerViewStore', OrangeFeSARQ.Services.CustomerViewStore)
         .service('commercialCampaignsSrv', OrangeFeSARQ.Services.CommercialCampaignsSrv)
+<<<<<<< HEAD
+=======
+        .service('s8salesOrderSrv', OrangeFeSARQ.Services.s8salesOrderSrv)
+        .service('stockSrv', OrangeFeSARQ.Services.stockSrv)
+        .service('repositorySrv', OrangeFeSARQ.Services.repositorySrv)
+        .service('callServiceSFIDSrv', OrangeFeSARQ.Services.callServiceSFIDSrv)
+>>>>>>> 231bca26059df90c211150aad255d01e8d02f502
         /* .service('agreementSrv', OFC.Services.AgreementSrv) */
         .service('userDeviceSrv', OrangeFeSARQ.Services.UserDeviceSrv)
         .service('getRolProfileSrv', OrangeFeSARQ.Services.getRolProfileSrv)

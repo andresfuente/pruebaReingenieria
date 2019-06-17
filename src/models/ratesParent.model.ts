@@ -595,6 +595,12 @@ module ratesParent.Models {
             }
         }
 
+<<<<<<< HEAD
+=======
+        private checkIsNetflixRate(rateData: any){
+            this.isNetflix = _.find(rateData.productSpecCharacteristic, { 'name' : 'Netflix incluido en tu tarifa'}) ? true : false;
+        }
+>>>>>>> 231bca26059df90c211150aad255d01e8d02f502
 
 
 
