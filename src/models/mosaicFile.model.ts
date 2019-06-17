@@ -162,6 +162,7 @@ module mosaicFile.Models {
         public litSubTitle: string;
         public litPrice: number;
         public siebelId: string;
+        public category: string;
         public initialPaid: number;
         public uniquePaid: number;
         public totalPaid: number;
@@ -408,6 +409,7 @@ module mosaicFile.Models {
                     let deviceOffering = serviceData.deviceOffering;
                     // ID del modelo del terminal
                     this.siebelId = deviceOffering[0].id;
+                    this.category = deviceOffering[0].category[0].name
 
                     // Si existe el offeringPrice y no esta vacio
                     if (deviceOffering && deviceOffering.length > 0) {
