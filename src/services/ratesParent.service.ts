@@ -72,6 +72,7 @@ module OrangeFeSARQ.Services {
                 return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
+                    //vm.mockPPM(response);
                     return {
                         specificationData: response.data
                     };
@@ -150,8 +151,9 @@ module OrangeFeSARQ.Services {
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
+                    //srv.mockPPMOffering(response);
                     rates.loadRates(specificationData, response.data, bucketId);
-
+                    
                     return rates;
                 })
                 .catch((error) => {
@@ -609,7 +611,11 @@ module OrangeFeSARQ.Services {
                     }else{
                         respuesta = response;
                     }
+<<<<<<< HEAD
                     return respuesta;
+=======
+                    return respuesta;                    
+>>>>>>> feature-UAT
                 })
                 .catch((error) => {
                     throw error;
@@ -656,7 +662,11 @@ module OrangeFeSARQ.Services {
                     }else{
                         respuesta = response;
                     }
+<<<<<<< HEAD
                     return respuesta;
+=======
+                    return respuesta;                    
+>>>>>>> feature-UAT
                 })
                 .catch((error) => {
                     throw error;
@@ -937,6 +947,47 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
             return vm.arrayFixed;
+        }
+
+        mockPPM(response) {
+            let vm = this;
+            let isPangea = vm.genericConstant && vm.genericConstant.site && vm.genericConstant.site === 'FCUPdV';
+            if (isPangea && response && response.data && response.data.productSpecification) {
+                _.forEach(response.data.productSpecification, element => {
+                    let existLADatos = _.some(element.productSpecificationRelationship, {id:'1-2MDAMC', type:'associatedLine'});
+                    let existLAPPM = _.some(element.productSpecificationRelationship, {id:'1-2WC4A7', type:'associatedLine'});
+                    if (existLADatos && !existLAPPM) { //existe LA Datos y no existe LA PPM
+                        element.productSpecificationRelationship.push({ // Añade LA PPM
+                            id:'1-2WC4A7',
+                            type:'associatedLine'
+                        });
+                    }
+                    
+                });
+                let ppm:any = _.find(response.data.productSpecification, {id:'1-2WC4A7'});
+                if (ppm) {
+                    ppm.name = 'Línea Smartphone 0 cént/min';
+                    ppm.ospTitulo = 'Smartphone 0 cént/min';
+                }   
+            }
+        }
+
+        mockPPMOffering(response) {
+            let vm = this;
+            let isPangea = vm.genericConstant && vm.genericConstant.site && vm.genericConstant.site === 'FCUPdV';
+            if (isPangea && response && response.data && response.data.productOffering) {
+                let datos:any = _.find(response.data.productOffering, (element:any) => {
+                    return _.find(element.bundledProductOffering, {id:'1-2MDAMC'});
+                });
+                let ppm:any = _.find(response.data.productOffering, (element:any) => {
+                    return _.find(element.bundledProductOffering, {id:'1-2WC4A7'});
+                });
+
+                if (datos && datos.productOfferingPrice[0] && ppm.productOfferingPrice[0].price && 
+                    ppm && ppm.productOfferingPrice[0] && ppm.productOfferingPrice[0].price) {
+                        ppm.productOfferingPrice[0].price = datos.productOfferingPrice[0].price;
+                }
+            }
         }
 
     }

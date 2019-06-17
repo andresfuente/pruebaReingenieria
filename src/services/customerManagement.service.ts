@@ -202,7 +202,7 @@ module OrangeFeSARQ.Services {
                     return response.data;
                 })
                 .catch(function (error) {
-                    throw error;
+                    throw error.data;
                 });
         }
 

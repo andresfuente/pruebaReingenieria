@@ -32,8 +32,7 @@ module OrangeFeSARQ.Services {
 
             let list: any = [];
             let validAll: boolean = false;
-            let loginData = JSON.parse(sessionStorage.getItem('loginData'));
-            let cv = JSON.parse(sessionStorage.getItem('cv'));
+            
 
             if (OrangeFeSARQ.Controllers.ParentController.shared
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
@@ -55,19 +54,33 @@ module OrangeFeSARQ.Services {
                 });
             }
 
+            return vm.checkSocio(validAll, list);
+        }
+
+        /**
+         * @name OrangeFeSARQ.Services:CreditLimitSrv#checkSocio
+         * @param {string} validAll Indica la validez del SFID para NMC
+         * @param {object} list Lista de sfids
+         * @description Comprueba que el cliente es socio
+         */
+        checkSocio(validAll: boolean, list: any) {
+            let loginData = JSON.parse(sessionStorage.getItem('loginData'));
+            let cv = JSON.parse(sessionStorage.getItem('cv'));
+
+            let returnValue : boolean = false;
 
             if (loginData && loginData.sfid && loginData.sfid !== null) {
                 if (validAll || list && ((_.size(list) !== 0) && _.indexOf(list, loginData.sfid) !== -1)) {
-                    if (cv && cv.ospPointProgrammeType && cv.ospPointProgrammeType.toUpperCase() === 'SOCIO') {
-                        return true;
-                    } else if (!cv) {
-                        return true;
+                    if (!cv || (cv && cv.ospPointProgrammeType && cv.ospPointProgrammeType.toUpperCase() === 'SOCIO')) {
+                        returnValue = true;
                     }
                 }
             }
 
-            return false;
+            return returnValue;
         }
+
+
         /**
          * 
          */

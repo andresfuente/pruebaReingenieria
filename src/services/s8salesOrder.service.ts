@@ -41,5 +41,42 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
+        
+        /**
+         * Obtener el estado de las órdenes en SIEBEL 8
+         * @param accountId Identificador unívoco del cliente en Siebel 8.	
+         * @param sistemaInvocante Campo usado por MDW para gestion de URLs 
+         * @param primaryOrganization AMENA | RESIDENCIAL | EMPRESAS
+         * @param canal Valor por defecto: MICROSERVICIOS
+         * @param quoteIds Identificador de oferta en Siebel 8.	
+         * @param quoteNumbers  Número de oferta en Siebel 8.
+         * @param s8Id Identificador de Siebel 8.	
+         * @param comp Componente invocante
+         */
+        getOrderStatus(accountId: string, sistemaInvocante: string, primaryOrganization: string, canal?: string, quoteIds?: string, quoteNumbers?: string, s8Id?: string, comp = 'orangeServices') {
+            let vm = this;
+            let endpoint = 'getOrderStatus';
+
+            let _params = {
+                queryParams: {
+                    AccountId: accountId,
+                    quoteIds: quoteIds,
+                    canal: canal,
+                    sistemaInvocante: sistemaInvocante,
+                    quoteNumbers: quoteNumbers,
+                    primaryOrganization: primaryOrganization,
+                    s8Id: s8Id
+                },
+                urlParams: [endpoint]
+            };
+
+            return vm.httpCacheGett(vm.genericConstant.s8SalesOrder, _params, comp)
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((error) => {
+                    throw error;
+                });
+        }
     }
 }

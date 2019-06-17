@@ -94,12 +94,12 @@ module OrangeFeSARQ.Services {
             return vm.httpPost(vm.communicationListAPIUrl, _search, componentName)
                 .then(
                     (response) => {
-                        return response;
+                        return response.data;
                     }
                 )
                 .catch(
                     (error) => {
-                        return error;
+                        return error.data;
                     }
                 );
         }

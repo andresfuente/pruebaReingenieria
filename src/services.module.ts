@@ -82,6 +82,7 @@ module OrangeFeSARQ.Constant {
         .service('customerViewStore', OrangeFeSARQ.Services.CustomerViewStore)
         .service('commercialCampaignsSrv', OrangeFeSARQ.Services.CommercialCampaignsSrv)
         .service('s8salesOrderSrv', OrangeFeSARQ.Services.s8salesOrderSrv)
+        .service('stockSrv', OrangeFeSARQ.Services.stockSrv)
         .service('repositorySrv', OrangeFeSARQ.Services.repositorySrv)
         .service('callServiceSFIDSrv', OrangeFeSARQ.Services.callServiceSFIDSrv)
         /* .service('agreementSrv', OFC.Services.AgreementSrv) */

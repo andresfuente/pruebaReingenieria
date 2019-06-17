@@ -65,9 +65,9 @@ module OrangeFeSARQ.Services {
             return vm.httpCacheGeth(vm.genericConstant.getTerminalDetails, { queryParams: params }, headers
             ).then((response) => {
                 if (response.data.length > 0) {
-                    return response;
+                    return response.data[0].deviceSpecification;
                 } else {
-                    return response;
+                    return response.data.deviceSpecification;
                 }
             }).catch((error) => {
                 throw error;

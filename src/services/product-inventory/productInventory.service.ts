@@ -37,10 +37,13 @@ module OrangeFeSARQ.Services {
       };
       return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
         .then(function (response) {
-            return response;
+          if (response.data && response.data.product) {
+            return response.data.product;
+          }
+          throw response.data.error;
         })
         .catch(function (error) {
-          return error;
+          return error.data;
         });
     }
 
