@@ -1,7 +1,7 @@
 {
   "name": "orange-services",
   "title": "Orange-services",
-  "version": "1.60.0-SNAPSHOT.0",
+  "version": "1.64.0-SNAPSHOT.0",
   "description": "Contiene los servicios comunes no core.",
   "main": "index.js",
   "scripts": {
@@ -49,7 +49,7 @@
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-remap-istanbul": "0.0.5",
     "karma-threshold-reporter": "^0.1.15",
-    "remap-istanbul": "^0.6.3",
+    "remap-istanbul": "0.10.1",
     "tslint": "^3.7.1",
     "typescript": "^1.8.9",
     "typings": "^0.8.1",
