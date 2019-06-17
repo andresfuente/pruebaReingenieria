@@ -129,9 +129,8 @@ module OrangeFeSARQ.Services {
             return userService.getUser(searchUrl, value)
                 .then(
                 (response) => {
-                    return response;
-                }
-                )
+                    return response.data;
+                })
                 .catch(function (error) {
                     return error;
                 });
