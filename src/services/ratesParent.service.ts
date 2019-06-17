@@ -611,11 +611,7 @@ module OrangeFeSARQ.Services {
                     }else{
                         respuesta = response;
                     }
-<<<<<<< HEAD
                     return respuesta;
-=======
-                    return respuesta;                    
->>>>>>> feature-UAT
                 })
                 .catch((error) => {
                     throw error;
