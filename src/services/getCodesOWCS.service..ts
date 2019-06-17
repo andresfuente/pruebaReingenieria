@@ -3,12 +3,12 @@ module OrangeFeSARQ.Services {
 
     /**
      * @ngdoc service
-     * @name OrangeFeSARQ.Services:getCodesOWCS
+     * @name OrangeFeSARQ.Services:getCodesOwcsSrv
      * @author Jaime Alain
      * @description
      * Servicio para recoger los codigos de scoring 
      */
-    export class getCodesOWCS extends OrangeFeSARQ.Services.ParentService {
+    export class getCodesOwcsSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
         constructor(public $injector) {
