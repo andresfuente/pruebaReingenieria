@@ -151,11 +151,11 @@ module OrangeFeSARQ.Services {
                 .then((response) => {
                     //vm.errorRequest = null; 
                     //let dataAux = vm.transformRequest(response.data);
-                    return response.data;
+                    return response;
                 })
                 .catch((response) => {
                     //vm.errorRequest = response.data.error.code;
-                    return response.data;
+                    return response;
                 });
         }
 
