@@ -68,7 +68,11 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
+<<<<<<< HEAD
                 return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.productSpecificationv2View,
+=======
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + '/productSpecificationv2View/OSP',
+>>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
                 { queryParams: params }, _headers)
                 .then((response) => {
 <<<<<<< HEAD
@@ -109,7 +113,34 @@ module OrangeFeSARQ.Services {
                 ratesIdListString, releatedRatesClient, pack, type, defaultTechnology,
                 bucketId);
             let _headers = srv.setHeaders();
+<<<<<<< HEAD
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.productOfferingv2View,
+=======
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + srv.LITPRODUCTOFFERING,
+                { queryParams: params }, _headers)
+                .then((response) => {
+                    let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
+                    //srv.mockPPMOffering(response);
+                    rates.loadRates(specificationData, response.data, bucketId);
+                    
+                    return rates;
+                })
+                .catch((error) => {
+                    throw error;
+                });
+
+        }
+
+        /* Consulta al productOffering del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
+         */
+        //Cambio_Adaptacion_Jazztel JPA
+        getOfferingDataJZ(productType: string, specificationData, category:string, tarifa?: string, promocion?: string, paquete?: string,
+            bucketId?: string) {
+            let srv = this;
+            let params = srv.setParamsJZ(productType,category, tarifa, promocion, paquete);
+            let _headers = srv.setHeaders();
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brandjz + '/productOfferingv2View/OSP',
+>>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -591,6 +622,10 @@ module OrangeFeSARQ.Services {
                         });
                         return ratesIdListString;
                     }
+<<<<<<< HEAD
+=======
+                    return respuesta;
+>>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
                 })
                 .catch((error) => {
                     throw error;

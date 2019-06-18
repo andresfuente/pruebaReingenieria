@@ -123,10 +123,16 @@ module OrangeFeSARQ.Services {
 
             return userService.getUser(searchUrl, value)
                 .then(
+<<<<<<< HEAD
                     (response) => {
                         return response;
                     }
                 )
+=======
+                (response) => {
+                    return response.data;
+                })
+>>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
                 .catch(function (error) {
                     return error;
                 });

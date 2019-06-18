@@ -256,6 +256,7 @@ module OrangeFeSARQ.Services {
                 });
         }
 
+<<<<<<< HEAD
         private getParamsForRenove(params: any, commercialData: any, commercialActIndex: number, srv: this, clientData: any, campana_txt: string) {
             if (params.commercialAction === 'renove') {
                 commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
@@ -334,6 +335,110 @@ module OrangeFeSARQ.Services {
             return clientGeolocation;
         }
 
+=======
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:MosaicFileSrv#getMosaicDataJZ
+         * @methodOf OrangeFeSARQ.Services:MosaicFileSrv
+         * @param {string} search Busqueda por texto
+         * @param {string} sortString Ordenacion
+         * @param {string} targetPage Paginacion (pagina activa)
+         * @param {number} pageSize Tamaño de pagina (numero de terminales a mostrar)
+         * @param {number} isExistingCustomer 
+         * @param {string} commercialAction Tipo de acto comercial [portabilidad/alta/migracion/renove]
+         * @param {string} portabilityOrigin Origen de portabilidad [pospago/prepago]
+         * @param {string} riskLevel Nivel de riesgo del cliente [alto/medio/bajo]
+         * @param {string} channel Canal al que hacer la consulta
+         * @param {string} sfid sfid de la tienda
+         * @param {string} relatedProductOffering Codigo de la tarifa con la que hacer la consulta
+         * @param {string} filters Filtros
+         * @param {} mosaicFileCompOWCSStore Contribucion OWCS del componente mosaicFile
+         * @param {string} profileBinding Perfil con el que hacer la consulta
+         * @param {string} priceNameBinding Tipo de precio con el que hacer la consulta
+         * @param {string} ospCustomerSegmentBinding Segmento del cliente [Residencial/Empresa]
+         * @param {string} stateOrProvinceBinding Provincia para calcular los impuesto a aplicar 
+         * @param {string} workflow Flujo de trabajo
+         * @param {string} campana_txt Nombre de la campaña
+         * @return {ng.IPromise<{}|void>}
+         * @description Metodo para obtener todos los elementos del mosaico de terminales completo
+         */
+        getMosaicDataJZ(
+            channel: string,
+            commercialAction: string,
+            limit: string,
+            offset: string,
+            ospFinancialScore: string,
+            paymentType: string,
+            portabilityOrigin: string,
+            scoring: string,
+            showInStock: boolean,
+            sort: string,
+            sortType: string,
+            category: number
+        ): ng.IPromise<{} | void> {
+            let srv = this;
+            let params;
+            // Cabeceras
+            let _headers = new HashMap<string, string>();
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
+
+            // Establece el codigo de la tarifa segun lo seleccionado
+            let idPaquete;
+            let idPromocion;
+            let idTarifa;
+            let channelAccountCode;
+            switch (category) {
+                case 1:
+                    idPaquete = '2983';
+                    idPromocion = '15870';
+                    idTarifa = '3117';
+                    channelAccountCode = '127';
+                    break;
+                default:
+                    idPaquete = '2983';
+                    idPromocion = '15870';
+                    idTarifa = '3117'
+                    channelAccountCode = '127';
+                    break;
+            }
+
+            params = {
+                channel: channel,
+                channelAccountCode: channelAccountCode,
+                commercialAction: commercialAction,
+                idPaquete: idPaquete,
+                idPromocion: idPromocion,
+                idTarifa: idTarifa,
+                limit: limit,
+                offset: offset,
+                ospFinancialScore: ospFinancialScore,
+                paymentType: paymentType,
+                portabilityOrigin: portabilityOrigin,
+                scoring: scoring,
+                showInStock: showInStock,
+                sort: sort,
+                sortType: sortType
+            };
+
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
+
+            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
+                .then((response) => {
+                    return {
+                        results: parseInt(response.headers()['x-total-count'] || 0),
+                        terminals: response.data,
+                    }
+
+                })
+                .catch((error) => {
+                    throw error;
+                });
+        }
+
+
+
+>>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:MosaicFileSrv#getMosaicData
@@ -490,7 +595,67 @@ module OrangeFeSARQ.Services {
             let { commercialData, commercialActIndex } = this.getParamsPrepago(srv, commercialAction, params, creditLimit);
 
             // Parametros para Renove   
+<<<<<<< HEAD
             ({ params, clientData, commercialData, commercialActIndex } = this.paramsForRenove(params, campana_txt, clientData, commercialData, commercialActIndex, srv));
+=======
+            if (params.commercialAction === 'renove') {
+                // Se seleccionan los parametros necesarios para la llamada a la OT
+                params.channel = '';
+                params.campaignName = campana_txt;
+                clientData = JSON.parse(sessionStorage.getItem('clientData'));
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = srv.getSelectedCommercialAct();
+                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
+                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
+                        if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)))) {
+                            params.priceType = 'unico';
+                        }
+                    });
+                }
+
+                // Renove pimaraio
+                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew' ||
+                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'best_renove') {
+                    if (!params.priceType) {
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
+                    } else {
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'priceType', 'deviceOffering.category.name']);
+                    }
+                }
+
+                // Renove secundario
+                else if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
+                    if (clientData && clientData.creditLimitRenove && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)) {
+                        params.priceType = 'unico';
+                    }
+                    if (!params.priceType) {
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                    } else {
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType', 'deviceOffering.category.name']);
+                    }
+                }
+
+                // Renove primario al añadir secundario
+                else if (commercialData[commercialActIndex].renewalType &&
+                    commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove primario' &&
+                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secundario') {
+                    if (params.priceType) {
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType', 'deviceOffering.category.name']);
+                    } else {
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                    }
+                }
+
+                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
+                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
+                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
+                            params.priceType = 'unico';
+                        }
+                    });
+                }
+
+            }
+>>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
 
             if (riskLevel === 'bajo') {
                 riskLevel += ',medio,alto';

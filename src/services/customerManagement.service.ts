@@ -13,7 +13,10 @@ module OrangeFeSARQ.Services {
         // Injection vars
         public genericConstant;
         public informationCenterSrv;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
         private url: string;
 
         // jazztel
