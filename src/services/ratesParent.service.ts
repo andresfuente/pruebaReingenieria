@@ -69,7 +69,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
                     //vm.mockPPM(response);
@@ -147,7 +147,7 @@ module OrangeFeSARQ.Services {
                 ratesIdListString, releatedRatesClient, pack, type, defaultTechnology,
                 bucketId);
             let _headers = srv.setHeaders();
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + srv.LITPRODUCTOFFERING,
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + srv.LITPRODUCTOFFERING,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
