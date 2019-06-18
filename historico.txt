@@ -1,8 +1,8 @@
 blocker_violations=1
-coverage=12.1
-critical_violations=101
-duplicated_lines_density=6.2
+coverage=12.0
+critical_violations=98
+duplicated_lines_density=6.0
 sqale_debt_ratio=0.8
 vulnerabilities=1
-complexity=3495
-cognitive_complexity=4578
+complexity=3511
+cognitive_complexity=4583

@@ -49,12 +49,12 @@ module OrangeFeSARQ.Services {
             };
             return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, {}, null, _headers)
                 .then(
-                    (response) => {
-                        return response.data;
-                    },
-                    (error) => {
-                        throw error.data;
-                    }
+                (response) => {
+                    return response.data;
+                },
+                (error) => {
+                    throw error.data;
+                }
                 );
         }
 
@@ -136,14 +136,14 @@ module OrangeFeSARQ.Services {
 
             return vm.httpPut(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
                 .then(
-                    (response) => {
-                        return response.data;
-                    }
+                (response) => {
+                    return response.data;
+                }
                 )
                 .catch(
-                    (error) => {
-                        throw error.data;
-                    }
+                (error) => {
+                    throw error.data;
+                }
                 );
         }
 
@@ -167,14 +167,14 @@ module OrangeFeSARQ.Services {
 
             return vm.httpCacheGeth(vm.genericConstant.shoppingCart, _search, _headers, componentName)
                 .then(
-                    (response) => {
-                        return response.data;
-                    }
+                (response) => {
+                    return response.data;
+                }
                 )
                 .catch(
-                    (error) => {
-                        throw error.data;
-                    }
+                (error) => {
+                    throw error.data;
+                }
                 );
         }
 
@@ -199,12 +199,12 @@ module OrangeFeSARQ.Services {
 
             return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
                 .then(
-                    (response) => {
-                        return response.data;
-                    },
-                    (error) => {
-                        throw error.data;
-                    }
+                (response) => {
+                    return response.data;
+                },
+                (error) => {
+                    throw error.data;
+                }
                 );
         }
 
@@ -246,12 +246,12 @@ module OrangeFeSARQ.Services {
 
             return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, null, null)
                 .then(
-                    (response) => {
-                        return response.data;
-                    },
-                    (error) => {
-                        throw error.data;
-                    }
+                (response) => {
+                    return response.data;
+                },
+                (error) => {
+                    throw error.data;
+                }
                 );
         }
 
@@ -296,7 +296,7 @@ module OrangeFeSARQ.Services {
                                 if (comm && comm.rates) {
                                     let rate: any = _.find(comm.rates, { 'siebelId': cartItem.id });
 
-                                    if (rate && rate.type === 'Convergente_NAC' && rate.typeService === 'movil_fijo' && cartItem.product.name) {
+                                    if (rate && ((rate.type === 'Convergente_NAC' && rate.typeService === 'movil_fijo') || (rate.type === 'Mobile Only_NAC' && rate.typeService === 'movil')) && cartItem.product.name) {
                                         if (newName) { // Si hay aprovechamiento, se pintan los apellidos
                                             cartItem.product.name = 'Love ' + newName;
                                         } else { // Si no hay aprvechamiento, se pinta "Love"

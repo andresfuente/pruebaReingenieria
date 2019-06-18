@@ -304,7 +304,7 @@ module OrangeFeSARQ.Services {
                         && response.data.customer.characteristic[0].value) {
                             promise.resolve(response);
                     } else {
-                        promise.resolve(false);
+                        promise.resolve(response);
                     }
                 })
                 .catch(function (error) {

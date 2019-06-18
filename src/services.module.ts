@@ -89,5 +89,6 @@ module OrangeFeSARQ.Constant {
         .service('userDeviceSrv', OrangeFeSARQ.Services.UserDeviceSrv)
         .service('eligibilitySrv', OrangeFeSARQ.Services.EligibilitySrv)
         .service('getRolProfileSrv', OrangeFeSARQ.Services.getRolProfileSrv)
+        .service('s8salesOrderSrv', OrangeFeSARQ.Services.s8salesOrderSrv)
         .service('getCodesOwcsSrv', OrangeFeSARQ.Services.getCodesOwcsSrv);
 }
