@@ -11,6 +11,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
 
         public storeLocatorURL: string;
+        private primarioOferta: string = 'primario oferta'
 
         constructor(public $injector) {
             super($injector);
@@ -74,6 +75,14 @@ module OrangeFeSARQ.Services {
                 return false;
             }
         }
+        getAccount(bic, domiciliation, accountHolder, iban): any{
+            return {
+                bic: bic,
+                domiciliation: domiciliation,
+                accountHolder: accountHolder,
+                iban: iban
+            };
+        }
 
         /**
          * @ngdoc method
@@ -86,55 +95,25 @@ module OrangeFeSARQ.Services {
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
-            let info = {
-                bic: '',
-                domiciliation: '',
-                accountHolder: '',
-                iban: ''
-            };
+            let info = vm.getAccount('', '', '', '');
 
             if (clientData && clientData.billingInfo) {
                 if (clientData.billingInfo.bankName) {
                     switch (clientData.billingInfo.bankName) {
                         case 'La Caixa':
-                            info = {
-                                bic: '2100',
-                                domiciliation: '0000',
-                                accountHolder: '66',
-                                iban: '1234567890'
-                            };
+                            info = vm.getAccount('2100', '0000', '66', '1234567890');
                             break;
                         case 'Santander':
-                            info = {
-                                bic: '0049',
-                                domiciliation: '0000',
-                                accountHolder: '06',
-                                iban: '1234567890'
-                            };
+                            info = vm.getAccount('0049', '0000', '06', '1234567890');
                             break;
                         case 'BBVA':
-                            info = {
-                                bic: '0182',
-                                domiciliation: '0000',
-                                accountHolder: '96',
-                                iban: '1234567890'
-                            };
+                            info = vm.getAccount('0182', '0000', '96', '1234567890');
                             break;
                         case 'Bankia':
-                            info = {
-                                bic: '2038',
-                                domiciliation: '0000',
-                                accountHolder: '76',
-                                iban: '1234567890'
-                            };
+                            info = vm.getAccount('2038', '0000', '76', '1234567890');
                             break;
                         case 'Otros':
-                            info = {
-                                bic: '2013',
-                                domiciliation: '0000',
-                                accountHolder: '16',
-                                iban: '1234567890'
-                            };
+                            info = vm.getAccount('2013', '0000', '16', '1234567890');
                             break;
                         default:
                             break;
@@ -231,7 +210,8 @@ module OrangeFeSARQ.Services {
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentPayer, contene, responseObj);  
                         }   else if (dDE === 'dtratAuto' && sessionClientData[cont] && sessionClientData[cont].treatmentAuthorized) {
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentAuthorized, contene, responseObj);  
-                        }  else {
+                        }  
+                         else {
                             vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                         }
                     }
@@ -257,6 +237,12 @@ module OrangeFeSARQ.Services {
                             cont = 'formattedName';
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont]
                                 ? sessionClientData[cont] : defaultData, contene, responseObj);
+                        } else if(dDE === 'idpetition'){ // MCM campos id petición
+                            if (sessionClientData.idpetition) {
+                                sessionClientData.idpetition.forEach(element => {
+                                    vm.insertarCampo(dCC, dDE, element, contene, responseObj);
+                                });
+                            }
                         } else {
                             // Flujo normal
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont]
@@ -595,7 +581,7 @@ module OrangeFeSARQ.Services {
                                     } else {
                                         primaryTerminalTypePrice = 'solo sim';
                                     }
-                                    vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                    vm.insertarCampo(dCC + ' ' + vm.primarioOferta + numOferta,
                                         dDE + auxPrimary + numOferta, primaryTerminalTypePrice,
                                         contene,
                                         responseObj);
@@ -626,7 +612,7 @@ module OrangeFeSARQ.Services {
                                 } else if (cont === 'seguro') {
                                     // Terminal primario
                                     if (insurancePrimaryTerminal) {
-                                        vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                        vm.insertarCampo(dCC + ' ' + vm.primarioOferta + numOferta,
                                             dDE + numOferta, 'seguro móvil',
                                             contene, responseObj);
                                     }
@@ -660,7 +646,7 @@ module OrangeFeSARQ.Services {
                                     vm.insertarCampo(dCC + ' ' + 'Secundario', dDE + 'Sec' + numOferta, 'si', contene, responseObj);
                                 } else {
                                     if (primaryTerminal) {
-                                        vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                        vm.insertarCampo(dCC + ' ' + vm.primarioOferta + numOferta,
                                             dDE + auxPrimary + numOferta, primaryTerminal.product[cont],
                                             contene,
                                             responseObj);

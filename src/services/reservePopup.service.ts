@@ -82,12 +82,12 @@ module reservePopup.Services {
             return vm.httpPostFull(vm.genericConstant.stockData, _search, 'reservePopupComp')
                 .then(
                 (response) => {
-                    return response.data.respuesta;
+                    return response;
                 },
                 (error) => {
                     vm.hideReservePopup();
                     vm.informationCenter.addInformationMessage(2, 'Error', 'No se ha podido realizar la reserva');
-                    throw error.data;
+                    throw error;
                 });
         }
 
@@ -108,6 +108,27 @@ module reservePopup.Services {
                 closeEnabled: true,
                 terminals: terminals
             };
+        }
+
+        /**
+         * @ngdoc method
+         * @name reservePopup.Services.ReservePopupSrv#showReservePopup
+         * @methodOf reservePopup.Services.ReservePopupSrv
+         * @param {Array} terminals terminales a mostrar
+         * Muestra el popup de reserva para contratacion
+         */
+        showReservePopupContratacion(terminals): void {
+            let vm = this;
+
+            vm.refreshShoppingCart = false;
+            vm.reservePopupSrvVars = <reservePopupSrv.Models.IReservePopupVarsModel>{
+                size: '',
+                visible: true,
+                closeEnabled: true,
+                terminals: terminals,
+                isContratacion: true
+            };
+            
         }
 
         /**

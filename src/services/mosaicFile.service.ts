@@ -20,6 +20,7 @@ module OrangeFeSARQ.Services {
         private cache = {}; // Storage to prevent repeating calls to the API
         private storeProvince: string = '';
         private httpService;
+        public CHARACTERISTICCOLOR = 'characteristic.color';
 
         public isTLV: boolean;
 
@@ -122,10 +123,10 @@ module OrangeFeSARQ.Services {
             }
 
             // Cabeceras
-            let headers = {
-                'Geolocation-local': srv.storeProvince.toUpperCase(),
-                'Geolocation-client': clientGeolocation.toUpperCase()
-            };
+            let _headers = new HashMap<string, string>();
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
+            _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
+
             // ELIMINAR cuando se eliminen los select.
             // Establece el codigo de la tarifa segun lo seleccionado
             let codTarifa = '';
@@ -196,7 +197,7 @@ module OrangeFeSARQ.Services {
                     'characteristic.screenData.groupData.screenSize.value',
                     'characteristic.memoryData.groupData.hardDisk.value',
                     'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                    'characteristic.color']);
+                    this.CHARACTERISTICCOLOR]);
             }
 
             // Parametros para Prepago   
@@ -213,6 +214,11 @@ module OrangeFeSARQ.Services {
 
             // Parametros para Renove
             if (params.commercialAction === 'renove') {
+
+                const color = 'characteristic.color';
+                const osType = 'characteristic.OSData.groupData.OStype.value';
+                const backCameraResolution = 'characteristic.cameraData.groupData.backCameraResolution.value';
+
                 commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
                 commercialActIndex = srv.getSelectedCommercialAct();
                 clientData = JSON.parse(sessionStorage.getItem('clientData'));
@@ -242,26 +248,25 @@ module OrangeFeSARQ.Services {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
                         'deviceOffering.category.name', 'purchaseOption', 'price.fee', 'totalPaymentRange',
-                        'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
+                        osType,
+                        'priceType', backCameraResolution,
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        color]);
                 } else {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
                         'purchaseOption', 'price.fee', 'totalPaymentRange', 'deviceOffering.category.name',
-                        'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
+                        osType,
+                        'priceType', backCameraResolution,
                         'characteristic.screenData.groupData.screenSize.value',
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        color]);
                 }
             }
 
-            let _headers = new HashMap<string, string>();
             _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
             _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
@@ -302,6 +307,108 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
+
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:MosaicFileSrv#getMosaicDataJZ
+         * @methodOf OrangeFeSARQ.Services:MosaicFileSrv
+         * @param {string} search Busqueda por texto
+         * @param {string} sortString Ordenacion
+         * @param {string} targetPage Paginacion (pagina activa)
+         * @param {number} pageSize Tamaño de pagina (numero de terminales a mostrar)
+         * @param {number} isExistingCustomer 
+         * @param {string} commercialAction Tipo de acto comercial [portabilidad/alta/migracion/renove]
+         * @param {string} portabilityOrigin Origen de portabilidad [pospago/prepago]
+         * @param {string} riskLevel Nivel de riesgo del cliente [alto/medio/bajo]
+         * @param {string} channel Canal al que hacer la consulta
+         * @param {string} sfid sfid de la tienda
+         * @param {string} relatedProductOffering Codigo de la tarifa con la que hacer la consulta
+         * @param {string} filters Filtros
+         * @param {} mosaicFileCompOWCSStore Contribucion OWCS del componente mosaicFile
+         * @param {string} profileBinding Perfil con el que hacer la consulta
+         * @param {string} priceNameBinding Tipo de precio con el que hacer la consulta
+         * @param {string} ospCustomerSegmentBinding Segmento del cliente [Residencial/Empresa]
+         * @param {string} stateOrProvinceBinding Provincia para calcular los impuesto a aplicar 
+         * @param {string} workflow Flujo de trabajo
+         * @param {string} campana_txt Nombre de la campaña
+         * @return {ng.IPromise<{}|void>}
+         * @description Metodo para obtener todos los elementos del mosaico de terminales completo
+         */
+        getMosaicDataJZ(
+            channel: string,
+            commercialAction: string,
+            limit: string,
+            offset: string,
+            ospFinancialScore: string,
+            paymentType: string,
+            portabilityOrigin: string,
+            scoring: string,
+            showInStock: boolean,
+            sort: string,
+            sortType: string,
+            category: number
+        ): ng.IPromise<{} | void> {
+            let srv = this;
+            let params;
+            // Cabeceras
+            let _headers = new HashMap<string, string>();
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
+
+            // Establece el codigo de la tarifa segun lo seleccionado
+            let idPaquete;
+            let idPromocion;
+            let idTarifa;
+            let channelAccountCode;
+            switch (category) {
+                case 1:
+                    idPaquete = '2983';
+                    idPromocion = '15870';
+                    idTarifa = '3117';
+                    channelAccountCode = '127';
+                    break;
+                default:
+                    idPaquete = '2983';
+                    idPromocion = '15870';
+                    idTarifa = '3117'
+                    channelAccountCode = '127';
+                    break;
+            }
+
+            params = {
+                channel: channel,
+                channelAccountCode: channelAccountCode,
+                commercialAction: commercialAction,
+                idPaquete: idPaquete,
+                idPromocion: idPromocion,
+                idTarifa: idTarifa,
+                limit: limit,
+                offset: offset,
+                ospFinancialScore: ospFinancialScore,
+                paymentType: paymentType,
+                portabilityOrigin: portabilityOrigin,
+                scoring: scoring,
+                showInStock: showInStock,
+                sort: sort,
+                sortType: sortType
+            };
+
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
+
+            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
+                .then((response) => {
+                    return {
+                        results: parseInt(response.headers()['x-total-count'] || 0),
+                        terminals: response.data,
+                    }
+
+                })
+                .catch((error) => {
+                    throw error;
+                });
+        }
+
+
 
         /**
          * @ngdoc method
@@ -497,22 +604,40 @@ module OrangeFeSARQ.Services {
                     if (!params.priceType) {
                         params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
                     } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId','priceType','deviceOffering.category.name']);
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'priceType', 'deviceOffering.category.name']);
                     }
                 }
 
                 // Renove secundario
                 else if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
-                    if (clientData && clientData.creditLimitRenove && ( clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)) {
+                    if (clientData && clientData.creditLimitRenove && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)) {
                         params.priceType = 'unico';
                     }
                     if (!params.priceType) {
                         params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
                     } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType','deviceOffering.category.name']);
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType', 'deviceOffering.category.name']);
                     }
                 }
 
+                // Renove primario al añadir secundario
+                else if (commercialData[commercialActIndex].renewalType &&
+                    commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove primario' &&
+                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secundario') {
+                    if (params.priceType) {
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType', 'deviceOffering.category.name']);
+                    } else {
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
+                    }
+                }
+
+                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
+                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
+                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
+                            params.priceType = 'unico';
+                        }
+                    });
+                }
 
             }
 

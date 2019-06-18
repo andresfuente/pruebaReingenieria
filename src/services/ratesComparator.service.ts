@@ -11,6 +11,8 @@ module OrangeFeSARQ.Services {
     export class RatesComparatorSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
+        public GEOLOCATION_LOCAL = 'Geolocation-local';
+        public GEOLOCATION_CLIENT = 'Geolocation-client';
         // Inject vars
         private spinnerBlockSrv;
 
@@ -19,10 +21,13 @@ module OrangeFeSARQ.Services {
         public storeProvince;
         private typeMulticomparatorRenove: boolean = true;
 
+        // Services
         private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
+        private addToShoppingCart: OrangeFeSARQ.Services.AddToShoppingCartSrv;
 
         public clientData;
         public shopInfo;
+        public principalNumber;
 
         /**
          * @ngdoc method
@@ -50,6 +55,7 @@ module OrangeFeSARQ.Services {
             let srv = this;
             srv.spinnerBlockSrv = $injector.get('spinnerBlockSrv');
             srv.billingAccountStore = $injector.get('billingAccountStoreSrv');
+            srv.addToShoppingCart = $injector.get('addToShoppingCartSrv');
         }
 
         getSession(){
@@ -141,8 +147,12 @@ module OrangeFeSARQ.Services {
             // };
             // CABECERA HASHMAP
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(vm.GEOLOCATION_LOCAL, vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set(vm.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
+
+            let commercialData;
+            let commercialActIndex;
+            let bucketID = vm.checkBucketID();
 
             let params = {
                 channel: channel,
@@ -157,21 +167,20 @@ module OrangeFeSARQ.Services {
                 campaignName: nameSgmr,
                 fields: 'deviceOffering',
                 creditLimit: creditLimit,
-                priceType: priceType
+                priceType: priceType,
+                bucketID: bucketID
+
             }; 
 
             if (creditLimit === undefined || creditLimit === null) {
                 delete params.creditLimit;
             }
 
-            if (isSecondaryRenew) {
-                delete params['deviceOffering.category.name'];
-            }
 
             // Prepago   
             if (sessionStorage.getItem('commercialData')) {
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = vm.getSelectedCommercialAct();
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = vm.getSelectedCommercialAct();
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemSubtype && commercialData[commercialActIndex].ospCartItemSubtype === 'prepago') {
                     if (commercialAction === 'portabilidad') {
                         delete params.portabilityOrigin;
@@ -180,8 +189,8 @@ module OrangeFeSARQ.Services {
             }
             // Cliente existente para Renove   
             if (sessionStorage.getItem('commercialData')) {
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                let commercialActIndex = vm.getSelectedCommercialAct();
+                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+                commercialActIndex = vm.getSelectedCommercialAct();
                 if (commercialActIndex !== -1 && commercialData[commercialActIndex].ospCartItemType && commercialData[commercialActIndex].ospCartItemType.toLowerCase() === 'renove' && vm.typeMulticomparatorRenove) {
                     delete params.isExistingCustomer;
                     delete params.portabilityOrigin;
@@ -190,6 +199,13 @@ module OrangeFeSARQ.Services {
                     delete params.creditLimit;
                 }
             }
+            if (isSecondaryRenew || vm.checkCampaignType(commercialData, commercialActIndex)) {
+                delete params['deviceOffering.category.name'];
+            }
+            if (!bucketID || vm.validLineRate(commercialData, rate)) {
+                delete params.bucketID;
+            }
+
 
             return vm.httpCacheGeth(vm.genericConstant.getTerminalDetails, { queryParams: params }, _headers
             ).then((response) => {
@@ -202,7 +218,6 @@ module OrangeFeSARQ.Services {
                     return data;
 
                 } else {
-                    let defaultData = JSON.parse(sessionStorage.getItem('defaultData')).idRateEssential;
                     let data = {
                         rateSiebelId: rate.siebelId,
                         terminalsiebelId: terminal.siebelId,
@@ -219,8 +234,132 @@ module OrangeFeSARQ.Services {
                     deviceOffering: []
                 };
                 return data;
-        });
+            });
         }
+        /**
+        * @ngdoc method
+        * @name ratesComparator.Services:RatesComparatorSrv#checkCampaignType
+        * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
+        * @description
+        * @return {boolean} Retorna verdadero en caso de que para mejor renove haya una campaña de renove secundario,
+        * en caso contrario devuelve false
+        */
+       checkCampaignType(commercialData, commercialActIndex){
+            let value = false;
+            if (commercialData){
+                if (commercialData[commercialActIndex] && commercialData[commercialActIndex].ospTerminalWorkflow && commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove' 
+                && commercialData[commercialActIndex].bestRenoveInfo && commercialData[commercialActIndex].bestRenoveInfo.length){
+                    let bestRenove = commercialData[commercialActIndex].bestRenoveInfo
+                    bestRenove.forEach(renove => {
+                        if (renove.campaigns && renove.campaigns.length){
+                            renove.campaigns.forEach(campaign => {
+                                if (campaign.cod !== undefined && campaign.cod !== null){
+                                    if (campaign.typeRenew && campaign.typeRenew === 'Renove secundario') {
+                                        value = true;
+                                    }
+                                }
+                            });
+                        }
+                        
+                    });
+                }
+            }
+
+            return value;
+        }
+        /**
+        * @ngdoc method
+        * @name ratesComparator.Services:RatesComparatorSrv#checkBucketID
+        * @author Jesús Alberto Mora San Andrés
+        * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
+        * @description Comprueba si hay una tarifa NAC para la línea ppal en el carrito o en caso de que no, comprueba si la línea ppal tiene una tarifa NAC
+        * Y devuelve el código bucket
+        * @return {string} idBucket
+        */
+        checkBucketID() {
+            let vm = this;
+            let bucketID;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+            if (vm.addToShoppingCart.NACRateInShoppingCart()) {
+                if (shoppingCart && shoppingCart.cartItem && shoppingCart.cartItem.length && shoppingCart.cartItem.length > 0) {
+                    bucketID = vm.checkShoppingCartNACSelected(shoppingCart.cartItem);
+                }
+            } else if (clientData && clientData.isNACClient && clientData.principalLine && clientData.principalLine.bucket) {
+                bucketID = clientData.principalLine.bucket;
+            }
+            if (clientData && clientData.principalLine && clientData.principalLine.number){
+                vm.principalNumber = clientData.principalLine.number;
+            }
+
+            return bucketID;
+        }
+        /**
+        * @ngdoc method
+        * @name ratesComparator.Services:RatesComparatorSrv#checkShoppingCartNACSelected
+        * @author Jesús Alberto Mora San Andrés
+        * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
+        * @descriptionBusca en el carrito la tarifa NAC y devuelve el bundle
+        * @return {string} idBucket
+        */
+        checkShoppingCartNACSelected(cart) {
+            let idBucket = '';
+            for (let k = 0; k < cart.length; k++) {
+                let cartItems = cart[k];
+                if (cartItems.ospSelected) {
+                    if (cartItems.cartItem && cartItems.cartItem.length && cartItems.cartItem.length > 0) {
+                        for (let i = 0; i < cartItems.cartItem.length; i++) {
+                            let cartItem = cartItems.cartItem[i];
+                            if (cartItem.product && cartItem.product.productRelationship && cartItem.product.productRelationship.length && cartItem.product.productRelationship.length > 0) {
+                                for (let j = 0; j < cartItem.product.productRelationship.length; j++) {
+                                    if (cartItem.product.productRelationship[j].type && cartItem.product.productRelationship[j].type === 'bucket') {
+                                        idBucket = cartItem.id;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return idBucket;
+        }
+
+        /**
+        * @ngdoc method
+        * @name ratesComparator.Services:RatesComparatorSrv#validLineRate
+        * @author Jesús Alberto Mora San Andrés
+        * @methodOf OrangeFeSARQ.Services:RatesComparatorSrv
+        * @description Si el número para la oferta es el mismo que el de la línea principal o si se trata de una tarifa NAC, devuelve true
+        * @return {string} value: boolean
+        */
+        validLineRate(commercialData, rate){
+            let value: boolean = false;
+            let number;
+            let vm = this;
+            if (rate && rate.line) {
+                number = rate.line;
+            }
+
+            if (commercialData) {
+                commercialData.forEach(commercial => {
+                    if (commercial.ospIsSelected && commercial.serviceNumber && commercial.serviceNumber === vm.principalNumber){
+                        value = true;
+                    } else if (commercial.serviceNumber === "" && number === vm.principalNumber) {
+                        value = true;
+                    }
+                    commercial.rates.forEach(rate => {
+                        if (commercial.ospIsSelected && rate && rate.groupName && rate.groupName !== "Convergente_NAC") {
+                            value = true;
+                        }
+                    });
+                });
+            }
+            
+            return value;
+        }
+
+
+
 
         /**
         * @ngdoc method
@@ -290,34 +429,34 @@ module OrangeFeSARQ.Services {
          */
         getClientType(siebelId: string) {
             let vm = this;
-            let type = '2'; // Por defecto es el valor que se devuelve
+            let typeRtc = '2'; // Por defecto es el valor que se devuelve
 
-            let cv = sessionStorage.getItem('cv');
+            let customerView = sessionStorage.getItem('cv');
 
-            if (!cv || cv === null || cv === undefined) {
-                let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+            if (!customerView || customerView === null || customerView === undefined) {
+                let comData = JSON.parse(sessionStorage.getItem('commercialData'));
 
                 // Buscamos el tipo de esta tarifa en commercial data
-                if (commercialData && commercialData.length > 0) {
-                    let currentAct: any = _.find(commercialData, { 'ospIsSelected': true });
+                if (comData && comData.length > 0) {
+                    let currentActRtc: any = _.find(comData, { 'ospIsSelected': true });
 
-                    if (currentAct !== null && currentAct.rates && currentAct.rates.length > 0) {
-                        let movilFijoRate: any = _.find(currentAct.rates, function (rate: any) {
-                            if (rate.siebelId === siebelId && rate.typeService.toUpperCase() === 'MOVIL_FIJO') {
-                                return rate;
+                    if (currentActRtc !== null && currentActRtc.rates && currentActRtc.rates.length > 0) {
+                        let tarifaMovilFijo: any = _.find(currentActRtc.rates, function (rateMF: any) {
+                            if (rateMF.siebelId === siebelId && rateMF.typeService.toUpperCase() === 'MOVIL_FIJO') {
+                                return rateMF;
                             }
                         });
 
-                        let movilRate: any = _.find(currentAct.rates, function (rate: any) {
-                            if (rate.siebelId === siebelId && rate.typeService.toUpperCase() !== 'MOVIL_FIJO') {
-                                return rate;
+                        let tarifaMovil: any = _.find(currentActRtc.rates, function (rateM: any) {
+                            if (rateM.siebelId === siebelId && rateM.typeService.toUpperCase() !== 'MOVIL_FIJO') {
+                                return rateM;
                             }
                         });
 
-                        if (movilFijoRate !== undefined && movilFijoRate !== null) {
-                            type = '2';
-                        } else if (movilRate !== undefined && movilRate !== null) {
-                            type = '0';
+                        if (tarifaMovilFijo !== undefined && tarifaMovilFijo !== null) {
+                            typeRtc = '2';
+                        } else if (tarifaMovil !== undefined && tarifaMovil !== null) {
+                            typeRtc = '0';
                         }
                     }
                 }
@@ -325,11 +464,11 @@ module OrangeFeSARQ.Services {
                 vm.getSession();
 
                 if (vm.clientData && vm.clientData.clientType) {
-                    type = vm.clientData.clientType;
+                    typeRtc = vm.clientData.clientType;
                 }
             }
 
-            return type;
+            return typeRtc;
         }
 
         /**
@@ -421,20 +560,18 @@ module OrangeFeSARQ.Services {
             // CABECERA HASHMAP
             vm.setCustomerData();
             vm.setStoreProvince();
-            let srv = this;
-            vm.getSession();
 
             let shopGeolocation = vm.shopInfo && vm.shopInfo.province ? vm.shopInfo.province : 'Madrid';
             let clientGeolocation = vm.clientData && vm.clientData.generalAddress && vm.clientData.generalAddress.city ? vm.clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
-            const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
+            const currentBillingAddress = vm.billingAccountStore.getCurrentBillingAddress()
 
             if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
             let _headers = new HashMap<string, string>();
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(vm.GEOLOCATION_LOCAL, vm.storeProvince ? vm.storeProvince : 'Madrid');
+            _headers.set(vm.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
@@ -529,8 +666,8 @@ module OrangeFeSARQ.Services {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
-            _headers.set('Geolocation-local', srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince ? srv.storeProvince.toUpperCase() : 'Madrid');
+            _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
@@ -569,7 +706,5 @@ module OrangeFeSARQ.Services {
             let rol = JSON.parse(sessionStorage.getItem('loginData'));
             return rol.site === 'fichadecliente'; 
         }
-
-
     }
 }

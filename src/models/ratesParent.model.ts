@@ -115,7 +115,7 @@ module ratesParent.Models {
         public defaultLines: Array<Object>;
 
         // Id Tech
-
+        public typeTecnology;
         public ospTecnology: string;
 
         // Estructura que contiene la fibra y las linea con sus respectivos iconos
@@ -150,6 +150,10 @@ module ratesParent.Models {
         // Atributos para NAC
         public bucket: RateBucket;
         public NACLines: Rate[] = [];
+
+        //Netflix
+        public isNetflix: boolean;
+        public NetflixRate: Rate;
 
         //Jazztel
         public characteristicJzz: RatesCharacteristicJzz[] = [];
@@ -242,60 +246,58 @@ module ratesParent.Models {
 
                 for (let i in priceData) {
                     if (priceData.length > 0) {
+                        // if (priceData[i].isBundle || sessionStorage.getItem('pangea-brand') === 'jazztel') {
                         // Buscamos si afecta el revamp de tarifas Love 
-                        priceData[i].bundledProductOffering.forEach(element => {
-                            if (element && element.id === rateData.id) {
-                                // Comprobamos la fecha 
-                                let fechaServicio = priceData[i].validFor && priceData[i].validFor.endDateTime ? priceData[i].validFor.endDateTime : null;
-                                let fechaLocal: any = new Date();
-                                let fechaServicioTransf = new Date(fechaServicio);
-                                let fechaLocalTransf = new Date(fechaLocal);
-                                let urlNewConditions = priceData[i].attachment && priceData[i].attachment[0] && priceData[i].attachment[0].url ? priceData[i].attachment[0].url : '';
-                                // Si el string no es una fecha o si fechaSrv es null, undefined o vacio y fechaSrv es posterios a fecha local
-                                if (fechaServicioTransf && fechaServicioTransf > fechaLocalTransf && urlNewConditions) {
-                                    // Recogemos la info de fecha y url 
-                                    let infoNewConditions: RatePopupInfoDate =
-                                        new RatePopupInfoDate(priceData[i].validFor.endDateTime, priceData[i].attachment[0].url);
-                                    this.pupupInfoNewConditions.push(infoNewConditions);
-                                    this.newRateConditions = true;
-                                } else {
-                                    this.newRateConditions = false;
-                                }
+                        if (priceData[i].bundledProductOffering && priceData[i].bundledProductOffering[1] && priceData[i].bundledProductOffering[1].id === rateData.id) {
+                            // Comprobamos la fecha 
+                            let fechaServicio = priceData[i].validFor && priceData[i].validFor.endDateTime ? priceData[i].validFor.endDateTime : null;
+                            let fechaLocal: any = new Date();
+                            let fechaServicioTransf = new Date(fechaServicio);
+                            let fechaLocalTransf = new Date(fechaLocal);
+                            let urlNewConditions = priceData[i].attachment && priceData[i].attachment[0] && priceData[i].attachment[0].url ? priceData[i].attachment[0].url : '';
+                            // Si el string no es una fecha o si fechaSrv es null, undefined o vacio y fechaSrv es posterios a fecha local
+                            if (fechaServicioTransf && fechaServicioTransf > fechaLocalTransf && urlNewConditions) {
+                                // Recogemos la info de fecha y url 
+                                let infoNewConditions: RatePopupInfoDate =
+                                    new RatePopupInfoDate(priceData[i].validFor.endDateTime, priceData[i].attachment[0].url);
+                                this.pupupInfoNewConditions.push(infoNewConditions);
+                                this.newRateConditions = true;
+                            } else {
+                                this.newRateConditions = false;
+                            }
 
-                                // Recoger precios
-                                for (let j in priceData[i].productOfferingPrice) {
-                                    if (priceData[i].productOfferingPrice.length > 0) {
+                            // Recoger precios
+                            for (let j in priceData[i].productOfferingPrice) {
+                                if (priceData[i].productOfferingPrice.length > 0) {
 
-                                        let promotionalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                            return price.ospTaxRateName === 'Promo';
-                                        });
+                                    let promotionalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                        return price.ospTaxRateName === 'Promo';
+                                    });
 
-                                        let commercialPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                            return price.ospTaxRateName === 'SinPromo';
-                                        });
+                                    let commercialPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                        return price.ospTaxRateName === 'SinPromo';
+                                    });
 
 
-                                        // Precios tarifa con promociones
-                                        // if (promotionalPrice) {
-                                        //     this.taxRate = promotionalPrice.taxRate;
-                                        //     this.taxRateName = promotionalPrice.priceType;
-                                        //     this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
-                                        //     this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
-                                        // }
+                                    // Precios tarifa con promociones
+                                    // if (promotionalPrice) {
+                                    //     this.taxRate = promotionalPrice.taxRate;
+                                    //     this.taxRateName = promotionalPrice.priceType;
+                                    //     this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
+                                    //     this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
+                                    // }
 
-                                        if (commercialPrice) {
-                                            this.typePriceName = commercialPrice.ospTaxRateName;
-                                            this.taxRate = commercialPrice.taxRate;
-                                            this.taxRateName = commercialPrice.priceType;
-                                            this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
-                                            this.ratePrice = commercialPrice.dutyFreeAmount;
+                                    if (commercialPrice) {
+                                        this.typePriceName = commercialPrice.ospTaxRateName;
+                                        this.taxRate = commercialPrice.taxRate;
+                                        this.taxRateName = commercialPrice.priceType;
+                                        this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
+                                        this.ratePrice = commercialPrice.dutyFreeAmount;
 
-                                        }
                                     }
                                 }
                             }
-                        });
-
+                        }
                     }
                 }
 
@@ -325,9 +327,6 @@ module ratesParent.Models {
                 }
             }
             else {
-
-
-
                 this.rateSubName = rateData.ospTitulo;
                 this.rateDescription = rateData.description;
                 this.siebelId = rateData.id;
@@ -343,9 +342,7 @@ module ratesParent.Models {
                 this.nacPriceTaxIncludedPromotional = 0;
 
                 // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
-                if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
-                    this.ospTecnology = rateData.ospTecnology;
-                }
+                this.checkIdIdTechDiferences(rateData);
 
                 this.pack = (typeof (rateData.ospFraseComercial) !== 'undefined' && rateData.ospFraseComercial !== null) ?
                     rateData.ospFraseComercial : '';
@@ -595,17 +592,22 @@ module ratesParent.Models {
                     }
                 }
             }
+
+            
+            this.checkIsNetflixRate(rateData);
         }
 
+        private checkIsNetflixRate(rateData: any){
+            this.isNetflix = _.find(rateData.productSpecCharacteristic, { 'name' : 'Netflix incluido en tu tarifa'}) ? true : false;
+        }
 
-
-
-
-
-
-
-
-
+        private checkIdIdTechDiferences(rateData: any) {
+            if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
+                this.ospTecnology = rateData.ospTecnology;
+                let caracteristic : any = _.find(rateData.productSpecCharacteristic, { 'name' : 'CARACTERISTICATECNOLOGIA'});
+                this.typeTecnology = caracteristic.ospCategory;
+            }
+        }
 
     }
 

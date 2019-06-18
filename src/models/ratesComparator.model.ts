@@ -157,58 +157,58 @@ module ratesComparator.Models {
                 this.IMEI = terminal.IMEI;
             }
 
-            let priceItem: ratesComparator.Models.OrangeMosaicFileTerminalFileIPriceItem;
-            let filePrice: ratesComparator.Models.OrangeMosaicFileTerminalFilePrice;
+            let priceItemRtc: ratesComparator.Models.OrangeMosaicFileTerminalFileIPriceItem;
+            let filePriceRtc: ratesComparator.Models.OrangeMosaicFileTerminalFilePrice;
 
             if (priceData && priceData.length) {
                 if (priceData[0].deviceOfferingPrice && priceData[0].deviceOfferingPrice.length > 0) {
                     // Array de precios
                     this.itemPrice = [];
                     priceData.forEach((deviceOff, x) => {
-                        deviceOff.deviceOfferingPrice.forEach((price, i) => {
+                        deviceOff.deviceOfferingPrice.forEach((priceRtc, i) => {
 
                             /* Precios del terminal */
-                            priceItem = new ratesComparator.Models.OrangeMosaicFileTerminalFileIPriceItem();
-                            filePrice = new ratesComparator.Models.OrangeMosaicFileTerminalFilePrice();
+                            priceItemRtc = new ratesComparator.Models.OrangeMosaicFileTerminalFileIPriceItem();
+                            filePriceRtc = new ratesComparator.Models.OrangeMosaicFileTerminalFilePrice();
                             // Id
-                            price.relatedProductOffering.forEach(item => {
-                                if ((price.priceType === 'inicial' && item.name === 'Cuota inicial') ||
-                                    (price.priceType === 'cuota' && item.name === 'Cuota mensual')) {
-                                    priceItem.id = item.id;
+                            priceRtc.relatedProductOffering.forEach(itemRtc => {
+                                if ((priceRtc.priceType === 'inicial' && itemRtc.name === 'Cuota inicial') ||
+                                    (priceRtc.priceType === 'cuota' && itemRtc.name === 'Cuota mensual')) {
+                                    priceItemRtc.id = itemRtc.id;
                                 }
                             });
-                            if (price.Price) {
+                            if (priceRtc.Price) {
                                 // Agregando precio sin impuesto
-                                filePrice.dutyFreeAmount.unit = price.Price.currencyCode;
-                                filePrice.dutyFreeAmount.value = price.Price.dutyFreeAmount;
+                                filePriceRtc.dutyFreeAmount.unit = priceRtc.Price.currencyCode;
+                                filePriceRtc.dutyFreeAmount.value = priceRtc.Price.dutyFreeAmount;
                                 // Agregando precio con impuesto
-                                filePrice.taxIncludedAmount.unit = price.Price.currencyCode;
-                                filePrice.taxIncludedAmount.value = price.Price.taxIncudedAmount; // Corregir
+                                filePriceRtc.taxIncludedAmount.unit = priceRtc.Price.currencyCode;
+                                filePriceRtc.taxIncludedAmount.value = priceRtc.Price.taxIncudedAmount; // Corregir
                                 // Recogiendo impuestos
-                                filePrice.taxRate = price.Price.taxRate;
-                                filePrice.ospTaxRateName = price.Price.ospTaxRateName;
+                                filePriceRtc.taxRate = priceRtc.Price.taxRate;
+                                filePriceRtc.ospTaxRateName = priceRtc.Price.ospTaxRateName;
                                 // Creando el objeto item price
-                                priceItem.priceType = price.priceType;
-                                priceItem.price = filePrice;
+                                priceItemRtc.priceType = priceRtc.priceType;
+                                priceItemRtc.price = filePriceRtc;
                             }
                             // Duracion de las cuotas
-                            if (price.priceType === 'cuota') {
-                                priceItem.recurringChargePeriod = Number(price.applicationDuration);
+                            if (priceRtc.priceType === 'cuota') {
+                                priceItemRtc.recurringChargePeriod = Number(priceRtc.applicationDuration);
                             }
                             // Añadiendo el precio al arreglo de precios del terminal
-                            this.itemPrice.push(priceItem);
-                            if (price.priceType && price.priceType === 'unico') {
-                                this.uniquePaid = price.Price.taxIncudedAmount;
-                                this.uniquePaidFree = price.Price.dutyFreeAmount;
+                            this.itemPrice.push(priceItemRtc);
+                            if (priceRtc.priceType && priceRtc.priceType === 'unico') {
+                                this.uniquePaid = priceRtc.Price.taxIncudedAmount;
+                                this.uniquePaidFree = priceRtc.Price.dutyFreeAmount;
                             }
-                            if (price.priceType && price.priceType === 'inicial') {
-                                this.initialPrice = price.Price.taxIncudedAmount;
-                                this.initialPriceFree = price.Price.dutyFreeAmount;
+                            if (priceRtc.priceType && priceRtc.priceType === 'inicial') {
+                                this.initialPrice = priceRtc.Price.taxIncudedAmount;
+                                this.initialPriceFree = priceRtc.Price.dutyFreeAmount;
                             }
-                            if (price.priceType && price.priceType === 'cuota') {
-                                this.litDeadlines = price.applicationDuration;
-                                this.monthlyPrice = price.Price.taxIncudedAmount;
-                                this.monthlyPriceFree = price.Price.dutyFreeAmount;
+                            if (priceRtc.priceType && priceRtc.priceType === 'cuota') {
+                                this.litDeadlines = priceRtc.applicationDuration;
+                                this.monthlyPrice = priceRtc.Price.taxIncudedAmount;
+                                this.monthlyPriceFree = priceRtc.Price.dutyFreeAmount;
                                 // Si se puede se calcula el precio total
                                 if (this.initialPrice !== undefined) {
                                     this.totalPrice = this.initialPrice + this.monthlyPrice * this.litDeadlines;

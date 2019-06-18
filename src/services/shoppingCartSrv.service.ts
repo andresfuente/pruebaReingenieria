@@ -35,6 +35,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let _headers = vm.getParentSfid();
             body = vm.conditionalJazztel(body);
+            body = vm.checkProductOfferingID(body);
             let _search = {
                 body: {
                     ospCartItemReqPost: [
@@ -48,13 +49,35 @@ module OrangeFeSARQ.Services {
             };
             return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, {}, null, _headers)
                 .then(
-                    (response) => {
-                        return response.data;
-                    },
-                    (error) => {
-                        throw error.data;
-                    }
+                (response) => {
+                    return response.data;
+                },
+                (error) => {
+                    throw error.data;
+                }
                 );
+        }
+
+        /**
+         * 
+         * @param body  
+         */
+        checkProductOfferingID(body) {
+            if (body && body.cartItem && _.isArray(body.cartItem) && !_.isEmpty(body.cartItem)) {
+                _.forEach(body.cartItem, (element) => {
+                    if (!element.productOffering) {
+                        element.productOffering = {
+                            "id": element.id,
+                            "href": null,
+                            "name": null,
+                            "category": [],
+                            "isBundle": null,
+                            "attributes": []
+                        }
+                    }
+                });
+            }
+            return body;
         }
 
         /**
@@ -66,21 +89,21 @@ module OrangeFeSARQ.Services {
          * Agrega una caracteristica en caso de ser cliente jazztel
          * @returns {object} Devuelve el body de la llamada
          */
-        conditionalJazztel(body){
+        conditionalJazztel(body) {
             let loginData = JSON.parse(sessionStorage.getItem('loginData'));
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
-            if(clientData && clientData.jazztelData){
-                if(body && body.cartItem && _.isArray(body.cartItem) && !_.isEmpty(body.cartItem)){
+            if (clientData && clientData.jazztelData) {
+                if (body && body.cartItem && _.isArray(body.cartItem) && !_.isEmpty(body.cartItem)) {
                     let characteristic = {
                         "name": "Aplicable Cambio Marca",
                         "value": "YES"
                     };
-                    _.forEach(body.cartItem, (element) =>{
-                        if(element.product && element.product.characteristic){
+                    _.forEach(body.cartItem, (element) => {
+                        if (element.product && element.product.characteristic) {
                             element.product.characteristic.push(characteristic);
                             return false;
-                        }else if(element.product && !element.product.characteristic){
+                        } else if (element.product && !element.product.characteristic) {
                             element.product.characteristic = [];
                             element.product.characteristic.push(characteristic);
                             return false;
@@ -113,14 +136,14 @@ module OrangeFeSARQ.Services {
 
             return vm.httpPut(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
                 .then(
-                    (response) => {
-                        return response.data;
-                    }
+                (response) => {
+                    return response.data;
+                }
                 )
                 .catch(
-                    (error) => {
-                        throw error.data;
-                    }
+                (error) => {
+                    throw error.data;
+                }
                 );
         }
 
@@ -144,14 +167,14 @@ module OrangeFeSARQ.Services {
 
             return vm.httpCacheGeth(vm.genericConstant.shoppingCart, _search, _headers, componentName)
                 .then(
-                    (response) => {
-                        return response.data;
-                    }
+                (response) => {
+                    return response.data;
+                }
                 )
                 .catch(
-                    (error) => {
-                        throw error.data;
-                    }
+                (error) => {
+                    throw error.data;
+                }
                 );
         }
 
@@ -176,12 +199,12 @@ module OrangeFeSARQ.Services {
 
             return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
                 .then(
-                    (response) => {
-                        return response.data;
-                    },
-                    (error) => {
-                        throw error.data;
-                    }
+                (response) => {
+                    return response.data;
+                },
+                (error) => {
+                    throw error.data;
+                }
                 );
         }
 
@@ -223,12 +246,12 @@ module OrangeFeSARQ.Services {
 
             return vm.httpPost(vm.genericConstant.shoppingCart, _search, componentName, null, null)
                 .then(
-                    (response) => {
-                        return response.data;
-                    },
-                    (error) => {
-                        throw error.data;
-                    }
+                (response) => {
+                    return response.data;
+                },
+                (error) => {
+                    throw error.data;
+                }
                 );
         }
 
@@ -244,7 +267,7 @@ module OrangeFeSARQ.Services {
         renameNACRates(shoppingCart: any, clientName: Array<string>) {
             let vm = this;
 
-            let newName : string = '';
+            let newName: string = '';
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
 
             // Formateamos el nombre (usando todos los elementos que se pasen)
@@ -265,15 +288,15 @@ module OrangeFeSARQ.Services {
                 shoppingCart.cartItem.forEach(opt => {
                     if (opt.cartItem) {
                         opt.cartItem.forEach(cartItem => {
-                            if (cartItem && cartItem.product && cartItem.product.productRelationship && cartItem.product.productRelationship[0] 
-                            && cartItem.product.productRelationship[0].type === 'tarifa') {
-                                let comm : any = _.find(commercialData, {id: Math.floor(opt.id)});
+                            if (cartItem && cartItem.product && cartItem.product.productRelationship && cartItem.product.productRelationship[0]
+                                && cartItem.product.productRelationship[0].type === 'tarifa') {
+                                let comm: any = _.find(commercialData, { id: Math.floor(opt.id) });
 
                                 // Revisamos las tarifas para renombrar únicamente las LOVE NAC principales (movil_fijo)
                                 if (comm && comm.rates) {
-                                    let rate : any = _.find(comm.rates, {'siebelId': cartItem.id});
+                                    let rate: any = _.find(comm.rates, { 'siebelId': cartItem.id });
 
-                                    if (rate && rate.type === 'Convergente_NAC' && rate.typeService === 'movil_fijo' && cartItem.product.name) {
+                                    if (rate && ((rate.type === 'Convergente_NAC' && rate.typeService === 'movil_fijo') || (rate.type === 'Mobile Only_NAC' && rate.typeService === 'movil')) && cartItem.product.name) {
                                         if (newName) { // Si hay aprovechamiento, se pintan los apellidos
                                             cartItem.product.name = 'Love ' + newName;
                                         } else { // Si no hay aprvechamiento, se pinta "Love"

@@ -162,6 +162,7 @@ module mosaicFile.Models {
         public litSubTitle: string;
         public litPrice: number;
         public siebelId: string;
+        public category: string;
         public initialPaid: number;
         public uniquePaid: number;
         public totalPaid: number;
@@ -216,7 +217,11 @@ module mosaicFile.Models {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = _.findIndex(commercialData, function (currentCommercialAct: any) {
                 return currentCommercialAct.ospIsSelected === true;
-            });
+            });            
+            if(commercialActIndex < 0) {
+                commercialActIndex = commercialData.length - 1;
+            }
+            
             // Banderas para controlar las opciones de la cámara
             let backCamera = false;
             let frontCamera = false;
@@ -286,7 +291,6 @@ module mosaicFile.Models {
                                 }
                                 default: {
                                     let child;
-
                                     // Se busca caracteristica de nivel 1
                                     let group = _.find(this.fileCharacteristic, { title: characteristic.description });
                                     // Si no existe
@@ -301,7 +305,6 @@ module mosaicFile.Models {
                                         if (characteristic.description) {
                                             characteristicNew.title = characteristic.description;
                                         }
-                                        // Si tiene hijo, se crea y se añade al objeto de nivel 1
                                         if (characteristic.characteristicValue.length > 0) {
                                             characteristic.characteristicValue.forEach((characteristicValue, z) => {
                                                 if (characteristic.name && characteristicValue.value) {
@@ -325,7 +328,6 @@ module mosaicFile.Models {
                                         }
                                         let groupOWCS2 = _.find(mosaicFileCompOWCSStore.listOption,
                                             { name: characteristic.ospCharCategory });
-
                                         if (groupOWCS2 && groupOWCS2['listOptionsLiteral']) {
                                             child = _.find(groupOWCS2['listOptionsLiteral'], { name: characteristic.name });
                                         }
@@ -347,7 +349,6 @@ module mosaicFile.Models {
                                                             characteristicValue.value);
                                                     let groupOWCS3 = _.find(mosaicFileCompOWCSStore.listOption,
                                                         { name: characteristic.ospCharCategory });
-
                                                     if (groupOWCS3 && groupOWCS3['listOptionsLiteral']) {
                                                         child = _.find(groupOWCS3['listOptionsLiteral'], { name: characteristic.name });
                                                     }
@@ -408,6 +409,7 @@ module mosaicFile.Models {
                     let deviceOffering = serviceData.deviceOffering;
                     // ID del modelo del terminal
                     this.siebelId = deviceOffering[0].id;
+                    this.category = deviceOffering[0].category[0].name
 
                     // Si existe el offeringPrice y no esta vacio
                     if (deviceOffering && deviceOffering.length > 0) {
@@ -536,9 +538,9 @@ module mosaicFile.Models {
                 if (commercialData[commercialActIndex].ospTerminalWorkflow) {
                     // Renove prepago
                     if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'prepaid_renew') {
-                        commercialData[commercialActIndex].prepaidProducts.forEach((product, i) => {
+                        commercialData[commercialActIndex].prepaidProducts.forEach((product) => {
                             if (product.codSAP === serviceData.deviceSpecification.id) {
-                                product.offertDetails.forEach((offert) => {
+                                product.offertDetails.forEach(offert => {
                                     let prepaidPrice = {
                                         valorRecarga: offert.valorRecarga,
                                         valorPuntos: offert.valorPuntos,
@@ -552,7 +554,7 @@ module mosaicFile.Models {
                     // Si es renove primario se guardan todas las tarifas asociadas
                     if (commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'primary_renew' ||
                         commercialData[commercialActIndex].ospTerminalWorkflow.toLocaleLowerCase() === 'best_renove') {
-                        serviceData.deviceOffering.forEach((deviceOff) => {
+                        serviceData.deviceOffering.forEach(deviceOff => {
                             if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length) {
                                 deviceOff.deviceOfferingPrice.forEach((price) => {
                                     if (price.relatedProductOffering && price.relatedProductOffering.length) {
