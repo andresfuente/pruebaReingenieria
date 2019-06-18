@@ -13,12 +13,12 @@ module OrangeFeSARQ.Services {
         public communicationListAPIUrl: string;
         public communicationListAPIUrlV2: string;
 
-
         constructor(public $injector) {
             super($injector);
             let vm = this;
 
             vm.communicationListAPIUrl = vm.genericConstant.communications;
+            vm.communicationListAPIUrlV2 = vm.genericConstant.communicationsV2;
         }
 
         /**
@@ -94,12 +94,12 @@ module OrangeFeSARQ.Services {
             return vm.httpPost(vm.communicationListAPIUrl, _search, componentName)
                 .then(
                     (response) => {
-                        return response.data;
+                        return response;
                     }
                 )
                 .catch(
                     (error) => {
-                        return error.data;
+                        return error;
                     }
                 );
         }
@@ -124,29 +124,6 @@ module OrangeFeSARQ.Services {
             vm.communicationListAPIUrl = 'api/communication/v2';
 
             return vm.httpPost(vm.communicationListAPIUrl, _search, componentName)
-                .then(
-                    (response) => {
-                        return response.data;
-                    }
-                )
-                .catch(
-                    (error) => {
-                        return error.data;
-                    }
-                );
-        }
-
-        sendSMS(body: any, componentName) : any {
-            let vm = this;
-
-            let _search: Object = {
-                queryParams:  body,
-                urlParams: ['communicationMessage']
-            };
-            vm.communicationListAPIUrlV2 = 'api/communication/v2';
-
-
-            return vm.httpPost(vm.communicationListAPIUrlV2, _search, componentName)
                 .then(
                     (response) => {
                         return response.data;
@@ -191,6 +168,29 @@ module OrangeFeSARQ.Services {
             };
 
             return vm.httpCacheGett(vm.genericConstant.communication, _search, componentName)
+                .then(
+                    (response) => {
+                        return response.data;
+                    }
+                )
+                .catch(
+                    (error) => {
+                        return error.data;
+                    }
+                );
+        }
+
+        sendSMS(body: any, componentName) : any {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams:  body,
+                urlParams: ['communicationMessage']
+            };
+            vm.communicationListAPIUrlV2 = 'api/communication/v2';
+
+
+            return vm.httpPost(vm.communicationListAPIUrlV2, _search, componentName)
                 .then(
                     (response) => {
                         return response.data;

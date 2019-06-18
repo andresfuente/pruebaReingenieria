@@ -180,7 +180,7 @@ module OrangeFeSARQ.Services {
                     return response.data;
                 })
                 .catch(function (error) {
-                    throw error.data;
+                    throw error;
                 });
         }
 

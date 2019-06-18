@@ -11,6 +11,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
 
         public storeLocatorURL: string;
+        private primarioOferta: string = 'primario oferta'
 
         constructor(public $injector) {
             super($injector);
@@ -209,7 +210,8 @@ module OrangeFeSARQ.Services {
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentPayer, contene, responseObj);  
                         }   else if (dDE === 'dtratAuto' && sessionClientData[cont] && sessionClientData[cont].treatmentAuthorized) {
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont].treatmentAuthorized, contene, responseObj);  
-                        }  else {
+                        }  
+                         else {
                             vm.insertarCampo(dCC, dDE, valueDep ? valueDep : defaultData, contene, responseObj);
                         }
                     }
@@ -235,6 +237,12 @@ module OrangeFeSARQ.Services {
                             cont = 'formattedName';
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont]
                                 ? sessionClientData[cont] : defaultData, contene, responseObj);
+                        } else if(dDE === 'idpetition'){ // MCM campos id petición
+                            if (sessionClientData.idpetition) {
+                                sessionClientData.idpetition.forEach(element => {
+                                    vm.insertarCampo(dCC, dDE, element, contene, responseObj);
+                                });
+                            }
                         } else {
                             // Flujo normal
                             vm.insertarCampo(dCC, dDE, sessionClientData[cont]
@@ -573,7 +581,7 @@ module OrangeFeSARQ.Services {
                                     } else {
                                         primaryTerminalTypePrice = 'solo sim';
                                     }
-                                    vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                    vm.insertarCampo(dCC + ' ' + vm.primarioOferta + numOferta,
                                         dDE + auxPrimary + numOferta, primaryTerminalTypePrice,
                                         contene,
                                         responseObj);
@@ -604,7 +612,7 @@ module OrangeFeSARQ.Services {
                                 } else if (cont === 'seguro') {
                                     // Terminal primario
                                     if (insurancePrimaryTerminal) {
-                                        vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                        vm.insertarCampo(dCC + ' ' + vm.primarioOferta + numOferta,
                                             dDE + numOferta, 'seguro móvil',
                                             contene, responseObj);
                                     }
@@ -638,7 +646,7 @@ module OrangeFeSARQ.Services {
                                     vm.insertarCampo(dCC + ' ' + 'Secundario', dDE + 'Sec' + numOferta, 'si', contene, responseObj);
                                 } else {
                                     if (primaryTerminal) {
-                                        vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                        vm.insertarCampo(dCC + ' ' + vm.primarioOferta + numOferta,
                                             dDE + auxPrimary + numOferta, primaryTerminal.product[cont],
                                             contene,
                                             responseObj);

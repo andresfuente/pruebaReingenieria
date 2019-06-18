@@ -37,13 +37,10 @@ module OrangeFeSARQ.Services {
       };
       return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
         .then(function (response) {
-          if (response.data && response.data.product) {
-            return response.data.product;
-          }
-          throw response.data.error;
+            return response;
         })
         .catch(function (error) {
-          return error.data;
+          return error;
         });
     }
 
@@ -127,6 +124,43 @@ module OrangeFeSARQ.Services {
             return error;
           });
 
+    }
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:ProductInventoryService#getPaymentServices
+     * @description
+     * #rest
+     * Servicio que busca un cliente en funcion de distintos parámetros
+     */
+    comprobarGrupo(codigoGrupo, segment?): any {
+      let vm = this;
+
+      let METHOD = 'services';
+
+      // parametro obligatorio lineCategory
+      // segmento no coge residential
+      // el numero no vale el de por defecto 666666666
+
+      let _search: Object = {
+        queryParams: {
+          lineCategory: 'mobile',          
+          queryType: 'infoGrupo',
+          groupId: codigoGrupo,
+        },
+        urlParams: [vm.genericConstant.brand, METHOD, '666666666']
+      };
+      
+      return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search)
+        .then(function (response) {
+          if (response.data) {
+            return response.data;
+          } else {
+            throw response.data.error;
+          }
+        })
+        .catch(function (error) {
+          return error.data;
+        });
     }
 
   }
