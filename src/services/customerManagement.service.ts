@@ -130,7 +130,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
             let _search: Object;
-            if(vm.brand!=='jazztel'){
+       
                 _search={
                     queryParams: {
                         typeRequest: 1,
@@ -140,19 +140,7 @@ module OrangeFeSARQ.Services {
                     urlParams: ['customer'],
                     body: body
                 };
-            }else{
-                _search={
-                    queryParams: {
-                        typeRequest: 1,
-                        numberRequiredLines: 1,
-                        blackList: false
-                    },
-                    urlParams: ['checkSalesProfile'],
-                    body: body
-                };
-            }
-           
-
+        
             return vm.httpPostFull(vm.genericConstant.customerManagement, _search, comp)
                 .then(function (response) {
                     if (response.data.error && response.data.error !== null) {
