@@ -218,41 +218,6 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-         /**
-         * @ngdoc method
-         * @name OrangeFeSARQ.Services:CustomerManagementSrv#postScoringRenove
-         * @param {number} typeRequest tipo de Acto comercial
-         * @param {Object} body datos a consultar
-         * @param {string} comp nombre del componente
-         * @methodOf OrangeFeSARQ.Services:CustomerManagementSrv
-         * @description
-         * Devuelve el riesgo de prescoring del cliente
-         * @returns {Object} Devuelve una promesa con el response
-         */
-        postScoringRenove(typeRequest, body, comp: string) {
-            let vm = this;
-
-            let _search: Object = {
-                queryParams: {
-                    typeRequest: typeRequest
-                },
-                urlParams: ['customer'],
-                body: body
-            };
-
-            return vm.httpPost(vm.genericConstant.customerManagement, _search, comp)
-                .then(function (response) {
-                    if (response.data.error && response.data.error !== null) {
-                        throw response.data.error;
-                    }
-                    return response.data;
-                })
-                .catch(function (error) {
-                    throw error.data;
-                });
-        }
-
-
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services.CustomerManagementSrv#getOspCustomer
