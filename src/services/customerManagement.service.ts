@@ -345,6 +345,9 @@ module OrangeFeSARQ.Services {
 
             return vm.httpCacheGett(vm.genericConstant.customerManagement, _search, componentName)
                 .then(function (response) {
+                    if(response.data) {
+                        response.data.status = response.status;
+                    }
                     return response.data;
                 })
                 .catch(function (error) {

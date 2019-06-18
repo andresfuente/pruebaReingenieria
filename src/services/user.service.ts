@@ -222,6 +222,9 @@ module OrangeFeSARQ.Services {
                             localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
                         }
                     }
+                    if (response.data) {
+                        response.data.status = response.status;
+                    }
 
                     vm.getMdgUser(param, clientId);
                     // - response.data.mdg = vm.mdgData;
