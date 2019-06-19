@@ -144,6 +144,21 @@ module servicesCommons.Tests.Controllers {
                 });
             });
 
+            describe('- Check isThisRolFFCC()', () => {
+
+                beforeEach(() => {
+                    srv.rolesFFCC = ['FFCC','FFCC_BO'];
+                });
+
+                it('rol : FFCC', () => {
+                    expect(srv.isThisRolFFCC('FFCC')).toBeTruthy();
+                });
+
+                it('rol : PDV', () => {
+                    expect(srv.isThisRolFFCC('PDV')).toBeFalsy();
+                });
+            });
+
             describe('- Check isRolTLV()', () => {
 
                 beforeEach(() => {
