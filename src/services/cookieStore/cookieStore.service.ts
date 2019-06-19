@@ -229,7 +229,7 @@ module OrangeFeSARQ.Services {
          */
         setParamsInventory(cvProduct, msisdn, code) {
             let vm = this;
-            let category = vm.utils.isFixedLine(vm.msisdnStore.msisdn) ? 'fixed' : 'mobile';
+            let category = vm.utils.isFixedLine(msisdn) ? 'fixed' : 'mobile';
             vm.productContractedTranslateSrv.getServicesContracted(msisdn, category, vm.genericConstant.brand, "services", vm.compName)
                 .then((response) => {
                     vm.isServiceActivatedResponse(true, response, cvProduct, msisdn, code);
