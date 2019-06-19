@@ -53,8 +53,6 @@ module OrangeFeSARQ.Services {
 
             };
 
-            
-
             vm.httpCacheGett(vm.clientAPIUrl, _search, componentName)
                 .then(
                     (response) => {
@@ -67,10 +65,10 @@ module OrangeFeSARQ.Services {
                             vm.getMdgUser(param, clientId); // Cuando se realiza la llamada al Plan amigo no es necesario esta llamada
                         }
                         // - response.data.mdg = vm.mdgData;
-                        promise.resolve(response.data);
+                        promise.resolve(response);
                     },
                     (error) => {
-                        promise.reject(error.data);
+                        promise.reject(error);
                     });
             return promise.promise;
         }
@@ -137,8 +135,9 @@ module OrangeFeSARQ.Services {
                             }
                             vm.getMdgUser(param, clientId); // Cuando se realiza la llamada al Plan amigo no es necesario esta llamada
                         }
-                        // - response.data.mdg = vm.mdgData;
-                        promise.resolve(response.data);
+                        // - response.data.mdg = vm.mdgData;                      
+                        promise.resolve(response);
+
                     },
                     (error) => {
                         promise.reject(error);
@@ -223,6 +222,9 @@ module OrangeFeSARQ.Services {
                             localStorage.setItem('id', JSON.stringify(response.data.customer.organization.id));
                         }
                     }
+                    if (response.data) {
+                        response.data.status = response.status;
+                    }
 
                     vm.getMdgUser(param, clientId);
                     // - response.data.mdg = vm.mdgData;
@@ -303,9 +305,9 @@ module OrangeFeSARQ.Services {
                 .then((response) => {
                     if (response && response.data && response.data.customer && response.data.customer.characteristic[0] 
                         && response.data.customer.characteristic[0].value) {
-                            promise.resolve(response.data.customer.characteristic[0].value);
+                            promise.resolve(response);
                     } else {
-                        promise.resolve(false);
+                        promise.resolve(response);
                     }
                 })
                 .catch(function (error) {

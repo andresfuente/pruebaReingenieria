@@ -32,8 +32,7 @@ module OrangeFeSARQ.Services {
 
             let list: any = [];
             let validAll: boolean = false;
-            let loginData = JSON.parse(sessionStorage.getItem('loginData'));
-            let cv = JSON.parse(sessionStorage.getItem('cv'));
+            
 
             if (OrangeFeSARQ.Controllers.ParentController.shared
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
@@ -55,19 +54,33 @@ module OrangeFeSARQ.Services {
                 });
             }
 
+            return vm.checkSocio(validAll, list);
+        }
+
+        /**
+         * @name OrangeFeSARQ.Services:CreditLimitSrv#checkSocio
+         * @param {string} validAll Indica la validez del SFID para NMC
+         * @param {object} list Lista de sfids
+         * @description Comprueba que el cliente es socio
+         */
+        checkSocio(validAll: boolean, list: any) {
+            let loginData = JSON.parse(sessionStorage.getItem('loginData'));
+            let cv = JSON.parse(sessionStorage.getItem('cv'));
+
+            let returnValue : boolean = false;
 
             if (loginData && loginData.sfid && loginData.sfid !== null) {
                 if (validAll || list && ((_.size(list) !== 0) && _.indexOf(list, loginData.sfid) !== -1)) {
-                    if (cv && cv.ospPointProgrammeType && cv.ospPointProgrammeType.toUpperCase() === 'SOCIO') {
-                        return true;
-                    } else if (!cv) {
-                        return true;
+                    if (!cv || (cv && cv.ospPointProgrammeType && cv.ospPointProgrammeType.toUpperCase() === 'SOCIO')) {
+                        returnValue = true;
                     }
                 }
             }
 
-            return false;
+            return returnValue;
         }
+
+
         /**
          * 
          */
@@ -153,7 +166,8 @@ module OrangeFeSARQ.Services {
                 if (search === 'UMBRAL') { // customerView
                     if (response.customer && response.customer.customerCharacteristic && _.size(response.customer.customerCharacteristic) !== 0) {
                         let existLimitCredit: any = _.find(response.customer.customerCharacteristic, { 'name': 'umbralOrange' });
-                        if (existLimitCredit && existLimitCredit.value !== null) {
+                        if (existLimitCredit && existLimitCredit.value !== null && 
+                            parseInt(existLimitCredit.value) >= 0 ) {
                             limit = parseInt(existLimitCredit.value, 10);
                         }
                     }
@@ -162,7 +176,8 @@ module OrangeFeSARQ.Services {
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0]
                         && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount
-                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount !== null) {
+                        && response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount !== null
+                        && parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount) >= 0 ) {
                         limit = parseInt(response.customer.ospCustomerSalesProfile[0].ospDeferredPaymentInfo[0].ospFinancedAmount, 10);
                     }
                 } else if (search === 'RENOVE') { // campañas
@@ -170,7 +185,7 @@ module OrangeFeSARQ.Services {
                         response.forEach(campaign => {// Sacar el valor del primer renove
                             campaign.campaignNum.forEach(element2 => {
                                 if (element2.wcs && element2.wcs.typeRenove && (element2.wcs.typeRenove === "Renove primario" || element2.wcs.typeRenove === "Renove secundario") && !saldoEncontrado) {
-                                    if (campaign.saldoDisponible !== null) {
+                                    if (campaign.saldoDisponible !== null && parseInt(campaign.saldoDisponible) >= 0 ) {
                                         limit = parseInt(campaign.saldoDisponible, 10);
                                         saldoEncontrado = true;
                                     }
@@ -204,7 +219,7 @@ module OrangeFeSARQ.Services {
                                 if (campaign.wcs && (_.camelCase(campaign.wcs.typeRenove) === owcsCampaign || _.camelCase(campaign.wcs.typeRenove) === owcsCampaignSecundario)) {
                                     ventaAPlazos = campaign.ventaAPlazos;
                                     if (!ventaAPlazos || ventaAPlazos === 'null') {
-                                        ventaAPlazos = 'Y';
+                                        ventaAPlazos = 'N';
                                     }
                                     linesWithVAP = {
                                         'line': line.idUser,
@@ -218,7 +233,7 @@ module OrangeFeSARQ.Services {
                 }
             }
 
-            if (sessionClientData.creditLimitRenove.linesWithVAP && _.size(sessionClientData.creditLimitRenove.linesWithVAP) !== 0) {
+            if (sessionClientData.creditLimitRenove && sessionClientData.creditLimitRenove.linesWithVAP && _.size(sessionClientData.creditLimitRenove.linesWithVAP) !== 0) {
                 sessionClientData.creditLimitRenove.linesWithVAP = _.uniqBy(sessionClientData.creditLimitRenove.linesWithVAP, 'line');
                 sessionStorage.setItem('clientData', JSON.stringify(sessionClientData));
             }

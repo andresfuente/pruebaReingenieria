@@ -35,6 +35,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
             let _headers = vm.getParentSfid();
             body = vm.conditionalJazztel(body);
+            body = vm.checkProductOfferingID(body);
             let _search = {
                 body: {
                     ospCartItemReqPost: [
@@ -55,6 +56,28 @@ module OrangeFeSARQ.Services {
                     throw error.data;
                 }
                 );
+        }
+
+        /**
+         * 
+         * @param body  
+         */
+        checkProductOfferingID(body) {
+            if (body && body.cartItem && _.isArray(body.cartItem) && !_.isEmpty(body.cartItem)) {
+                _.forEach(body.cartItem, (element) => {
+                    if (!element.productOffering) {
+                        element.productOffering = {
+                            "id": element.id,
+                            "href": null,
+                            "name": null,
+                            "category": [],
+                            "isBundle": null,
+                            "attributes": []
+                        }
+                    }
+                });
+            }
+            return body;
         }
 
         /**

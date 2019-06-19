@@ -20,9 +20,8 @@ module OrangeFeSARQ.Services {
       vm.utils = $injector.get('utils');
     }
 
-    getServicesContracted(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
+    allServicesContracted (msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false, brand: string) {
       let vm = this;
-      let BRAND = vm.genericConstant.brand;
       let METHOD = 'services';
       let type = vm.utils.isFixedLine(msisdn) ? 'fixed' : 'mobile';
       let request;
@@ -34,46 +33,27 @@ module OrangeFeSARQ.Services {
       }
       let _search: Object = {
         queryParams: request,
-        urlParams: [BRAND, METHOD, msisdn]
+        urlParams: [brand, METHOD, msisdn]
       };
       return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
         .then(function (response) {
-          if (response.data && response.data.product) {
-            return response.data.product;
-          }
-          throw response.data.error;
+            return response;
         })
         .catch(function (error) {
-          return error.data;
+          return error;
         });
+    }
+
+    getServicesContracted(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
+      let vm = this;
+      let BRAND = vm.genericConstant.brand;
+      return vm.allServicesContracted(msisdn, componentName, refresh, BRAND);      
     }
 
     getServicesContractedJazztel(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
       let vm = this;
       let BRAND = 'jazztel';
-      let METHOD = 'services';
-      let type = vm.utils.isFixedLine(msisdn) ? 'fixed' : 'mobile';
-      let request;
-      request = {};
-      request.lineCategory = type;
-      request.onlyActive = vm.genericConstant.onlyActive;
-      if (!vm.utils.isFixedLine(msisdn)) {
-        request.source = 'mdw';
-      }
-      let _search: Object = {
-        queryParams: request,
-        urlParams: [BRAND, METHOD, msisdn]
-      };
-      return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
-        .then(function (response) {
-          if (response.data && response.data.product) {
-            return response.data.product;
-          }
-          throw response.data.error;
-        })
-        .catch(function (error) {
-          return error.data;
-        });
+      return vm.allServicesContracted(msisdn, componentName, refresh, BRAND);
     }
 
     getPaymentServices(msisdn: string, componentName: string = 'productInventorySrv', refresh: boolean = false): any {
@@ -144,6 +124,43 @@ module OrangeFeSARQ.Services {
             return error;
           });
 
+    }
+    /**
+     * @ngdoc service
+     * @name OrangeFeSARQ.Services:ProductInventoryService#getPaymentServices
+     * @description
+     * #rest
+     * Servicio que busca un cliente en funcion de distintos parámetros
+     */
+    comprobarGrupo(codigoGrupo, segment?): any {
+      let vm = this;
+
+      let METHOD = 'services';
+
+      // parametro obligatorio lineCategory
+      // segmento no coge residential
+      // el numero no vale el de por defecto 666666666
+
+      let _search: Object = {
+        queryParams: {
+          lineCategory: 'mobile',          
+          queryType: 'infoGrupo',
+          groupId: codigoGrupo,
+        },
+        urlParams: [vm.genericConstant.brand, METHOD, '666666666']
+      };
+      
+      return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search)
+        .then(function (response) {
+          if (response.data) {
+            return response.data;
+          } else {
+            throw response.data.error;
+          }
+        })
+        .catch(function (error) {
+          return error.data;
+        });
     }
 
   }

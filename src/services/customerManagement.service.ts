@@ -13,7 +13,6 @@ module OrangeFeSARQ.Services {
         // Injection vars
         public genericConstant;
         public informationCenterSrv;
-
         private url: string;
 
         /**
@@ -181,6 +180,40 @@ module OrangeFeSARQ.Services {
                     return response.data;
                 })
                 .catch(function (error) {
+                    throw error;
+                });
+        }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:CustomerManagementSrv#postScoringRenove
+         * @param {number} typeRequest tipo de Acto comercial
+         * @param {Object} body datos a consultar
+         * @param {string} comp nombre del componente
+         * @methodOf OrangeFeSARQ.Services:CustomerManagementSrv
+         * @description
+         * Devuelve el riesgo de prescoring del cliente
+         * @returns {Object} Devuelve una promesa con el response
+         */
+        postScoringRenove(typeRequest, body, comp: string) {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams: {
+                    typeRequest: typeRequest
+                },
+                urlParams: ['customer'],
+                body: body
+            };
+
+            return vm.httpPost(vm.genericConstant.customerManagement, _search, comp)
+                .then(function (response) {
+                    if (response.data.error && response.data.error !== null) {
+                        throw response.data.error;
+                    }
+                    return response.data;
+                })
+                .catch(function (error) {
                     throw error.data;
                 });
         }
@@ -277,13 +310,48 @@ module OrangeFeSARQ.Services {
 
             return vm.httpCacheGett(vm.genericConstant.customerManagement, _search, componentName)
                 .then(function (response) {
+                    if(response.data) {
+                        response.data.status = response.status;
+                    }
                     return response.data;
                 })
                 .catch(function (error) {
                     throw error;
                 });
-
-
         }
+
+        getNormalizedAddress(address) {
+            let vm = this;
+
+            let params: any = {};
+
+            params.city = address.province;
+            params.locality = address.city;
+            params.postcode = address.postalCode;
+            params.streetName = address.street;
+            params.streetNr = address.streetNumber;
+            params.streetType = address.streetType;
+            params.floorNumber = address.floorNumber;
+            params.externalId = address.externalId;
+            if (params.externalId && address.ospINECityCode && address.ospSingularEntity) {
+                params.ospAddressExternalId = [
+                    {
+                        refId: 'arvatoCode',
+                        externalId: params.externalId
+                    }
+                ],
+                params.ospINECityCode = address.ospINECityCode;
+                params.ospSingularEntity = address.ospSingularEntity;
+            }
+
+
+            return vm.httpCacheGett(vm.genericConstant.address, { queryParams: params }, 'coverageComp')
+                .then((response) => {
+                    return response.data;
+                }).catch((error) => {
+                    throw error;
+                });
+        }
+
     }
 }
