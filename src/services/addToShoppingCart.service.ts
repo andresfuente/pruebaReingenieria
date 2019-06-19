@@ -994,7 +994,7 @@ module OrangeFeSARQ.Services {
 
             if (coverage && coverage.hasFlagTv) {
                 coverage.hasFlagTv.forEach(item => {
-                    if (item.id && item.isTv) {
+                    if (item && item.id && item.isTv) {
                         vm.objectTv = item.isTv;
                     }
                 });
