@@ -347,7 +347,8 @@ module OrangeFeSARQ.Services {
             showInStock: boolean,
             sort: string,
             sortType: string,
-            category: number
+            category: number,
+            mosaicFileCompOWCSStore: any
         ): ng.IPromise<{} | void> {
             let srv = this;
             let params;
@@ -397,15 +398,28 @@ module OrangeFeSARQ.Services {
 
             return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
                 .then((response) => {
+
                     return {
                         results: parseInt(response.headers()['x-total-count'] || 0),
-                        terminals: response.data,
+                        terminals: srv.getTerminalesJZ(response.data, commercialAction, portabilityOrigin, 1, channel, mosaicFileCompOWCSStore)
                     }
 
                 })
                 .catch((error) => {
                     throw error;
                 });
+        }
+
+        getTerminalesJZ(terminalList, commercialAction, portabilityOrigin, isExistingCustomer, channel, mosaicFileCompOWCSStore) {
+
+            return _.map(terminalList, (terminal: any) => {
+                let srv = this;
+                srv.handleCacheVersion(isExistingCustomer, commercialAction, portabilityOrigin, 'mediio,alto', channel);
+                let mosaicTerminal: mosaicFile.Models.OrangeMosaicFileTerminal = this.cache[terminal.deviceSpecification.id];
+                mosaicTerminal.loadCatalogViewData(terminal, 'Residencial', 'primario', mosaicFileCompOWCSStore);
+                return mosaicTerminal;
+            });
+
         }
 
 
