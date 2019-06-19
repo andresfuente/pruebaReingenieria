@@ -27,7 +27,7 @@ module OrangeFeSARQ.Services {
 
             let _search: Object = {
                 queryParams: {},
-                urlParams: ['getListValues', 'listName', codes]
+                urlParams: ['getListValue', 'listName', codes]
             };
             return vm.httpCacheGett(vm.genericConstant.dataController, _search)
                 .then((response) => {
