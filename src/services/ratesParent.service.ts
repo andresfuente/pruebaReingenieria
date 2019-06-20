@@ -68,17 +68,10 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-<<<<<<< HEAD
-                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.productSpecificationv2View,
-=======
             return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + '/productSpecificationv2View/OSP',
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
                 { queryParams: params }, _headers)
                 .then((response) => {
-<<<<<<< HEAD
-=======
                     //vm.mockPPM(response);
->>>>>>> 231bca26059df90c211150aad255d01e8d02f502
                     return {
                         specificationData: response.data
                     };
@@ -113,9 +106,6 @@ module OrangeFeSARQ.Services {
                 ratesIdListString, releatedRatesClient, pack, type, defaultTechnology,
                 bucketId);
             let _headers = srv.setHeaders();
-<<<<<<< HEAD
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.productOfferingv2View,
-=======
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + srv.LITPRODUCTOFFERING,
                 { queryParams: params }, _headers)
                 .then((response) => {
@@ -140,7 +130,6 @@ module OrangeFeSARQ.Services {
             let params = srv.setParamsJZ(productType,category, tarifa, promocion, paquete);
             let _headers = srv.setHeaders();
             return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brandjz + '/productOfferingv2View/OSP',
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -622,10 +611,7 @@ module OrangeFeSARQ.Services {
                         });
                         return ratesIdListString;
                     }
-<<<<<<< HEAD
-=======
                     return respuesta;
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
                 })
                 .catch((error) => {
                     throw error;

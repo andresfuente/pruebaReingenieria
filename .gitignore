@@ -26,3 +26,4 @@ develop.bat
 uat.bat
 push.bat
 .vscode/settings.json
+src/services/customerManagement.service.ts.rej
