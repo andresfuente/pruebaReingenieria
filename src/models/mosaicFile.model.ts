@@ -16,6 +16,7 @@ module mosaicFile.Models {
         public status: string;
         private deferred: ng.IDeferred<{}>;
         public promise: ng.IPromise<{}>;
+        public brand = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand') : 'orange';
 
         constructor(serviceData?: any, deferred?: ng.IDeferred<{}>) {
 
@@ -25,6 +26,13 @@ module mosaicFile.Models {
         }
 
         loadCatalogViewData(serviceData: any, ospCustomerSegment: string, priceName: string, mosaicFileCompOWCSStore?: any) {
+            let vm = this;
+            if (vm.brand === 'jazztel') {
+                let arrayTerminales = [];
+                arrayTerminales.push(serviceData);
+                serviceData = arrayTerminales;
+            }
+
             if (serviceData && serviceData.length) {
                 let deviceSpecification = serviceData.deviceSpecification;
                 this.variants = this.generateTerminalVariants(serviceData, ospCustomerSegment, priceName, mosaicFileCompOWCSStore);
@@ -217,11 +225,11 @@ module mosaicFile.Models {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = _.findIndex(commercialData, function (currentCommercialAct: any) {
                 return currentCommercialAct.ospIsSelected === true;
-            });            
-            if(commercialActIndex < 0) {
+            });
+            if (commercialActIndex < 0) {
                 commercialActIndex = commercialData.length - 1;
             }
-            
+
             // Banderas para controlar las opciones de la cámara
             let backCamera = false;
             let frontCamera = false;

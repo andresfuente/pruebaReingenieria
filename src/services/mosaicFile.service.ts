@@ -313,25 +313,21 @@ module OrangeFeSARQ.Services {
          * @ngdoc method
          * @name OrangeFeSARQ.Services:MosaicFileSrv#getMosaicDataJZ
          * @methodOf OrangeFeSARQ.Services:MosaicFileSrv
-         * @param {string} search Busqueda por texto
-         * @param {string} sortString Ordenacion
-         * @param {string} targetPage Paginacion (pagina activa)
-         * @param {number} pageSize Tamaño de pagina (numero de terminales a mostrar)
-         * @param {number} isExistingCustomer 
-         * @param {string} commercialAction Tipo de acto comercial [portabilidad/alta/migracion/renove]
-         * @param {string} portabilityOrigin Origen de portabilidad [pospago/prepago]
-         * @param {string} riskLevel Nivel de riesgo del cliente [alto/medio/bajo]
          * @param {string} channel Canal al que hacer la consulta
-         * @param {string} sfid sfid de la tienda
-         * @param {string} relatedProductOffering Codigo de la tarifa con la que hacer la consulta
-         * @param {string} filters Filtros
-         * @param {} mosaicFileCompOWCSStore Contribucion OWCS del componente mosaicFile
-         * @param {string} profileBinding Perfil con el que hacer la consulta
-         * @param {string} priceNameBinding Tipo de precio con el que hacer la consulta
-         * @param {string} ospCustomerSegmentBinding Segmento del cliente [Residencial/Empresa]
-         * @param {string} stateOrProvinceBinding Provincia para calcular los impuesto a aplicar 
-         * @param {string} workflow Flujo de trabajo
-         * @param {string} campana_txt Nombre de la campaña
+         * @param {string} commercialAction Canal al que hacer la consulta
+         * @param {string} limit Limite de terminales
+         * @param {string} offset Modulo del la pagina      * 
+         * @param {string} ospFinancialScore 
+         * @param {string} paymentType 
+         * @param {string} portabilityOrigin 
+         * @param {string} scoring scoring  
+         * @param {string} showInStock Canal al que hacer la consulta  
+         * @param {string} sort   
+         * @param {string} sortType  
+         * @param {string} category Categoria de dispositivos a mostrar  
+         * @param {string} mosaicFileCompOWCSStore 
+
+
          * @return {ng.IPromise<{}|void>}
          * @description Metodo para obtener todos los elementos del mosaico de terminales completo
          */
@@ -401,7 +397,15 @@ module OrangeFeSARQ.Services {
 
                     return {
                         results: parseInt(response.headers()['x-total-count'] || 0),
-                        terminals: srv.getTerminalesJZ(response.data, commercialAction, portabilityOrigin, 1, channel, mosaicFileCompOWCSStore)
+                        terminals: _.map(response.data, (terminal: any) => {
+                            let srv = this;
+                            srv.handleCacheVersion(1, commercialAction, portabilityOrigin, 'mediio,alto', channel);
+                            let mosaicTerminal: mosaicFile.Models.OrangeMosaicFileTerminal = this.cache[terminal.deviceSpecification.id];
+                            let deferred = srv.$q.defer();
+                            mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
+                            mosaicTerminal.loadCatalogViewData(terminal, 'Residencial', 'primario', mosaicFileCompOWCSStore);
+                            return mosaicTerminal;
+                        })
                     }
 
                 })
@@ -409,19 +413,6 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
-
-        getTerminalesJZ(terminalList, commercialAction, portabilityOrigin, isExistingCustomer, channel, mosaicFileCompOWCSStore) {
-
-            return _.map(terminalList, (terminal: any) => {
-                let srv = this;
-                srv.handleCacheVersion(isExistingCustomer, commercialAction, portabilityOrigin, 'mediio,alto', channel);
-                let mosaicTerminal: mosaicFile.Models.OrangeMosaicFileTerminal = this.cache[terminal.deviceSpecification.id];
-                mosaicTerminal.loadCatalogViewData(terminal, 'Residencial', 'primario', mosaicFileCompOWCSStore);
-                return mosaicTerminal;
-            });
-
-        }
-
 
 
         /**
