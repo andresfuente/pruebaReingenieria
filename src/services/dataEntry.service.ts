@@ -11,6 +11,7 @@ module OrangeFeSARQ.Services {
         static $inject = ['$injector'];
 
         public storeLocatorURL: string;
+        public firstSales: string;
 
         constructor(public $injector) {
             super($injector);
@@ -163,6 +164,7 @@ module OrangeFeSARQ.Services {
          */
         getData(mapeosDE, sessionClientData: any, sessionLoginData: any, sessionPrescoring: any, sessionShoppingCart: any) {
             let vm = this;
+            let firstSales: 'primario oferta';
             let responseObj = [];
             // Recorro el archivo de mapeos (la parte de datos de cliente) para aplicar la lógica correspondiente
             // CLIENT DATA
@@ -595,7 +597,7 @@ module OrangeFeSARQ.Services {
                                     } else {
                                         primaryTerminalTypePrice = 'solo sim';
                                     }
-                                    vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                    vm.insertarCampo(dCC + ' ' + vm.firstSales + numOferta,
                                         dDE + auxPrimary + numOferta, primaryTerminalTypePrice,
                                         contene,
                                         responseObj);
@@ -626,7 +628,7 @@ module OrangeFeSARQ.Services {
                                 } else if (cont === 'seguro') {
                                     // Terminal primario
                                     if (insurancePrimaryTerminal) {
-                                        vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                        vm.insertarCampo(dCC + ' ' + vm.firstSales + numOferta,
                                             dDE + numOferta, 'seguro móvil',
                                             contene, responseObj);
                                     }
@@ -660,7 +662,7 @@ module OrangeFeSARQ.Services {
                                     vm.insertarCampo(dCC + ' ' + 'Secundario', dDE + 'Sec' + numOferta, 'si', contene, responseObj);
                                 } else {
                                     if (primaryTerminal) {
-                                        vm.insertarCampo(dCC + ' ' + 'primario oferta' + numOferta,
+                                        vm.insertarCampo(dCC + ' ' + vm.firstSales + numOferta,
                                             dDE + auxPrimary + numOferta, primaryTerminal.product[cont],
                                             contene,
                                             responseObj);

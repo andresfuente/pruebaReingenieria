@@ -6,6 +6,7 @@ module ratesParent.Models {
         private deferred: ng.IDeferred<{}>;
         public promise: ng.IPromise<{}>;
         private customerSegment;
+        
 
         public rateName: string; // Nombre de la pestaña
         public rates: Rate[] = []; /// Listado de tarifas
@@ -109,6 +110,7 @@ module ratesParent.Models {
         public descriptionPromotion;
         public applicationDuration;
         public recurringChargePeriodPromotion: string; // Tipo de promoción
+        public paymentPost: string;
 
         // Atributos para NAC
         public bucket: RateBucket;
@@ -120,12 +122,14 @@ module ratesParent.Models {
             this.siebelId = rateData.id;
             this.groupName = rateData.ospGroupName;
             this.typeService = rateData.ospTypeService;
+            
 
             // Inicializamos a 0 los precios auxiliares del pack NAC
             this.nacPrice = 0;
             this.nacPriceTaxIncluded = 0;
             this.nacPricePromotional = 0;
             this.nacPriceTaxIncludedPromotional = 0;
+            this.paymentPost = 'Pago aplazado';
 
             // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
             if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
@@ -254,7 +258,7 @@ module ratesParent.Models {
                                         this.typePriceName = promotionalPrice.priceType;
                                         this.taxRate = promotionalPrice.taxRate;
                                         this.taxRateName = promotionalPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                        if (priceData[i].productOfferingPrice[j].priceType === this.paymentPost) {
                                             this.ratePriceTaxIncludedPromotional = promotionalPrice.taxIncludedAmount;
                                             this.ratePricePromotional = promotionalPrice.dutyFreeAmount;
                                         } else {
@@ -279,7 +283,7 @@ module ratesParent.Models {
                                         this.typePriceName = precioFijo.priceType;
                                         this.taxRate = precioFijo.taxRate;
                                         this.taxRateName = precioFijo.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                        if (priceData[i].productOfferingPrice[j].priceType === this.paymentPost) {
                                             this.ratePriceTaxIncluded = precioFijo.taxIncludedAmount;
                                             this.ratePrice = precioFijo.dutyFreeAmount;
                                         } else {
@@ -290,7 +294,7 @@ module ratesParent.Models {
                                         this.typePriceName = commercialPrice.priceType;
                                         this.taxRate = commercialPrice.taxRate;
                                         this.taxRateName = commercialPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                        if (priceData[i].productOfferingPrice[j].priceType === this.paymentPost) {
                                             this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
                                             this.ratePrice = commercialPrice.dutyFreeAmount;
                                         } else {
@@ -301,7 +305,7 @@ module ratesParent.Models {
                                         this.typePriceName = techSiebelProductBundlePrice.priceType;
                                         this.taxRate = techSiebelProductBundlePrice.taxRate;
                                         this.taxRateName = techSiebelProductBundlePrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                        if (priceData[i].productOfferingPrice[j].priceType === this.paymentPost) {
                                             this.ratePriceTaxIncluded = techSiebelProductBundlePrice.taxIncludedAmount;
                                             this.ratePrice = techSiebelProductBundlePrice.dutyFreeAmount;
                                         } else {
@@ -312,7 +316,7 @@ module ratesParent.Models {
                                         this.typePriceName = siebelPrice.priceType;
                                         this.taxRate = siebelPrice.taxRate;
                                         this.taxRateName = siebelPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                        if (priceData[i].productOfferingPrice[j].priceType === this.paymentPost) {
                                             this.ratePriceTaxIncluded = siebelPrice.taxIncludedAmount;
                                             this.ratePrice = siebelPrice.dutyFreeAmount;
                                         } else {
@@ -323,7 +327,7 @@ module ratesParent.Models {
                                         this.typePriceName = ratePrice.priceType;
                                         this.taxRate = ratePrice.taxRate;
                                         this.taxRateName = ratePrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                        if (priceData[i].productOfferingPrice[j].priceType === this.paymentPost) {
                                             this.ratePriceTaxIncluded = ratePrice.taxIncludedAmount;
                                             this.ratePrice = ratePrice.dutyFreeAmount;
                                         } else {
@@ -334,7 +338,7 @@ module ratesParent.Models {
                                         this.typePriceName = techSiebelPrice.priceType;
                                         this.taxRate = techSiebelPrice.taxRate;
                                         this.taxRateName = techSiebelPrice.ospTaxRateName;
-                                        if (priceData[i].productOfferingPrice[j].priceType === 'Pago aplazado') {
+                                        if (priceData[i].productOfferingPrice[j].priceType === this.paymentPost) {
                                             this.ratePriceTaxIncluded = techSiebelPrice.taxIncludedAmount;
                                             this.ratePrice = techSiebelPrice.dutyFreeAmount;
                                         } else {
