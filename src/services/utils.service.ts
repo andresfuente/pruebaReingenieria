@@ -124,7 +124,7 @@ module OrangeFeSARQ.Services {
             return userService.getUser(searchUrl, value)
                 .then(
                     (response) => {
-                        return response;
+                        return response.data;
                     }
                 )
                 .catch(function (error) {
@@ -261,7 +261,7 @@ module OrangeFeSARQ.Services {
         findByName(name, array, value = 'value') {
             if (array && array.length >= 1) {
                 for (let i = 0; i < array.length; i++) {
-                    if (array[i].name !== null) {
+                    if (array[i].name) {
                         if (array[i].name.replace(" ", "") === name.replace(" ", "")) {
                             return array[i][value];
                         }

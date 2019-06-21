@@ -108,7 +108,25 @@ module OrangeFeSARQ.Services {
 			} else {
                 return false;
             }
-        }
+		}
+
+		/**
+		* @ngdoc method
+		* @name getRolProfile.Services:getRolProfileSrv#isThisRolFFCC
+		* @author David López Corbelle (dlopecor)
+		* @methodOf getRolProfile.Services:getRolProfileSrv
+		* @description
+		* Comprueba si el rol por parámetro pertenece a FFCC
+		*/
+		public isThisRolFFCC(rol: string):boolean {
+			            let vm = this;
+			
+			            if (_.includes(vm.rolesFFCC, rol)) {
+			                return true;
+			            } else {
+			return false;
+			}
+			} 
 
 		/**
 		* @ngdoc method

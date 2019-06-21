@@ -103,6 +103,7 @@ module OrangeFeSARQ.Services {
             device.description = device.litSubTitle;
             device.isModified = false;
             device.action = 'New';
+            device.category = device.category;
 
             // Buscamos Esim en dispositivo
             if (device.icon) {
@@ -118,12 +119,12 @@ module OrangeFeSARQ.Services {
             let deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                 'description', 'litSubTitle', 'brand', 'priceType', 'payType', 'preSelectDiviceToRate', 'insuranceSiebelId', 'srcImage',
                 'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'taxRate', 'taxRateName',
-                'tipoPago', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc', 'litInsurancePaid']);
+                'tipoPago', 'eSim', 'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc', 'litInsurancePaid', 'category']);
             if (device.renewRates !== undefined && device.renewRates) {
                 deviceForSession = _.pick(device, ['terminalId', 'siebelId', 'name',
                     'description', 'litSubTitle', 'brand', 'priceType', 'payType', 'preSelectDiviceToRate', 'insuranceSiebelId', 'srcImage',
                     'insuranceSelected', 'stock', 'isModified', 'itemPrice', 'id', 'IMEI', 'renewRates', 'eSim',
-                    'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc', 'litInsurancePaid']);
+                    'cpDescription', 'cpSiebel', 'cpDuration', 'bonusId', 'bonusDesc', 'litInsurancePaid', 'category']);
             }
 
             return deviceForSession;

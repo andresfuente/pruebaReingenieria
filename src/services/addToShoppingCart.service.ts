@@ -583,7 +583,7 @@ module OrangeFeSARQ.Services {
             };
 
             // SI es NAC, calculamos el precio total estándar del pack
-            if (rate.groupName === 'Convergente_NAC') {
+            if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
                 if (rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value !== undefined && rate.nacPrice !== undefined) {
                     rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value += rate.nacPrice;
                 }
@@ -607,7 +607,7 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
-            if (rate.groupName === 'Convergente_NAC' && rate.bucket) {
+            if ((rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') && rate.bucket) {
                 bucket = vm.createBucketCartItem(rate.bucket);
 
                 if (bucket) {
@@ -832,7 +832,7 @@ module OrangeFeSARQ.Services {
                     'ospSelected': true
                 };
 
-                if (rate.groupName === 'Convergente_NAC') {
+                if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
                     let cartItemBucket;
 
                     if (bucket) { // Si se informa el bucket, se crea con ese
@@ -978,7 +978,7 @@ module OrangeFeSARQ.Services {
             };
 
             // SI es NAC, calculamos el precio total estándar del pack
-            if (rate.groupName === 'Convergente_NAC') {
+            if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
                 if (rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value !== undefined && rate.nacPrice !== undefined) {
                     rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value += rate.nacPrice;
                 }
@@ -1000,7 +1000,7 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
-            if (rate.groupName === 'Convergente_NAC' && rate.bucket) {
+            if ((rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') && rate.bucket) {
                 bucket = vm.createBucketCartItem(rate.bucket);
 
                 if (bucket) {
@@ -1060,7 +1060,7 @@ module OrangeFeSARQ.Services {
 
             if (coverage && coverage.hasFlagTv) {
                 coverage.hasFlagTv.forEach(item => {
-                    if (item.id && item.isTv) {
+                    if (item && item.id && item.isTv) {
                         vm.objectTv = item.isTv;
                     }
                 });
@@ -2294,8 +2294,8 @@ module OrangeFeSARQ.Services {
             let isPromo : boolean = false;
 
             // Averiguamos si hay promociones en las líneas adicionales
-            if (rate.groupName === 'Convergente_NAC') {
-                 isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
+            if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
+                isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
 
                 // Si no hay promoción en la principal, comprobamos las adicionales
                 // y si alguna tiene promo, hay que pintarlo

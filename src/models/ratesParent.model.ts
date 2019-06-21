@@ -151,6 +151,10 @@ module ratesParent.Models {
         public bucket: RateBucket;
         public NACLines: Rate[] = [];
 
+        // Netflix
+        public NetflixRate: Rate;
+        public isNetflix:boolean; 
+
         //Jazztel
         public characteristicJzz: RatesCharacteristicJzz[] = [];
 
@@ -594,17 +598,9 @@ module ratesParent.Models {
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
-
+        private checkIsNetflixRate(rateData: any){
+            this.isNetflix = _.find(rateData.productSpecCharacteristic, { 'name' : 'Netflix incluido en tu tarifa'}) ? true : false;
+            }
     }
 
     export class RatesProductBundle {

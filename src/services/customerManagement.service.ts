@@ -16,6 +16,9 @@ module OrangeFeSARQ.Services {
 
         private url: string;
 
+        //jazztel
+        private brand: any = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand') : 'orange';
+
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:CustomerManagementSrv#constructor

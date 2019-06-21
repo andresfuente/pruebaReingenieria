@@ -162,6 +162,7 @@ module mosaicFile.Models {
         public litSubTitle: string;
         public litPrice: number;
         public siebelId: string;
+        public category: string;
         public initialPaid: number;
         public uniquePaid: number;
         public totalPaid: number;
@@ -246,7 +247,7 @@ module mosaicFile.Models {
 
             }
         }
-        
+
         private setRenove(commercialData: any, commercialActIndex: number, serviceData: any) {
             if (commercialData[commercialActIndex].ospTerminalWorkflow) {
                 // Renove prepago
@@ -428,7 +429,6 @@ module mosaicFile.Models {
                 }
             }
         }
-
         private checkPriceTypeInitial(price: any, ospCustomerSegment: string) {
             if (price.priceType && price.priceType === 'inicial') {
                 if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
@@ -439,9 +439,6 @@ module mosaicFile.Models {
                 }
             }
         }
-
-        
-
         private getDeviceCharacteristics(serviceData: any, mosaicFileCompOWCSStore: any, backCamera: boolean, frontCamera: boolean) {
             if (serviceData.deviceSpecification.characteristic && serviceData.deviceSpecification.characteristic.length) {
                 serviceData.deviceSpecification.characteristic.forEach((characteristic) => {
@@ -467,7 +464,7 @@ module mosaicFile.Models {
                             ({ backCamera, frontCamera } = this.setOspCharCategoryDefaultCase(characteristic, mosaicFileCompOWCSStore, backCamera, frontCamera));
                             break;
                         }
-                        
+
                     }
                 });
             }
