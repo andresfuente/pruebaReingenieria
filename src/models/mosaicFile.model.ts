@@ -16,6 +16,7 @@ module mosaicFile.Models {
         public status: string;
         private deferred: ng.IDeferred<{}>;
         public promise: ng.IPromise<{}>;
+        public brand = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand') : 'orange';
 
         constructor(serviceData?: any, deferred?: ng.IDeferred<{}>) {
 
@@ -25,6 +26,13 @@ module mosaicFile.Models {
         }
 
         loadCatalogViewData(serviceData: any, ospCustomerSegment: string, priceName: string, mosaicFileCompOWCSStore?: any) {
+            let vm = this;
+            if (vm.brand === 'jazztel') {
+                let arrayTerminales = [];
+                arrayTerminales.push(serviceData);
+                serviceData = arrayTerminales;
+            }
+
             if (serviceData && serviceData.length) {
                 let deviceSpecification = serviceData.deviceSpecification;
                 this.variants = this.generateTerminalVariants(serviceData, ospCustomerSegment, priceName, mosaicFileCompOWCSStore);
@@ -211,6 +219,7 @@ module mosaicFile.Models {
         public anchor: string[] = [];
         private renewRates = [];
         private prepaidRenewPrices = [];
+        public brand: any = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand') : 'orange';
 
         constructor(serviceData: any, ospCustomerSegment: string, priceName: string, mosaicFileCompOWCSStore?: any) {
 
@@ -218,6 +227,13 @@ module mosaicFile.Models {
             let commercialActIndex = _.findIndex(commercialData, function (currentCommercialAct: any) {
                 return currentCommercialAct.ospIsSelected === true;
             });
+<<<<<<< HEAD
+=======
+            if (commercialActIndex < 0) {
+                commercialActIndex = commercialData.length - 1;
+            }
+
+>>>>>>> d6ebc8a2b253d5f05d7aa8fcdbbeae6c0b98c06b
             // Banderas para controlar las opciones de la cámara
             let backCamera = false;
             let frontCamera = false;
@@ -477,15 +493,27 @@ module mosaicFile.Models {
                                     // Añadiendo el precio al arreglo de precios del terminal
                                     this.itemPrice.push(priceItem);
 
+                                    let if1, if2, if3;
+
+                                    if (this.brand == 'jazztel') {
+                                        if1 = 'Importe prepago';
+                                        if2 = 'Importe recurrente';
+                                        if3 = 'Importe alta';
+                                    } else {
+                                        if1 = 'inicial';
+                                        if2 = 'cuota';
+                                        if3 = 'unico';
+                                    }
+
                                     if (price.name === priceName) {
-                                        if (price.priceType && price.priceType === 'inicial') {
+                                        if (price.priceType && price.priceType === if1) {
                                             if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
                                                 this.initialPaid = price.Price.taxIncudedAmount;
                                             } else {
                                                 this.initialPaid = price.Price.dutyFreeAmount;
                                             }
                                         }
-                                        if (price.priceType && price.priceType === 'cuota') {
+                                        if (price.priceType && price.priceType === if2) {
                                             this.litDeadlines = price.applicationDuration;
                                             if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
                                                 this.litPrice = price.Price.taxIncudedAmount;
@@ -497,7 +525,7 @@ module mosaicFile.Models {
                                                 this.totalPaid = this.initialPaid + this.litPrice * this.litDeadlines;
                                             }
                                         }
-                                        if (price.priceType && price.priceType === 'unico') {
+                                        if (price.priceType && price.priceType === if3) {
                                             if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
                                                 this.uniquePaid = price.Price.taxIncudedAmount;
                                             } else {
