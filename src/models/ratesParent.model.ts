@@ -157,6 +157,7 @@ module ratesParent.Models {
 
         //Jazztel
         public characteristicJzz: RatesCharacteristicJzz[] = [];
+        public packValueJzz: PackValueJzz[] = [];
 
         constructor(rateData, priceData, bucketInfo?) {
 
@@ -204,10 +205,17 @@ module ratesParent.Models {
                             this.bucket = new RateBucket('', bucketInfo, '', '', '', '');
                         }
                         //Se obtienen las caracteríticas para jazztel de forma provisional
-                        if (element.name === 'LiteralTarifa') {
-                            if (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length > 0 && element.productSpecCharacteristicValue[0].value) {
-                                let characteristicJazztelRate = new RatesCharacteristicJzz(element.productSpecCharacteristicValue[0].value);
-                                this.characteristicJzz.push(characteristicJazztelRate);
+                        for (let i = 0; i < element.length && element.productSpecCharacteristicValue.length; i++) {
+                            if (element.name === 'LiteralTarifa') {
+                                if (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length > 0 && element.productSpecCharacteristicValue[i].value) {
+                                    let characteristicJazztelRate = new RatesCharacteristicJzz(element.productSpecCharacteristicValue[i].value);
+                                    this.characteristicJzz.push(characteristicJazztelRate);
+                                }
+                            } else if (element.name === 'packType') {
+                                if (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length > 0 && element.productSpecCharacteristicValue[i].value) {
+                                    let packValue = new PackValueJzz(element.productSpecCharacteristicValue[i].value);
+                                    this.packValueJzz.push(packValue);
+                                }
                             }
                         }
 
@@ -593,18 +601,18 @@ module ratesParent.Models {
                 }
             }
 
-            
+
             this.checkIsNetflixRate(rateData);
         }
 
-        private checkIsNetflixRate(rateData: any){
-            this.isNetflix = _.find(rateData.productSpecCharacteristic, { 'name' : 'Netflix incluido en tu tarifa'}) ? true : false;
+        private checkIsNetflixRate(rateData: any) {
+            this.isNetflix = _.find(rateData.productSpecCharacteristic, { 'name': 'Netflix incluido en tu tarifa' }) ? true : false;
         }
 
         private checkIdIdTechDiferences(rateData: any) {
             if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
                 this.ospTecnology = rateData.ospTecnology;
-                let caracteristic : any = _.find(rateData.productSpecCharacteristic, { 'name' : 'CARACTERISTICATECNOLOGIA'});
+                let caracteristic: any = _.find(rateData.productSpecCharacteristic, { 'name': 'CARACTERISTICATECNOLOGIA' });
                 this.typeTecnology = caracteristic.ospCategory;
             }
         }
@@ -654,6 +662,14 @@ module ratesParent.Models {
 
         constructor(description: string) {
             this.description = description;
+        }
+    }
+
+    export class PackValueJzz {
+        public packType: string;
+
+        constructor(description: string) {
+            this.packType = description;
         }
     }
     export class RatePopupInfo {
