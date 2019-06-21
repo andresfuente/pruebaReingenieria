@@ -14,10 +14,29 @@ module OrangeFeSARQ.Services {
         public genericConstant;
         public informationCenterSrv;
 
-        private url: string;
+        public scorignCodeErrorAcept = [
+            "000031", "000030", "000010", "000000", "000021", "000020", "000011", "000001"
+        ];
 
-        //jazztel
-        private brand: any = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand') : 'orange';
+        public scorignCodeErrorPdt = [
+            "100001", "100000"
+        ];
+
+        public scorignCodeErrorReject = [
+            "080791", "080801", "080811", "080821", "080831", "080841", "080851", "080861",
+            "080871", "080881", "099911", "080850", "080840", "080830", "080820", "080810",
+            "080800", "080790", "080880", "099910", "080860", "080870", "080890", "099900",
+            "099901", "001331", "001290", "001291", "001350", "001351", "001321", "001201",
+            "001370", "001371", "001150", "001151", "001271", "001320", "001260", "001340",
+            "001341", "001100", "001101", "001110", "001111", "001120", "001121", "001200",
+            "001210", "001211", "001220", "001221", "001230", "001231", "001240", "001241",
+            "001250", "001261", "001270", "001300", "001301", "001310", "001311", "001130",
+            "001140", "001131", "001141", "001360", "001361", "001160", "001280", "001251",
+            "001330"
+        ];
+
+        private url: string;
+        private brand: any = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand'):'orange';
 
         /**
          * @ngdoc method
@@ -129,13 +148,17 @@ module OrangeFeSARQ.Services {
         checkBlacklist(body, comp: string) {
             let vm = this;
 
+
+            let blacklist = vm.brand !== 'jazztel' ? false : true;
+            let param = vm.brand!=='jazztel'? ['customer']:['Customer/checkSalesProfile'];
+
             let _search: Object = {
                 queryParams: {
                     typeRequest: 1,
                     numberRequiredLines: 1,
-                    blackList: true
+                    blackList:  blacklist
                 },
-                urlParams: ['customer'],
+                urlParams: param,
                 body: body
             };
 
@@ -165,14 +188,17 @@ module OrangeFeSARQ.Services {
          */
         postPrescoring(typeRequest, numberRequiredLines, body, comp: string) {
             let vm = this;
+            let param = vm.brand!=='jazztel'? ['customer']:['Customer/checkSalesProfile']
+            let blacklist = vm.brand!=='jazztel'? true : false;
+            typeRequest = vm.brand!=='jazztel'? 0 : 1;
 
             let _search: Object = {
                 queryParams: {
                     typeRequest: typeRequest,
                     numberRequiredLines: numberRequiredLines,
-                    blackList: false
+                    blackList: blacklist
                 },
-                urlParams: ['customer'],
+                urlParams: param,
                 body: body
             };
 
@@ -187,6 +213,41 @@ module OrangeFeSARQ.Services {
                     throw error.data;
                 });
         }
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:CustomerManagementSrv#postScoringRenove
+         * @param {number} typeRequest tipo de Acto comercial
+         * @param {Object} body datos a consultar
+         * @param {string} comp nombre del componente
+         * @methodOf OrangeFeSARQ.Services:CustomerManagementSrv
+         * @description
+         * Devuelve el riesgo de prescoring del cliente
+         * @returns {Object} Devuelve una promesa con el response
+         */
+        postScoringRenove(typeRequest, body, comp: string) {
+            let vm = this;
+
+            let _search: Object = {
+                queryParams: {
+                    typeRequest: typeRequest
+                },
+                urlParams: ['customer'],
+                body: body
+            };
+
+            return vm.httpPost(vm.genericConstant.customerManagement, _search, comp)
+                .then(function (response) {
+                    if (response.data.error && response.data.error !== null) {
+                        throw response.data.error;
+                    }
+                    return response.data;
+                })
+                .catch(function (error) {
+                    throw error.data;
+                });
+        }
+
 
         /**
          * @ngdoc method
@@ -285,8 +346,42 @@ module OrangeFeSARQ.Services {
                 .catch(function (error) {
                     throw error;
                 });
-
-
         }
+
+        getNormalizedAddress(address) {
+            let vm = this;
+
+            let params: any = {};
+            if(vm.brand==='jazztel'){
+            params.brand = vm.brand;
+            } 
+            params.city = address.province;
+            params.locality = address.city;
+            params.postcode = address.postalCode;
+            params.streetName = address.street;
+            params.streetNr = address.streetNumber;
+            params.streetType = address.streetType;
+            params.floorNumber = address.floorNumber;
+            params.externalId = address.externalId;
+            if (params.externalId && address.ospINECityCode && address.ospSingularEntity) {
+                params.ospAddressExternalId = [
+                    {
+                        refId: 'arvatoCode',
+                        externalId: params.externalId
+                    }
+                ],
+                params.ospINECityCode = address.ospINECityCode;
+                params.ospSingularEntity = address.ospSingularEntity;
+            }
+
+
+            return vm.httpCacheGett(vm.genericConstant.address, { queryParams: params }, 'coverageComp')
+                .then((response) => {
+                    return response.data;
+                }).catch((error) => {
+                    throw error;
+                });
+        }
+
     }
 }
