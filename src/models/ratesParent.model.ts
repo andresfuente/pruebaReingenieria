@@ -99,6 +99,7 @@ module ratesParent.Models {
         public groupName: string; // Familia 
         public typeService: string;
         public pack: string;
+        public packValueJzz: string;
         public taxRate: number;
         public taxRateName: string;
         public typePriceName: string;
@@ -157,7 +158,6 @@ module ratesParent.Models {
 
         //Jazztel
         public characteristicJzz: RatesCharacteristicJzz[] = [];
-        public packValueJzz: PackValueJzz[] = [];
 
         constructor(rateData, priceData, bucketInfo?) {
 
@@ -166,7 +166,6 @@ module ratesParent.Models {
                 this.rateSubName = rateData.ospTitulo;
                 this.rateDescription = rateData.description;
                 this.siebelId = rateData.id ? rateData.id : rateData.bundledProductSpecification && rateData.bundledProductSpecification[0].id;
-
                 if (!rateData.id) {
                     rateData.id = rateData.bundledProductSpecification[0].id;
                 }
@@ -205,16 +204,16 @@ module ratesParent.Models {
                             this.bucket = new RateBucket('', bucketInfo, '', '', '', '');
                         }
                         //Se obtienen las caracteríticas para jazztel de forma provisional
-                        for (let i = 0; i < element.length && element.productSpecCharacteristicValue.length; i++) {
+                        for (let i = 0; i < (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length); i++) {
                             if (element.name === 'LiteralTarifa') {
                                 if (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length > 0 && element.productSpecCharacteristicValue[i].value) {
                                     let characteristicJazztelRate = new RatesCharacteristicJzz(element.productSpecCharacteristicValue[i].value);
                                     this.characteristicJzz.push(characteristicJazztelRate);
                                 }
-                            } else if (element.name === 'packType') {
+                            } 
+                            else if (element.name === 'packType') {
                                 if (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length > 0 && element.productSpecCharacteristicValue[i].value) {
-                                    let packValue = new PackValueJzz(element.productSpecCharacteristicValue[i].value);
-                                    this.packValueJzz.push(packValue);
+                                    this.packValueJzz = element.productSpecCharacteristicValue[i].value;
                                 }
                             }
                         }
@@ -665,13 +664,13 @@ module ratesParent.Models {
         }
     }
 
-    export class PackValueJzz {
-        public packType: string;
+    // export class PackValueJzz {
+    //     public packType: string;
 
-        constructor(description: string) {
-            this.packType = description;
-        }
-    }
+    //     constructor(description: string) {
+    //         this.packType = description;
+    //     }
+    // }
     export class RatePopupInfo {
         public name: string;
         public description: string;
