@@ -357,11 +357,12 @@ module OrangeFeSARQ.Services {
             _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
 
             // Establece el id tarifa que tenemos seleccionado. Si llegamos no tenemos tarifa, seleccionamos las de fijo por defecto
-            if (relatedProductOffering) {
+            if (relatedProductOffering !== '1-2IHOKA') {
                 let aux = relatedProductOffering.split('+');
-                idPaquete = aux[0];
-                idPromocion = aux[1];
-                idTarifa = aux[2];
+                idTarifa = aux[0];
+                idPaquete = aux[1];
+                idPromocion = aux[2].split('|');
+                idPromocion = idPromocion[0];
                 channelAccountCode = '127';
             } else {
                 idPaquete = '2983';
