@@ -18,12 +18,13 @@ module OrangeFeSARQ.Services {
         private customerSegment: string;
 
         private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
+        public GEOLOCATIONLOCAL = 'Geolocation-local';
+        public GEOLOCATIONCLIENT = 'Geolocation-client';
+        public LITPRODUCTSPECIFICATION = '/productSpecificationv2View/OSP';
+        public LITPRODUCTOFFERING = '/productOfferingv2View/OSP';
 
         private tabGroupName: string;
         private arrayFixed: Array<any>;
-        public productSpecificationv2View = '/productSpecificationv2View/OSP';
-        public productOfferingv2View = '/productOfferingv2View/OSP';
-
 
         constructor(public $injector) {
             super($injector);
@@ -68,7 +69,29 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-                return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.productSpecificationv2View,
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + '/productSpecificationv2View/OSP',
+                { queryParams: params }, _headers)
+                .then((response) => {
+                    //vm.mockPPM(response);
+                    return {
+                        specificationData: response.data
+                    };
+                })
+                .catch((error) => {
+                    throw error;
+                });
+        }
+        /*Consulta al productSpecification del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
+        */
+        //Cambio_Adaptacion_Jazztel JPA
+        getSpecificationDataJZ(productType: string, category: string, tarifa?: string, promocion?: string, paquete?: string): ng.IPromise<{} | void> {
+            let vm = this;
+
+            let params = vm.setParamsJZ(productType, category, tarifa, promocion, paquete);
+
+            let _headers = vm.setHeaders();
+
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brandjz + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -79,6 +102,25 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
+        // mostrar tarifas de Jazztel sin cobertura
+        // getSpecificationDataJZWithoutCoverage(productType: string, category: string): ng.IPromise<{} | void> {
+        //     let vm = this;
+
+        //     let params = vm.setParamsJZWithoutCoverage(productType, category);
+
+        //     let _headers = vm.setHeaders();
+
+        //     return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brandjz + '/productSpecificationv2View/OSP',
+        //         { queryParams: params }, _headers)
+        //         .then((response) => {
+        //             return {
+        //                 specificationData: response.data
+        //             };
+        //         })
+        //         .catch((error) => {
+        //             throw error;
+        //         });
+        // }
 
         /** @ngdoc method
          * @name ratesParent.Services:RatesParentSrv#getOfferingData
@@ -105,7 +147,30 @@ module OrangeFeSARQ.Services {
                 ratesIdListString, releatedRatesClient, pack, type, defaultTechnology,
                 bucketId);
             let _headers = srv.setHeaders();
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.productOfferingv2View,
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + srv.LITPRODUCTOFFERING,
+                { queryParams: params }, _headers)
+                .then((response) => {
+                    let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
+                    //srv.mockPPMOffering(response);
+                    rates.loadRates(specificationData, response.data, bucketId);
+                    
+                    return rates;
+                })
+                .catch((error) => {
+                    throw error;
+                });
+
+        }
+
+        /* Consulta al productOffering del catalogo de Jazztel con la información de las tarifas segun los parámetros de entrada
+         */
+        //Cambio_Adaptacion_Jazztel JPA
+        getOfferingDataJZ(productType: string, specificationData, category:string, tarifa?: string, promocion?: string, paquete?: string,
+            bucketId?: string) {
+            let srv = this;
+            let params = srv.setParamsJZ(productType,category, tarifa, promocion, paquete);
+            let _headers = srv.setHeaders();
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brandjz + '/productOfferingv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -118,6 +183,7 @@ module OrangeFeSARQ.Services {
                 });
 
         }
+
 
         /** @ngdoc method
          * @name OrangeFeSARQ.Services:RatesParentSrv#getNameNAC
@@ -132,7 +198,7 @@ module OrangeFeSARQ.Services {
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
 
-            if (clientData && clientData.ospCustomerSegment && clientData.ospCustomerSegment.toUpperCase()  === 'RESIDENCIAL' && clientData.surname) {
+            if (clientData && clientData.ospCustomerSegment && clientData.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL' && clientData.surname) {
                 name += 'Love ' + _.capitalize(clientData.surname);
 
                 if (clientData.secondSurname) {
@@ -160,6 +226,24 @@ module OrangeFeSARQ.Services {
                 return false;
             }
         }
+                /** @ngdoc method
+         * @name OrangeFeSARQ.Services:RatesParentSrv#isSOHOClient
+         * @methodOf ratesParent.Services:RatesParentSrv
+         * @description
+         * Método auxiliar para saber si el cliente es SOHO
+         */
+        //TODO comprobar que este método funciona
+        isSOHOClient() {
+            let srv = this;
+
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
+
+            if (clientData && clientData.isSOHOClient) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
         /** @ngdoc method
          * @name OrangeFeSARQ.Services:RatesParentSrv#getSpecificationData
@@ -180,12 +264,12 @@ module OrangeFeSARQ.Services {
                 commercialAction: commercialAction.toLowerCase(),
                 segment: segment,
                 isExistingCustomer: isExistingCustomer,
-                bundleId : idBundle
+                bundleId: idBundle
             };
 
             let _headers = srv.setHeaders();
 
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.productSpecificationv2View,
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + srv.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -217,12 +301,12 @@ module OrangeFeSARQ.Services {
                 commercialAction: commercialAction.toLowerCase(),
                 segment: segment,
                 isExistingCustomer: isExistingCustomer,
-                bundleId : idBundle
+                bundleId: idBundle
             };
 
             let _headers = srv.setHeaders();
 
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + this.productOfferingv2View,
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.genericConstant.brand + srv.LITPRODUCTOFFERING,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return ratesParent.Models.RateSVA.createSVAList(specificationData, response.data, customerSegment);
@@ -241,14 +325,12 @@ module OrangeFeSARQ.Services {
                 idSvaList: idList
             };
 
-            let srv = this;
-
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.productSpecificationv2View,
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((responseSpecification) => {
-                    return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productOffering2View/OSP',
+                    return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTOFFERING,
                         { queryParams: params }, _headers)
                         .then((responseOffering) => {
                             return {
@@ -278,45 +360,14 @@ module OrangeFeSARQ.Services {
          * para el renove primario segun los parámetros de entrada
          */
         getSpecificationRenewData(productType: string, clientSegment: string, ratesList,
-        technologyList, defaultTechnology?: string, bucketId?: string) {
+            technologyList, defaultTechnology?: string, bucketId?: string) {
             let vm = this;
 
-            let ratesString = '';
-            let technologyString = '';
-            if (ratesList) {
-                ratesString = vm.getRatesString(ratesList);
-            }
-            if (technologyList) {
-                technologyString = vm.getIdTechnologyString(technologyList);
-            }
-            let params = {
-                productType: productType, // Tipo de producto (rate)
-                segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
-                idOfertaComercialList: ratesString, // Listado de idBundle 
-                idTecnologiaList: technologyString, // Listado de id de tecnologia
-                actocomercial: 'renove',
-                defaultTechnology: defaultTechnology,
-                bucketId: bucketId
-            };
-            if (ratesString === '') {
-                delete params.idOfertaComercialList;
-            }
-
-            if (defaultTechnology || technologyString === '') {
-                delete params.idTecnologiaList;
-            }
-
-            if (!defaultTechnology)  {
-                delete params.defaultTechnology
-            }
-
-            if (!bucketId) {
-                delete params.bucketId;
-            }
+            let params = vm.setParamsRenove(ratesList, technologyList, productType, clientSegment, defaultTechnology, bucketId);
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + '/productSpecificationv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -343,42 +394,12 @@ module OrangeFeSARQ.Services {
         getOfferingRenewData(productType: string, clientSegment: string,
             specificationData, ratesList, technologyList, defaultTechnology?: string, bucketId?: string) {
             let vm = this;
-            let ratesString = '';
-            let technologyString = '';
-            if (ratesList) {
-                ratesString = vm.getRatesString(ratesList);
-            }
-            if (technologyList) {
-                technologyString = vm.getIdTechnologyString(technologyList);
-            }
-            let params = {
-                productType: productType, // Tipo de producto (rate)
-                segment: clientSegment,  // Segmento del cliente (Residencial/Empresas)
-                idOfertaComercialList: ratesString, // Listado de id Siebel 
-                idTecnologiaList: technologyString, // Listado de id de tecnologia
-                actocomercial: 'renove',
-                defaultTechnology: defaultTechnology,
-                bucketId: bucketId
-            };
 
-            if (ratesString === '') {
-                delete params.idOfertaComercialList;
-            }
-            if (defaultTechnology || technologyString === '') {
-                delete params.idTecnologiaList;
-            }
-
-            if (!defaultTechnology)  {
-                delete params.defaultTechnology
-            }
-
-            if (!bucketId) {
-                delete params.bucketId;
-            }
+            let params = vm.setParamsRenove(ratesList, technologyList, productType, clientSegment, defaultTechnology, bucketId);
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + this.productOfferingv2View,
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brand + vm.LITPRODUCTOFFERING,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
@@ -575,7 +596,8 @@ module OrangeFeSARQ.Services {
                 srv.genericConstant.brand + srv.genericConstant.changeRateListBusiness + msisdn,
                 { queryParams: params }, _headers, 'ratesParent')
                 .then((response) => {
-                    if (response && response.data.error === null && response.data.productSpecification) {
+                    let respuesta;
+                    if (response && response.data.error === undefined && response.data.productSpecification) {
                         productSpecification = response.data.productSpecification;
                         // Se recorre el array de tarifas disponibles para realizar el cambio
                         productSpecification.forEach((element, index) => {
@@ -585,8 +607,11 @@ module OrangeFeSARQ.Services {
                                     element.id : element.id + ',';
                             }
                         });
-                        return ratesIdListString;
+                        respuesta = ratesIdListString;
+                    }else{
+                        respuesta = response;
                     }
+                    return respuesta;
                 })
                 .catch((error) => {
                     throw error;
@@ -620,7 +645,8 @@ module OrangeFeSARQ.Services {
             return srv.httpCacheGeth(srv.genericConstant.productCatalog + srv.genericConstant.changeRateList + originRate,
                 queryParamsObjet, _headers)
                 .then((response) => {
-                    if (response && response.data.error === null && response.data.productSpecification) {
+                    let respuesta;
+                    if (response && response.data.error === undefined && response.data.productSpecification) {
                         productSpecification = response.data.productSpecification;
                         // Se recorre el array de tarifas disponibles para realizar el cambio
                         productSpecification.forEach((element, index) => {
@@ -628,8 +654,11 @@ module OrangeFeSARQ.Services {
                             ratesIdListString += (index === (productSpecification.length - 1)) ?
                                 element.id : element.id + ',';
                         });
-                        return ratesIdListString;
+                        respuesta = ratesIdListString;
+                    }else{
+                        respuesta = response;
                     }
+                    return respuesta;                    
                 })
                 .catch((error) => {
                     throw error;
@@ -650,18 +679,6 @@ module OrangeFeSARQ.Services {
 
             let loginData = JSON.parse(sessionStorage.getItem('loginData'));
 
-            ({ list, validAll } = this.checkIsValid(list, validAll));
-
-            if (loginData && loginData.sfid) {
-                if (validAll || (list && list.length > 0 && _.find(list, {'value': loginData.sfid}))) {
-                    validSFID = true;
-                }
-            }
-
-            return validSFID;
-        }
-
-        private checkIsValid(list: Object[], validAll: boolean) {
             if (OrangeFeSARQ.Controllers.ParentController.shared
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule) {
@@ -670,17 +687,23 @@ module OrangeFeSARQ.Services {
                         element.listOption.forEach((option) => {
                             if (option.name === 'defaultNac.options' && option.listOptionsLiteral) {
                                 if (_.size(option.listOptionsLiteral) !== 0) {
-                                    list = option.listOptionsLiteral;
-                                }
-                                else {
+                                    list = option.listOptionsLiteral
+                                } else {
                                     validAll = true;
                                 }
                             }
-                        });
+                        })
                     }
                 });
             }
-            return { list, validAll };
+
+            if (loginData && loginData.sfid) {
+                if (validAll || (list && list.length > 0 && _.find(list, { 'value': loginData.sfid }))) {
+                    validSFID = true;
+                }
+            }
+
+            return validSFID;
         }
 
         /**
@@ -688,7 +711,7 @@ module OrangeFeSARQ.Services {
          * @returns {string}
          * @description Obtiene la localización del cliente
          */
-        getClientGeolocation() : string {
+        getClientGeolocation(): string {
             let srv = this;
 
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
@@ -698,23 +721,23 @@ module OrangeFeSARQ.Services {
             let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
             const currentBillingAddress = srv.billingAccountStore.getCurrentBillingAddress()
 
-            if(currentBillingAddress && currentBillingAddress.stateOrProvince) {
+            if (currentBillingAddress && currentBillingAddress.stateOrProvince) {
                 clientGeolocation = currentBillingAddress.stateOrProvince.toUpperCase()
             }
 
             return clientGeolocation;
         }
 
-/**
-         * @ngdoc method
-         * @description
-         * Añade los params
-         */
+        /**
+                 * @ngdoc method
+                 * @description
+                 * Añade los params
+                 */
 
         setParams(categoryParam: string, productType: string, clientSegment: string,
             contractType: string, commercialAction: string, isExistingCustomer: string, technologyList: Array<string>,
             ratesIdListString: string, releatedRatesClient: string, pack?: string, type?: string, defaultTechnology?: string,
-            bucketId?: string){
+            bucketId?: string) {
             let vm = this;
             let technologyString = '';
             if (technologyList) {
@@ -736,15 +759,15 @@ module OrangeFeSARQ.Services {
                 bucketId: bucketId,
                 ospContractible: 'Y'
             };
-    
+
             if (!bucketId) {
                 delete params.bucketId;
             }
-    
+
             if (!pack) {
                 delete params.pack;
             }
-    
+
             // Si la categoria no es convergente se eliminan los parametros para la tecnologia
             if ((categoryParam !== 'Convergente' && categoryParam !== 'Convergente_NAC' && categoryParam !== 'Fijo_Pangea') || defaultTechnology === 'Y') {
                 delete params.idTecnologiaList;
@@ -763,18 +786,56 @@ module OrangeFeSARQ.Services {
             return params;
         }
 
-/**
-         * @ngdoc method
-         * @description
-         * Añade las cabeceras
-         */
-        setHeaders(){
+        //Parametros de Jazztel
+        //Cambio_Adaptacion_Jazztel JPA
+        setParamsJZ(productType: string, Category: string, Tarifa?: string, Promocion?: string, Paquete?: string) {
+            let vm = this;
+            let params;
+
+            params = {
+                productType: productType, // Tipo de producto (rate)
+                category: Category,//IDs de las categorias posibles de Jazztel
+            };
+            if (Tarifa) {
+                params.idCRMTarifa = Tarifa
+            }
+            if (Promocion) {
+                params.idCRMPromocion = Promocion
+            }
+            if (Paquete) {
+                params.idCRMPaquete = Tarifa
+            }
+
+            // let params = {
+            //     productType: productType, // Tipo de producto (rate)
+            //     idCRMTarifa:Tarifa, //IDs de  las tarifas posibles de Jazztel
+            //     idCRMPromocion:Promocion, //IDs de  las promocion posibles de Jazztel
+            //     idCRMPaquete:Paquete ,//IDs de las paquete posibles de Jazztel
+            //     category:Category //IDs de las paquete posibles de Jazztel
+
+            // };
+
+            return params;
+        }
+
+        // setParamsJZWithoutCoverage(productType: string, category: string) {
+        //     let vm = this;
+
+        //     return params;
+        // }
+
+        /**
+                 * @ngdoc method
+                 * @description
+                 * Añade las cabeceras
+                 */
+        setHeaders() {
             let vm = this;
             let clientGeolocation = vm.getClientGeolocation();
             let _headers = new HashMap<string, string>();
 
-            _headers.set('Geolocation-local', vm.storeProvince ? vm.storeProvince.toUpperCase() : 'Madrid');
-            _headers.set('Geolocation-client', clientGeolocation.toUpperCase());
+            _headers.set(vm.GEOLOCATIONLOCAL, vm.storeProvince ? vm.storeProvince.toUpperCase() : 'Madrid');
+            _headers.set(vm.GEOLOCATIONCLIENT, clientGeolocation.toUpperCase());
 
             return _headers;
         }
@@ -802,7 +863,7 @@ module OrangeFeSARQ.Services {
 
             return vm.tabGroupName;
         }
-        
+
         /**
          * @name ratesParent.Services:RatesParentSrv#setParamsRenove
          * @methodOf ratesParent.Services:RatesParentSrv
@@ -842,7 +903,7 @@ module OrangeFeSARQ.Services {
                 delete params.idTecnologiaList;
             }
 
-            if (!defaultTechnology)  {
+            if (!defaultTechnology) {
                 delete params.defaultTechnology;
             }
 
@@ -863,7 +924,7 @@ module OrangeFeSARQ.Services {
         setArrayFixed(rates) {
             let vm = this;
 
-            vm.arrayFixed = _.filter(rates, {groupName: 'Fijo_Pangea'});
+            vm.arrayFixed = _.filter(rates, { groupName: 'Fijo_Pangea' });
         }
 
 
@@ -880,7 +941,48 @@ module OrangeFeSARQ.Services {
             return vm.arrayFixed;
         }
 
-      }
+        mockPPM(response) {
+            let vm = this;
+            let isPangea = vm.genericConstant && vm.genericConstant.site && vm.genericConstant.site === 'FCUPdV';
+            if (isPangea && response && response.data && response.data.productSpecification) {
+                _.forEach(response.data.productSpecification, element => {
+                    let existLADatos = _.some(element.productSpecificationRelationship, {id:'1-2MDAMC', type:'associatedLine'});
+                    let existLAPPM = _.some(element.productSpecificationRelationship, {id:'1-2WC4A7', type:'associatedLine'});
+                    if (existLADatos && !existLAPPM) { //existe LA Datos y no existe LA PPM
+                        element.productSpecificationRelationship.push({ // Añade LA PPM
+                            id:'1-2WC4A7',
+                            type:'associatedLine'
+                        });
+                    }
+                    
+                });
+                let ppm:any = _.find(response.data.productSpecification, {id:'1-2WC4A7'});
+                if (ppm) {
+                    ppm.name = 'Línea Smartphone 0 cént/min';
+                    ppm.ospTitulo = 'Smartphone 0 cént/min';
+                }   
+            }
+        }
+
+        mockPPMOffering(response) {
+            let vm = this;
+            let isPangea = vm.genericConstant && vm.genericConstant.site && vm.genericConstant.site === 'FCUPdV';
+            if (isPangea && response && response.data && response.data.productOffering) {
+                let datos:any = _.find(response.data.productOffering, (element:any) => {
+                    return _.find(element.bundledProductOffering, {id:'1-2MDAMC'});
+                });
+                let ppm:any = _.find(response.data.productOffering, (element:any) => {
+                    return _.find(element.bundledProductOffering, {id:'1-2WC4A7'});
+                });
+
+                if (datos && datos.productOfferingPrice[0] && ppm.productOfferingPrice[0].price && 
+                    ppm && ppm.productOfferingPrice[0] && ppm.productOfferingPrice[0].price) {
+                        ppm.productOfferingPrice[0].price = datos.productOfferingPrice[0].price;
+                }
+            }
+        }
+
+    }
     angular.module('RatesParentSrv', [])
         .service('RatesParentSrv', OrangeFeSARQ.Services.RatesParentSrv);
 }

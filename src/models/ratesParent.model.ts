@@ -99,6 +99,7 @@ module ratesParent.Models {
         public groupName: string; // Familia 
         public typeService: string;
         public pack: string;
+        public packValueJzz: string;
         public taxRate: number;
         public taxRateName: string;
         public typePriceName: string;
@@ -115,7 +116,7 @@ module ratesParent.Models {
         public defaultLines: Array<Object>;
 
         // Id Tech
-
+        public typeTecnology;
         public ospTecnology: string;
 
         // Estructura que contiene la fibra y las linea con sus respectivos iconos
@@ -151,9 +152,9 @@ module ratesParent.Models {
         public bucket: RateBucket;
         public NACLines: Rate[] = [];
 
-        // Netflix
-        public NetflixRate: Rate;
-        public isNetflix:boolean; 
+        //Netflix
+        public isNetflix: boolean;
+        public NetflixRate: Rate;
 
         //Jazztel
         public characteristicJzz: RatesCharacteristicJzz[] = [];
@@ -165,7 +166,6 @@ module ratesParent.Models {
                 this.rateSubName = rateData.ospTitulo;
                 this.rateDescription = rateData.description;
                 this.siebelId = rateData.id ? rateData.id : rateData.bundledProductSpecification && rateData.bundledProductSpecification[0].id;
-
                 if (!rateData.id) {
                     rateData.id = rateData.bundledProductSpecification[0].id;
                 }
@@ -204,10 +204,17 @@ module ratesParent.Models {
                             this.bucket = new RateBucket('', bucketInfo, '', '', '', '');
                         }
                         //Se obtienen las caracteríticas para jazztel de forma provisional
-                        if (element.name === 'LiteralTarifa') {
-                            if (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length > 0 && element.productSpecCharacteristicValue[0].value) {
-                                let characteristicJazztelRate = new RatesCharacteristicJzz(element.productSpecCharacteristicValue[0].value);
-                                this.characteristicJzz.push(characteristicJazztelRate);
+                        for (let i = 0; i < (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length); i++) {
+                            if (element.name === 'LiteralTarifa') {
+                                if (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length > 0 && element.productSpecCharacteristicValue[i].value) {
+                                    let characteristicJazztelRate = new RatesCharacteristicJzz(element.productSpecCharacteristicValue[i].value);
+                                    this.characteristicJzz.push(characteristicJazztelRate);
+                                }
+                            } 
+                            else if (element.name === 'packType') {
+                                if (element.productSpecCharacteristicValue && element.productSpecCharacteristicValue.length > 0 && element.productSpecCharacteristicValue[i].value) {
+                                    this.packValueJzz = element.productSpecCharacteristicValue[i].value;
+                                }
                             }
                         }
 
@@ -278,6 +285,14 @@ module ratesParent.Models {
                                         return price.ospTaxRateName === 'SinPromo';
                                     });
 
+                                    let promotionalPriceTotal = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                        return price.ospTaxRateName === 'PromoTotal';
+                                    });
+
+                                    let commercialPriceTotal = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                        return price.ospTaxRateName === 'SinPromoTotal';
+                                    });
+
 
                                     // Precios tarifa con promociones
                                     // if (promotionalPrice) {
@@ -293,6 +308,22 @@ module ratesParent.Models {
                                         this.taxRateName = commercialPrice.priceType;
                                         this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
                                         this.ratePrice = commercialPrice.dutyFreeAmount;
+
+                                    }
+                                    // Precios pack con promociones
+                                    // if (promotionalPriceTotal) {
+                                    //     this.taxRate = promotionalPriceTotal.taxRate;
+                                    //     this.taxRateName = promotionalPriceTotal.priceType;
+                                    //     this.ratePriceTaxIncludedPromotional = promotionalPriceTotal.taxIncludedAmount;
+                                    //     this.ratePricePromotional = promotionalPriceTotal.dutyFreeAmount;
+                                    // }
+
+                                    if (commercialPriceTotal) {
+                                        this.typePriceName = commercialPriceTotal.ospTaxRateName;
+                                        this.taxRate = commercialPriceTotal.taxRate;
+                                        this.taxRateName = commercialPriceTotal.priceType;
+                                        this.ratePriceTaxIncluded = commercialPriceTotal.taxIncludedAmount;
+                                        this.ratePrice = commercialPriceTotal.dutyFreeAmount;
 
                                     }
                                 }
@@ -327,9 +358,6 @@ module ratesParent.Models {
                 }
             }
             else {
-
-
-
                 this.rateSubName = rateData.ospTitulo;
                 this.rateDescription = rateData.description;
                 this.siebelId = rateData.id;
@@ -345,9 +373,7 @@ module ratesParent.Models {
                 this.nacPriceTaxIncludedPromotional = 0;
 
                 // Checkea si el id y el idTecnologia son distintos (Es LOVE, es decir Convergente y principal)
-                if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
-                    this.ospTecnology = rateData.ospTecnology;
-                }
+                this.checkIdIdTechDiferences(rateData);
 
                 this.pack = (typeof (rateData.ospFraseComercial) !== 'undefined' && rateData.ospFraseComercial !== null) ?
                     rateData.ospFraseComercial : '';
@@ -597,10 +623,23 @@ module ratesParent.Models {
                     }
                 }
             }
+
+
+            this.checkIsNetflixRate(rateData);
         }
-        private checkIsNetflixRate(rateData: any){
-            this.isNetflix = _.find(rateData.productSpecCharacteristic, { 'name' : 'Netflix incluido en tu tarifa'}) ? true : false;
+
+        private checkIsNetflixRate(rateData: any) {
+            this.isNetflix = _.find(rateData.productSpecCharacteristic, { 'name': 'Netflix incluido en tu tarifa' }) ? true : false;
+        }
+
+        private checkIdIdTechDiferences(rateData: any) {
+            if (rateData.ospTecnology !== rateData.id && rateData.ospTypeService === 'movil_fijo') {
+                this.ospTecnology = rateData.ospTecnology;
+                let caracteristic: any = _.find(rateData.productSpecCharacteristic, { 'name': 'CARACTERISTICATECNOLOGIA' });
+                this.typeTecnology = caracteristic.ospCategory;
             }
+        }
+
     }
 
     export class RatesProductBundle {
@@ -648,6 +687,14 @@ module ratesParent.Models {
             this.description = description;
         }
     }
+
+    // export class PackValueJzz {
+    //     public packType: string;
+
+    //     constructor(description: string) {
+    //         this.packType = description;
+    //     }
+    // }
     export class RatePopupInfo {
         public name: string;
         public description: string;
