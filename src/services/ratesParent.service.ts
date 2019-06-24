@@ -679,6 +679,18 @@ module OrangeFeSARQ.Services {
 
             let loginData = JSON.parse(sessionStorage.getItem('loginData'));
 
+            ({ list, validAll } = this.checkIsValid(list, validAll));
+
+            if (loginData && loginData.sfid) {
+                if (validAll || (list && list.length > 0 && _.find(list, {'value': loginData.sfid}))) {
+                    validSFID = true;
+                }
+            }
+
+            return validSFID;
+        }
+
+        private checkIsValid(list: Object[], validAll: boolean) {
             if (OrangeFeSARQ.Controllers.ParentController.shared
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore
                 && OrangeFeSARQ.Controllers.ParentController.shared.headerFooterStore.listModule) {
@@ -687,23 +699,17 @@ module OrangeFeSARQ.Services {
                         element.listOption.forEach((option) => {
                             if (option.name === 'defaultNac.options' && option.listOptionsLiteral) {
                                 if (_.size(option.listOptionsLiteral) !== 0) {
-                                    list = option.listOptionsLiteral
-                                } else {
+                                    list = option.listOptionsLiteral;
+                                }
+                                else {
                                     validAll = true;
                                 }
                             }
-                        })
+                        });
                     }
                 });
             }
-
-            if (loginData && loginData.sfid) {
-                if (validAll || (list && list.length > 0 && _.find(list, { 'value': loginData.sfid }))) {
-                    validSFID = true;
-                }
-            }
-
-            return validSFID;
+            return { list, validAll };
         }
 
         /**
