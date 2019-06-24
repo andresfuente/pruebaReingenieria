@@ -343,32 +343,42 @@ module OrangeFeSARQ.Services {
             showInStock: boolean,
             sort: string,
             sortType: string,
-            category: number,
-            mosaicFileCompOWCSStore: any
+            mosaicFileCompOWCSStore: any,
+            relatedProductOffering?: string
         ): ng.IPromise<{} | void> {
             let srv = this;
             let params;
-            // Cabeceras
-            let _headers = new HashMap<string, string>();
-            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
-
-            // Establece el codigo de la tarifa segun lo seleccionado
             let idPaquete;
             let idPromocion;
             let idTarifa;
             let channelAccountCode;
-            switch (category) {
-                case 1:
-                    idPaquete = '2983';
-                    idPromocion = '15870';
-                    idTarifa = '3117';
-                    channelAccountCode = '127';
+            // Cabeceras
+            let _headers = new HashMap<string, string>();
+            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
+
+            // Establece el id tarifa que tenemos seleccionado. Si llegamos no tenemos tarifa, seleccionamos las de fijo por defecto
+            if (relatedProductOffering) {
+                let aux = relatedProductOffering.split('+');
+                idPaquete = aux[0];
+                idPromocion = aux[1];
+                idTarifa = aux[2];
+                channelAccountCode = '127';
+            } else {
+                idPaquete = '2983';
+                idPromocion = '15870';
+                idTarifa = '3117';
+                channelAccountCode = '127';
+            }
+
+            switch (commercialAction) {
+                case 'alta':
+                    commercialAction = '0';
+                    break;
+                case 'portabilidad':
+                    commercialAction = '2';
                     break;
                 default:
-                    idPaquete = '2983';
-                    idPromocion = '15870';
-                    idTarifa = '3117'
-                    channelAccountCode = '127';
+                    commercialAction = '0';
                     break;
             }
 

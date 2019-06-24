@@ -465,6 +465,7 @@ module mosaicFile.Models {
                                         if1 = 'Importe prepago';
                                         if2 = 'Importe recurrente';
                                         if3 = 'Importe alta';
+                                        priceName = 'Precio';
                                     } else {
                                         if1 = 'inicial';
                                         if2 = 'cuota';
