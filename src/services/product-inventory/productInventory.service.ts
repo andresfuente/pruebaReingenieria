@@ -67,12 +67,12 @@ module OrangeFeSARQ.Services {
       return vm.httpCacheGett(vm.contractedServicesAPIUrl, _search, componentName, refresh)
         .then(function (response) {
           if (response.data && response.data.product) {
-            return response.data.product;
+            return response;
           }
-          throw response.data.error;
+          throw response;
         })
         .catch(function (error) {
-          return error.data;
+          return error;
         });
     }
 

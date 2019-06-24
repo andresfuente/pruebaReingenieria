@@ -256,7 +256,6 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-<<<<<<< HEAD
         private getParamsForRenove(params: any, commercialData: any, commercialActIndex: number, srv: this, clientData: any, campana_txt: string) {
             if (params.commercialAction === 'renove') {
                 commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
@@ -335,119 +334,6 @@ module OrangeFeSARQ.Services {
             return clientGeolocation;
         }
 
-=======
-
-        /**
-         * @ngdoc method
-         * @name OrangeFeSARQ.Services:MosaicFileSrv#getMosaicDataJZ
-         * @methodOf OrangeFeSARQ.Services:MosaicFileSrv
-         * @param {string} channel Canal al que hacer la consulta
-         * @param {string} commercialAction Canal al que hacer la consulta
-         * @param {string} limit Limite de terminales
-         * @param {string} offset Modulo del la pagina      * 
-         * @param {string} ospFinancialScore 
-         * @param {string} paymentType 
-         * @param {string} portabilityOrigin 
-         * @param {string} scoring scoring  
-         * @param {string} showInStock Canal al que hacer la consulta  
-         * @param {string} sort   
-         * @param {string} sortType  
-         * @param {string} category Categoria de dispositivos a mostrar  
-         * @param {string} mosaicFileCompOWCSStore 
-
-
-         * @return {ng.IPromise<{}|void>}
-         * @description Metodo para obtener todos los elementos del mosaico de terminales completo
-         */
-        getMosaicDataJZ(
-            channel: string,
-            commercialAction: string,
-            limit: string,
-            offset: string,
-            ospFinancialScore: string,
-            paymentType: string,
-            portabilityOrigin: string,
-            scoring: string,
-            showInStock: boolean,
-            sort: string,
-            sortType: string,
-            category: number,
-            mosaicFileCompOWCSStore: any
-        ): ng.IPromise<{} | void> {
-            let srv = this;
-            let params;
-            // Cabeceras
-            let _headers = new HashMap<string, string>();
-            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
-
-            // Establece el codigo de la tarifa segun lo seleccionado
-            let idPaquete;
-            let idPromocion;
-            let idTarifa;
-            let channelAccountCode;
-            switch (category) {
-                case 1:
-                    idPaquete = '2983';
-                    idPromocion = '15870';
-                    idTarifa = '3117';
-                    channelAccountCode = '127';
-                    break;
-                default:
-                    idPaquete = '2983';
-                    idPromocion = '15870';
-                    idTarifa = '3117'
-                    channelAccountCode = '127';
-                    break;
-            }
-
-            params = {
-                channel: channel,
-                channelAccountCode: channelAccountCode,
-                commercialAction: commercialAction,
-                idPaquete: idPaquete,
-                idPromocion: idPromocion,
-                idTarifa: idTarifa,
-                limit: limit,
-                offset: offset,
-                ospFinancialScore: ospFinancialScore,
-                paymentType: paymentType,
-                portabilityOrigin: portabilityOrigin,
-                scoring: scoring,
-                showInStock: showInStock,
-                sort: sort,
-                sortType: sortType
-            };
-
-            _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
-
-            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
-                .then((response) => {
-
-                    return {
-                        results: parseInt(response.headers()['x-total-count'] || 0),
-                        terminals: _.map(response.data, (terminal: any) => {
-                            let srv = this;
-                            srv.handleCacheVersion(1, commercialAction, portabilityOrigin, 'mediio,alto', channel);
-                            let mosaicTerminal: mosaicFile.Models.OrangeMosaicFileTerminal = this.cache[terminal.deviceSpecification.id];
-                            let deferred = srv.$q.defer();
-                            mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
-                            mosaicTerminal.loadCatalogViewData(terminal, 'Residencial', 'primario', mosaicFileCompOWCSStore);
-                            return mosaicTerminal;
-                        })
-                    }
-
-                })
-                .catch((error) => {
-                    throw error;
-                });
-        }
-
-
-<<<<<<< HEAD
-
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
-=======
->>>>>>> d6ebc8a2b253d5f05d7aa8fcdbbeae6c0b98c06b
         /**
          * @ngdoc method
          * @name OrangeFeSARQ.Services:MosaicFileSrv#getMosaicData
@@ -604,67 +490,7 @@ module OrangeFeSARQ.Services {
             let { commercialData, commercialActIndex } = this.getParamsPrepago(srv, commercialAction, params, creditLimit);
 
             // Parametros para Renove   
-<<<<<<< HEAD
             ({ params, clientData, commercialData, commercialActIndex } = this.paramsForRenove(params, campana_txt, clientData, commercialData, commercialActIndex, srv));
-=======
-            if (params.commercialAction === 'renove') {
-                // Se seleccionan los parametros necesarios para la llamada a la OT
-                params.channel = '';
-                params.campaignName = campana_txt;
-                clientData = JSON.parse(sessionStorage.getItem('clientData'));
-                commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-                commercialActIndex = srv.getSelectedCommercialAct();
-                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
-                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
-                        if (lines.line === commercialData[commercialActIndex].serviceNumber && (lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)))) {
-                            params.priceType = 'unico';
-                        }
-                    });
-                }
-
-                // Renove pimaraio
-                if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'primary_renew' ||
-                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'best_renove') {
-                    if (!params.priceType) {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
-                    } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'priceType', 'deviceOffering.category.name']);
-                    }
-                }
-
-                // Renove secundario
-                else if (commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secondary_renew') {
-                    if (clientData && clientData.creditLimitRenove && (clientData.creditLimitRenove.upperUmbral || clientData.creditLimitRenove.upperCreditLimit)) {
-                        params.priceType = 'unico';
-                    }
-                    if (!params.priceType) {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
-                    } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType', 'deviceOffering.category.name']);
-                    }
-                }
-
-                // Renove primario al añadir secundario
-                else if (commercialData[commercialActIndex].renewalType &&
-                    commercialData[commercialActIndex].renewalType.toLowerCase() === 'renove primario' &&
-                    commercialData[commercialActIndex].ospTerminalWorkflow.toLowerCase() === 'secundario') {
-                    if (params.priceType) {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType', 'deviceOffering.category.name']);
-                    } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
-                    }
-                }
-
-                if (clientData && clientData.creditLimitRenove && clientData.creditLimitRenove.linesWithVAP && _.size(clientData.creditLimitRenove.linesWithVAP) !== 0) {
-                    clientData.creditLimitRenove.linesWithVAP.forEach(lines => {
-                        if (lines.line === commercialData[commercialActIndex].serviceNumber && lines.ventaAPlazos === 'N' || (lines.ventaAPlazos === 'Y' && clientData.creditLimitRenove.upperUmbral)) {
-                            params.priceType = 'unico';
-                        }
-                    });
-                }
-
-            }
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
 
             if (riskLevel === 'bajo') {
                 riskLevel += ',medio,alto';

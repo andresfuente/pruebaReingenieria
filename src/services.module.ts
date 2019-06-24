@@ -80,21 +80,14 @@ module OrangeFeSARQ.Constant {
         .service('localStorageManager', OrangeFeSARQ.Services.LocalStorageManager)
         .service('customerViewStore', OrangeFeSARQ.Services.CustomerViewStore)
         .service('commercialCampaignsSrv', OrangeFeSARQ.Services.CommercialCampaignsSrv)
-<<<<<<< HEAD
-=======
-        .service('s8salesOrderSrv', OrangeFeSARQ.Services.s8salesOrderSrv)
-        .service('stockSrv', OrangeFeSARQ.Services.stockSrv)
-        .service('repositorySrv', OrangeFeSARQ.Services.repositorySrv)
-        .service('callServiceSFIDSrv', OrangeFeSARQ.Services.callServiceSFIDSrv)
->>>>>>> 231bca26059df90c211150aad255d01e8d02f502
+        .service('s8salesOrderSrv', OrangeFeSARQ.Services.s8salesOrderSrv)
+        .service('stockSrv', OrangeFeSARQ.Services.stockSrv)
+        .service('repositorySrv', OrangeFeSARQ.Services.repositorySrv)
+        .service('callServiceSFIDSrv', OrangeFeSARQ.Services.callServiceSFIDSrv) 
         /* .service('agreementSrv', OFC.Services.AgreementSrv) */
-        .service('userDeviceSrv', OrangeFeSARQ.Services.UserDeviceSrv)
-<<<<<<< HEAD
-        .service('getRolProfileSrv', OrangeFeSARQ.Services.getRolProfileSrv)
-        .service('orangeBankSalesSrv', OrangeFeSARQ.Services.orangeBankSalesSrv)
-=======
-        .service('eligibilitySrv', OrangeFeSARQ.Services.EligibilitySrv)
-        .service('getRolProfileSrv', OrangeFeSARQ.Services.getRolProfileSrv)
-        .service('getCodesOwcsSrv', OrangeFeSARQ.Services.getCodesOwcsSrv);
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
+        .service('userDeviceSrv', OrangeFeSARQ.Services.UserDeviceSrv)
+        .service('getRolProfileSrv', OrangeFeSARQ.Services.getRolProfileSrv)
+        .service('orangeBankSalesSrv', OrangeFeSARQ.Services.orangeBankSalesSrv)
+        .service('eligibilitySrv', OrangeFeSARQ.Services.EligibilitySrv)
+        .service('getCodesOwcsSrv', OrangeFeSARQ.Services.getCodesOwcsSrv);
 }

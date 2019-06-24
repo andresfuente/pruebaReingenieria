@@ -256,7 +256,6 @@ module OrangeFeSARQ.Services {
     */
     isLove(element: any, currency: string = 'eur', priceType: string = 'pago único'): any {
       let vm = this;
-<<<<<<< HEAD
       let product: any;
       let priceAndLove: any;
       product = this.getProductByElement(element, product, vm);
@@ -327,10 +326,6 @@ module OrangeFeSARQ.Services {
         product = element;
       }
       return product;
-=======
-      vm.ratelove = true;
-      return vm.getProductPrice(element, currency, priceType);
->>>>>>> 231bca26059df90c211150aad255d01e8d02f502
     }
   }
 }

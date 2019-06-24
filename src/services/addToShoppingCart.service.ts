@@ -399,7 +399,6 @@ module OrangeFeSARQ.Services {
             return { secundaryTerminal, seguro, commercialData, commercialActIndex, selectedCartTerminal, selectedCartRate, shoppingCart };
         }
 
-<<<<<<< HEAD
         private insertIntoOptionsArray(commercialData: any, commercialActIndex: number, device: any, selectedCartTerminal: any, selectedCartRate: any) {
             commercialData[commercialActIndex].shoppingCartElementsSelected
                 .forEach((currentItem, index) => {
@@ -415,56 +414,6 @@ module OrangeFeSARQ.Services {
                 });
             return { selectedCartTerminal, selectedCartRate };
         }
-=======
-        /**
-         * @ngdoc method
-         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
-         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
-         * @description
-         * Añade una tarifa al session storage del carrito
-         */
-        putRateInShoppingCart(rate) {
-            let vm = this;
-            let productItem;
-            let rateCartItemElement;
-            let cartItemElement;
-            let cartItemElementId, cartItemIndex, lastCartItemId, commercialActId: number;
-            let svaCartItemList = [];
-            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
-            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
-            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
-            let commercialActIndex = vm.getSelectedCommercialAct();
-            let bucket;
-
-            // Se obtiene el ID del acto comercial que se esta modificando
-            if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
-                commercialActId = Number(commercialData[commercialActIndex].id);
-
-                if (rate.groupName === 'Convergente' && rate.family === 'love') {
-                    commercialData[commercialActIndex].loveRateInShoppingCart = true;
-                }
-
-                if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
-                    commercialData[commercialActIndex].NACRateInShoppingCart = true;
-                }
-                //Seteamos el valor de SOHORateInShoppingCart cuando groupNme es movil, cuando typeService es movil y cuando el segmento es empresa
-                if (rate.groupName === 'Mobile Only_NAC' && rate.typeService === 'movil' && (clientData.ospCustomerSegment === 'empresa' || clientData.ospCustomerSegment === 'autonomo') ) {
-                    commercialData[commercialActIndex].SOHORateInShoppingCart = true;
-                }
-
-                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
-            }
-            // Se comprueba si existe alguna tarifa en el shopping cart que se este modificando
-            if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
-                commercialData[commercialActIndex].ospIsSelected) {
-                commercialData[commercialActIndex].isCompletedAC = false;
-                // Se eliminan las tarifas del acto comercial existentes en el shopping cart
-                shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
-                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
-            }
-            // Se obtiene el id del ultimo elmento del cart item del shopping cart
-            lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
 
         private insertSecondaryIntoShoppingCart(shoppingCart: any, selectedCartRate: any, selectedCartTerminal: any, secundaryDeviceCartItem: any, payType: any, vapCartItems: any[], device: any, vm: this, seguro: any) {
             if (shoppingCart !== null && shoppingCart.cartItem.length > 0) {
@@ -558,7 +507,6 @@ module OrangeFeSARQ.Services {
             return { vapCartItem, unPriceItem };
         }
 
-<<<<<<< HEAD
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putRateInShoppingCart
@@ -577,13 +525,6 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
             let bucket;
-=======
-                // Si es NAC, añadimos los precios promocionados de las líneas adicionales al pack, si existen
-                if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
-                    if (priceAlteration[0].price.dutyFreeAmount.value !== undefined && rate.nacPricePromotional !== undefined) {
-                        priceAlteration[0].price.dutyFreeAmount.value += rate.nacPricePromotional;
-                    }
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
 
             // Se obtiene el ID del acto comercial que se esta modificando
             commercialActId = this.getComercialActId(commercialActIndex, commercialData, commercialActId, rate);
@@ -1224,57 +1165,12 @@ module OrangeFeSARQ.Services {
             this.removePreId(preId, shoppingCart);
 
             // Se obtiene el ID del acto comercial que se esta creando
-<<<<<<< HEAD
             commercialActId = this.getCommercialActId(commercialActIndex, commercialData, commercialActId, rate);
-=======
-            if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
-                commercialActId = Number(commercialData[commercialActIndex].id);
-                if (rate.groupName === 'Convergente' && rate.family === 'love') {
-                    commercialData[commercialActIndex].loveRateInShoppingCart = true;
-                }
-                if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
-                    commercialData[commercialActIndex].NACRateInShoppingCart = true;
-                }
-                //Seteamos el valor de SOHORateInShoppingCart cuando groupNme es movil, cuando typeService es movil y cuando el segmento es empresa
-                //TODO comprobar que se setea correctamente SOHORateInShoppingCart
-                if (rate.groupName === 'Mobile Only_NAC' && rate.typeService === 'movil' && (clientData.ospCustomerSegment === 'empresa' || clientData.ospCustomerSegment === 'autonomo') ) {
-                    commercialData[commercialActIndex].SOHORateInShoppingCart = true;
-                }
-
-                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
-            }
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
             // Se obtiene el id del ultimo elemento del cart item del shopping cart
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
             let priceAlteration = [];
 
-<<<<<<< HEAD
-=======
-            if (vm.hasPromotion(rate)) {
-                priceAlteration = [{
-                    'name': rate.typePriceName ? rate.typePriceName : '',
-                    'priceType': rate.priceType,
-                    'applicationDuration': rate.applicationDuration,
-                    'price': {
-                        'dutyFreeAmount': {
-                            'unit': 'EUR',
-                            'value': rate.ratePricePromotional ? rate.ratePricePromotional : rate.taxFreePrice
-                        },
-                        'taxIncludedAmount': {
-                            'unit': 'EUR',
-                            'value': rate.ratePriceTaxIncludedPromotional ? rate.ratePriceTaxIncludedPromotional : rate.taxIncludedPrice
-                        },
-                        taxRate: rate.taxRate,
-                        ospTaxRateName: rate.taxRateName
-                    }
-                }];
-
-                if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
-                    if (priceAlteration[0].price.dutyFreeAmount.value !== undefined && rate.nacPricePromotional !== undefined) {
-                        priceAlteration[0].price.dutyFreeAmount.value += rate.nacPricePromotional;
-                    }
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
 
             priceAlteration = this.getPriceAlterationNac(vm, rate, priceAlteration);
 
@@ -1282,19 +1178,7 @@ module OrangeFeSARQ.Services {
             rateCartItemElement = this.generateRateCartItemTarifa(rateCartItemElement, rate, vm, priceAlteration);
 
             // SI es NAC, calculamos el precio total estándar del pack
-<<<<<<< HEAD
             this.calculateStandarPackRate(rate, rateCartItemElement);
-=======
-            if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
-                if (rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value !== undefined && rate.nacPrice !== undefined) {
-                    rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value += rate.nacPrice;
-                }
-
-                if (rateCartItemElement.itemPrice[0].price.taxIncludedAmount.value !== undefined && rate.nacPriceTaxIncluded !== undefined) {
-                    rateCartItemElement.itemPrice[0].price.taxIncludedAmount.value += rate.nacPriceTaxIncluded;
-                }
-            }
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
 
             cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
             lastCartItemId = cartItemElementId;
@@ -1591,66 +1475,8 @@ module OrangeFeSARQ.Services {
                     'isBundle': true
                 }
             };
-<<<<<<< HEAD
             return rateCartItemElement;
         }
-=======
-            let preselected = true;
-            if (selected !== null && selected !== undefined && selected === false) {
-                preselected = false;
-            }
-            cartItemElement = {
-                'id': preId ? preId : cartItemElementId,
-                'cartItem': uniquePaid ? [rateCartItemElement, deviceCartItemElement] :
-                    [rateCartItemElement, deviceCartItemElement].concat(vapCartItems),
-                'action': 'New',
-                'cartItemRelationship': [{
-                    id: commercialActId
-                }],
-                'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
-                'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
-                'ospSelected': preselected
-            };
-
-            if ((rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') && rate.bucket) {
-                bucket = vm.createBucketCartItem(rate.bucket);
-
-                if (bucket) {
-                    cartItemElement.cartItem.push(bucket);
-                }
-            }
-
-            // Comprobar SVAs Asociados a la tarifa y al carrito
-            for (let i = 0; i < commercialData[commercialActIndex].rates.length; i++) {
-                if (commercialData[commercialActIndex].rates[i].siebelId === rate.siebelId) {
-                    if (commercialData[commercialActIndex].rates[i].selectedSvaList.length !== 0) {
-                        for (let j = 0; j < commercialData[commercialActIndex].rates[i].selectedSvaList.length; j++) {
-                            cartItemElement.cartItem
-                                .push(vm.createSVACartItem(commercialData[commercialActIndex].rates[i].selectedSvaList[j]));
-                        }
-                    }
-                }
-            }
-
-            for (let i = 0; i < commercialData[commercialActIndex].terminals.length; i++) {
-                if (commercialData[commercialActIndex].terminals[i].bonusId) {
-                    let params = {
-                        commercialAction: '',
-                        idSvaList: commercialData[commercialActIndex].terminals[i].bonusId,
-                        isExistingCustomer: false,
-                        segment: ''
-                    };
-
-                    let cv = JSON.parse(sessionStorage.getItem('cv'));
-                    let defaultData = JSON.parse(sessionStorage.getItem('defaultData'));
-
-                    // Obtenemos si es cliente existente
-                    if (!cv || cv === null || cv === undefined) {
-                        params.isExistingCustomer = false;
-                    } else {
-                        params.isExistingCustomer = true;
-                    }
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
 
         private calculateStandarPack(vm: this, rate: any, priceAlteration: any[]) {
             if (vm.hasPromotion(rate)) {
@@ -2468,13 +2294,8 @@ module OrangeFeSARQ.Services {
             let isPromo : boolean = false;
 
             // Averiguamos si hay promociones en las líneas adicionales
-<<<<<<< HEAD
-            if (rate.groupName === 'Convergente_NAC') {
-                 isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
-=======
             if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
                 isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
->>>>>>> 8cdf87b8a723e0830aa35a10c298d90231ad5ae7
 
                 // Si no hay promoción en la principal, comprobamos las adicionales
                 // y si alguna tiene promo, hay que pintarlo

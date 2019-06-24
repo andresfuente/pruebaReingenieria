@@ -16,7 +16,6 @@ module mosaicFile.Models {
         public status: string;
         private deferred: ng.IDeferred<{}>;
         public promise: ng.IPromise<{}>;
-        public brand = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand') : 'orange';
 
         constructor(serviceData?: any, deferred?: ng.IDeferred<{}>) {
 
@@ -26,13 +25,6 @@ module mosaicFile.Models {
         }
 
         loadCatalogViewData(serviceData: any, ospCustomerSegment: string, priceName: string, mosaicFileCompOWCSStore?: any) {
-            let vm = this;
-            if (vm.brand === 'jazztel') {
-                let arrayTerminales = [];
-                arrayTerminales.push(serviceData);
-                serviceData = arrayTerminales;
-            }
-
             if (serviceData && serviceData.length) {
                 let deviceSpecification = serviceData.deviceSpecification;
                 this.variants = this.generateTerminalVariants(serviceData, ospCustomerSegment, priceName, mosaicFileCompOWCSStore);
@@ -219,7 +211,6 @@ module mosaicFile.Models {
         public anchor: string[] = [];
         private renewRates = [];
         private prepaidRenewPrices = [];
-        public brand: any = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand') : 'orange';
 
         constructor(serviceData: any, ospCustomerSegment: string, priceName: string, mosaicFileCompOWCSStore?: any) {
 
@@ -227,13 +218,6 @@ module mosaicFile.Models {
             let commercialActIndex = _.findIndex(commercialData, function (currentCommercialAct: any) {
                 return currentCommercialAct.ospIsSelected === true;
             });
-<<<<<<< HEAD
-=======
-            if (commercialActIndex < 0) {
-                commercialActIndex = commercialData.length - 1;
-            }
-
->>>>>>> d6ebc8a2b253d5f05d7aa8fcdbbeae6c0b98c06b
             // Banderas para controlar las opciones de la cámara
             let backCamera = false;
             let frontCamera = false;
@@ -263,7 +247,7 @@ module mosaicFile.Models {
 
             }
         }
-        
+
         private setRenove(commercialData: any, commercialActIndex: number, serviceData: any) {
             if (commercialData[commercialActIndex].ospTerminalWorkflow) {
                 // Renove prepago
@@ -435,7 +419,6 @@ module mosaicFile.Models {
             }
         }
 
-<<<<<<< HEAD
         private checkPriceTypeUnico(price: any, ospCustomerSegment: string) {
             if (price.priceType && price.priceType === 'unico') {
                 if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
@@ -446,97 +429,6 @@ module mosaicFile.Models {
                 }
             }
         }
-=======
-                // DEVICE OFFERING
-                if (serviceData.deviceOffering && serviceData.deviceOffering.length) {
-                    let deviceOffering = serviceData.deviceOffering;
-                    // ID del modelo del terminal
-                    this.siebelId = deviceOffering[0].id;
-                    this.category = deviceOffering[0].category[0].name
-
-                    // Si existe el offeringPrice y no esta vacio
-                    if (deviceOffering && deviceOffering.length > 0) {
-                        // Se recorre todo el array de precios
-                        serviceData.deviceOffering.forEach((deviceOff, x) => {
-                            if (deviceOff.deviceOfferingPrice && deviceOff.deviceOfferingPrice.length > 0) {
-                                deviceOff.deviceOfferingPrice.forEach((price, i) => {
-
-                                    /* Precios del terminal */
-                                    priceItem = new OrangeMosaicFileTerminalFileIPriceItem();
-                                    filePrice = new OrangeMosaicFileTerminalFilePrice();
-
-                                    // Id
-                                    price.relatedProductOffering.forEach(item => {
-                                        if ((price.priceType === 'inicial' && item.name === 'Cuota inicial') ||
-                                            (price.priceType === 'cuota' && item.name === 'Cuota mensual')) {
-                                            priceItem.id = item.id;
-                                        }
-                                    });
-                                    if (price.Price) {
-                                        // Agregando precio sin impuesto
-                                        filePrice.dutyFreeAmount.unit = price.Price.currencyCode;
-                                        filePrice.dutyFreeAmount.value = price.Price.dutyFreeAmount;
-                                        // Agregando precio con impuesto
-                                        filePrice.taxIncludedAmount.unit = price.Price.currencyCode;
-                                        filePrice.taxIncludedAmount.value = price.Price.taxIncudedAmount; // Corregir
-                                        // Recogiendo impuestos
-                                        filePrice.taxRate = price.Price.taxRate;
-                                        filePrice.ospTaxRateName = price.Price.ospTaxRateName;
-                                        // Creando el objeto item price
-                                        priceItem.priceType = price.priceType;
-                                        priceItem.price = filePrice;
-                                    }
-                                    // Duracion de las cuotas
-                                    if (price.priceType === 'cuota') {
-                                        priceItem.recurringChargePeriod = Number(price.applicationDuration);
-                                    }
-                                    // Añadiendo el precio al arreglo de precios del terminal
-                                    this.itemPrice.push(priceItem);
-
-                                    let if1, if2, if3;
-
-                                    if (this.brand == 'jazztel') {
-                                        if1 = 'Importe prepago';
-                                        if2 = 'Importe recurrente';
-                                        if3 = 'Importe alta';
-                                    } else {
-                                        if1 = 'inicial';
-                                        if2 = 'cuota';
-                                        if3 = 'unico';
-                                    }
-
-                                    if (price.name === priceName) {
-                                        if (price.priceType && price.priceType === if1) {
-                                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
-                                                this.initialPaid = price.Price.taxIncudedAmount;
-                                            } else {
-                                                this.initialPaid = price.Price.dutyFreeAmount;
-                                            }
-                                        }
-                                        if (price.priceType && price.priceType === if2) {
-                                            this.litDeadlines = price.applicationDuration;
-                                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
-                                                this.litPrice = price.Price.taxIncudedAmount;
-                                            } else {
-                                                this.litPrice = price.Price.dutyFreeAmount;
-                                            }
-                                            // Si se puede se calcula el precio total
-                                            if (this.initialPaid !== undefined) {
-                                                this.totalPaid = this.initialPaid + this.litPrice * this.litDeadlines;
-                                            }
-                                        }
-                                        if (price.priceType && price.priceType === if3) {
-                                            if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
-                                                this.uniquePaid = price.Price.taxIncudedAmount;
-                                            } else {
-                                                this.uniquePaid = price.Price.dutyFreeAmount;
-                                            }
-                                        }
-                                    }
-                                });
-                            }
->>>>>>> 231bca26059df90c211150aad255d01e8d02f502
-
         private checkPriceTypeInitial(price: any, ospCustomerSegment: string) {
             if (price.priceType && price.priceType === 'inicial') {
                 if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
@@ -547,9 +439,6 @@ module mosaicFile.Models {
                 }
             }
         }
-
-        
-
         private getDeviceCharacteristics(serviceData: any, mosaicFileCompOWCSStore: any, backCamera: boolean, frontCamera: boolean) {
             if (serviceData.deviceSpecification.characteristic && serviceData.deviceSpecification.characteristic.length) {
                 serviceData.deviceSpecification.characteristic.forEach((characteristic) => {
@@ -575,7 +464,7 @@ module mosaicFile.Models {
                             ({ backCamera, frontCamera } = this.setOspCharCategoryDefaultCase(characteristic, mosaicFileCompOWCSStore, backCamera, frontCamera));
                             break;
                         }
-                        
+
                     }
                 });
             }

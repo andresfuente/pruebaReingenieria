@@ -39,13 +39,13 @@ module addToShoppingCart.Test.Services {
         describe('Service to addToShoppingCartSrv ', () => {
             
 
-            describe('- SOHORateInShoppingCart()', () => {
-                it('commercialData && commercialData.length', function () {
-                    service.SOHORateInShoppingCart();
-                    expect(service.SOHORateInShoppingCart).toBeEmpty;
-                });
+            // describe('- SOHORateInShoppingCart()', () => {
+            //     it('commercialData && commercialData.length', function () {
+            //         service.SOHORateInShoppingCart();
+            //         expect(service.SOHORateInShoppingCart).toBeEmpty;
+            //     });
                 
-            });
+            // });
 
             describe('- putRateInShoppingCart()', () => {
                 it('commercialData && commercialData.length', function () {
