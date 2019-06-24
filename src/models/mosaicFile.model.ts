@@ -313,6 +313,7 @@ module mosaicFile.Models {
                 let deviceOffering = serviceData.deviceOffering;
                 // ID del modelo del terminal
                 this.siebelId = deviceOffering[0].id;
+                this.category = deviceOffering[0].category[0].name;
                 // Si existe el offeringPrice y no esta vacio
                 if (deviceOffering && deviceOffering.length > 0) {
                     // Se recorre todo el array de precios
