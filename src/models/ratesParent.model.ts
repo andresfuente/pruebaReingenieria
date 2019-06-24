@@ -603,7 +603,7 @@ module ratesParent.Models {
 
 
         private checkIsNetflixRate(rateData: any){
-            this.isNetflix = _.find(rateData.productSpecCharacteristic, { 'name' : 'Netflix'}) ? true : false;
+            this.isNetflix = _.find(rateData.productSpecCharacteristic, { 'name' : 'Netflix incluido en tu tarifa'}) ? true : false;
         }
 
 

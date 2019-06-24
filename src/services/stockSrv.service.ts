@@ -30,7 +30,6 @@ module OrangeFeSARQ.Services {
             vm.genericConstant = $injector.get('genericConstant');
             vm.brand = vm.genericConstant.brand;
             vm.stockServiceUrl = vm.genericConstant.stockData;
-
         }
 
         getStock(filters: Object, compName = 'consultarReservas'): ng.IPromise<Array<consultarReservas.Models.WdtTableModelSAPData>> {
