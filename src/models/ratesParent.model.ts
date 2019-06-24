@@ -285,6 +285,14 @@ module ratesParent.Models {
                                         return price.ospTaxRateName === 'SinPromo';
                                     });
 
+                                    let promotionalPriceTotal = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                        return price.ospTaxRateName === 'PromoTotal';
+                                    });
+
+                                    let commercialPriceTotal = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                        return price.ospTaxRateName === 'SinPromoTotal';
+                                    });
+
 
                                     // Precios tarifa con promociones
                                     // if (promotionalPrice) {
@@ -300,6 +308,22 @@ module ratesParent.Models {
                                         this.taxRateName = commercialPrice.priceType;
                                         this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
                                         this.ratePrice = commercialPrice.dutyFreeAmount;
+
+                                    }
+                                    // Precios pack con promociones
+                                    // if (promotionalPriceTotal) {
+                                    //     this.taxRate = promotionalPriceTotal.taxRate;
+                                    //     this.taxRateName = promotionalPriceTotal.priceType;
+                                    //     this.ratePriceTaxIncludedPromotional = promotionalPriceTotal.taxIncludedAmount;
+                                    //     this.ratePricePromotional = promotionalPriceTotal.dutyFreeAmount;
+                                    // }
+
+                                    if (commercialPriceTotal) {
+                                        this.typePriceName = commercialPriceTotal.ospTaxRateName;
+                                        this.taxRate = commercialPriceTotal.taxRate;
+                                        this.taxRateName = commercialPriceTotal.priceType;
+                                        this.ratePriceTaxIncluded = commercialPriceTotal.taxIncludedAmount;
+                                        this.ratePrice = commercialPriceTotal.dutyFreeAmount;
 
                                     }
                                 }
