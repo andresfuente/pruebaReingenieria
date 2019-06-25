@@ -1239,24 +1239,6 @@ module OrangeFeSARQ.Services {
                     );
                 }
             }
-
-            // Se guarda el IMEI del terminal si se dispone de el
-            if (device && deviceReserve && deviceReserve.IMEI) {
-                let imei = {
-                    'name': 'IMEI',
-                    'value': deviceReserve.IMEI
-                };
-                device.characteristic.push(imei);
-
-                if (!vm.isFdcSite() && deviceReserve.idReserva) {
-                    device.characteristic.push(
-                        {
-                            name: 'idReserva',
-                            value: deviceReserve.idReserva
-                        }
-                    );
-                }
-            }
             if (device.insuranceSiebelId) {
                 insurance = vm.createInsuranceCartItem(device, 'primary');
             }
