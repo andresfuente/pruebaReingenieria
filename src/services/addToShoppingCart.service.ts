@@ -162,7 +162,14 @@ module OrangeFeSARQ.Services {
                 };
                 productItem.characteristic.push(imei);
 
-                if (!vm.isFdcSite() && device.idReserva) {
+                if (!vm.isFdcSite() && device.idReserva && device.id) {
+
+                    productItem.productSpecification.push(
+                        {
+                            name: 'codigoSAP',
+                            value: device.id
+                        }
+                    );
                     productItem.characteristic.push(
                         {
                             name: 'idReserva',
@@ -464,11 +471,18 @@ module OrangeFeSARQ.Services {
         }
 
         private addIMEI(device: any, productItem: any) {
-            if (device && device.IMEI && device.IMEI !== undefined) {
+            if (device && device.IMEI && device.id) {
                 let imei = {
                     'name': 'IMEI',
                     'value': device.IMEI
                 };
+
+                let codigoSAP = {
+                    'name': 'codigoSAP',
+                    'value': device.id
+                };
+
+                productItem.productSpecification.push(codigoSAP);
                 productItem.characteristic.push(imei);
             }
         }
@@ -1230,7 +1244,13 @@ module OrangeFeSARQ.Services {
                 };
                 device.characteristic.push(imei);
 
-                if (!vm.isFdcSite() && deviceReserve.idReserva) {
+                if (!vm.isFdcSite() && deviceReserve.idReserva && deviceReserve.id) {
+                    device.productSpecification.push(
+                        {
+                            name: 'codigoSAP',
+                            value: deviceReserve.id
+                        }
+                    );
                     device.characteristic.push(
                         {
                             name: 'idReserva',
@@ -1639,7 +1659,14 @@ module OrangeFeSARQ.Services {
                 };
                 productItem.characteristic.push(imei);
 
-                if (!vm.isFdcSite() && device.idReserva) {
+                if (!vm.isFdcSite() && device.idReserva && device.id) {
+
+                    productItem.productSpecification.push(
+                        {
+                            name: 'codigoSAP',
+                            value: device.id
+                        }
+                    );
                     productItem.characteristic.push(
                         {
                             name: 'idReserva',
