@@ -141,12 +141,8 @@ module OrangeFeSARQ.Services {
                     codTarifa = relatedProductOffering;
                     break;
             }
-            // Establece el nivel de riego
-            if (riskLevel === 'bajo') {
-                riskLevel += ',medio,alto';
-            } else if (riskLevel === 'medio') {
-                riskLevel += ',alto';
-            }
+            riskLevel = srv.getRiskLevel(riskLevel);
+
             // Establece el segmento del cliente
             let clientSegment = '';
             if (ospCustomerSegmentBinding.toUpperCase() === 'RESIDENCIAL') {
@@ -171,15 +167,7 @@ module OrangeFeSARQ.Services {
                 'deviceOffering.category.name': priceNameBinding
             };
 
-            if (filters && filters.length) {
-                filters.forEach((filtersParam, index) => {
-                    params[Object.keys(filtersParam)[0]] = filtersParam[Object.keys(filtersParam)[0]];
-                    if (Object.keys(filtersParam)[0] === 'price') {
-                        // tslint:disable-next-line
-                        params['priceType'] = 'aplazado';
-                    }
-                });
-            }
+            params = srv.getFilters(filters, params);
 
             if (creditLimit !== undefined && creditLimit !== null) {
                 params.creditLimit = Math.round(creditLimit);
@@ -324,10 +312,11 @@ module OrangeFeSARQ.Services {
          * @param {string} showInStock Canal al que hacer la consulta  
          * @param {string} sort   
          * @param {string} sortType  
-         * @param {string} category Categoria de dispositivos a mostrar  
          * @param {string} mosaicFileCompOWCSStore 
-
-
+         * @param {string} filters 
+         * @param {string} ospCustomerSegmentBinding 
+         * @param {string} riskLevel 
+         * @param {string} relatedProductOffering 
          * @return {ng.IPromise<{}|void>}
          * @description Metodo para obtener todos los elementos del mosaico de terminales completo
          */
@@ -344,6 +333,9 @@ module OrangeFeSARQ.Services {
             sort: string,
             sortType: string,
             mosaicFileCompOWCSStore: any,
+            filters: any,
+            ospCustomerSegmentBinding: string,
+            riskLevel: string,
             relatedProductOffering?: string
         ): ng.IPromise<{} | void> {
             let srv = this;
@@ -383,6 +375,10 @@ module OrangeFeSARQ.Services {
                     break;
             }
 
+
+            riskLevel = srv.getRiskLevel(riskLevel);
+
+
             params = {
                 channel: channel,
                 channelAccountCode: channelAccountCode,
@@ -401,6 +397,8 @@ module OrangeFeSARQ.Services {
                 sortType: sortType
             };
 
+            params = srv.getFilters(filters, params);
+
             _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
 
             return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
@@ -410,11 +408,11 @@ module OrangeFeSARQ.Services {
                         results: parseInt(response.headers()['x-total-count'] || 0),
                         terminals: _.map(response.data, (terminal: any) => {
                             let srv = this;
-                            srv.handleCacheVersion(1, commercialAction, portabilityOrigin, 'mediio,alto', channel);
+                            srv.handleCacheVersion(1, commercialAction, portabilityOrigin, riskLevel, channel);
                             let mosaicTerminal: mosaicFile.Models.OrangeMosaicFileTerminal = this.cache[terminal.deviceSpecification.id];
                             let deferred = srv.$q.defer();
                             mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
-                            mosaicTerminal.loadCatalogViewData(terminal, 'Residencial', 'primario', mosaicFileCompOWCSStore);
+                            mosaicTerminal.loadCatalogViewData(terminal, ospCustomerSegmentBinding, 'primario', mosaicFileCompOWCSStore);
                             return mosaicTerminal;
                         })
                     }
@@ -423,6 +421,49 @@ module OrangeFeSARQ.Services {
                 .catch((error) => {
                     throw error;
                 });
+        }
+
+
+        /**
+         * @ngdoc method
+         * @name OrangeFeSARQ.Services:MosaicFileSrv#getRiskLevel
+         * @param {string} riskLevel
+         * @return {string}
+         * @description Metodo para obtener el riesgo de cliente
+         */
+
+        getRiskLevel(riskLevel: string) {
+            // Establece el nivel de riego
+            if (riskLevel === 'bajo') {
+                riskLevel += ',medio,alto';
+            } else if (riskLevel === 'medio') {
+                riskLevel += ',alto';
+            }
+            return riskLevel;
+        }
+
+
+        /**
+        * @ngdoc method
+        * @name OrangeFeSARQ.Services:MosaicFileSrv#getFilters
+        * @param {string} filters
+        * @param {string} params
+        * @return {string}
+        * @description Metodo para añadir filtros
+        */
+
+        getFilters(filters, params) {
+
+            if (filters && filters.length) {
+                filters.forEach((filtersParam, index) => {
+                    params[Object.keys(filtersParam)[0]] = filtersParam[Object.keys(filtersParam)[0]];
+                    if (Object.keys(filtersParam)[0] === 'price') {
+                        // tslint:disable-next-line
+                        params['priceType'] = 'aplazado';
+                    }
+                });
+            }
+            return params;
         }
 
 
