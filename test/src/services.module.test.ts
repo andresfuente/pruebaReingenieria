@@ -161,10 +161,33 @@ module servicesCommons.Tests.Controllers {
                         expect(httpCacheOrange).toBeDefined();
                     });
                 });
-        
-        
 
-               
+            });
+
+            describe('- getCodesScoringSrv  ()', () => {
+                let service;
+                let $httpBackend;
+                let $scope;
+                let $q;
+                let httpCacheOrange;
+
+                beforeEach(angular.mock.inject((_getCodesScoringSrv_, _$rootScope_, _$httpBackend_, _$q_, _httpCacheOrange_) => {
+                    service = _getCodesScoringSrv_;
+                    $httpBackend = _$httpBackend_;
+                    $scope = _$rootScope_.$new();
+                    $q = _$q_;
+                    httpCacheOrange = _httpCacheOrange_;
+                }));
+
+                describe('injections', () => {
+                    it('should inject correctly', () => {
+                        expect(service).toBeDefined();
+                        expect($httpBackend).toBeDefined();
+                        expect($scope).toBeDefined();
+                        expect($q).toBeDefined();
+                        expect(httpCacheOrange).toBeDefined();
+                    });
+                });
 
             });
 

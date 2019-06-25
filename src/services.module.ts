@@ -85,4 +85,5 @@ module OrangeFeSARQ.Constant {
         .service('getRolProfileSrv', OrangeFeSARQ.Services.getRolProfileSrv)
         .service('s8salesOrderSrv', OrangeFeSARQ.Services.s8salesOrderSrv)
         .service('callServiceSFIDSrv', OrangeFeSARQ.Services.callServiceSFIDSrv)
+        .service('getCodesScoringSrv', OrangeFeSARQ.Services.getCodesScoringSrv)
 }

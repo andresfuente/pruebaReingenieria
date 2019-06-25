@@ -3,12 +3,12 @@ module OrangeFeSARQ.Services {
 
     /**
      * @ngdoc service
-     * @name OrangeFeSARQ.Services:s8salesOrder
+     * @name OrangeFeSARQ.Services:getCodesScoringSrv
      * @author Jaime Alain
      * @description
-     * Servicio para comprobar las ordenes en vuelo
+     * Servicio para recoger los codigos de scoring 
      */
-    export class callServiceSFIDSrv extends OrangeFeSARQ.Services.ParentService {
+    export class getCodesScoringSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
         constructor(public $injector) {
@@ -17,22 +17,19 @@ module OrangeFeSARQ.Services {
 
         /**
          * @ngdoc service
-         * @name OrangeFeSARQ.Services:getSFID
+         * @name OrangeFeSARQ.Services:getOrders
          * @author Jaime Alain
          * @description
-         * Servicio para recoger los SFID por filtro en OWCS
+         * Servicio para comprobar las ordenes en vuelo
          */
-        getSFID(filter, comp) {
+        getCodes(codes) {
             let vm = this;
 
             let _search: Object = {
                 queryParams: {},
-                urlParams: [filter]
+                urlParams: ['getListValue', 'listName', codes]
             };
-
-            let url = vm.genericConstant.dataController + '/getFilterSfid';
-
-            return vm.httpCacheGett(url, _search, comp)
+            return vm.httpCacheGett(vm.genericConstant.dataController, _search)
                 .then((response) => {
                     return response.data;
                 })
@@ -40,6 +37,6 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
-    }
     
+    }
 }
