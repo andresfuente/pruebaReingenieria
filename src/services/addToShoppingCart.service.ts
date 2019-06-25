@@ -198,7 +198,14 @@ module OrangeFeSARQ.Services {
                 };
                 productItem.characteristic.push(imei);
 
-                if (!vm.isFdcSite() && device.idReserva) {
+                if (!vm.isFdcSite() && device.idReserva && device.id) {
+
+                    productItem.productSpecification.push(
+                        {
+                            name: 'codigoSAP',
+                            value: device.id
+                        }
+                    );
                     productItem.characteristic.push(
                         {
                             name: 'idReserva',
@@ -352,8 +359,14 @@ module OrangeFeSARQ.Services {
                     'value': device.IMEI
                 };
                 productItem.characteristic.push(imei);
+                if (!vm.isFdcSite() && device.idReserva && device.id) {
 
-                if (!vm.isFdcSite() && device.idReserva) {
+                    productItem.productSpecification.push(
+                        {
+                            name: 'codigoSAP',
+                            value: device.id
+                        }
+                    );
                     productItem.characteristic.push(
                         {
                             name: 'idReserva',
@@ -1245,7 +1258,14 @@ module OrangeFeSARQ.Services {
                 };
                 device.characteristic.push(imei);
 
-                if (!vm.isFdcSite() && deviceReserve.idReserva) {
+                if (!vm.isFdcSite() && deviceReserve.idReserva && deviceReserve.id) {
+
+                    device.productSpecification.push(
+                        {
+                            name: 'codigoSAP',
+                            value: deviceReserve.id
+                        }
+                    );
                     device.characteristic.push(
                         {
                             name: 'idReserva',
@@ -1519,7 +1539,13 @@ module OrangeFeSARQ.Services {
                 };
                 productItem.characteristic.push(imei);
 
-                if (!vm.isFdcSite() && device.idReserva) {
+                if (!vm.isFdcSite() && device.idReserva && device.id) {
+                    productItem.productSpecification.push(
+                        {
+                            name: 'codigoSAP',
+                            value: device.id
+                        }
+                    );
                     productItem.characteristic.push(
                         {
                             name: 'idReserva',
@@ -2270,7 +2296,7 @@ module OrangeFeSARQ.Services {
 
         }
         */
-        
+
         isFdcSite() {
             const loginData = JSON.parse(sessionStorage.getItem('loginData'));
             return loginData.site === 'fichadecliente';
