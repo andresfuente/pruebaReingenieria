@@ -16,7 +16,7 @@ module mosaicFile.Models {
         public status: string;
         private deferred: ng.IDeferred<{}>;
         public promise: ng.IPromise<{}>;
-
+        public brand = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand') : 'orange';
         constructor(serviceData?: any, deferred?: ng.IDeferred<{}>) {
 
             this.status = 'loading';
@@ -25,6 +25,11 @@ module mosaicFile.Models {
         }
 
         loadCatalogViewData(serviceData: any, ospCustomerSegment: string, priceName: string, mosaicFileCompOWCSStore?: any) {
+            if (this.brand === 'jazztel') {
+                let array = [];
+                array.push(serviceData)
+                serviceData = array;
+            };
             if (serviceData && serviceData.length) {
                 let deviceSpecification = serviceData.deviceSpecification;
                 this.variants = this.generateTerminalVariants(serviceData, ospCustomerSegment, priceName, mosaicFileCompOWCSStore);
@@ -211,6 +216,7 @@ module mosaicFile.Models {
         public anchor: string[] = [];
         private renewRates = [];
         private prepaidRenewPrices = [];
+        private brand = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand') : 'orange';
 
         constructor(serviceData: any, ospCustomerSegment: string, priceName: string, mosaicFileCompOWCSStore?: any) {
 
@@ -397,6 +403,7 @@ module mosaicFile.Models {
         }
 
         private checkPriceName(price: any, priceName: string, ospCustomerSegment: string) {
+            priceName = this.brand === 'jazztel' ? 'Precio' : priceName;
             if (price.name === priceName) {
                 this.checkPriceTypeInitial(price, ospCustomerSegment);
                 this.checkPriceTypeCuota(price, ospCustomerSegment);
@@ -405,7 +412,9 @@ module mosaicFile.Models {
         }
 
         private checkPriceTypeCuota(price: any, ospCustomerSegment: string) {
-            if (price.priceType && price.priceType === 'cuota') {
+            let option;
+            option = this.brand === 'jazztel' ? 'Importe recurrente' : 'cuota';
+            if (price.priceType && price.priceType === option) {
                 this.litDeadlines = price.applicationDuration;
                 if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
                     this.litPrice = price.Price.taxIncudedAmount;
@@ -421,7 +430,10 @@ module mosaicFile.Models {
         }
 
         private checkPriceTypeUnico(price: any, ospCustomerSegment: string) {
-            if (price.priceType && price.priceType === 'unico') {
+            let option;
+            option = this.brand === 'jazztel' ? 'Importe alta' : 'unico';
+
+            if (price.priceType && price.priceType === option) {
                 if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
                     this.uniquePaid = price.Price.taxIncudedAmount;
                 }
@@ -431,7 +443,10 @@ module mosaicFile.Models {
             }
         }
         private checkPriceTypeInitial(price: any, ospCustomerSegment: string) {
-            if (price.priceType && price.priceType === 'inicial') {
+            let option;
+            option = this.brand === 'jazztel' ? 'Importe prepago' : 'inicial';
+
+            if (price.priceType && price.priceType === option) {
                 if (ospCustomerSegment.toLocaleLowerCase() === 'residencial') {
                     this.initialPaid = price.Price.taxIncudedAmount;
                 }
