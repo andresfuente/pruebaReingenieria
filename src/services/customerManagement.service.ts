@@ -352,7 +352,7 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
             let params: any = {};
-            if(vm.brand!=='orange'){
+            if(vm.brand==='jazztel'){
             params.brand = vm.brand;
             } 
             params.city = address.province;
