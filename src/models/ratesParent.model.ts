@@ -144,6 +144,8 @@ module ratesParent.Models {
         public nacPriceTaxIncludedPromotional: number;
         public nacPricePromotional: number;
 
+        public commercialTotalPrice;
+        public promotionalTotalPrice;
         public descriptionPromotion;
         public applicationDuration;
         public recurringChargePeriodPromotion: string; // Tipo de promoción
@@ -285,15 +287,32 @@ module ratesParent.Models {
                                         return price.ospTaxRateName === 'SinPromo';
                                     });
 
-                                    let promotionalPriceTotal = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.ospTaxRateName === 'PromoTotal';
-                                    });
+                                    // if(rateData.ospTecnology === '2'){
+                                        let promotionalTotalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                            return price.ospTaxRateName === 'PromoTotal';
+                                        });
+    
+                                        let commercialTotalPrice = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
+                                            return price.ospTaxRateName === 'SinPromoTotal';
+                                        });
+                                    // }
+                                    // Precios pack con promociones
+                                    // if (promotionalTotalPrice) {
+                                    //     this.taxRate = promotionalTotalPrice.taxRate;
+                                    //     this.taxRateName = promotionalTotalPrice.priceType;
+                                    //     this.promotionalTotalPrice = promotionalTotalPrice.taxIncludedAmount;
+                                    //     this.ratePricePromotional = promotionalTotalPrice.dutyFreeAmount;
+                                    // }
 
-                                    let commercialPriceTotal = _.find(priceData[i].productOfferingPrice[j].price, function (price: any) {
-                                        return price.ospTaxRateName === 'SinPromoTotal';
-                                    });
-
-
+                                        if (commercialTotalPrice) {
+                                            this.typePriceName = commercialTotalPrice.ospTaxRateName;
+                                            this.taxRate = commercialTotalPrice.taxRate;
+                                            this.taxRateName = commercialTotalPrice.priceType;
+                                            this.commercialTotalPrice = commercialTotalPrice.taxIncludedAmount;
+                                            this.ratePrice = commercialTotalPrice.dutyFreeAmount;
+    
+                                        }
+                                    
                                     // Precios tarifa con promociones
                                     // if (promotionalPrice) {
                                     //     this.taxRate = promotionalPrice.taxRate;
@@ -309,23 +328,7 @@ module ratesParent.Models {
                                         this.ratePriceTaxIncluded = commercialPrice.taxIncludedAmount;
                                         this.ratePrice = commercialPrice.dutyFreeAmount;
 
-                                    }
-                                    // Precios pack con promociones
-                                    // if (promotionalPriceTotal) {
-                                    //     this.taxRate = promotionalPriceTotal.taxRate;
-                                    //     this.taxRateName = promotionalPriceTotal.priceType;
-                                    //     this.ratePriceTaxIncludedPromotional = promotionalPriceTotal.taxIncludedAmount;
-                                    //     this.ratePricePromotional = promotionalPriceTotal.dutyFreeAmount;
-                                    // }
-
-                                    if (commercialPriceTotal) {
-                                        this.typePriceName = commercialPriceTotal.ospTaxRateName;
-                                        this.taxRate = commercialPriceTotal.taxRate;
-                                        this.taxRateName = commercialPriceTotal.priceType;
-                                        this.ratePriceTaxIncluded = commercialPriceTotal.taxIncludedAmount;
-                                        this.ratePrice = commercialPriceTotal.dutyFreeAmount;
-
-                                    }
+                                    }                             
                                 }
                             }
                         }
@@ -584,7 +587,7 @@ module ratesParent.Models {
                                                 this.rateOfferingPriceTaxInluded = techSiebelPrice.taxIncludedAmount;
                                                 this.rateOfferingPrice = techSiebelPrice.dutyFreeAmount;
                                             }
-                                        }
+                                                                               }
                                     }
                                 }
                             }
