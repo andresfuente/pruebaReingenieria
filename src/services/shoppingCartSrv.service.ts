@@ -104,11 +104,12 @@ module OrangeFeSARQ.Services {
          */
         putOspShoppingCart(body, id: string, componentName: string) {
             let vm = this;
-
+            let brand = sessionStorage.getItem("pangea-brand") ? sessionStorage.getItem("pangea-brand")
+              : "orange";
             let _headers = vm.getParentSfid();
             let _search = {
-                body: body,
-                urlParams: ['ospShoppingCart', id]
+              body: brand === "amena" ? (body.id = id) : body,
+              urlParams: ["ospShoppingCart", id]
             };
 
             return vm.httpPut(vm.genericConstant.shoppingCart, _search, componentName, null, null, _headers)
