@@ -253,10 +253,10 @@ module OrangeFeSARQ.Services {
                 });
         }
 
-        getProductPrice(product: any, sva: boolean = false, promoted: boolean = true): number {
+        getProductPrice(product: any, sva: boolean = false, promoted: boolean = true): Object {
             let vm = this;
     
-            let price: number = 0;
+            let price: Object = {};
             if (product && product.productOfferingPrice) {
                 let priorities: string[] = [];
                 if (sva) {
@@ -282,14 +282,17 @@ module OrangeFeSARQ.Services {
             return price;
         }
     
-        private getPriorityPrice(productPricesList: any[], priorities: string[], promoted: boolean = true): number {
+        private getPriorityPrice(productPricesList: any[], priorities: string[], promoted: boolean = true): Object {
     
             const PRICETYPE: string = 'Pago aplazado';
     
             for (let price of productPricesList) {
                 if (price.priceType == PRICETYPE) {
+
                     if (promoted && price.productOfferingPriceAlteration && price.productOfferingPriceAlteration.price) {
-                        return price.productOfferingPriceAlteration.price.taxIncludedAmount;
+                        let alteration=  price.productOfferingPriceAlteration
+
+                        return {amount: alteration.price.taxIncludedAmount, duration: alteration.applicationDuration};
                     }
                     for (let priority of priorities) {
                         let priceReturn = _.find(price.price, function(o: any) { return o.priceType == priority});
