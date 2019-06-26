@@ -88,4 +88,5 @@ module OrangeFeSARQ.Constant {
         .service('callServiceSFIDSrv', OrangeFeSARQ.Services.callServiceSFIDSrv)
         .service('getCodesScoringSrv', OrangeFeSARQ.Services.getCodesScoringSrv)
         .service('getCodesOwcsSrv', OrangeFeSARQ.Services.getCodesOwcsSrv)
+        .service('stockSrv', OrangeFeSARQ.Services.stockSrv)
 }
