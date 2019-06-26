@@ -147,6 +147,7 @@ module OrangeFeSARQ.Services {
                     'type': 'terminal'
                 }],
                 'place': [],
+                'productSpecification': [],
                 'characteristic': [{
                     'name': 'CIMATerminalType',
                     'value': 'Primary'
@@ -1648,6 +1649,7 @@ module OrangeFeSARQ.Services {
                     'type': 'terminal'
                 }],
                 'place': [],
+                'productSpecification': [],
                 'characteristic': device.characteristic
             };
 
