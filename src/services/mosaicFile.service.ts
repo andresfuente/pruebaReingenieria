@@ -28,6 +28,12 @@ module OrangeFeSARQ.Services {
         private GEOLOCATION_LOCAL: string = 'Geolocation-local';
         private GEOLOCATION_CLIENT: string = 'Geolocation-client';
 
+        // CONSTANTS
+        private backCameraResolution = 'characteristic.cameraData.groupData.backCameraResolution.value';
+        private categoryName = 'deviceOffering.category.name';
+        private screenSize = 'characteristic.screenData.groupData.screenSize.value';
+        private hardDisk = 'characteristic.memoryData.groupData.hardDisk.value';
+
         /**
          * @name OrangeFeSARQ.Services:MosaicFileSrv
          * @description
@@ -189,12 +195,12 @@ module OrangeFeSARQ.Services {
                 params.channel = 'eShopRES';
                 // Se seleccionan los parametros necesarios para la llamada a la OT 
                 params = _.pick(params, ['channel', 'isExistingCustomer', 'limit', 'segment',
-                    'offset', 'commercialAction', 'deviceOffering.category.name', 'sort', 'relatedProductOffering',
+                    'offset', 'commercialAction', srv.categoryName, 'sort', 'relatedProductOffering',
                     'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee', 'totalPaymentRange',
                     'characteristic.OSData.groupData.OStype.value',
-                    'characteristic.cameraData.groupData.backCameraResolution.value',
-                    'characteristic.screenData.groupData.screenSize.value',
-                    'characteristic.memoryData.groupData.hardDisk.value',
+                    srv.backCameraResolution,
+                    srv.screenSize,
+                    srv.hardDisk,
                     'characteristic.batteryData.groupData.batteryDurationInConversation.value',
                     'characteristic.color']);
             }
@@ -241,21 +247,21 @@ module OrangeFeSARQ.Services {
                 if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
-                        'deviceOffering.category.name', 'purchaseOption', 'price.fee', 'totalPaymentRange',
+                        srv.categoryName, 'purchaseOption', 'price.fee', 'totalPaymentRange',
                         'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
-                        'characteristic.screenData.groupData.screenSize.value',
-                        'characteristic.memoryData.groupData.hardDisk.value',
+                        'priceType', srv.backCameraResolution,
+                        srv.screenSize,
+                        srv.hardDisk,
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
                         'characteristic.color']);
                 } else {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
-                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'deviceOffering.category.name',
+                        'purchaseOption', 'price.fee', 'totalPaymentRange', srv.categoryName,
                         'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
-                        'characteristic.screenData.groupData.screenSize.value',
-                        'characteristic.memoryData.groupData.hardDisk.value',
+                        'priceType', srv.backCameraResolution,
+                        srv.screenSize,
+                        srv.hardDisk,
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
                         'characteristic.color']);
                 }
@@ -497,7 +503,7 @@ module OrangeFeSARQ.Services {
                     if (!params.priceType) {
                         params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
                     } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId','priceType','deviceOffering.category.name']);
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId','priceType',srv.categoryName]);
                     }
                 }
 
@@ -509,7 +515,7 @@ module OrangeFeSARQ.Services {
                     if (!params.priceType) {
                         params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
                     } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType','deviceOffering.category.name']);
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType',srv.categoryName]);
                     }
                 }
 
