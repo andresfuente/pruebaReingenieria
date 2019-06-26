@@ -1025,11 +1025,16 @@ module OrangeFeSARQ.Services {
                         dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
                         dataOT.ospCartItemType = 'renove';
 
-                        if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
-                            dataOT.relatedRateResidential = commercialData[commercialActIndex].originRate;
+                        if (commercialData[commercialActIndex].originRate === "1-2WC4A7") {
+                            dataOT.relatedRateResidential = "";
                         } else {
-                            dataOT.relatedRateBusiness = commercialData[commercialActIndex].originRate;
+                            if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
+                                dataOT.relatedRateResidential = commercialData[commercialActIndex].originRate;
+                            } else {
+                                dataOT.relatedRateBusiness = commercialData[commercialActIndex].originRate;
+                            }
                         }
+                        
                         break;
                     case 'secondary_renew':
                         dataOT.campana_txt = commercialData[commercialActIndex].nameSgmr;
