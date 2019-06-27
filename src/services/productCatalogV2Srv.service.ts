@@ -314,6 +314,17 @@ module OrangeFeSARQ.Services {
             return '';
 
         }
+        getPromotionDuration(product: any): string {
+
+            if(product && product.productOfferingPrice && 
+                    product.productOfferingPrice.productOfferingPriceAlteration && 
+                    product.productOfferingPrice.productOfferingPriceAlteration.duration) {  
+                return product.productOfferingPrice.productOfferingPriceAlteration.duration;
+            }
+
+            return '';
+
+        }
     }
 
     angular.module('productCatalogV2Srv', [])
