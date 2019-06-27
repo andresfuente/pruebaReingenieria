@@ -147,6 +147,7 @@ module OrangeFeSARQ.Services {
                     'type': 'terminal'
                 }],
                 'place': [],
+                'productSpecification ' : [],
                 'characteristic': [{
                     'name': 'CIMATerminalType',
                     'value': 'Primary'
@@ -346,6 +347,7 @@ module OrangeFeSARQ.Services {
                     'type': 'terminal'
                 }],
                 'place': [],
+                'productSpecification': [],
                 'characteristic': [{
                     'name': 'CIMATerminalType',
                     'value': 'Secundary'
@@ -1259,7 +1261,7 @@ module OrangeFeSARQ.Services {
                 device.characteristic.push(imei);
 
                 if (!vm.isFdcSite() && deviceReserve.idReserva && deviceReserve.id) {
-
+                    device.productSpecification = [];
                     device.productSpecification.push(
                         {
                             name: 'codigoSAP',
@@ -1528,6 +1530,7 @@ module OrangeFeSARQ.Services {
                     'type': 'terminal'
                 }],
                 'place': [],
+                'productSpecification ' : [],
                 'characteristic': device.characteristic
             };
 
