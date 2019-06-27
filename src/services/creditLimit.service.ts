@@ -219,7 +219,7 @@ module OrangeFeSARQ.Services {
                                 if (campaign.wcs && (_.camelCase(campaign.wcs.typeRenove) === owcsCampaign || _.camelCase(campaign.wcs.typeRenove) === owcsCampaignSecundario)) {
                                     ventaAPlazos = campaign.ventaAPlazos;
                                     if (!ventaAPlazos || ventaAPlazos === 'null') {
-                                        ventaAPlazos = 'N';
+                                        ventaAPlazos = 'Y';
                                     }
                                     linesWithVAP = {
                                         'line': line.idUser,
