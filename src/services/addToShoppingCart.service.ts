@@ -168,7 +168,7 @@ module OrangeFeSARQ.Services {
                     productItem.productSpecification.push(
                         {
                             name: 'codigoSAP',
-                            value: device.id
+                            id: device.id
                         }
                     );
                     productItem.characteristic.push(
@@ -1250,7 +1250,7 @@ module OrangeFeSARQ.Services {
                     device.productSpecification.push(
                         {
                             name: 'codigoSAP',
-                            value: deviceReserve.id
+                            id: deviceReserve.id
                         }
                     );
                     device.characteristic.push(
@@ -1425,6 +1425,7 @@ module OrangeFeSARQ.Services {
                         'type': 'terminal'
                     }],
                     'place': [],
+                    'productSpecification': device.productSpecification,
                     'characteristic': device.characteristic
                 },
                 'itemPrice': uniquePaid ? uniqueItemPrice : [{ 'priceType': 'aplazado' }],
@@ -1667,7 +1668,7 @@ module OrangeFeSARQ.Services {
                     productItem.productSpecification.push(
                         {
                             name: 'codigoSAP',
-                            value: device.id
+                            id: device.id
                         }
                     );
                     productItem.characteristic.push(
