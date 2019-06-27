@@ -1246,6 +1246,7 @@ module OrangeFeSARQ.Services {
                 device.characteristic.push(imei);
 
                 if (!vm.isFdcSite() && deviceReserve.idReserva && deviceReserve.id) {
+                    device.productSpecification = [];
                     device.productSpecification.push(
                         {
                             name: 'codigoSAP',
