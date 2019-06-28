@@ -90,5 +90,5 @@ module OrangeFeSARQ.Constant {
         .service('getRolProfileSrv', OrangeFeSARQ.Services.getRolProfileSrv)
         .service('orangeBankSalesSrv', OrangeFeSARQ.Services.orangeBankSalesSrv)
         .service('eligibilitySrv', OrangeFeSARQ.Services.EligibilitySrv)
-        .service('getCodesOwcsSrv', OrangeFeSARQ.Services.getCodesOwcsSrv);
+        .service('getCodesScoringSrv', OrangeFeSARQ.Services.getCodesScoringSrv);
 }
