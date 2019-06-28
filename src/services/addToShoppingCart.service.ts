@@ -1358,6 +1358,7 @@ module OrangeFeSARQ.Services {
                         if (commercialData[commercialActIndex].multicomparador) {
                             shoppingCart.isMulticomparador = true;
                         }
+                        shoppingCart = shoppingCart === null ? JSON.parse(sessionStorage.getItem('shoppingCart')) : shoppingCart;
                         sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
                     }
                 })
