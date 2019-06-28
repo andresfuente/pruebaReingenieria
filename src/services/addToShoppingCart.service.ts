@@ -1353,12 +1353,13 @@ module OrangeFeSARQ.Services {
             vm.productCatalogV2Srv.getSpecificationSVAS(params.idSvaList, params.isExistingCustomer, params.segment, params.commercialAction)
                 .then((spec) => {
                     if (spec) {
+                        shoppingCart = shoppingCart === null ? JSON.parse(sessionStorage.getItem('shoppingCart')) : shoppingCart;
                         // Pasamos true como parámetro opcional porque es un bono de terminal
                         cartItemElement.cartItem.push(vm.createSVACartItem(spec.productSpecification[0], true));
                         if (commercialData[commercialActIndex].multicomparador) {
                             shoppingCart.isMulticomparador = true;
                         }
-                        shoppingCart = shoppingCart === null ? JSON.parse(sessionStorage.getItem('shoppingCart')) : shoppingCart;
+                        
                         sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
                     }
                 })
