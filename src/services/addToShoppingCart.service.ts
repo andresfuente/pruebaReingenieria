@@ -530,7 +530,7 @@ module OrangeFeSARQ.Services {
                 }
                 //Seteamos el valor de SOHORateInShoppingCart cuando groupNme es movil, cuando typeService es movil y cuando el segmento es empresa
                 //TODO comprobar que se setea correctamente SOHORateInShoppingCart
-                if (rate.groupName === 'movil' && rate.typeService === 'movil' && clientData.ospCustomerSegment === 'empresa') {
+                if (rate.groupName === 'Mobile Only_NAC' && rate.typeService === 'movil' && (clientData.ospCustomerSegment === 'empresa' || clientData.ospCustomerSegment === 'autonomo')) {
                     commercialData[commercialActIndex].SOHORateInShoppingCart = true;
                 }
 
@@ -1127,7 +1127,7 @@ module OrangeFeSARQ.Services {
                 }
                 //Seteamos el valor de SOHORateInShoppingCart cuando groupNme es movil, cuando typeService es movil y cuando el segmento es empresa
                 //TODO comprobar que se setea correctamente SOHORateInShoppingCart
-                if (rate.groupName === 'Mobile Only_NAC' && rate.typeService === 'movil' && clientData.ospCustomerSegment === 'empresa') {
+                if (rate.groupName === 'Mobile Only_NAC' && rate.typeService === 'movil' && (clientData.ospCustomerSegment === 'empresa' || clientData.ospCustomerSegment === 'autonomo')) {
                     commercialData[commercialActIndex].SOHORateInShoppingCart = true;
                 }
 
