@@ -255,7 +255,7 @@ module OrangeFeSARQ.Services {
 
         getProductPrice(product: any, sva: boolean = false, promoted: boolean = true): number {
             let vm = this;
-    
+
             let price: number = 0;
             if (product && product.productOfferingPrice) {
                 let priorities: string[] = [];
@@ -275,39 +275,39 @@ module OrangeFeSARQ.Services {
                         'techSiebelPriceRate'
                     ];
                 }
-    
+
                 price = vm.getPriorityPrice(product.productOfferingPrice, priorities, promoted);
             }
-    
+
             return price;
         }
-    
+
         private getPriorityPrice(productPricesList: any[], priorities: string[], promoted: boolean = true): number {
-    
+
             const PRICETYPE: string = 'Pago aplazado';
-    
+
             for (let price of productPricesList) {
                 if (price.priceType == PRICETYPE) {
                     if (promoted && price.productOfferingPriceAlteration && price.productOfferingPriceAlteration.price) {
                         return price.productOfferingPriceAlteration.price.taxIncludedAmount;
                     }
                     for (let priority of priorities) {
-                        let priceReturn = _.find(price.price, function(o: any) { return o.priceType == priority});
-                        if(priceReturn) {
+                        let priceReturn = _.find(price.price, function (o: any) { return o.priceType == priority });
+                        if (priceReturn) {
                             return priceReturn.taxIncludedAmount;
                         }
                     }
                 }
             }
-    
+
             return;
         }
 
         getPromotionDescription(product: any): string {
 
-            if(product && product.productOfferingPrice && 
-                    product.productOfferingPrice.productOfferingPriceAlteration && 
-                    product.productOfferingPrice.productOfferingPriceAlteration.description) {  
+            if (product && product.productOfferingPrice &&
+                product.productOfferingPrice.productOfferingPriceAlteration &&
+                product.productOfferingPrice.productOfferingPriceAlteration.description) {
                 return product.productOfferingPrice.productOfferingPriceAlteration.description;
             }
 
@@ -316,17 +316,18 @@ module OrangeFeSARQ.Services {
         }
         getPromotionDuration(product: any): string {
 
-            if(product && product.productOfferingPrice && 
-                    product.productOfferingPrice.productOfferingPriceAlteration && 
-                    product.productOfferingPrice.productOfferingPriceAlteration.duration) {  
-                return product.productOfferingPrice.productOfferingPriceAlteration.duration;
+            for (let obj of product.productOfferingPrice) {
+                if (obj.productOfferingPriceAlteration && obj.productOfferingPriceAlteration.applicationDuration) {
+
+                    return obj.productOfferingPriceAlteration.applicationDuration
+                }
             }
 
             return '';
 
         }
     }
-
+    
     angular.module('productCatalogV2Srv', [])
         .service('productCatalogV2Srv', OrangeFeSARQ.Services.ProductCatalogV2Srv);
 }
