@@ -156,21 +156,19 @@ module OrangeFeSARQ.Services {
             };
 
             // Se guarda el IMEI del terminal si se dispone de el
-            if (device && device.IMEI && device.IMEI !== undefined) {
-                let imei = {
-                    'name': 'IMEI',
-                    'value': device.IMEI
-                };
-                productItem.characteristic.push(imei);
-
-                if (!vm.isFdcSite() && device.idReserva && device.id) {
-
-                    productItem.productSpecification.push(
-                        {
-                            name: 'codigoSAP',
-                            id: device.id
-                        }
-                    );
+            if (device) {
+                productItem.productSpecification.push(
+                    {
+                        name: 'codigoSAP',
+                        id: device.id
+                    }
+                );
+                if (!vm.isFdcSite() && device.idReserva && device.IMEI) {
+                    let imei = {
+                        'name': 'IMEI',
+                        'value': device.IMEI
+                    };
+                    productItem.characteristic.push(imei);
                     productItem.characteristic.push(
                         {
                             name: 'idReserva',
@@ -1238,21 +1236,20 @@ module OrangeFeSARQ.Services {
             });
 
             // Se guarda el IMEI del terminal si se dispone de el
-            if (device && deviceReserve && deviceReserve.IMEI) {
-                let imei = {
-                    'name': 'IMEI',
-                    'value': deviceReserve.IMEI
-                };
-                device.characteristic.push(imei);
-
-                if (!vm.isFdcSite() && deviceReserve.idReserva && deviceReserve.id) {
-                    device.productSpecification = [];
-                    device.productSpecification.push(
-                        {
-                            name: 'codigoSAP',
-                            id: deviceReserve.id
-                        }
-                    );
+            if (deviceReserve) {
+                device.productSpecification = [];
+                device.productSpecification.push(
+                    {
+                        name: 'codigoSAP',
+                        id: deviceReserve.id
+                    }
+                );
+                if (!vm.isFdcSite() && deviceReserve.idReserva && deviceReserve.IMEI) {
+                    let imei = {
+                        'name': 'IMEI',
+                        'value': deviceReserve.IMEI
+                    };
+                    device.characteristic.push(imei);
                     device.characteristic.push(
                         {
                             name: 'idReserva',
@@ -1359,7 +1356,7 @@ module OrangeFeSARQ.Services {
                         if (commercialData[commercialActIndex].multicomparador) {
                             shoppingCart.isMulticomparador = true;
                         }
-                        
+
                         sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
                     }
                 })
@@ -1658,21 +1655,19 @@ module OrangeFeSARQ.Services {
             };
 
             // Se guarda el IMEI del terminal si se dispone de el
-            if (device && device.IMEI && device.IMEI !== undefined) {
-                let imei = {
-                    'name': 'IMEI',
-                    'value': device.IMEI
-                };
-                productItem.characteristic.push(imei);
-
-                if (!vm.isFdcSite() && device.idReserva && device.id) {
-
-                    productItem.productSpecification.push(
-                        {
-                            name: 'codigoSAP',
-                            id: device.id
-                        }
-                    );
+            if (device) {
+                productItem.productSpecification.push(
+                    {
+                        name: 'codigoSAP',
+                        id: device.id
+                    }
+                );
+                if (!vm.isFdcSite() && device.idReserva && device.IMEI) {
+                    let imei = {
+                        'name': 'IMEI',
+                        'value': device.IMEI
+                    };
+                    productItem.characteristic.push(imei);
                     productItem.characteristic.push(
                         {
                             name: 'idReserva',
