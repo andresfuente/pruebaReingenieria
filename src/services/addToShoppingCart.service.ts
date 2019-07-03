@@ -1439,13 +1439,15 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
 
+            let isSecRenove: boolean = commercialData && commercialData[commercialActIndex].ospTerminalWorkflow === 'secondary_renew';
+
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
             }
             // Se comprueba si existe algun dispositivo en el shopping cart que se este modificando
             if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
-                commercialData[commercialActIndex].ospIsSelected) {
+                commercialData[commercialActIndex].ospIsSelected && !isSecRenove) {
                 // Se eliminan los terminales del acto comercial existentes en el shopping cart
                 shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
                 commercialData[commercialActIndex].isCompletedAC = false;
@@ -1455,14 +1457,13 @@ module OrangeFeSARQ.Services {
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
             // Tipo del terminal
-
             device.characteristic = [
                 {
                     name: 'CIMATerminalType',
-                    value: 'Primary'
+                    value: isSecRenove ? 'Secundary' : 'Primary'
                 }
             ];
-
+            
             let uniqueItemPrice = [];
             let vapCartItems = [];
 
@@ -1475,7 +1476,7 @@ module OrangeFeSARQ.Services {
                         'action': 'New',
                         'product': {
                             'productRelationship': [{ 'type': 'VAP' }],
-                            'characteristic': [{ 'name': 'CIMATerminalType', 'value': 'Primary' }]
+                            'characteristic': [{ 'name': 'CIMATerminalType', 'value': isSecRenove ? 'Secundary' : 'Primary' }]
                         },
                         'itemPrice': [device.itemPrice[i]],
                         'productOffering': { 'id': device.itemPrice[i].id },
@@ -1488,6 +1489,8 @@ module OrangeFeSARQ.Services {
                 }
             }
 
+            uniqueItemPrice = _.uniqBy(uniqueItemPrice, 'priceType');
+            vapCartItems = _.uniqBy(vapCartItems, 'id');
 
             productItem = {
                 'href': device.srcImage,
@@ -1525,7 +1528,9 @@ module OrangeFeSARQ.Services {
 
             rateCartItemElement = vm.obtainRateCartItemElement(commercialData, commercialActIndex);
 
-            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
+            
+            cartItemElementId = isSecRenove && lastCartItemId % 1 !== 0 ? Number((lastCartItemId).toFixed(1)) : Number((lastCartItemId + 0.1).toFixed(1));
+
             cartItemElement = {
                 'id': cartItemElementId,
                 'cartItem': uniquePaid ? [deviceCartItemElement, rateCartItemElement] : [deviceCartItemElement, rateCartItemElement].concat(vapCartItems),
@@ -1533,23 +1538,40 @@ module OrangeFeSARQ.Services {
                 'cartItemRelationship': [{
                     id: commercialActId
                 }],
-                'ospSelected': false,
+                'ospSelected': isSecRenove ? true : false,
                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
             };
             // Añade seguro en caso de que se haya seleccionado
             if (device.insuranceSiebelId) {
-                cartItemElement.cartItem.push(vm.createInsuranceCartItem(device, 'primary'));
+                if (isSecRenove) {
+                    cartItemElement.cartItem.push(vm.createInsuranceCartItem(device, 'secundary'));
+                } else {
+                    cartItemElement.cartItem.push(vm.createInsuranceCartItem(device, 'primary'));
+                }
             }
 
 
             // Añadir cartItem compromiso de permanencia CP
             if (device.cpDescription && device.cpSiebel) {
-                cartItemElement.cartItem.push(vm.createCPCartItem(device));
+                if (isSecRenove) {
+                    cartItemElement.cartItem.push(vm.createCPCartItem(device, 'secundary'));
+                } else {
+                    cartItemElement.cartItem.push(vm.createCPCartItem(device));
+                }
             }
 
             if (shoppingCart !== null) {
-                shoppingCart.cartItem.push(cartItemElement);
+                let cartItem = _.find(shoppingCart.cartItem, (elem:any) => {
+                    return elem.id && elem.id === cartItemElementId;
+                });
+                if (cartItem) {
+                    _.forEach(cartItemElement.cartItem, elem => {
+                        cartItem.cartItem.push(elem);
+                    });
+                } else {
+                    shoppingCart.cartItem.push(cartItemElement);
+                }
             } else {
                 shoppingCart = {
                     'id': '',
