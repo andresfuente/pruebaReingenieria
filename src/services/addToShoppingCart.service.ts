@@ -549,7 +549,7 @@ module OrangeFeSARQ.Services {
             let bucket;
 
             // Se obtiene el ID del acto comercial que se esta modificando
-            commercialActId = this.getComercialActId(commercialActIndex, commercialData, commercialActId, rate);
+            commercialActId = this.getCommercialActId(commercialActIndex, commercialData, commercialActId, rate);
             // Se comprueba si existe alguna tarifa en el shopping cart que se este modificando
             shoppingCart = this.getShoppingCart(shoppingCart, commercialData, commercialActIndex, vm, commercialActId);
             // Se obtiene el id del ultimo elmento del cart item del shopping cart
@@ -778,7 +778,8 @@ module OrangeFeSARQ.Services {
             return shoppingCart;
         }
 
-        private getComercialActId(commercialActIndex: number, commercialData: any, commercialActId: number, rate: any) {
+        private getCommercialActId(commercialActIndex: number, commercialData: any, commercialActId: number, rate: any) {
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
                 if (rate.groupName === 'Convergente' && rate.family === 'love') {
@@ -787,6 +788,12 @@ module OrangeFeSARQ.Services {
                 if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
                     commercialData[commercialActIndex].NACRateInShoppingCart = true;
                 }
+                if (rate.groupName === 'Mobile Only_NAC' && rate.typeService === 'movil'
+                    && (clientData.ospCustomerSegment === 'empresa'
+                        || clientData.ospCustomerSegment === 'autonomo')) {
+                    commercialData[commercialActIndex].SOHORateInShoppingCart = true;
+                }
+
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
             return commercialActId;
@@ -1556,20 +1563,6 @@ module OrangeFeSARQ.Services {
             }
         }
 
-        private getCommercialActId(commercialActIndex: number, commercialData: any, commercialActId: number, rate: any) {
-            if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
-                commercialActId = Number(commercialData[commercialActIndex].id);
-                if (rate.groupName === 'Convergente' && rate.family === 'love') {
-                    commercialData[commercialActIndex].loveRateInShoppingCart = true;
-                }
-                if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
-                    commercialData[commercialActIndex].NACRateInShoppingCart = true;
-                }
-                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
-            }
-            return commercialActId;
-        }
-
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putDeviceNoRateInShoppingCart
@@ -2210,6 +2203,32 @@ module OrangeFeSARQ.Services {
 
             return response;
         }
+        
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#SOHORateInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @return {boolean} true si se ha llegado al carrito con una tarifa SOHO
+         * @description
+         * Devuelve si se ha llegado al carrito con una tarifa SOHO
+         */
+        SOHORateInShoppingCart(): boolean {
+
+            let response: boolean = false;
+
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+
+            if (commercialData && commercialData.length) {
+                commercialData.forEach((commData) => {
+                    if (commData.SOHORateInShoppingCart) {
+                        response = true;
+                    }
+                });
+            }
+
+            return response;
+        }
+
 
         createCommercialDataPacks(dato1?, dato2?) {
 
