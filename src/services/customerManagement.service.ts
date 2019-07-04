@@ -189,8 +189,9 @@ module OrangeFeSARQ.Services {
         postPrescoring(typeRequest, numberRequiredLines, body, comp: string) {
             let vm = this;
             let param = vm.brand!=='jazztel'? ['customer']:['Customer/checkSalesProfile']
-            let blacklist = vm.brand!=='jazztel'? true : false;
+            let blacklist = false;
             typeRequest = vm.brand!=='jazztel'? 0 : 1;
+     
 
             let _search: Object = {
                 queryParams: {
