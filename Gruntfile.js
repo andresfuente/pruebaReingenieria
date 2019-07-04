@@ -68,6 +68,10 @@ module.exports = function (grunt) {
                 src: './dist/styles/jazztel-pdv-<%= shortName %>.css',
                 dest: './dist/styles/jazztel-pdv-<%= shortName %>.css'
             },
+            amenapdv: {
+                src: './dist/styles/amena-pdv-<%= shortName %>.css',
+                dest: './dist/styles/amena-pdv-<%= shortName %>.css'
+            }
         },
 
         sass: {
@@ -156,6 +160,14 @@ module.exports = function (grunt) {
                     './dist/styles/jazztel-pdv-<%= shortName %>.css': './src/sass/jazztel-pdv-<%= shortName %>.scss'
                 }
             },
+            amenapdv: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './dist/styles/amena-pdv-<%= shortName %>.css': './src/sass/amena-pdv-<%= shortName %>.scss'
+                }
+            }
         },
 
         ts: {
