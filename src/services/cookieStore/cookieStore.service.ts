@@ -123,28 +123,29 @@ module OrangeFeSARQ.Services {
                 document = vm.customerViewStore.loginData.document;
                 vm.hootSrv.getMainLine(vm.genericConstant.brand, document, vm.genericConstant.site, vm.compName)
                     .then((response) => {
+                        let cvProduct;
                         if (response && response.line) {
                             if (vm.msisdn) {
-                                let cvProduct = vm.searchCvProduct(vm.msisdn);
+                                cvProduct = vm.searchCvProduct(vm.msisdn);
                                 vm.setCode(cvProduct, vm.msisdn);
                                 if (vm.utils.isFixedLine(vm.msisdn)) {
                                     if (response.line.lineaPrincipalMovil) {
-                                        let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
+                                        cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
                                         vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
                                     }
                                 } else {
                                     if (response.line.lineaPrincipalFijo) {
-                                        let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
+                                        cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
                                         vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
                                     }
                                 }
                             } else {
                                 if (response.line.lineaPrincipalMovil) {
-                                    let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
+                                    cvProduct = vm.searchCvProduct(response.line.lineaPrincipalMovil);
                                     vm.setCode(cvProduct, response.line.lineaPrincipalMovil);
                                 }
                                 if (response.line.lineaPrincipalFijo) {
-                                    let cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
+                                    cvProduct = vm.searchCvProduct(response.line.lineaPrincipalFijo);
                                     vm.setCode(cvProduct, response.line.lineaPrincipalFijo);
                                 }
                             }

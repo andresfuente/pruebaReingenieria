@@ -25,7 +25,7 @@ module OrangeFeSARQ.Services {
                 // Creamos el store
                 .reduce((store, product) => {
                     // Buscamos al objeto que contiene msisdn
-                    const characteristic = product.productCharacteristic.find(characteristic => (
+                    const Numbercharacteristic = product.productCharacteristic.find(characteristic => (
                         characteristic.name === this.LAND_PHONE_NAME || characteristic.name === this.MOBILE_PHONE_NAME
                     ));
                     // Buscamos el billingAccount de la línea
@@ -33,7 +33,7 @@ module OrangeFeSARQ.Services {
                         account.id === product.billingAccount.id
                     ))
                     
-                    const msisdn = characteristic && characteristic.value;
+                    const msisdn = Numbercharacteristic && Numbercharacteristic.value;
                     const billingAddress = billingAccount && billingAccount.billingAddress; // Cogemos la primera porque no se ha visto más direcciones
                     // Si todo va bien, construimos el store
                     if (msisdn && billingAddress) {

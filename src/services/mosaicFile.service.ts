@@ -27,6 +27,10 @@ module OrangeFeSARQ.Services {
 
         private GEOLOCATION_LOCAL: string = 'Geolocation-local';
         private GEOLOCATION_CLIENT: string = 'Geolocation-client';
+        private DEVICEOFFERING_CATEGORY_NAME: string = 'deviceOffering.category.name';
+        private CHARACTERISTIC_CAMERADATA_GROUPDATA_BACKCAMERARESOLUTION_VALUE: string = 'characteristic.cameraData.groupData.backCameraResolution.value';
+        private CHARACTERISTIC_SCREENDATA_GROUPDATA_SCREENSIZE_VALUE: string = 'characteristic.screenData.groupData.screenSize.value';
+        private CHARACTERISTIC_COLOR: string = 'characteristic.color';
 
         /**
          * @name OrangeFeSARQ.Services:MosaicFileSrv
@@ -189,14 +193,14 @@ module OrangeFeSARQ.Services {
                 params.channel = 'eShopRES';
                 // Se seleccionan los parametros necesarios para la llamada a la OT 
                 params = _.pick(params, ['channel', 'isExistingCustomer', 'limit', 'segment',
-                    'offset', 'commercialAction', 'deviceOffering.category.name', 'sort', 'relatedProductOffering',
+                    'offset', 'commercialAction', srv.DEVICEOFFERING_CATEGORY_NAME, 'sort', 'relatedProductOffering',
                     'ospOpenSearch', 'brand', 'price', 'deviceType', 'purchaseOption', 'price.fee', 'totalPaymentRange',
                     'characteristic.OSData.groupData.OStype.value',
-                    'characteristic.cameraData.groupData.backCameraResolution.value',
-                    'characteristic.screenData.groupData.screenSize.value',
+                    srv.CHARACTERISTIC_CAMERADATA_GROUPDATA_BACKCAMERARESOLUTION_VALUE,
+                    srv.CHARACTERISTIC_SCREENDATA_GROUPDATA_SCREENSIZE_VALUE,
                     'characteristic.memoryData.groupData.hardDisk.value',
                     'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                    'characteristic.color']);
+                    srv.CHARACTERISTIC_COLOR]);
             }
 
             // Parametros para Prepago   
@@ -241,23 +245,23 @@ module OrangeFeSARQ.Services {
                 if (commercialData[commercialActIndex].ospTerminalWorkflow === 'best_renove') {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
-                        'deviceOffering.category.name', 'purchaseOption', 'price.fee', 'totalPaymentRange',
+                        srv.DEVICEOFFERING_CATEGORY_NAME, 'purchaseOption', 'price.fee', 'totalPaymentRange',
                         'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
-                        'characteristic.screenData.groupData.screenSize.value',
+                        'priceType', srv.CHARACTERISTIC_CAMERADATA_GROUPDATA_BACKCAMERARESOLUTION_VALUE,
+                        srv.CHARACTERISTIC_SCREENDATA_GROUPDATA_SCREENSIZE_VALUE,
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        srv.CHARACTERISTIC_COLOR]);
                 } else {
                     params = _.pick(params, ['channel', 'offset', 'limit', 'sort', 'commercialAction', 'campaignName',
                         'relatedProductOffering', 'ospOpenSearch', 'brand', 'price', 'deviceType',
-                        'purchaseOption', 'price.fee', 'totalPaymentRange', 'deviceOffering.category.name',
+                        'purchaseOption', 'price.fee', 'totalPaymentRange', srv.DEVICEOFFERING_CATEGORY_NAME,
                         'characteristic.OSData.groupData.OStype.value',
-                        'priceType', 'characteristic.cameraData.groupData.backCameraResolution.value',
-                        'characteristic.screenData.groupData.screenSize.value',
+                        'priceType', srv.CHARACTERISTIC_CAMERADATA_GROUPDATA_BACKCAMERARESOLUTION_VALUE,
+                        srv.CHARACTERISTIC_SCREENDATA_GROUPDATA_SCREENSIZE_VALUE,
                         'characteristic.memoryData.groupData.hardDisk.value',
                         'characteristic.batteryData.groupData.batteryDurationInConversation.value',
-                        'characteristic.color']);
+                        srv.CHARACTERISTIC_COLOR]);
                 }
             }
 
@@ -497,7 +501,7 @@ module OrangeFeSARQ.Services {
                     if (!params.priceType) {
                         params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId']);
                     } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId','priceType','deviceOffering.category.name']);
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId','priceType',srv.DEVICEOFFERING_CATEGORY_NAME]);
                     }
                 }
 
@@ -509,7 +513,7 @@ module OrangeFeSARQ.Services {
                     if (!params.priceType) {
                         params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering']);
                     } else {
-                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType','deviceOffering.category.name']);
+                        params = _.pick(params, ['campaignName', 'channel', 'commercialAction', 'modelId', 'relatedProductOffering', 'priceType',srv.DEVICEOFFERING_CATEGORY_NAME]);
                     }
                 }
 

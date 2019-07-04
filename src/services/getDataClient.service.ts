@@ -41,11 +41,11 @@ module OrangeFeSARQ.Services {
                     // Lleno el customerViewStore
                     if (response.data && response.data.user) {
                         // Eliminamos los 34 en los telefonos
-						let msisdn = response.data.user.user;
-                        if ((/^34/).test(msisdn) &&
-                         !(/[a-z A-Z]/).test(msisdn) && 
-                        msisdn.length === 11) {
-                                response.data.user.user = msisdn.replace(/^34/, '');
+						let msisdn2 = response.data.user.user;
+                        if ((/^34/).test(msisdn2) &&
+                         !(/[a-z A-Z]/).test(msisdn2) && 
+                        msisdn2.length === 11) {
+                                response.data.user.user = msisdn2.replace(/^34/, '');
                         }
                         vm.customerViewStore.loginData = response.data.user;
 						if (vm.customerViewStore.info) {
