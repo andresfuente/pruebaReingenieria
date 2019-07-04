@@ -312,6 +312,20 @@ module OrangeFeSARQ.Services {
             return '';
 
         }
+        getPromotionDuration(product: any): string {
+
+            for (let obj of product.productOfferingPrice) {
+                if (obj.productOfferingPriceAlteration && obj.productOfferingPriceAlteration.applicationDuration) {
+
+                    return obj.productOfferingPriceAlteration.applicationDuration
+                }
+            }
+
+            return '';
+
+        }
+
+
     }
 
     angular.module('productCatalogV2Srv', [])
