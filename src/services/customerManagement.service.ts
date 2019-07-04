@@ -149,14 +149,14 @@ module OrangeFeSARQ.Services {
             let vm = this;
 
 
-            let blacklist = vm.brand !== 'jazztel' ? false : true;
+          
             let param = vm.brand!=='jazztel'? ['customer']:['Customer/checkSalesProfile'];
 
             let _search: Object = {
                 queryParams: {
                     typeRequest: 1,
                     numberRequiredLines: 1,
-                    blackList:  blacklist
+                    blackList:  false
                 },
                 urlParams: param,
                 body: body
