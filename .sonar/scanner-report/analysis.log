@@ -1,0 +1,188 @@
+Environment variables:
+  - BRANCH_ANSIBLE=master
+  - BRANCH_UPLOAD=release
+  - BUILD_DISPLAY_NAME=#633
+  - BUILD_ID=633
+  - BUILD_NUMBER=633
+  - BUILD_TAG=jenkins-FUN_ANG_SERVICES_Release-633
+  - BUILD_URL=http://10.113.64.124:8080/jenkinsLibra/job/FUN_ANG_SERVICES_Release/633/
+  - EXECUTOR_NUMBER=10
+  - GIT_BRANCH=origin/master
+  - GIT_COMMIT=8dd2833856661a3d8803433d7dfccfa929a5a0e7
+  - GIT_PREVIOUS_COMMIT=8dd2833856661a3d8803433d7dfccfa929a5a0e7
+  - GIT_PREVIOUS_SUCCESSFUL_COMMIT=8dd2833856661a3d8803433d7dfccfa929a5a0e7
+  - GIT_URL=https://torredecontrol.si.orange.es/gitlab/TORRECONTROL/IC/TORRECONTROL_JENKINSFILE_ANGULARCOMPONENTS_CIPLUS_RELEASE.git
+  - GROOVY_HOME=/home/jenk_a/opt/groovy/groovy-2.5.4/
+  - GRUPODyC=DyC
+  - GRUPOSOE=DyC
+  - HOME=/home/jenk_a
+  - HUDSON_COOKIE=77ba2dc2-cabc-4112-bfc7-5abc8b013d87
+  - HUDSON_HOME=/home/jenk_a/.jenkins
+  - HUDSON_SERVER_COOKIE=ba26d565053c3cf3
+  - HUDSON_URL=http://10.113.64.124:8080/jenkinsLibra/
+  - JAVA_HOME=/home/jenk_a/opt/java/jdk1.8.0_101
+  - JENKINS_HOME=/home/jenk_a/.jenkins
+  - JENKINS_NODE_COOKIE=ef978e36-11fe-4938-89f4-d0b0a5c4b25f
+  - JENKINS_SERVER_COOKIE=durable-55ed5b744c0692ff834faab46eb58cde
+  - JENKINS_URL=http://10.113.64.124:8080/jenkinsLibra/
+  - JOB_BASE_NAME=FUN_ANG_SERVICES_Release
+  - JOB_DISPLAY_URL=http://10.113.64.124:8080/jenkinsLibra/job/FUN_ANG_SERVICES_Release/display/redirect
+  - JOB_NAME=FUN_ANG_SERVICES_Release
+  - JOB_URL=http://10.113.64.124:8080/jenkinsLibra/job/FUN_ANG_SERVICES_Release/
+  - LOGNAME=jenk_a
+  - M2_HOME=/home/jenk_a/opt/apache-maven-3.6.0
+  - MAIL=/var/mail/jenk_a
+  - MITMPROXY_HOME=/home/jenk_a/opt/mitmproxy-4.0.4
+  - MVN_PROFILE=pro
+  - NLSPATH=/usr/dt/lib/nls/msg/%L/%N.cat
+  - NODE_HOME=/home/jenk_a/opt/node/node-v10.11.0-linux-x64
+  - NODE_LABELS=SPASlave
+  - NODE_NAME=SPASlave
+  - NPM_HOME=/home/jenk_a/opt/node/node-v10.11.0-linux-x64
+  - OPT_PATH=/home/jenk_a/opt
+  - PATH=/home/jenk_a/.npm-global/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/jenk_a/opt/node/node-v10.11.0-linux-x64/bin:/home/jenk_a/opt/node/node-v10.11.0-linux-x64/bin:/home/jenk_a/opt/java/jdk1.8.0_101/bin:/home/jenk_a/opt/apache-maven-3.6.0/bin:/home/jenk_a/opt/groovy/groovy-2.5.4//bin:/home/jenk_a/opt/mitmproxy-4.0.4:/home/jenk_a/opt/sonar-scanner-2.6.1//bin:/home/jenk_a/opt/phantomjs-2.1.1-linux-x86_64//bin
+  - PHANTOMJS_HOME=/home/jenk_a/opt/phantomjs-2.1.1-linux-x86_64/
+  - PWD=/home/jenk_a/workspace/FUN_ANG_SERVICES_Release
+  - RECIPIENTS=gema.garcia.gomez@everis.com,mauricio.correa.urizar.sa@everis.com,david.lorenzo.alvarez.sa@everis.com,domingo.javier.briviesca.martinez@everis.com,maria.alejandra.benavides.blanco@everis.com,alberto.esteban.diaz@everis.com,juan.manuel.ostos.martinez.sagrera@everis.com,alma.lizetth.arquijo.esquivel.sa@everis.com,jaime.cardona.villegas.sa@everis.com,mario.arranz.agueda.sa@everis.com,jesus.alberto.tejedor.doria@everis.com,francisco.carlos.guerrero.diaz.sa@everis.com,mariano.moreno.molina@everis.com,diego.de.las.heras.deza@everis.com,alvaro.garcia.garcia@everis.com,iker.hurtado.lopez@everis.com,ruben.lopez.rey@everis.com,cristian.cantarero.davila@everis.com,santiago.flecha.alfonso.sa@everis.com,javier.perez.garcia@everis.com,gilberto.jose.hernandez.mendoza.sa@everis.com
+  - RUN_CHANGES_DISPLAY_URL=http://10.113.64.124:8080/jenkinsLibra/job/FUN_ANG_SERVICES_Release/633/display/redirect?page=changes
+  - RUN_DISPLAY_URL=http://10.113.64.124:8080/jenkinsLibra/job/FUN_ANG_SERVICES_Release/633/display/redirect
+  - SHELL=/bin/bash
+  - SHLVL=3
+  - SKIPT_UNIT_TESTS=false
+  - SONARQUBE_SCANNER_PARAMS={ "sonar.host.url" : "https:\/\/torredecontrol.si.orange.es\/sonar", "sonar.login" : "235b487f0da9ec364f536afd7cfbcc6998020857"}
+  - SONAR_AUTH_TOKEN=235b487f0da9ec364f536afd7cfbcc6998020857
+  - SONAR_CONFIG_NAME=SonarQube Scanner
+  - SONAR_HOST_URL=https://torredecontrol.si.orange.es/sonar
+  - SONAR_MAVEN_GOAL=sonar:sonar
+  - SONAR_SCANNER_HOME=/home/jenk_a/opt/sonar-scanner-2.6.1/
+  - SONAR_TOKEN=83d987383228c60697f199aa68e111f68da682be
+  - SSH_CLIENT=10.113.64.124 35464 22
+  - SSH_CONNECTION=10.113.64.124 35464 10.113.64.181 22
+  - STATIC_ANALISYS=true
+  - TAG=1.63.28-RC
+  - TYPE=APP
+  - URL_GIT=https://torredecontrol.si.orange.es/gitlab/DyC/SOE/FUN_ANG_SERVICES.git
+  - URL_GITLAB=https://torredecontrol.si.orange.es/gitlab/
+  - URL_GITLAB_TORRE3=https://sourcerepository-tc.shared-nonprod.cloud.si.orange.es
+  - URL_NEXUS_REPOSITORY=https://torredecontrol.si.orange.es/nexus/repository
+  - USER=jenk_a
+  - VALIDATION_FILE=/home/jenk_a/workspace/FUN_ANG_SERVICES_Release/validations/validation_633.txt
+  - VALIDATION_FOLDER=/home/jenk_a/workspace/FUN_ANG_SERVICES_Release/validations
+  - WORKSPACE=/home/jenk_a/workspace/FUN_ANG_SERVICES_Release
+  - XDG_RUNTIME_DIR=/run/user/1053
+  - XDG_SESSION_ID=139571
+  - XFILESEARCHPATH=/usr/dt/app-defaults/%L/Dt
+  - scannerHome=/home/jenk_a/opt/sonar-scanner-2.6.1/
+System properties:
+  - awt.toolkit=sun.awt.X11.XToolkit
+  - file.encoding=ANSI_X3.4-1968
+  - file.encoding.pkg=sun.io
+  - file.separator=/
+  - java.awt.graphicsenv=sun.awt.X11GraphicsEnvironment
+  - java.awt.headless=true
+  - java.awt.printerjob=sun.print.PSPrinterJob
+  - java.class.path=/home/jenk_a/opt/sonar-scanner-2.6.1//lib/sonar-scanner-cli-2.6.1.jar
+  - java.class.version=52.0
+  - java.endorsed.dirs=/home/jenk_a/opt/java/jdk1.8.0_101/jre/lib/endorsed
+  - java.ext.dirs=/home/jenk_a/opt/java/jdk1.8.0_101/jre/lib/ext:/usr/java/packages/lib/ext
+  - java.home=/home/jenk_a/opt/java/jdk1.8.0_101/jre
+  - java.io.tmpdir=/tmp
+  - java.library.path=/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib
+  - java.runtime.name=Java(TM) SE Runtime Environment
+  - java.runtime.version=1.8.0_101-b13
+  - java.specification.name=Java Platform API Specification
+  - java.specification.vendor=Oracle Corporation
+  - java.specification.version=1.8
+  - java.vendor=Oracle Corporation
+  - java.vendor.url=http://java.oracle.com/
+  - java.vendor.url.bug=http://bugreport.sun.com/bugreport/
+  - java.version=1.8.0_101
+  - java.vm.info=mixed mode
+  - java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+  - java.vm.specification.name=Java Virtual Machine Specification
+  - java.vm.specification.vendor=Oracle Corporation
+  - java.vm.specification.version=1.8
+  - java.vm.vendor=Oracle Corporation
+  - java.vm.version=25.101-b13
+  - line.separator=
+
+  - os.arch=amd64
+  - os.name=Linux
+  - os.version=3.10.0-693.11.1.el7.x86_64
+  - path.separator=:
+  - project.home=/home/jenk_a/workspace/FUN_ANG_SERVICES_Release
+  - scanner.home=/home/jenk_a/opt/sonar-scanner-2.6.1/
+  - sun.arch.data.model=64
+  - sun.boot.class.path=/home/jenk_a/opt/java/jdk1.8.0_101/jre/lib/resources.jar:/home/jenk_a/opt/java/jdk1.8.0_101/jre/lib/rt.jar:/home/jenk_a/opt/java/jdk1.8.0_101/jre/lib/sunrsasign.jar:/home/jenk_a/opt/java/jdk1.8.0_101/jre/lib/jsse.jar:/home/jenk_a/opt/java/jdk1.8.0_101/jre/lib/jce.jar:/home/jenk_a/opt/java/jdk1.8.0_101/jre/lib/charsets.jar:/home/jenk_a/opt/java/jdk1.8.0_101/jre/lib/jfr.jar:/home/jenk_a/opt/java/jdk1.8.0_101/jre/classes
+  - sun.boot.library.path=/home/jenk_a/opt/java/jdk1.8.0_101/jre/lib/amd64
+  - sun.cpu.endian=little
+  - sun.cpu.isalist=
+  - sun.io.unicode.encoding=UnicodeLittle
+  - sun.java.command=org.sonarsource.scanner.cli.Main -Dsonar.login=83d987383228c60697f199aa68e111f68da682be -Dsonar.password= -Dsonar.host.url=https://torredecontrol.si.orange.es/sonar -Dsonar.projectKey=FUN_ANG_SERVICES -Dsonar.projectName=FUN_ANG_SERVICES -Dsonar.projectVersion=1.63.28-RC -Dsonar.sources=src/ -Dsonar.tests=test -Dsonar.typescript.lcov.reportPaths=coverage/lcov-report/lcov.info -Dsonar.sourceEncoding=UTF-8 -X
+  - sun.java.launcher=SUN_STANDARD
+  - sun.jnu.encoding=ANSI_X3.4-1968
+  - sun.management.compiler=HotSpot 64-Bit Tiered Compilers
+  - sun.os.patch.level=unknown
+  - user.country=US
+  - user.dir=/home/jenk_a/workspace/FUN_ANG_SERVICES_Release
+  - user.home=/home/jenk_a
+  - user.language=en
+  - user.name=jenk_a
+  - user.timezone=Europe/Madrid
+SonarQube plugins:
+  - Cobertura TRUNK-SNAPSHOT (cobertura)
+  - C++ (Community) 0.9.9 (cxx)
+  - SonarPython 1.10.0.2131 (python)
+  - C (Community) 0.9.9 (c)
+  - SonarCSS 1.0.2.611 (cssfamily)
+  - Scala 6.1.0 (scala)
+  - Clover 3.1 (clover)
+  - SonarKotlin 1.4.0.155 (kotlin)
+  - Svn 1.7.0.1017 (scmsvn)
+  - SonarJS 4.1.0.6085 (javascript)
+  - Findbugs 3.6.0 (findbugs)
+  - SonarC# 7.2.0.5463 (csharp)
+  - SonarJava 5.5.0.14655 (java)
+  - LDAP 2.2.0.608 (ldap)
+  - Git 1.4.1.1128 (scmgit)
+  - SonarFlex 2.4.0.1222 (flex)
+  - SonarXML 1.5.1.1452 (xml)
+  - SonarPHP 2.13.0.3107 (php)
+  - SonarTS 1.7.0.2893 (typescript)
+  - Checkstyle 4.10 (checkstyle)
+Global properties:
+  - email.prefix=[SONARQUBE]
+  - email.smtp_host.secured=******
+  - sonar.core.id=AWHCcNqgH6ZruCGJHamO
+  - sonar.core.serverBaseURL=https://torredecontrol.si.orange.es/sonar
+  - sonar.core.startTime=2019-06-15T04:09:41+0200
+  - sonar.coverage.exclusions=src/app/pagesdirectives.js,src/app/pagesModulosFactory.js,src/app/main/app.js,src/app/main/Config.js,src/app/mainfilters.js,src/app/mainGlobalController.js,src/app/pages/directives.js,src/app/pages/ModulosFactory.js,src/app/main/app.js,src/app/main/Config.js,src/app/main/filters.js,src/app/main/GlobalController.js,**/model/**/*Model.java,**/model/**/*ModelImpl.java,**/model/**/*Wrapper.java,**/model/**/*Soap.java,**/service/**/*LocalService.java,**/service/**/*LocalServiceImpl.java,**/service/**/*LocalServiceUtil.java,**/service/**/*ServiceBaseImpl.java,**/service/**/*PersistenceImpl.java,**/service/**/*ServiceHttp.java,**/service/**/*ServiceSoap.java ,**/service/**/PropsUtil.java
+  - sonar.cpd.exclusions=**/model/**,**/entities/**,**/repository/**,**/domain/**,**/mock/**/*.json,**/environments/environment*.ts,**/IframeRedirectPagoDirectoImpl*,**/nacCustomizerPopup.service.ts,**/components/escaparate-llaa/escaparate-llaa.component.ts,**/components/escaparate/escaparate.component.ts
+  - sonar.findbugs.timeout=7200000
+  - sonar.global.exclusions=path: **/model/**,**/com/orange/entities/**,**/com/orange/**/entities/**,**/com/orange/domain/**,**/com/orange/model/**,**/ecare/mdg/dto/**,**/ecare/mdg/model/**,**/ecare/mdg/modelRed/**,**/ecare/mdg/processors/**,**/ecare/pae/model/**,**/ecare/pae/processors/**,**/ecare/segmentation/model/**,**/ecare/segmentation/processors/**,**/ecare/counter/model/**,**/ecare/pae/processors /**,**/com/liferay/portal/**,**/catalogcall/ProductCatalogCall.java,**/BonusCompatibilitiesRepository.java,**/jquery.jqGrid.min.js,**/jquery-ui.js,**/jquery-ui-1.82.custom.min.js,**/jquery-ui-timepicker-addon-0.6.js,**/grid.locale-es.js,**/jquery.ui.datepicker-es.js,**/chosen.jquery.min.js,**/chosen.proto.js,**/chosen.proto.min.js,**/chosen.css,**/jquery-ui.css,**/jquery-ui-1.8.2.custom.css,**/jquery-ui.min.css,**/jquery.ui.theme.css,**/ui.jqgrid.css
+  - sonar.issue.ignore.allfile=1
+  - sonar.issue.ignore.allfile.1.fileRegexp=Copyright \(c\) 2000\-present Liferay
+  - sonar.javascript.globals=angular,goog,google,OpenLayers,d3,dojo,dojox,dijit,Backbone,moment,casper,var
+  - sonar.leak.period=1
+  - sonar.lf.logoUrl=https://applogin.orange.es/oam/pages/img/logo.png
+  - sonar.lf.logoWidthPx=30
+  - sonar.links.scm=https://torredecontrol.si.orange.es/gitlab/
+  - sonar.typescript.lcov.reportPaths=/coverage/lcov-report/,/coverage/,/coverage/test-raw-reports/
+Settings for module: FUN_ANG_SERVICES
+  - sonar.host.url=https://torredecontrol.si.orange.es/sonar
+  - sonar.jdbc.password=******
+  - sonar.jdbc.url=jdbc:mysql://10.113.47.127:3306/sonar?useUnicode=true&characterEncoding=utf8
+  - sonar.jdbc.username=sonar
+  - sonar.login=******
+  - sonar.password=******
+  - sonar.projectBaseDir=/home/jenk_a/workspace/FUN_ANG_SERVICES_Release
+  - sonar.projectKey=FUN_ANG_SERVICES
+  - sonar.projectName=FUN_ANG_SERVICES
+  - sonar.projectVersion=1.63.28-RC
+  - sonar.qualitygate=281
+  - sonar.sourceEncoding=UTF-8
+  - sonar.sources=src/
+  - sonar.tests=test
+  - sonar.typescript.lcov.reportPaths=coverage/lcov-report/lcov.info
+  - sonar.verbose=true
+  - sonar.working.directory=/home/jenk_a/workspace/FUN_ANG_SERVICES_Release/.sonar
