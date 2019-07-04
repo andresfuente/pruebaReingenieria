@@ -3,12 +3,12 @@ module OrangeFeSARQ.Services {
 
     /**
      * @ngdoc service
-     * @name OrangeFeSARQ.Services:getCodesOwcsSrv
+     * @name OrangeFeSARQ.Services:getCodesScoringSrv
      * @author Jaime Alain
      * @description
      * Servicio para recoger los codigos de scoring 
      */
-    export class getCodesOwcsSrv extends OrangeFeSARQ.Services.ParentService {
+    export class getCodesScoringSrv extends OrangeFeSARQ.Services.ParentService {
         static $inject = ['$injector'];
 
         constructor(public $injector) {
@@ -27,7 +27,7 @@ module OrangeFeSARQ.Services {
 
             let _search: Object = {
                 queryParams: {},
-                urlParams: ['getListValues', 'listName', codes]
+                urlParams: ['getListValue', 'listName', codes]
             };
             return vm.httpCacheGett(vm.genericConstant.dataController, _search)
                 .then((response) => {
