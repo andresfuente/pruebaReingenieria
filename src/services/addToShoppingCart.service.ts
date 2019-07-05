@@ -591,7 +591,8 @@ module OrangeFeSARQ.Services {
                                 'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
                             },
                             taxRate: rate.taxRate,
-                            ospTaxRateName: rate.taxRateName
+                            ospTaxRateName: rate.taxRateName,
+                            packPrice: rate.commercialTotalPrice ? rate.commercialTotalPrice : null
                         },
                         'priceAlteration': priceAlteration
                     }
@@ -986,7 +987,9 @@ module OrangeFeSARQ.Services {
                                 'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
                             },
                             taxRate: rate.taxRate,
-                            ospTaxRateName: rate.taxRateName
+                            ospTaxRateName: rate.taxRateName,
+                            packPrice: rate.commercialTotalPrice ? rate.commercialTotalPrice : null
+                        
                         },
                         'priceAlteration': priceAlteration
                     }
@@ -1504,7 +1507,8 @@ module OrangeFeSARQ.Services {
                                 'value': !isNaN(rate.ratePriceTaxIncluded) ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
                             },
                             'taxRate': rate.taxRate,
-                            'ospTaxRateName': rate.taxRateName
+                            'ospTaxRateName': rate.taxRateName,
+                            packPrice: rate.commercialTotalPrice ? rate.commercialTotalPrice : null
                         },
                         'priceAlteration': priceAlteration
                     }
