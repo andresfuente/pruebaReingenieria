@@ -413,6 +413,7 @@ module OrangeFeSARQ.Services {
                             let deferred = srv.$q.defer();
                             mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
                             mosaicTerminal.loadCatalogViewData(terminal, ospCustomerSegmentBinding, 'primario', mosaicFileCompOWCSStore);
+                            this.spinnerBlockSrv.show=false;
                             return mosaicTerminal;
                         })
                     }
