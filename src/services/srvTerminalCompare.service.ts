@@ -345,6 +345,8 @@ module OrangeFeSARQ.Services {
             rate.taxFreePrice = rate.ratePrice;
             rate.taxIncludedPrice = rate.ratePriceTaxIncluded;
             rate.description = rate.rateDescription;
+            rate.commercialTotalPrice = rate.commercialTotalPrice;
+            rate.promotionalTotalPrice = rate.promotionalTotalPrice;
             // Se seleccionan las propiedades para session
 
             let rateForSession = _.pick(rate, ['rateId', 'otherSvaInfoList', 'siebelId',
@@ -352,7 +354,7 @@ module OrangeFeSARQ.Services {
                 'typeService', 'svaInfoList', 'allSVAChildrenList', 'pack', 'selectedSvaList',
                 'taxRate', 'taxRateName', 'applicationDuration',
                 'ratePriceTaxIncludedPromotional', 'ratePricePromotional', 'nacPriceTaxIncludedPromotional', 'nacPricePromotional',
-                'ospTecnology', 'type', 'associatedLine', 'bucket', 'NACLines', 'optionalFeatures', 'descriptionPromotion', 'recurringChargePeriodPromotion']);
+                'ospTecnology', 'type', 'associatedLine', 'bucket', 'NACLines', 'optionalFeatures', 'descriptionPromotion', 'recurringChargePeriodPromotion', 'commercialTotalPrice', 'promotionalTotalPrice']);
 
             return rateForSession;
         }
