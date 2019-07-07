@@ -1249,6 +1249,9 @@ module OrangeFeSARQ.Services {
             });
 
             if (deviceReserve) {
+                if(!device.productSpecification){
+                    device.productSpecification = [];
+                }
                 device.productSpecification.push(
                     {
                         name: 'codigoSAP',
