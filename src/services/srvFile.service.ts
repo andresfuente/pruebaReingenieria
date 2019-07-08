@@ -64,6 +64,9 @@ module OrangeFeSARQ.Services {
         getData(str_id, sfid, fileTerminalCompOWCSStore, callApiStock) {
             let srv = this;
             let relatedProductOffering;
+            let brand = sessionStorage.getItem('pangea-brand')
+            let channelAccountCode;
+            let deviceId = '3710031';
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = srv.getSelectedCommercialAct();
@@ -96,23 +99,48 @@ module OrangeFeSARQ.Services {
                         delete dataOT.creditLimit;
                     }
                 }
-
-                srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
-                    str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
-                    dataOT.ospCartItemSubType, dataOT.creditRiskRating,
-                    dataOT.channel, sfid, relatedProductOffering,
-                    fileTerminalCompOWCSStore, dataOT.profile, dataOT.priceName, callApiStock,
-                    dataOT.ospCustomerSegment, dataOT.stateOrProvince, dataOT.campana_txt, dataOT.creditLimit
-                ).then((terminal) => {
+                if (brand === "jazztel") {
+                  srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
+                    dataOT.channel,
+                    channelAccountCode = '*',
+                    deviceId,
+                    str_id = undefined,
+                    Number((dataOT.isExistingCustomer = undefined)),
+                    dataOT.ospCartItemType = undefined,
+                    dataOT.ospCartItemSubType = undefined,
+                    dataOT.creditRiskRating = undefined,
+                    sfid = undefined,
+                    relatedProductOffering = undefined,
+                    fileTerminalCompOWCSStore = undefined,
+                    dataOT.profile = undefined,
+                    dataOT.priceName = undefined,
+                    callApiStock = undefined,
+                    dataOT.ospCustomerSegment = undefined,
+                    dataOT.stateOrProvince = undefined,
+                    dataOT.campana_txt = undefined,
+                    dataOT.creditLimit = undefined
+                  ).then((terminal) => {
                     srv.viewState.selectedVariant = terminal.variants[0];
                     return terminal;
                 });
+                } else {
+                    srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
+                        str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
+                        dataOT.ospCartItemSubType, dataOT.creditRiskRating,
+                        dataOT.channel, sfid, relatedProductOffering,
+                        fileTerminalCompOWCSStore, dataOT.profile, dataOT.priceName, callApiStock,
+                        dataOT.ospCustomerSegment, dataOT.stateOrProvince, dataOT.campana_txt, dataOT.creditLimit
+                    ).then((terminal) => {
+                        srv.viewState.selectedVariant = terminal.variants[0];
+                        return terminal;
+                    });
+                }
+
 
                 srv.cachedTerminalName = str_id;
                 return srv.cachedTerminalPromise;
             }
         }
-
         private getRelatedProductOffering(dataOT: any, relatedProductOffering: any) {
             if (dataOT.ospCustomerSegment.toUpperCase() === 'RESIDENCIAL') {
                 relatedProductOffering = dataOT.relatedRateResidential;
