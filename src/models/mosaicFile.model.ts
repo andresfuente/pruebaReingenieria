@@ -29,6 +29,7 @@ module mosaicFile.Models {
             let vm = this;
             if (vm.brand === 'jazztel') {
                 let arrayTerminales = [];
+                this.status = 'loaded';
                 arrayTerminales.push(serviceData);
                 serviceData = arrayTerminales;
             }
