@@ -16,6 +16,8 @@ module ratesComparator.Models {
         public ratePriceTaxIncluded: number;
         public ratePriceTaxIncludedPromotional: number;
         public ratePricePromotional: number;
+        public commercialTotalPrice: number;
+        public promotionalTotalPrice: number;
         public paymentsNumber: number;
         public typeService: string;
         public taxRate : number;
@@ -56,6 +58,8 @@ module ratesComparator.Models {
             this.ratePriceTaxIncluded = rate.taxIncludedPrice;
             this.ratePriceTaxIncludedPromotional = rate.ratePriceTaxIncludedPromotional;
             this.ratePricePromotional = rate.ratePricePromotional;
+            this.commercialTotalPrice = rate.commercialTotalPrice ? rate.commercialTotalPrice : null;
+            this.promotionalTotalPrice = rate.promotionalTotalPrice ? rate.promotionalTotalPrice : null;
             this.description = rate.description;
             this.typeService = rate.typeService;
             this.taxRate = rate.taxRate;
