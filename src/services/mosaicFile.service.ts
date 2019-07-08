@@ -683,6 +683,18 @@ module OrangeFeSARQ.Services {
             // Se devuelve la informacion del terminal
             return mosaicTerminal;
         }
+
+        getVariants(response, ospCustomerSegmentBinding, priceNameBinding, mosaicFileCompOWCSStore) {
+            let srv = this;
+            let deferred = srv.$q.defer();
+            let mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
+
+            mosaicTerminal.loadCatalogViewData(response.data,
+                                    ospCustomerSegmentBinding,
+                                    priceNameBinding,
+                                    mosaicFileCompOWCSStore);
+            return mosaicTerminal;
+        }
         private paramsForRenove(params: any, campana_txt: string, clientData: any, commercialData: any, commercialActIndex: number, srv: this) {
             if (params.commercialAction === 'renove') {
                 // Se seleccionan los parametros necesarios para la llamada a la OT
