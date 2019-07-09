@@ -25,11 +25,14 @@ module mosaicFile.Models {
         }
 
         loadCatalogViewData(serviceData: any, ospCustomerSegment: string, priceName: string, mosaicFileCompOWCSStore?: any) {
-            if (this.brand === 'jazztel') {
-                let array = [];
-                array.push(serviceData)
-                serviceData = array;
-            };
+            let vm = this;
+            if (vm.brand === 'jazztel') {
+                let arrayTerminales = [];
+                this.status = 'loaded';
+                arrayTerminales.push(serviceData);
+                serviceData = arrayTerminales;
+            }
+
             if (serviceData && serviceData.length) {
                 let deviceSpecification = serviceData.deviceSpecification;
                 this.variants = this.generateTerminalVariants(serviceData, ospCustomerSegment, priceName, mosaicFileCompOWCSStore);
