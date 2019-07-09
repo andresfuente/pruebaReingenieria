@@ -302,6 +302,7 @@ module OrangeFeSARQ.Services {
          * @name OrangeFeSARQ.Services:MosaicFileSrv#getMosaicDataJZ
          * @methodOf OrangeFeSARQ.Services:MosaicFileSrv
          * @param {string} channel Canal al que hacer la consulta
+         * @param {string} search
          * @param {string} commercialAction Canal al que hacer la consulta
          * @param {string} limit Limite de terminales
          * @param {string} offset Modulo del la pagina      * 
@@ -322,6 +323,7 @@ module OrangeFeSARQ.Services {
          */
         getMosaicDataJZ(
             channel: string,
+            ospOpenSearch:string,
             commercialAction: string,
             limit: string,
             offset: string,
@@ -381,6 +383,7 @@ module OrangeFeSARQ.Services {
 
             params = {
                 channel: channel,
+                ospOpenSearch:ospOpenSearch,
                 channelAccountCode: channelAccountCode,
                 commercialAction: commercialAction,
                 idPaquete: idPaquete,
