@@ -65,8 +65,8 @@ module OrangeFeSARQ.Services {
             let srv = this;
             let relatedProductOffering;
             let brand = sessionStorage.getItem('pangea-brand')
-            let channelAccountCode;
-            let deviceId = '3710031';
+            let channelAccountCode = brand === 'jazztel' ? '*' : undefined;
+            let deviceId = brand === 'jazztel' ? '3710031' : undefined;
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = srv.getSelectedCommercialAct();
@@ -101,14 +101,14 @@ module OrangeFeSARQ.Services {
                 }
                 if (brand === "jazztel") {
                   srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
-                    dataOT.channel,
-                    channelAccountCode = '*',
+                    channelAccountCode,
                     deviceId,
                     str_id = undefined,
-                    Number((dataOT.isExistingCustomer = undefined)),
+                    dataOT.isExistingCustomer = undefined,
                     dataOT.ospCartItemType = undefined,
                     dataOT.ospCartItemSubType = undefined,
                     dataOT.creditRiskRating = undefined,
+                    dataOT.channel,
                     sfid = undefined,
                     relatedProductOffering = undefined,
                     fileTerminalCompOWCSStore = undefined,
@@ -125,7 +125,7 @@ module OrangeFeSARQ.Services {
                 });
                 } else {
                     srv.cachedTerminalPromise = srv.MosaicFileSrv.getTerminalFileData(
-                        str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
+                        channelAccountCode,deviceId,str_id, Number(dataOT.isExistingCustomer), dataOT.ospCartItemType,
                         dataOT.ospCartItemSubType, dataOT.creditRiskRating,
                         dataOT.channel, sfid, relatedProductOffering,
                         fileTerminalCompOWCSStore, dataOT.profile, dataOT.priceName, callApiStock,
