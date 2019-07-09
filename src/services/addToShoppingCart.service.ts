@@ -1,5 +1,6 @@
 module OrangeFeSARQ.Services {
     'use strict';
+    const MOVILONLY = 'Mobile Only_NAC';
     /**
      * @ngdoc service
      * @name orangeFeSARQ.Services:AddToShoppingCartSrv
@@ -19,6 +20,7 @@ module OrangeFeSARQ.Services {
         public pressRateModifyButton: boolean;
         public shoppingCartAux;
         public promoInformative;
+        
 
         /**
          * @ngdoc method
@@ -606,7 +608,7 @@ module OrangeFeSARQ.Services {
             };
 
             // SI es NAC, calculamos el precio total estándar del pack
-            if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
+            if (rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) {
                 if (rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value !== undefined && rate.nacPrice !== undefined) {
                     rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value += rate.nacPrice;
                 }
@@ -630,7 +632,7 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
-            if ((rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') && rate.bucket) {
+            if ((rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) && rate.bucket) {
                 bucket = vm.createBucketCartItem(rate.bucket);
 
                 if (bucket) {
@@ -789,7 +791,7 @@ module OrangeFeSARQ.Services {
                 if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
                     commercialData[commercialActIndex].NACRateInShoppingCart = true;
                 }
-                if (rate.groupName === 'Mobile Only_NAC' && rate.typeService === 'movil'
+                if (rate.groupName === MOVILONLY && rate.typeService === 'movil'
                     && (clientData.ospCustomerSegment === 'empresa'
                         || clientData.ospCustomerSegment === 'autonomo')) {
                     commercialData[commercialActIndex].SOHORateInShoppingCart = true;
@@ -862,7 +864,7 @@ module OrangeFeSARQ.Services {
                     'ospSelected': true
                 };
 
-                if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
+                if (rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) {
                     let cartItemBucket;
 
                     if (bucket) { // Si se informa el bucket, se crea con ese
@@ -1010,7 +1012,7 @@ module OrangeFeSARQ.Services {
             };
 
             // SI es NAC, calculamos el precio total estándar del pack
-            if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
+            if (rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) {
                 if (rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value !== undefined && rate.nacPrice !== undefined) {
                     rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value += rate.nacPrice;
                 }
@@ -1032,7 +1034,7 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
-            if ((rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') && rate.bucket) {
+            if ((rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) && rate.bucket) {
                 bucket = vm.createBucketCartItem(rate.bucket);
 
                 if (bucket) {
@@ -2395,7 +2397,7 @@ module OrangeFeSARQ.Services {
             let isPromo: boolean = false;
 
             // Averiguamos si hay promociones en las líneas adicionales
-            if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
+            if (rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) {
                 isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
 
                 // Si no hay promoción en la principal, comprobamos las adicionales

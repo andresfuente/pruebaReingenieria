@@ -1,6 +1,6 @@
 module OrangeFeSARQ.Services {
     'use strict';
-
+    const LITPRODUCTSPECIFICATION = '/productSpecificationv2View/OSP';
     /**
      * @ngdoc service
      * @name OrangeFeSARQ.Services:RatesParentSrv
@@ -20,7 +20,7 @@ module OrangeFeSARQ.Services {
         private billingAccountStore: OrangeFeSARQ.Services.BillingAccountStoreSrv;
         public GEOLOCATIONLOCAL = 'Geolocation-local';
         public GEOLOCATIONCLIENT = 'Geolocation-client';
-        public LITPRODUCTSPECIFICATION = '/productSpecificationv2View/OSP';
+        
         public LITPRODUCTOFFERING = '/productOfferingv2View/OSP';
 
         private tabGroupName: string;
@@ -69,7 +69,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + '/productSpecificationv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     //vm.mockPPM(response);
@@ -91,7 +91,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brandjz + '/productSpecificationv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brandjz + LITPRODUCTSPECIFICATION,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     return {
@@ -110,7 +110,7 @@ module OrangeFeSARQ.Services {
 
         //     let _headers = vm.setHeaders();
 
-        //     return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brandjz + '/productSpecificationv2View/OSP',
+        //     return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.genericConstant.brandjz + LITPRODUCTSPECIFICATION,
         //         { queryParams: params }, _headers)
         //         .then((response) => {
         //             return {
