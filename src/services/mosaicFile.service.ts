@@ -401,7 +401,7 @@ module OrangeFeSARQ.Services {
 
             _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
 
-            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
+            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', true)
                 .then((response) => {
 
                     return {
