@@ -286,7 +286,10 @@ module mosaicFile.Models {
                                     break;
                                 }
                                 case 'isMonthObjective': {
-                                    this.litOutstanding = characteristic.description;
+                                    let val : any = _.head(characteristic.characteristicValue);
+                                    if(val && val.value === "true"){
+                                        this.litOutstanding =  characteristic.description;
+                                    }
                                     break;
                                 }
                                 default: {
