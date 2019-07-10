@@ -1249,15 +1249,14 @@ module OrangeFeSARQ.Services {
             });
 
             if (deviceReserve) {
-                if(!device.productSpecification){
+                let productSpecification = {
+                    name: 'codigoSAP',
+                    id: deviceReserve.id
+                }
+                if (!device.productSpecification) {
                     device.productSpecification = [];
                 }
-                device.productSpecification.push(
-                    {
-                        name: 'codigoSAP',
-                        id: deviceReserve.id
-                    }
-                );
+                device.productSpecification.push(productSpecification);
                 if (!vm.isFdcSite() && deviceReserve.idReserva && deviceReserve.IMEI) {
                     let imei = {
                         'name': 'IMEI',
@@ -1279,10 +1278,12 @@ module OrangeFeSARQ.Services {
 
             let uniqueItemPrice = [];
             let vapCartItems = [];
+            let ospSelected;
             for (let i in device.itemPrice) {
                 if (device.itemPrice[i].priceType === 'unico') {
                     uniqueItemPrice.push(device.itemPrice[i]);
                 } else {
+                    ospSelected = vm.checkOspSelected();
                     let vapCartItem = {
                         'id': device.itemPrice[i].id,
                         'action': 'New',
@@ -1293,7 +1294,7 @@ module OrangeFeSARQ.Services {
                         'itemPrice': [device.itemPrice[i]],
                         'productOffering': { 'id': device.itemPrice[i].id },
                         'cartItemRelationship': [{ 'id': device.siebelId }],
-                        'ospSelected': true,
+                        'ospSelected': ospSelected,
                         'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                         'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
                     };
@@ -1323,7 +1324,7 @@ module OrangeFeSARQ.Services {
                 }
             };
             let preselected = true;
-            if (selected !== null && selected !== undefined && selected === false) {
+            if ((selected !== null && selected !== undefined && selected === false) || (vm.checkOspSelected)) {
                 preselected = false;
             }
             cartItemElement = {
@@ -2299,6 +2300,20 @@ module OrangeFeSARQ.Services {
         isFdcSite() {
             const loginData = JSON.parse(sessionStorage.getItem('loginData'));
             return loginData.site === 'fichadecliente';
+        }
+        checkOspSelected() {
+            let ospSelected = true;
+            let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+
+            if (shoppingCart && shoppingCart.cartItem && shoppingCart.cartItem.length > 0) {
+                shoppingCart.cartItem.forEach((item) => {
+                    if (item && item.ospSelected) {
+                        ospSelected = false;
+                    }
+                });
+            }
+
+            return ospSelected;
         }
     }
 }
