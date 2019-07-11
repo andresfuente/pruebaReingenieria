@@ -1,5 +1,6 @@
 module OrangeFeSARQ.Services {
     'use strict';
+    const MOVILONLY = 'Mobile Only_NAC';
     /**
      * @ngdoc service
      * @name orangeFeSARQ.Services:AddToShoppingCartSrv
@@ -19,6 +20,7 @@ module OrangeFeSARQ.Services {
         public pressRateModifyButton: boolean;
         public shoppingCartAux;
         public promoInformative;
+        
 
         /**
          * @ngdoc method
@@ -156,21 +158,19 @@ module OrangeFeSARQ.Services {
             };
 
             // Se guarda el IMEI del terminal si se dispone de el
-            if (device && device.IMEI && device.IMEI !== undefined) {
-                let imei = {
-                    'name': 'IMEI',
-                    'value': device.IMEI
-                };
-                productItem.characteristic.push(imei);
-
-                if (!vm.isFdcSite() && device.idReserva && device.id) {
-
-                    productItem.productSpecification.push(
-                        {
-                            name: 'codigoSAP',
-                            value: device.id
-                        }
-                    );
+            if (device) {
+                productItem.productSpecification.push(
+                    {
+                        name: 'codigoSAP',
+                        id: device.id
+                    }
+                );
+                if (!vm.isFdcSite() && device.idReserva && device.IMEI) {
+                    let imei = {
+                        'name': 'IMEI',
+                        'value': device.IMEI
+                    };
+                    productItem.characteristic.push(imei);
                     productItem.characteristic.push(
                         {
                             name: 'idReserva',
@@ -551,7 +551,7 @@ module OrangeFeSARQ.Services {
             let bucket;
 
             // Se obtiene el ID del acto comercial que se esta modificando
-            commercialActId = this.getComercialActId(commercialActIndex, commercialData, commercialActId, rate);
+            commercialActId = this.getCommercialActId(commercialActIndex, commercialData, commercialActId, rate);
             // Se comprueba si existe alguna tarifa en el shopping cart que se este modificando
             shoppingCart = this.getShoppingCart(shoppingCart, commercialData, commercialActIndex, vm, commercialActId);
             // Se obtiene el id del ultimo elmento del cart item del shopping cart
@@ -593,7 +593,8 @@ module OrangeFeSARQ.Services {
                                 'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
                             },
                             taxRate: rate.taxRate,
-                            ospTaxRateName: rate.taxRateName
+                            ospTaxRateName: rate.taxRateName,
+                            packPrice: rate.commercialTotalPrice ? rate.commercialTotalPrice : null
                         },
                         'priceAlteration': priceAlteration
                     }
@@ -607,7 +608,7 @@ module OrangeFeSARQ.Services {
             };
 
             // SI es NAC, calculamos el precio total estándar del pack
-            if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
+            if (rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) {
                 if (rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value !== undefined && rate.nacPrice !== undefined) {
                     rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value += rate.nacPrice;
                 }
@@ -631,7 +632,7 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
-            if ((rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') && rate.bucket) {
+            if ((rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) && rate.bucket) {
                 bucket = vm.createBucketCartItem(rate.bucket);
 
                 if (bucket) {
@@ -780,7 +781,8 @@ module OrangeFeSARQ.Services {
             return shoppingCart;
         }
 
-        private getComercialActId(commercialActIndex: number, commercialData: any, commercialActId: number, rate: any) {
+        private getCommercialActId(commercialActIndex: number, commercialData: any, commercialActId: number, rate: any) {
+            let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
                 if (rate.groupName === 'Convergente' && rate.family === 'love') {
@@ -789,6 +791,12 @@ module OrangeFeSARQ.Services {
                 if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
                     commercialData[commercialActIndex].NACRateInShoppingCart = true;
                 }
+                if (rate.groupName === MOVILONLY && rate.typeService === 'movil'
+                    && (clientData.ospCustomerSegment === 'empresa'
+                        || clientData.ospCustomerSegment === 'autonomo')) {
+                    commercialData[commercialActIndex].SOHORateInShoppingCart = true;
+                }
+
                 sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
             }
             return commercialActId;
@@ -856,7 +864,7 @@ module OrangeFeSARQ.Services {
                     'ospSelected': true
                 };
 
-                if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
+                if (rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) {
                     let cartItemBucket;
 
                     if (bucket) { // Si se informa el bucket, se crea con ese
@@ -988,7 +996,9 @@ module OrangeFeSARQ.Services {
                                 'value': rate.ratePriceTaxIncluded ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
                             },
                             taxRate: rate.taxRate,
-                            ospTaxRateName: rate.taxRateName
+                            ospTaxRateName: rate.taxRateName,
+                            packPrice: rate.commercialTotalPrice ? rate.commercialTotalPrice : null
+                        
                         },
                         'priceAlteration': priceAlteration
                     }
@@ -1002,7 +1012,7 @@ module OrangeFeSARQ.Services {
             };
 
             // SI es NAC, calculamos el precio total estándar del pack
-            if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
+            if (rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) {
                 if (rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value !== undefined && rate.nacPrice !== undefined) {
                     rateCartItemElement.itemPrice[0].price.dutyFreeAmount.value += rate.nacPrice;
                 }
@@ -1024,7 +1034,7 @@ module OrangeFeSARQ.Services {
                 'ospSelected': true
             };
 
-            if ((rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') && rate.bucket) {
+            if ((rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) && rate.bucket) {
                 bucket = vm.createBucketCartItem(rate.bucket);
 
                 if (bucket) {
@@ -1238,21 +1248,20 @@ module OrangeFeSARQ.Services {
             });
 
             // Se guarda el IMEI del terminal si se dispone de el
-            if (device && deviceReserve && deviceReserve.IMEI) {
-                let imei = {
-                    'name': 'IMEI',
-                    'value': deviceReserve.IMEI
-                };
-                device.characteristic.push(imei);
-
-                if (!vm.isFdcSite() && deviceReserve.idReserva && deviceReserve.id) {
-                    device.productSpecification = [];
-                    device.productSpecification.push(
-                        {
-                            name: 'codigoSAP',
-                            value: deviceReserve.id
-                        }
-                    );
+            if (deviceReserve) {
+                device.productSpecification = [];
+                device.productSpecification.push(
+                    {
+                        name: 'codigoSAP',
+                        id: deviceReserve.id
+                    }
+                );
+                if (!vm.isFdcSite() && deviceReserve.idReserva && deviceReserve.IMEI) {
+                    let imei = {
+                        'name': 'IMEI',
+                        'value': deviceReserve.IMEI
+                    };
+                    device.characteristic.push(imei);
                     device.characteristic.push(
                         {
                             name: 'idReserva',
@@ -1353,11 +1362,13 @@ module OrangeFeSARQ.Services {
             vm.productCatalogV2Srv.getSpecificationSVAS(params.idSvaList, params.isExistingCustomer, params.segment, params.commercialAction)
                 .then((spec) => {
                     if (spec) {
+                        shoppingCart = shoppingCart === null ? JSON.parse(sessionStorage.getItem('shoppingCart')) : shoppingCart;
                         // Pasamos true como parámetro opcional porque es un bono de terminal
                         cartItemElement.cartItem.push(vm.createSVACartItem(spec.productSpecification[0], true));
                         if (commercialData[commercialActIndex].multicomparador) {
                             shoppingCart.isMulticomparador = true;
                         }
+
                         sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
                     }
                 })
@@ -1425,6 +1436,7 @@ module OrangeFeSARQ.Services {
                         'type': 'terminal'
                     }],
                     'place': [],
+                    'productSpecification': device.productSpecification,
                     'characteristic': device.characteristic
                 },
                 'itemPrice': uniquePaid ? uniqueItemPrice : [{ 'priceType': 'aplazado' }],
@@ -1504,7 +1516,8 @@ module OrangeFeSARQ.Services {
                                 'value': !isNaN(rate.ratePriceTaxIncluded) ? rate.ratePriceTaxIncluded : rate.taxIncludedPrice
                             },
                             'taxRate': rate.taxRate,
-                            'ospTaxRateName': rate.taxRateName
+                            'ospTaxRateName': rate.taxRateName,
+                            packPrice: rate.commercialTotalPrice ? rate.commercialTotalPrice : null
                         },
                         'priceAlteration': priceAlteration
                     }
@@ -1556,20 +1569,6 @@ module OrangeFeSARQ.Services {
             }
         }
 
-        private getCommercialActId(commercialActIndex: number, commercialData: any, commercialActId: number, rate: any) {
-            if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
-                commercialActId = Number(commercialData[commercialActIndex].id);
-                if (rate.groupName === 'Convergente' && rate.family === 'love') {
-                    commercialData[commercialActIndex].loveRateInShoppingCart = true;
-                }
-                if (rate.groupName === 'Convergente_NAC' && rate.typeService === 'movil_fijo') {
-                    commercialData[commercialActIndex].NACRateInShoppingCart = true;
-                }
-                sessionStorage.setItem('commercialData', JSON.stringify(commercialData));
-            }
-            return commercialActId;
-        }
-
         /**
          * @ngdoc method
          * @name orangeFeSARQ.Services:AddToShoppingCartSrv#putDeviceNoRateInShoppingCart
@@ -1592,13 +1591,15 @@ module OrangeFeSARQ.Services {
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = vm.getSelectedCommercialAct();
 
+            let isSecRenove: boolean = commercialData && commercialData[commercialActIndex].ospTerminalWorkflow === 'secondary_renew';
+
             // Se obtiene el ID del acto comercial que se esta modificando
             if (commercialActIndex !== -1 && commercialData[commercialActIndex].id !== null) {
                 commercialActId = Number(commercialData[commercialActIndex].id);
             }
             // Se comprueba si existe algun dispositivo en el shopping cart que se este modificando
             if (shoppingCart !== null && commercialData !== null && commercialData[commercialActIndex].isCompletedAC &&
-                commercialData[commercialActIndex].ospIsSelected) {
+                commercialData[commercialActIndex].ospIsSelected && !isSecRenove) {
                 // Se eliminan los terminales del acto comercial existentes en el shopping cart
                 shoppingCart = vm.deleteElementInCartItem(shoppingCart, commercialActId);
                 commercialData[commercialActIndex].isCompletedAC = false;
@@ -1608,14 +1609,13 @@ module OrangeFeSARQ.Services {
             lastCartItemId = vm.getLastCartItemId(shoppingCart, commercialActId);
 
             // Tipo del terminal
-
             device.characteristic = [
                 {
                     name: 'CIMATerminalType',
-                    value: 'Primary'
+                    value: isSecRenove ? 'Secundary' : 'Primary'
                 }
             ];
-
+            
             let uniqueItemPrice = [];
             let vapCartItems = [];
 
@@ -1628,7 +1628,7 @@ module OrangeFeSARQ.Services {
                         'action': 'New',
                         'product': {
                             'productRelationship': [{ 'type': 'VAP' }],
-                            'characteristic': [{ 'name': 'CIMATerminalType', 'value': 'Primary' }]
+                            'characteristic': [{ 'name': 'CIMATerminalType', 'value': isSecRenove ? 'Secundary' : 'Primary' }]
                         },
                         'itemPrice': [device.itemPrice[i]],
                         'productOffering': { 'id': device.itemPrice[i].id },
@@ -1641,6 +1641,8 @@ module OrangeFeSARQ.Services {
                 }
             }
 
+            uniqueItemPrice = _.uniqBy(uniqueItemPrice, 'priceType');
+            vapCartItems = _.uniqBy(vapCartItems, 'id');
 
             productItem = {
                 'href': device.srcImage,
@@ -1655,21 +1657,19 @@ module OrangeFeSARQ.Services {
             };
 
             // Se guarda el IMEI del terminal si se dispone de el
-            if (device && device.IMEI && device.IMEI !== undefined) {
-                let imei = {
-                    'name': 'IMEI',
-                    'value': device.IMEI
-                };
-                productItem.characteristic.push(imei);
-
-                if (!vm.isFdcSite() && device.idReserva && device.id) {
-
-                    productItem.productSpecification.push(
-                        {
-                            name: 'codigoSAP',
-                            value: device.id
-                        }
-                    );
+            if (device) {
+                productItem.productSpecification.push(
+                    {
+                        name: 'codigoSAP',
+                        id: device.id
+                    }
+                );
+                if (!vm.isFdcSite() && device.idReserva && device.IMEI) {
+                    let imei = {
+                        'name': 'IMEI',
+                        'value': device.IMEI
+                    };
+                    productItem.characteristic.push(imei);
                     productItem.characteristic.push(
                         {
                             name: 'idReserva',
@@ -1695,7 +1695,9 @@ module OrangeFeSARQ.Services {
 
             rateCartItemElement = vm.obtainRateCartItemElement(commercialData, commercialActIndex);
 
-            cartItemElementId = Number((lastCartItemId + 0.1).toFixed(1));
+            
+            cartItemElementId = isSecRenove && lastCartItemId % 1 !== 0 ? Number((lastCartItemId).toFixed(1)) : Number((lastCartItemId + 0.1).toFixed(1));
+
             cartItemElement = {
                 'id': cartItemElementId,
                 'cartItem': uniquePaid ? [deviceCartItemElement, rateCartItemElement] : [deviceCartItemElement, rateCartItemElement].concat(vapCartItems),
@@ -1703,23 +1705,40 @@ module OrangeFeSARQ.Services {
                 'cartItemRelationship': [{
                     id: commercialActId
                 }],
-                'ospSelected': false,
+                'ospSelected': isSecRenove ? true : false,
                 'ospCartItemType': commercialData[commercialActIndex].ospCartItemType.toLowerCase(),
                 'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase(),
             };
             // Añade seguro en caso de que se haya seleccionado
             if (device.insuranceSiebelId) {
-                cartItemElement.cartItem.push(vm.createInsuranceCartItem(device, 'primary'));
+                if (isSecRenove) {
+                    cartItemElement.cartItem.push(vm.createInsuranceCartItem(device, 'secundary'));
+                } else {
+                    cartItemElement.cartItem.push(vm.createInsuranceCartItem(device, 'primary'));
+                }
             }
 
 
             // Añadir cartItem compromiso de permanencia CP
             if (device.cpDescription && device.cpSiebel) {
-                cartItemElement.cartItem.push(vm.createCPCartItem(device));
+                if (isSecRenove) {
+                    cartItemElement.cartItem.push(vm.createCPCartItem(device, 'secundary'));
+                } else {
+                    cartItemElement.cartItem.push(vm.createCPCartItem(device));
+                }
             }
 
             if (shoppingCart !== null) {
-                shoppingCart.cartItem.push(cartItemElement);
+                let cartItem = _.find(shoppingCart.cartItem, (elem:any) => {
+                    return elem.id && elem.id === cartItemElementId;
+                });
+                if (cartItem) {
+                    _.forEach(cartItemElement.cartItem, elem => {
+                        cartItem.cartItem.push(elem);
+                    });
+                } else {
+                    shoppingCart.cartItem.push(cartItemElement);
+                }
             } else {
                 shoppingCart = {
                     'id': '',
@@ -2212,6 +2231,32 @@ module OrangeFeSARQ.Services {
 
             return response;
         }
+        
+        /**
+         * @ngdoc method
+         * @name orangeFeSARQ.Services:AddToShoppingCartSrv#SOHORateInShoppingCart
+         * @methodOf orangeFeSARQ.Services:AddToShoppingCartSrv
+         * @return {boolean} true si se ha llegado al carrito con una tarifa SOHO
+         * @description
+         * Devuelve si se ha llegado al carrito con una tarifa SOHO
+         */
+        SOHORateInShoppingCart(): boolean {
+
+            let response: boolean = false;
+
+            let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
+
+            if (commercialData && commercialData.length) {
+                commercialData.forEach((commData) => {
+                    if (commData.SOHORateInShoppingCart) {
+                        response = true;
+                    }
+                });
+            }
+
+            return response;
+        }
+
 
         createCommercialDataPacks(dato1?, dato2?) {
 
@@ -2352,7 +2397,7 @@ module OrangeFeSARQ.Services {
             let isPromo: boolean = false;
 
             // Averiguamos si hay promociones en las líneas adicionales
-            if (rate.groupName === 'Convergente_NAC' || rate.groupName === 'Mobile Only_NAC') {
+            if (rate.groupName === 'Convergente_NAC' || rate.groupName === MOVILONLY) {
                 isPromo = !isNaN(rate.ratePriceTaxIncludedPromotional) || !isNaN(rate.ratePricePromotional);
 
                 // Si no hay promoción en la principal, comprobamos las adicionales
