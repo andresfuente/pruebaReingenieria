@@ -48,6 +48,26 @@ module ratesParent.Models {
                     });
                 }
             } else {
+
+               if (specificationData.productSpecification && offeringData.productOffering) {
+                    let specificationInPack = [];
+                    let specificationOutPack = [];
+                    let offeringInPack = [];
+                    let offeringOutPack = [];
+
+                    _.forEach(specificationData.productSpecification, elem => {
+                        elem.ospIsPackLine ? specificationInPack.push(elem) : specificationOutPack.push(elem);
+                    });
+                    _.forEach(offeringData.productOffering, elem => {
+                        elem.ospIsPackLine ? offeringInPack.push(elem) : offeringOutPack.push(elem);
+                    });
+
+                    vm.pushRates(specificationInPack, offeringInPack, bucketInfo);
+                    vm.pushRates(specificationOutPack, offeringOutPack, bucketInfo);
+                }
+
+/*
+
                 if (specificationData.productSpecification && offeringData.productOffering) {
                     specificationData.productSpecification.forEach(function (specification) {
                         let productOffering = [];
@@ -67,11 +87,33 @@ module ratesParent.Models {
 
                         vm.rates.push(rate);
                     });
-                }
-
+                } 
+*/
             }
         }
 
+        private pushRates(specification, offering, bucketInfo) {
+            let vm = this;
+            specification.forEach(function (specification) {
+                let productOffering = [];
+                offering.forEach(function (offering) {
+                    if (offering.isBundle) {
+                        offering.bundledProductOffering.forEach(element => {
+    
+                            if (specification.id && element.id && specification.id === element.id) {
+                                productOffering.push(offering);
+                            }
+    
+                        });
+                    }
+                });
+    
+                let rate: Rate = new Rate(specification, productOffering, bucketInfo);
+    
+                vm.rates.push(rate);
+            });
+        }
+        
         setError(errorMsg) {
             let vm = this;
             vm.status = 'error';
@@ -147,7 +189,9 @@ module ratesParent.Models {
         public descriptionPromotion;
         public applicationDuration;
         public recurringChargePeriodPromotion: string; // Tipo de promoción
-        
+        public ospIsPackLine: boolean;
+
+
         // Atributos para NAC
         public bucket: RateBucket;
         public NACLines: Rate[] = [];
@@ -404,6 +448,7 @@ module ratesParent.Models {
                 for (let i in priceData) {
                     if (priceData.length > 0) {
                         if (priceData[i].isBundle) {
+                            this.ospIsPackLine = priceData[i].ospIsPackLine;
                             // Buscamos si afecta el revamp de tarifas Love 
                             if (priceData[i].bundledProductOffering && priceData[i].bundledProductOffering[0] && priceData[i].bundledProductOffering[0].id === rateData.id) {
                                 // Comprobamos la fecha 
