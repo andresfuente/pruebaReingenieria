@@ -419,6 +419,12 @@ module OrangeFeSARQ.Services {
                             let mosaicTerminal: mosaicFile.Models.OrangeMosaicFileTerminal = this.cache[terminal.deviceSpecification.id];
                             let deferred = srv.$q.defer();
                             mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
+                            
+                                let arrayTerminales = [];
+                                
+                                arrayTerminales.push(terminal);
+                                terminal = arrayTerminales;
+                            
                             mosaicTerminal.loadCatalogViewData(terminal, ospCustomerSegmentBinding, 'primario', mosaicFileCompOWCSStore);
                             this.spinnerBlockSrv.show=false;
                             return mosaicTerminal;
@@ -598,6 +604,7 @@ module OrangeFeSARQ.Services {
         ) {
             let srv = this;
             let params;
+            let fileCompOWCSStoreTerminal = mosaicFileCompOWCSStore;
 
             //Cabeceras Pangea
             // let _headers = {
@@ -609,7 +616,7 @@ module OrangeFeSARQ.Services {
             let _headers = new HashMap<string, string>();
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
-            // let brand = sessionStorage.getItem('pangea-brand');
+            let brand = sessionStorage.getItem('pangea-brand');
 
             let shopGeolocation = shopInfo && shopInfo.province ? shopInfo.province : 'Madrid';
             let clientGeolocation = clientData && clientData.generalAddress && clientData.generalAddress.city ? clientData.generalAddress.city.toUpperCase() : shopGeolocation.toUpperCase();
@@ -677,7 +684,7 @@ module OrangeFeSARQ.Services {
                                 // Se carga la vista del terminal
                                 mosaicTerminal.loadCatalogViewData(response.data,
                                     ospCustomerSegmentBinding,
-                                    priceNameBinding,
+                                    priceNameBinding, brand ==='jazztel' ? fileCompOWCSStoreTerminal :
                                     mosaicFileCompOWCSStore);
 
                                 srv.spinnerBlockSrv.show = false;

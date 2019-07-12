@@ -66,7 +66,7 @@ module OrangeFeSARQ.Services {
             let relatedProductOffering;
             let brand = sessionStorage.getItem('pangea-brand')
             let channelAccountCode = brand === 'jazztel' ? '*' : undefined;
-            let deviceId = brand === 'jazztel' ? '3710031' : undefined;
+            let deviceId = brand === 'jazztel' ? '3710070' : undefined;
             let clientData = JSON.parse(sessionStorage.getItem('clientData'));
             let commercialData = JSON.parse(sessionStorage.getItem('commercialData'));
             let commercialActIndex = srv.getSelectedCommercialAct();
@@ -111,11 +111,11 @@ module OrangeFeSARQ.Services {
                     dataOT.channel,
                     sfid = undefined,
                     relatedProductOffering = undefined,
-                    fileTerminalCompOWCSStore = undefined,
+                    fileTerminalCompOWCSStore,
                     dataOT.profile = undefined,
-                    dataOT.priceName = undefined,
+                    dataOT.priceName,
                     callApiStock = undefined,
-                    dataOT.ospCustomerSegment = undefined,
+                    dataOT.ospCustomerSegment,
                     dataOT.stateOrProvince = undefined,
                     dataOT.campana_txt = undefined,
                     dataOT.creditLimit = undefined

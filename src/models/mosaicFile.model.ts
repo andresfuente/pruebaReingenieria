@@ -27,10 +27,9 @@ module mosaicFile.Models {
         loadCatalogViewData(serviceData: any, ospCustomerSegment: string, priceName: string, mosaicFileCompOWCSStore?: any) {
             let vm = this;
             if (vm.brand === 'jazztel') {
-                let arrayTerminales = [];
+                
                 this.status = 'loaded';
-                arrayTerminales.push(serviceData);
-                serviceData = arrayTerminales;
+               
             }
 
             if (serviceData && serviceData.length) {
