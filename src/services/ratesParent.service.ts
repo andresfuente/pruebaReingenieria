@@ -26,6 +26,8 @@ module OrangeFeSARQ.Services {
         private tabGroupName: string;
         private arrayFixed: Array<any>;
 
+        public brand = sessionStorage.getItem('pangea-brand') ? sessionStorage.getItem('pangea-brand') : 'orange';
+
         constructor(public $injector) {
             super($injector);
             let vm = this;
@@ -69,7 +71,7 @@ module OrangeFeSARQ.Services {
 
             let _headers = vm.setHeaders();
 
-            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + '/productSpecificationv2View/OSP',
+            return vm.httpCacheGeth(vm.genericConstant.getRates + '/' + vm.brand + '/productSpecificationv2View/OSP',
                 { queryParams: params }, _headers)
                 .then((response) => {
                     //vm.mockPPM(response);
@@ -147,7 +149,7 @@ module OrangeFeSARQ.Services {
                 ratesIdListString, releatedRatesClient, pack, type, defaultTechnology,
                 bucketId);
             let _headers = srv.setHeaders();
-            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + (sessionStorage.getItem('pangea-brand')) + srv.LITPRODUCTOFFERING,
+            return srv.httpCacheGeth(srv.genericConstant.getRates + '/' + srv.brand + srv.LITPRODUCTOFFERING,
                 { queryParams: params }, _headers)
                 .then((response) => {
                     let rates: ratesParent.Models.Rates = new ratesParent.Models.Rates();
