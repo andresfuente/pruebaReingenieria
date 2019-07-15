@@ -54,7 +54,7 @@ module OrangeFeSARQ.Services {
                 queryParams: {},
                 urlParams: ['version']
             };
-            let url = "https://pangea-uat.int.si.orange.es/eContratoKyCWS";
+            let url = vm.genericConstant.eContratoKyCWS;
 
             return vm.httpCacheGett(url, _search, 'shoppingCartResume' )
                 .then((response) => {
