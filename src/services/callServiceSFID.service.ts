@@ -40,5 +40,29 @@ module OrangeFeSARQ.Services {
                     throw error;
                 });
         }
+
+        /**
+         * @ngdoc service
+         * @name OrangeFeSARQ.Services:checkIECISA
+         * @author Jaime Alain
+         * @description
+         * Servicio para saber si la F.Digital (IECISA) esta levantado
+         */
+        checkIECISA(){
+            let vm = this;
+            let _search: Object = {
+                queryParams: {},
+                urlParams: ['version']
+            };
+            let url = "https://pangea-uat.int.si.orange.es/eContratoKyCWS";
+
+            return vm.httpCacheGett(url, _search, 'shoppingCartResume' )
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((error) => {
+                    throw error;
+                });
+        }
     }
 }
