@@ -216,7 +216,7 @@ module OrangeFeSARQ.Services {
             //     params: params,
             //     headers: headers
             // })
-            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
+            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', true)
                 .then((response) => {
                     return {
                         // tslint:disable-next-line
