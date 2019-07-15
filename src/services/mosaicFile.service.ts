@@ -94,8 +94,6 @@ module OrangeFeSARQ.Services {
          * @description Metodo para obtener todos los elementos del mosaico de terminales completo
          */
         getMosaicData(
-            channelAccountCode: string,
-            deviceId: string,
             search: string,
             sortString: string,
             targetPage: number,
@@ -116,7 +114,10 @@ module OrangeFeSARQ.Services {
             workflow: string,
             callApiStock: boolean,
             campana_txt?: string,
-            creditLimit?: number
+            creditLimit?: number,
+            channelAccountCode?: string,
+            deviceId?: string
+
         ): ng.IPromise<{} | void> {
             let srv = this;
             let params;
@@ -227,8 +228,6 @@ module OrangeFeSARQ.Services {
                         results: parseInt(response.headers()['x-total-count'] || 0),
                         terminals: srv.populateTerminals(
                             response.data,
-                            channelAccountCode,
-                            deviceId,
                             isExistingCustomer,
                             commercialAction,
                             portabilityOrigin,
@@ -244,7 +243,9 @@ module OrangeFeSARQ.Services {
                             priceType,
                             callApiStock,
                             campana_txt,
-                            creditLimit
+                            creditLimit,
+                            channelAccountCode,
+                            deviceId
                         )
                     };
                 })
@@ -509,8 +510,6 @@ module OrangeFeSARQ.Services {
          * @description Metodo para obtener los datos de cada uno de los terminales que forman el catalogo
          */
         populateTerminals(
-            channelAccountCode:string,
-            deviceId: string,
             terminalList,
             isExistingCustomer: number,
             commercialAction: string,
@@ -527,7 +526,9 @@ module OrangeFeSARQ.Services {
             priceType: string,
             callApiStock: boolean,
             campana_txt?: string,
-            creditLimit?: number
+            creditLimit?: number,
+            channelAccountCode?:string,
+            deviceId?: string
         ) {
             let srv = this;
             
@@ -535,8 +536,6 @@ module OrangeFeSARQ.Services {
             // Para cada uno de los terminales hace la consulta de sus datos
             return _.map(terminalList, (terminal: any) => {
                 return srv.getTerminalData(
-                    channelAccountCode,
-                    deviceId,
                     terminal.deviceSpecification.name= srv.brand === 'jazztel' ? 'prueba': terminal.deviceSpecification.name,
                     isExistingCustomer,
                     commercialAction,
@@ -553,7 +552,9 @@ module OrangeFeSARQ.Services {
                     priceType,
                     callApiStock,
                     campana_txt,
-                    creditLimit
+                    creditLimit,
+                    channelAccountCode,
+                    deviceId
                 );
             });
         }
@@ -582,8 +583,6 @@ module OrangeFeSARQ.Services {
          */
 
         private getTerminalData(
-            channelAccountCode:string,
-            deviceId:string,
             terminalName:string,
             isExistingCustomer: number,
             commercialAction: string,
@@ -600,7 +599,10 @@ module OrangeFeSARQ.Services {
             priceType: string,
             callApiStock: boolean,
             campana_txt?: string,
-            creditLimit?: number
+            creditLimit?: number,
+            channelAccountCode?:string,
+            deviceId?:string
+            
         ) {
             let srv = this;
             let params;
@@ -630,24 +632,24 @@ module OrangeFeSARQ.Services {
             _headers.set(srv.GEOLOCATION_CLIENT, clientGeolocation.toUpperCase());
 
             params = {
-                // channel: (brand === 'jazztel' ? 'otjzz' : channel),
-                channel: 'otjzz',
+                channel: (brand === 'jazztel' ? 'otjzz' : channel),
+                // channel: 'otjzz',
                 channelAccountCode,
                 deviceId,
                 isExistingCustomer: isExistingCustomer,
                 commercialAction: commercialAction,
                 portabilityOrigin: portabilityOrigin,
-                modelId: undefined,
-                // modelId: (brand === 'jazztel' ? undefined : terminalName),
+                // modelId: undefined,
+                modelId: (brand === 'jazztel' ? undefined : terminalName),
 
                 riskLevel: riskLevel,
                 relatedProductOffering: relatedProductOffering,
                 profile: profileBinding,
-                priceType: undefined
-                // priceType: (brand === 'jazztel' ? undefined : priceType)
+                // priceType: undefined
+                priceType: (brand === 'jazztel' ? undefined : priceType)
             };
 
-            params[this.categoryName] = priceNameBinding;
+            params[this.categoryName] = (brand === 'jazztel' ? undefined : priceNameBinding);
 
             // Parametros para Terminal Libre sin Servicio 
             params = this.getParamsTerminalLibre(relatedProductOffering, params);
@@ -862,8 +864,6 @@ module OrangeFeSARQ.Services {
         }
 
         getTerminalFileData(
-            channelAccountCode: string,
-            deviceId: string,
             terminalName: string,
             isExistingCustomer: number,
             commercialAction: string,
@@ -879,12 +879,12 @@ module OrangeFeSARQ.Services {
             ospCustomerSegmentBinding?: string,
             stateOrProvinceBinding?: string,
             campana_txt?: string,
-            creditLimit?: number
+            creditLimit?: number,
+            channelAccountCode?: string,
+            deviceId?: string
         ) {
             let brand = sessionStorage.getItem('pangea-brand')
             return this.getTerminalData(
-                channelAccountCode,
-                deviceId,
                 terminalName = brand === 'jazztel' ? 'prueba' : terminalName,
                 isExistingCustomer,
                 commercialAction,
@@ -901,7 +901,9 @@ module OrangeFeSARQ.Services {
                 '',
                 callApiStock,
                 campana_txt,
-                creditLimit).promise;
+                creditLimit,
+                channelAccountCode,
+                deviceId).promise;
         }
 
         handleCacheVersion(
