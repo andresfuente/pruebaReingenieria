@@ -19,6 +19,7 @@ module OrangeFeSARQ.Services {
         public pressRateModifyButton: boolean;
         public shoppingCartAux;
         public promoInformative;
+            private brand = sessionStorage.getItem("pangea-brand") ? sessionStorage.getItem("pangea-brand") : 'orange';
 
         /**
          * @ngdoc method
@@ -505,7 +506,7 @@ module OrangeFeSARQ.Services {
 
         private loopDeviceItemPriceGenerateVapCartItem(device: any, payType: any, vapCartItem: any, commercialData: any, commercialActIndex: number, vapCartItems: any[], unPriceItem: any) {
             device.itemPrice.forEach(item => {
-                if (payType === 'deferred' && item.priceType === 'inicial' || item.priceType === 'cuota') {
+                if (payType === 'deferred' && item.priceType === 'inicial' || item.priceType === 'cuota'|| item.priceType === 'Importe prepago') {
                     vapCartItem = {
                         'id': item.id,
                         'action': 'New',
@@ -522,7 +523,7 @@ module OrangeFeSARQ.Services {
                     };
                     vapCartItems.push(vapCartItem);
                 }
-                if (payType === 'unique' && item.priceType === 'unico') {
+                if (payType === 'unique' && item.priceType === 'unico' || payType === 'unique' && item.priceType === 'Importe alta') {
                     unPriceItem = item;
                 }
             });
@@ -1450,8 +1451,10 @@ module OrangeFeSARQ.Services {
         private loopDeviceItemPriceSetVapCartItem(device: any, commercialData: any, commercialActIndex: number) {
             let uniqueItemPrice = [];
             let vapCartItems = [];
+            
             for (let i in device.itemPrice) {
-                if (device.itemPrice[i].priceType === 'unico') {
+          
+                if (device.itemPrice[i].priceType === 'unico' || device.itemPrice[i].priceType === 'Importe alta') {
                     uniqueItemPrice.push(device.itemPrice[i]);
                 }
                 else {
@@ -1470,6 +1473,7 @@ module OrangeFeSARQ.Services {
                         'ospCartItemSubtype': commercialData[commercialActIndex].ospCartItemSubtype.toLowerCase()
                     };
                     vapCartItems.push(vapCartItem);
+                
                 }
             }
             return { uniqueItemPrice, vapCartItems };
@@ -1618,7 +1622,7 @@ module OrangeFeSARQ.Services {
             let vapCartItems = [];
 
             for (let i in device.itemPrice) {
-                if (device.itemPrice[i].priceType === 'unico') {
+                if (device.itemPrice[i].priceType === 'unico' ||  device.itemPrice[i].priceType === 'Importe alta') {
                     uniqueItemPrice.push(device.itemPrice[i]);
                 } else {
                     let vapCartItem = {
