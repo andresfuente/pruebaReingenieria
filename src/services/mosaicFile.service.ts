@@ -216,7 +216,7 @@ module OrangeFeSARQ.Services {
             //     params: params,
             //     headers: headers
             // })
-            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
+            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', true)
                 .then((response) => {
                     return {
                         // tslint:disable-next-line
@@ -302,6 +302,7 @@ module OrangeFeSARQ.Services {
          * @name OrangeFeSARQ.Services:MosaicFileSrv#getMosaicDataJZ
          * @methodOf OrangeFeSARQ.Services:MosaicFileSrv
          * @param {string} channel Canal al que hacer la consulta
+         * @param {string} search
          * @param {string} commercialAction Canal al que hacer la consulta
          * @param {string} limit Limite de terminales
          * @param {string} offset Modulo del la pagina      * 
@@ -322,6 +323,7 @@ module OrangeFeSARQ.Services {
          */
         getMosaicDataJZ(
             channel: string,
+            ospOpenSearch:string,
             commercialAction: string,
             limit: string,
             offset: string,
@@ -379,6 +381,7 @@ module OrangeFeSARQ.Services {
 
             params = {
                 channel: channel,
+                ospOpenSearch:ospOpenSearch,
                 channelAccountCode: channelAccountCode,
                 commercialAction: commercialAction,
                 idPaquete: idPaquete,
@@ -399,7 +402,7 @@ module OrangeFeSARQ.Services {
 
             _headers.set(srv.GEOLOCATION_LOCAL, srv.storeProvince.toUpperCase());
 
-            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', false)
+            return srv.httpCacheGeth(srv.genericConstant.getMosaico, { queryParams: params }, _headers, 'mosaicFile', true)
                 .then((response) => {
 
                     return {
@@ -411,6 +414,7 @@ module OrangeFeSARQ.Services {
                             let deferred = srv.$q.defer();
                             mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
                             mosaicTerminal.loadCatalogViewData(terminal, ospCustomerSegmentBinding, 'primario', mosaicFileCompOWCSStore);
+                            this.spinnerBlockSrv.show=false;
                             return mosaicTerminal;
                         })
                     }
@@ -681,6 +685,18 @@ module OrangeFeSARQ.Services {
                 srv.spinnerBlockSrv.show = false;
             }
             // Se devuelve la informacion del terminal
+            return mosaicTerminal;
+        }
+
+        getVariants(response, ospCustomerSegmentBinding, priceNameBinding, mosaicFileCompOWCSStore) {
+            let srv = this;
+            let deferred = srv.$q.defer();
+            let mosaicTerminal = new mosaicFile.Models.OrangeMosaicFileTerminal('', deferred);
+
+            mosaicTerminal.loadCatalogViewData(response.data,
+                                    ospCustomerSegmentBinding,
+                                    priceNameBinding,
+                                    mosaicFileCompOWCSStore);
             return mosaicTerminal;
         }
         private paramsForRenove(params: any, campana_txt: string, clientData: any, commercialData: any, commercialActIndex: number, srv: this) {

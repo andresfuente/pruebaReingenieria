@@ -25,11 +25,14 @@ module mosaicFile.Models {
         }
 
         loadCatalogViewData(serviceData: any, ospCustomerSegment: string, priceName: string, mosaicFileCompOWCSStore?: any) {
-            if (this.brand === 'jazztel') {
-                let array = [];
-                array.push(serviceData)
-                serviceData = array;
-            };
+            let vm = this;
+            if (vm.brand === 'jazztel') {
+                let arrayTerminales = [];
+                this.status = 'loaded';
+                arrayTerminales.push(serviceData);
+                serviceData = arrayTerminales;
+            }
+
             if (serviceData && serviceData.length) {
                 let deviceSpecification = serviceData.deviceSpecification;
                 this.variants = this.generateTerminalVariants(serviceData, ospCustomerSegment, priceName, mosaicFileCompOWCSStore);
@@ -473,7 +476,10 @@ module mosaicFile.Models {
                             break;
                         }
                         case 'isMonthObjective': {
-                            this.litOutstanding = characteristic.description;
+                            let val : any = _.head(characteristic.characteristicValue);
+                            if(val && val.value === "true"){
+                                this.litOutstanding =  characteristic.description;
+                            }
                             break;
                         }
                         default: {

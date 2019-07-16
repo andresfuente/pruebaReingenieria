@@ -403,10 +403,12 @@ module OrangeFeSARQ.Services {
                     sessionClientData.creditLimitRenove.staticCreditLimit - totalPriceVaps;
             }
 
-            if (sessionClientData.creditLimitRenove.creditLimitAvailable > sessionClientData.creditLimitRenove.umbral) {
-                sessionClientData.creditLimitRenove.upperUmbral = false;
-            } else {
+            let totalPrice = sessionClientData.creditLimitRenove && !sessionClientData.creditLimitCapta ? priceVapsRenove : totalPriceVaps;
+
+            if (totalPrice > sessionClientData.creditLimitRenove.umbral) {
                 sessionClientData.creditLimitRenove.upperUmbral = true;
+            } else {
+                sessionClientData.creditLimitRenove.upperUmbral = false;
             }
 
             if (priceVapsRenove > sessionClientData.creditLimitRenove.staticCreditLimit) {
